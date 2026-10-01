@@ -5,6 +5,8 @@
   const startBtn = document.querySelector("#bootStart");
   const howBtn = document.querySelector("#bootHow");
   const optionsBtn = document.querySelector("#bootOptions");
+  const dailyBtn = document.querySelector("#bootDaily");
+  const endlessBtn = document.querySelector("#bootEndless");
   const howPanel = document.querySelector("#bootHowPanel");
   const optionsPanel = document.querySelector("#bootOptionsPanel");
   const howBack = document.querySelector("#bootHowBack");
@@ -12,11 +14,12 @@
   const gridToggle = document.querySelector("#bootGrid");
   const vibrationToggle = document.querySelector("#bootVibration");
   const motionToggle = document.querySelector("#bootMotion");
+  const soundToggle = document.querySelector("#bootSound");
   const errorPanel = document.querySelector("#bootError");
   const errorText = document.querySelector("#bootErrorText");
   const retryBtn = document.querySelector("#bootErrorRetry");
   const settingsKey = "snake-evolution-settings";
-  const defaults = {grid:true,vibration:true,reducedMotion:false};
+  const defaults = {grid:true,vibration:true,reducedMotion:false,sound:true};
   let settings = {...defaults};
   let gameLoaded = false;
   let gameLoading = false;
@@ -30,7 +33,7 @@
   };
 
   const renderSettings = () => {
-    [[gridToggle,"grid"],[vibrationToggle,"vibration"],[motionToggle,"reducedMotion"]].forEach(([button,key]) => {
+    [[gridToggle,"grid"],[vibrationToggle,"vibration"],[motionToggle,"reducedMotion"],[soundToggle,"sound"]].forEach(([button,key]) => {
       if (!button) return;
       button.textContent = settings[key] ? "ON" : "OFF";
       button.setAttribute("aria-pressed", String(!!settings[key]));
@@ -58,12 +61,18 @@
     if (errorText) errorText.textContent = detail || "GAME BOOT FAILED";
   };
 
-  const loadGame = () => {
+  const startLoadedMode = (mode) => {
+    if (mode === "daily") window.SnakeEvolution?.startDaily?.();
+    else if (mode === "endless") window.SnakeEvolution?.startEndless?.();
+    else window.SnakeEvolution?.start?.();
+  };
+
+  const loadGame = (mode="normal") => {
     hidePanels();
     if (gameLoaded) {
       bootMenu?.classList.add("hidden");
       app?.classList.remove("preboot");
-      window.SnakeEvolution?.start?.();
+      startLoadedMode(mode);
       return;
     }
     if (gameLoading) return;
@@ -84,11 +93,21 @@
     script.id = "snakeGameScript";
     script.src = "game.js?v=survival-v7";
     script.onload = () => {
-      window.removeEventListener("error", onRuntimeError);
-      gameLoading = false;
       if (bootFailed) return;
-      gameLoaded = true;
-      window.SnakeEvolution?.start?.();
+      const ultimate = document.createElement("script");
+      ultimate.id = "snakeUltimateScript";
+      ultimate.src = "ultimate-gameplay-v1.js?v=ultimate-v1";
+      ultimate.onload = () => {
+        window.removeEventListener("error", onRuntimeError);
+        gameLoading = false;
+        gameLoaded = true;
+        startLoadedMode(mode);
+      };
+      ultimate.onerror = () => {
+        window.removeEventListener("error", onRuntimeError);
+        failLoad("ULTIMATE GAMEPLAY LAYER COULD NOT LOAD");
+      };
+      document.body.appendChild(ultimate);
     };
     script.onerror = () => {
       window.removeEventListener("error", onRuntimeError);
@@ -97,7 +116,9 @@
     document.body.appendChild(script);
   };
 
-  startBtn?.addEventListener("click", loadGame);
+  startBtn?.addEventListener("click", () => loadGame("normal"));
+  dailyBtn?.addEventListener("click", () => loadGame("daily"));
+  endlessBtn?.addEventListener("click", () => loadGame("endless"));
   howBtn?.addEventListener("click", () => {
     optionsPanel?.classList.add("hidden");
     howPanel?.classList.remove("hidden");
@@ -114,8 +135,10 @@
   gridToggle?.addEventListener("click", () => { settings.grid=!settings.grid; saveSettings(); });
   vibrationToggle?.addEventListener("click", () => { settings.vibration=!settings.vibration; saveSettings(); });
   motionToggle?.addEventListener("click", () => { settings.reducedMotion=!settings.reducedMotion; saveSettings(); });
+  soundToggle?.addEventListener("click", () => { settings.sound=!settings.sound; try { localStorage.setItem("snake-evolution-sound", settings.sound ? "on" : "off"); } catch {} saveSettings(); });
 
   window.showBootMenu = showBootMenu;
   renderSettings();
+  if (settings.sound === false) { try { localStorage.setItem("snake-evolution-sound", "off"); } catch {} }
   showBootMenu();
 })();
