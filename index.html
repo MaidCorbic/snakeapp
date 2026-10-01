@@ -1,9 +1,31 @@
 <!doctype html>
-<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no"><meta name="theme-color" content="#080b09"><title>Snake Evolution — Survival Run</title><link rel="stylesheet" href="style.css?v=811cc9e3"></head>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no"><meta name="theme-color" content="#080b09"><title>Snake Evolution — Survival Run</title><link rel="stylesheet" href="style.css?v=cd53e5ff"></head>
 <body><main id="app">
 <header><div><span class="eyebrow">PIXEL ARCADE // SURVIVAL RUN</span><h1>SNAKE <b>EVOLUTION</b></h1><div class="subhud"><span>ZONE <strong id="zone">NEON GRID</strong></span><span>EVOLUTION <strong id="evo">RUNNER</strong></span></div></div><div class="stats"><span>SCORE<strong id="score">0</strong></span><span>COMBO<strong id="combo">x1</strong></span><span>TIME<strong id="time">5:00</strong></span><span>BEST<strong id="best">0</strong></span></div></header>
-<section class="game-shell"><div id="menu" class="menu"><div class="menu-card"><span class="eyebrow">PIXEL ARCADE // 05:00 RUN</span><h2>SNAKE <b>EVOLUTION</b></h2><p>Survive. Evolve. Break the record.</p><div class="menu-actions"><button type="button" id="menuStart" class="menu-action">START RUN</button><button type="button" id="how" class="menu-action">HOW TO PLAY</button></div><div id="howPanel" class="how-panel hidden"><h3>HOW TO PLAY</h3><p><b>MOVE</b> WASD / ARROWS</p><p><b>DASH</b> SPACE</p><p><b>SHIELD</b> SHIFT</p><p><b>PULSE</b> E</p><p><b>GOAL</b> Survive 5 minutes, collect ENERGY and CORE, build your combo and defeat the WARDEN.</p><button type="button" id="howBack" class="menu-action">BACK</button></div></div></div><canvas id="game" aria-label="Snake Evolution game"></canvas><div id="bossHud" class="boss-hud"><span>WARDEN</span><strong id="bossHp">12/12</strong></div><div id="message" class="message"><div class="message-card"><h2>RUN ENDED</h2><p>Review your stats below.</p><button id="start" class="primary-btn">RUN AGAIN</button></div></div><div id="eventBanner" class="event-banner"></div><div id="floaters" class="floaters"></div><div id="toast" class="toast"></div></section>
-<section id="runStats" class="run-stats"></section><section id="saveStats" class="save-stats"></section><section id="missions" class="missions"><b>MISSIONS</b><span>25 ENERGY</span><span>5 CORES</span><span>10 HUNTERS</span><span>COMBO x9</span><span>WARDEN</span><span>NO HIT</span></section>
+<section class="game-shell">
+<div id="menu" class="menu"><div class="menu-card">
+<span class="eyebrow">PIXEL ARCADE // 05:00 RUN</span><h2>SNAKE <b>EVOLUTION</b></h2><p>Survive. Evolve. Break the record.</p>
+<div class="menu-actions">
+<button type="button" id="menuStart" class="menu-action" onclick="openGameFromMenu(event)">START RUN</button>
+<button type="button" id="how" class="menu-action" aria-expanded="false" onclick="openTutorial(event)">HOW TO PLAY</button>
+</div>
+<div id="howPanel" class="how-panel hidden">
+<h3>HOW TO PLAY</h3>
+<p><b>MOVE</b> WASD / ARROWS — On phone, use the four direction buttons or swipe the game field.</p>
+<p><b>DASH</b> SPACE — On phone, press DASH to move faster.</p>
+<p><b>SHIELD</b> SHIFT — On phone, press SHIELD to block damage for a short time.</p>
+<p><b>PULSE</b> E — On phone, press PULSE to clear nearby hazards and hurt the WARDEN.</p>
+<p><b>GOAL</b> Survive 5 minutes, collect ENERGY and CORE, build your combo, defeat Hunters and destroy the WARDEN.</p>
+<p><b>PHONE</b> Keep the phone in landscape for the most comfortable controls.</p>
+<button type="button" id="howBack" class="menu-action" onclick="closeTutorial(event)">BACK</button>
+</div></div></div>
+<canvas id="game" aria-label="Snake Evolution game"></canvas>
+<div id="bossHud" class="boss-hud"><span>WARDEN</span><strong id="bossHp">12/12</strong></div>
+<div id="message" class="message"><div class="message-card"><h2>RUN ENDED</h2><p>Review your stats below.</p><button id="start" class="primary-btn">RUN AGAIN</button></div></div>
+<div id="eventBanner" class="event-banner"></div><div id="floaters" class="floaters"></div><div id="toast" class="toast"></div>
+</section>
+<section id="runStats" class="run-stats"></section><section id="saveStats" class="save-stats"></section>
+<section id="missions" class="missions"><b>MISSIONS</b><span>25 ENERGY</span><span>5 CORES</span><span>10 HUNTERS</span><span>COMBO x9</span><span>WARDEN</span><span>NO HIT</span></section>
 <section class="ability-bar"><button id="dash" class="ability"><b>DASH</b><span>SPACE</span><i id="dashFill"></i></button><button id="shield" class="ability"><b>SHIELD</b><span>SHIFT</span><i id="shieldFill"></i></button><button id="pulse" class="ability"><b>PULSE</b><span>E</span><i id="pulseFill"></i></button></section>
 <footer><div class="legend"><span class="desktop-commands">KEYBOARD: WASD / ARROWS · SPACE DASH · SHIFT SHIELD · E PULSE · P / ESC PAUSE</span><span>ENERGY +10</span><span>CORE +50</span><span>HUNTER</span><span>HAZARD</span><span>POWER-UP</span></div><div class="controls" aria-label="Mobile touch controls"><span class="touch-label">TOUCH</span><button data-dir="up">▲</button><div><button data-dir="left">◀</button><button data-dir="down">▼</button><button data-dir="right">▶</button></div></div></footer>
-</main><script src="game.js?v=811cc9e3"></script></body></html>
+</main><script src="game.js?v=cd53e5ff"></script></body></html>
