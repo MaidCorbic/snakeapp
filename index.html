@@ -3,30 +3,7 @@
 <body><main id="app">
 <header><div><span class="eyebrow">PIXEL ARCADE // SURVIVAL RUN</span><h1>SNAKE <b>EVOLUTION</b></h1><div class="subhud"><span>ZONE <strong id="zone">NEON GRID</strong></span><span>EVOLUTION <strong id="evo">RUNNER</strong></span></div></div><div class="stats"><span>SCORE<strong id="score">0</strong></span><span>COMBO<strong id="combo">x1</strong></span><span>TIME<strong id="time">5:00</strong></span><span>BEST<strong id="best">0</strong></span></div></header>
 <section class="game-shell">
-<div id="menu" class="menu"><div class="menu-card">
-<span class="eyebrow">PIXEL ARCADE // 05:00 RUN</span><h2>SNAKE <b>EVOLUTION</b></h2><p>Survive. Evolve. Break the record.</p>
-<div class="menu-actions">
-<button type="button" id="menuStart" class="menu-action" onclick="return window.openGameFromMenu(event)">START RUN</button>
-<button type="button" id="how" class="menu-action" aria-expanded="false" onclick="return window.openTutorial(event)">HOW TO PLAY</button>
-<button type="button" id="options" class="menu-action" onclick="return window.openOptions(event)">OPTIONS</button>
-</div>
-<div id="optionsPanel" class="how-panel options-panel hidden">
-<h3>OPTIONS</h3>
-<div class="option-row"><span>GRID</span><button type="button" class="option-toggle" id="gridToggle" aria-pressed="true">ON</button></div>
-<div class="option-row"><span>VIBRATION</span><button type="button" class="option-toggle" id="vibrationToggle" aria-pressed="true">ON</button></div>
-<div class="option-row"><span>REDUCED MOTION</span><button type="button" class="option-toggle" id="motionToggle" aria-pressed="false">OFF</button></div>
-<button type="button" id="optionsBack" class="menu-action" onclick="return window.closeOptions(event)">BACK</button>
-</div>
-<div id="howPanel" class="how-panel hidden">
-<h3>HOW TO PLAY</h3>
-<p><b>MOVE</b> WASD / ARROWS — On phone, use the four direction buttons or swipe the game field.</p>
-<p><b>DASH</b> SPACE — On phone, press DASH to move faster.</p>
-<p><b>SHIELD</b> SHIFT — On phone, press SHIELD to block damage for a short time.</p>
-<p><b>PULSE</b> E — On phone, press PULSE to clear nearby hazards and hurt the WARDEN.</p>
-<p><b>GOAL</b> Survive 5 minutes, collect ENERGY and CORE, build your combo, defeat Hunters and destroy the WARDEN.</p>
-<p><b>PHONE</b> Keep the phone in landscape for the most comfortable controls.</p>
-<button type="button" id="howBack" class="menu-action" onclick="return window.closeTutorial(event)">BACK</button>
-</div></div></div>
+<section id="bootMenu" class="boot-menu" role="dialog" aria-modal="true" aria-label="Snake Evolution main menu"><div class="boot-card"><span class="eyebrow">PIXEL ARCADE // 05:00 RUN</span><h2>SNAKE <b>EVOLUTION</b></h2><p>Survive. Evolve. Break the record.</p><div class="boot-actions"><button type="button" id="bootStart" class="boot-action">START RUN</button><button type="button" id="bootHow" class="boot-action">HOW TO PLAY</button><button type="button" id="bootOptions" class="boot-action">OPTIONS</button></div><div id="bootOptionsPanel" class="boot-panel hidden"><h3>OPTIONS</h3><div class="option-row"><span>GRID</span><button type="button" class="option-toggle" id="bootGrid" aria-pressed="true">ON</button></div><div class="option-row"><span>VIBRATION</span><button type="button" class="option-toggle" id="bootVibration" aria-pressed="true">ON</button></div><div class="option-row"><span>REDUCED MOTION</span><button type="button" class="option-toggle" id="bootMotion" aria-pressed="false">OFF</button></div><button type="button" id="bootOptionsBack" class="boot-action">BACK</button></div><div id="bootHowPanel" class="boot-panel hidden"><h3>HOW TO PLAY</h3><p><b>MOVE</b> WASD / ARROWS — Phone: direction buttons or swipe.</p><p><b>DASH</b> SPACE — burst forward.</p><p><b>SHIELD</b> SHIFT — block damage briefly.</p><p><b>PULSE</b> E — clear nearby threats and damage the WARDEN.</p><p><b>FURY</b> Q — charge the meter, then activate 2X SCORE + threat wipe.</p><p><b>GOAL</b> Survive 5 minutes, evolve, build combo, hunt enemies, destroy the WARDEN.</p><p><b>APEX CORE</b> Rare power-up: massive score, combo boost and hazard wipe.</p><p><b>PHONE</b> Landscape gives the best control layout.</p><button type="button" id="bootHowBack" class="boot-action">BACK</button></div><div id="bootError" class="boot-error hidden"><h3>SYSTEM ERROR</h3><p id="bootErrorText">GAME BOOT FAILED</p><button type="button" id="bootErrorRetry" class="boot-action">RETRY</button></div></div></section>
 <canvas id="game" aria-label="Snake Evolution game"></canvas>
 <div id="bossHud" class="boss-hud"><span>WARDEN</span><strong id="bossHp">12/12</strong></div>
 <div id="message" class="message"><div class="message-card"><h2>RUN ENDED</h2><p>Review your stats below.</p><button id="start" class="primary-btn">RUN AGAIN</button></div></div>
@@ -36,4 +13,4 @@
 <section id="missions" class="missions"><b>MISSIONS // PROGRESSION</b><div id="missionList" class="mission-list"></div></section>
 <section class="ability-bar"><button id="dash" class="ability"><b>DASH</b><span>SPACE</span><i id="dashFill"></i></button><button id="shield" class="ability"><b>SHIELD</b><span>SHIFT</span><i id="shieldFill"></i></button><button id="pulse" class="ability"><b>PULSE</b><span>E</span><i id="pulseFill"></i></button></section>
 <footer><div class="legend"><span class="desktop-commands">KEYBOARD: WASD / ARROWS · SPACE DASH · SHIFT SHIELD · E PULSE · P / ESC PAUSE</span><span>ENERGY +10</span><span>CORE +50</span><span>HUNTER</span><span>HAZARD</span><span>POWER-UP</span></div><div class="controls" aria-label="Mobile touch controls"><span class="touch-label">TOUCH</span><button data-dir="up">▲</button><div><button data-dir="left">◀</button><button data-dir="down">▼</button><button data-dir="right">▶</button></div></div></footer>
-</main><script src="game.js?v=menu-fix03"></script></body></html>
+</main><script src="menu.js?v=boot-v5"></script></body></html>
