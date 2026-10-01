@@ -133,7 +133,7 @@
     dailyMode=mode==="daily";endlessMode=mode==="endless";endlessCycle=0;endlessTotalStart=performance.now();
     if(dailyMode)enableDailyRng();else restoreRng();
     chooseCondition();deathCause="NONE";perfectBroken=false;maxThreat=0;bountyTarget=null;bountyClaimed=false;enemyId=0;arenaBlocks=[];telegraphs=[];riskShrine=null;secretPortal=null;secretUntil=0;layerZone=-1;layerEventClock=0;nextRiskAt=performance.now()+60000;nextSecretAt=performance.now()+90000;
-    loadGhost();baseResetU();if(runCondition?.[0]==="ONE CHANCE")lives=1;
+    loadGhost();contractOfferOpen=true;extractionOpen=false;baseResetU();if(runCondition?.[0]==="ONE CHANCE")lives=1;
     perfectStart=performance.now();generateArena();hud();draw();renderLeaderboard();baseRenderAchievementsU();renderUltimateAchievements()
   }
   function startDaily(){prepareRun("daily")}
