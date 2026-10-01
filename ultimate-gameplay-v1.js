@@ -1,12 +1,12 @@
 /* ULTIMATE GAMEPLAY LAYER V1 */
 (() => {
   "use strict";
-  let dailyMode=false,endlessMode=false,endlessCycle=0,endlessTotalStart=0,dailySeed=0;
+  let dailyMode=false,endlessMode=false,endlessCycle=0,endlessTotalStart=0,dailySeed=0,riskHeatUntil=0,ghostSaved=false;
   let runCondition=null,arenaBlocks=[],telegraphs=[],riskShrine=null,secretPortal=null,secretUntil=0;
   let perfectStart=0,perfectBroken=false,deathCause="NONE",maxThreat=0,bountyTarget=null,bountyClaimed=false;
   let enemyId=0,ghostPath=[],ghostIndex=0,runPath=[],nextRiskAt=0,nextSecretAt=0,bossTelegraphUntil=0,layerZone=-1,layerEventClock=0,audioCtx=null;
   const originalRandom=Math.random;
-  const baseGainU=gain,baseHudU=hud,baseDrawU=draw,baseMoveU=move,baseResetU=reset,baseTakeDamageU=takeDamage,baseUseDashU=useDash,baseUsePulseU=usePulse,baseUseFuryU=useFury,baseSpawnWaveU=spawnWave,baseHunterStepU=hunterStep,baseBossStepU=bossStep,basePersistU=persist,baseStatsMarkupU=statsMarkup,baseRenderAchievementsU=renderAchievements;
+  const baseGainU=gain,baseHudU=hud,baseDrawU=draw,baseMoveU=move,baseResetU=reset,baseTakeDamageU=takeDamage,baseUseDashU=useDash,baseUsePulseU=usePulse,baseUseFuryU=useFury,baseCollectPowerupU=collectPowerup,baseSpawnWaveU=spawnWave,baseHunterStepU=hunterStep,baseBossStepU=bossStep,basePersistU=persist,baseStatsMarkupU=statsMarkup,baseRenderAchievementsU=renderAchievements;
 
   function hashSeed(input){let h=2166136261;for(let i=0;i<input.length;i++){h^=input.charCodeAt(i);h=Math.imul(h,16777619)}return h>>>0}
   function dailyDateKey(){const d=new Date();return d.getUTCFullYear()+"-"+String(d.getUTCMonth()+1).padStart(2,"0")+"-"+String(d.getUTCDate()).padStart(2,"0")}
@@ -71,7 +71,7 @@
 
   function loadGhost(){try{ghostPath=JSON.parse(localStorage.getItem(dailyMode?"snake-evolution-daily-ghost":"snake-evolution-ghost")||"[]")}catch{ghostPath=[]}ghostIndex=0;runPath=[]}
   function recordStep(){if(alive){const p=snake[0];runPath.push({x:p.x,y:p.y});ghostIndex=Math.min(ghostIndex+1,ghostPath.length)}}
-  function saveGhost(){const key=dailyMode?"snake-evolution-daily-ghost":"snake-evolution-ghost",bestKey=dailyMode?"snake-evolution-daily-best":"snake-evolution-best",best=Number(localStorage.getItem(bestKey)||0);if(score>best||ghostPath.length===0){try{localStorage.setItem(key,JSON.stringify(runPath.slice(0,5000)));localStorage.setItem(bestKey,String(score))}catch{}}}
+  function saveGhost(){const key=dailyMode?"snake-evolution-daily-ghost":"snake-evolution-ghost",bestKey=dailyMode?"snake-evolution-daily-best":"snake-evolution-best",best=Number(localStorage.getItem(bestKey)||0);if(score>best||ghostPath.length===0){try{localStorage.setItem(key,JSON.stringify(runPath.slice(0,5000)));localStorage.setItem(bestKey,String(score));ghostSaved=true}catch{}}}
   function saveLeaderboard(mode){const key=dailyMode?"snake-evolution-daily-leaderboard":"snake-evolution-leaderboard";let list=[];try{list=JSON.parse(localStorage.getItem(key)||"[]")}catch{}list.push({score:Math.round(score),combo,zone:currentZone(),evolution:evoNames[evolution()-1],mutation:mutationName(),condition:conditionName(),mode,date:dailyDateKey()});list.sort((a,b)=>b.score-a.score);writeStore(key,list.slice(0,10))}
   function renderLeaderboard(){
     const render=(el,key)=>{if(!el)return;let list=[];try{list=JSON.parse(localStorage.getItem(key)||"[]")}catch{}el.innerHTML=list.length?list.map((r,n)=>"<div class=\"leader-row\"><b>#"+(n+1)+"</b><strong>"+r.score+"</strong><span>x"+r.combo+" // "+r.evolution+"</span><small>"+r.mutation+" // "+r.mode+"</small></div>").join(""):"<div class=\"leader-empty\">NO RUNS RECORDED</div>"};
@@ -79,7 +79,7 @@
   }
 
   function spawnRiskShrine(){if(riskShrine||currentZone()<2)return;riskShrine=safePointU();riskShrine.expires=performance.now()+18000;addTelegraph(riskShrine.x,riskShrine.y,"RISK SHRINE","#ffd85c",900);event("RISK SHRINE // ACCEPT THE HEAT");say("RISK SHRINE // +15 THREAT // +400")}
-  function collectRiskShrine(head){if(!riskShrine||!same(riskShrine,head))return;riskShrine=null;threatBonus+=15;gain(400);gainXp(100);chargeFury(25);const s=ultimateStats();s.shrines++;saveUltimateStats(s);say("RISK SHRINE // HEAT +15 // 25s");event("RISK SHRINE ACTIVE")}
+  function collectRiskShrine(head){if(!riskShrine||!same(riskShrine,head))return;riskShrine=null;riskHeatUntil=performance.now()+25000;threatBonus+=15;gain(400);gainXp(100);chargeFury(25);const s=ultimateStats();s.shrines++;saveUltimateStats(s);say("RISK SHRINE // HEAT +15 // 25s");event("RISK SHRINE ACTIVE")}
   function spawnSecretPortal(){if(secretPortal||currentZone()<2||secretUntil>performance.now())return;secretPortal=safePointU();addTelegraph(secretPortal.x,secretPortal.y,"SECRET","#a66cff",1200);event("ANOMALY // SECRET VAULT")}
   function enterSecret(head){if(!secretPortal||!same(secretPortal,head))return;secretPortal=null;secretUntil=performance.now()+22000;arenaBlocks=[];gain(300);gainXp(100);chargeFury(20);const s=ultimateStats();s.secretZones++;saveUltimateStats(s);for(let i=0;i<2;i++)powerups.push({...safePointU(),type:Math.random()<.5?"apex":"overdrive"});event("SECRET VAULT // 22s");say("SECRET ZONE // LOOT SURGE")}
 
@@ -92,6 +92,7 @@
   }
 
   useDash=function(){audioCue("ability");baseUseDashU();if(alive&&evolution()===2)dashReady=Math.min(dashReady,performance.now()+3500)};
+  collectPowerup=function(head){const hit=powerups.find(p=>same(p,head)),oldLives=lives;baseCollectPowerupU(head);if(runCondition?.[0]==="NO MEDKITS"&&hit?.type==="medkit"){lives=oldLives;gain(250);gainXp(50);say("NO MEDKITS // +250 SCORE")}};
   useFury=function(){audioCue("ability");baseUseFuryU();if(alive&&evolution()>=4)gainXp(8)};
   gain=function(points){const perfect=!perfectBroken&&alive&&(performance.now()-perfectStart)>=30000;baseGainU(points*conditionScoreMult()*(perfect?1.25:1))};
   chargeFury=function(amount){const before=fury;baseChargeFuryU(amount);if(performance.now()<furyUntil||fury>=100)return;const u=getUpgrades(),extra=1+(u.fury||0)*.08;fury=Math.min(100,fury+amount*extra*.08)};
@@ -100,7 +101,7 @@
 
   usePulse=function(){const finisher=alive&&chain>=10,bountyBefore=bountyTarget;audioCue("ability");baseUsePulseU();if(finisher&&alive){gain(750);gainXp(100);hazards=[];chargeFury(25);const s=ultimateStats();s.finishers++;saveUltimateStats(s);say("CHAIN FINISHER // +750");event("CHAIN x10 // FINISHER")}if(evolution()>=4&&boss){boss.hp=Math.max(0,boss.hp-1);if(boss.hp===0)destroyBoss()}if(bountyBefore&&!hunters.includes(bountyBefore)&&!bountyClaimed){bountyClaimed=true;gain(450);gainXp(90);const s=ultimateStats();s.bounties++;saveUltimateStats(s);say("BOUNTY TARGET DOWN // +450");event("BOUNTY COMPLETE")}};
 
-  spawnWave=function(){baseSpawnWaveU();hunters.forEach(h=>{if(!h.id)h.id=++enemyId});if(!bountyTarget&&!bountyClaimed){bountyTarget=hunters.find(h=>h.type==="elite")||hunters[0]||null;if(bountyTarget){bountyTarget.bounty=true;say("BOUNTY // TARGET MARKED")}}};
+  spawnWave=function(){baseSpawnWaveU();hunters.forEach(h=>{if(!h.id)h.id=++enemyId;if(h.type==="elite"&&!h.variant)h.variant=Math.random()<.5?"charger":"watcher"});if(!bountyTarget&&!bountyClaimed){bountyTarget=hunters.find(h=>h.type==="elite")||hunters[0]||null;if(bountyTarget){bountyTarget.bounty=true;say("BOUNTY // TARGET MARKED")}}};
   hunterStep=function(){hunters.filter(h=>h.type==="elite"&&h.variant==="charger").forEach(h=>{const dx=snake[0].x-h.x,dy=snake[0].y;if(Math.abs(dx)+Math.abs(dy)<9)addTelegraph(h.x,h.y,"CHARGER","#ff6a3d",450)});baseHunterStepU();if(hunters.length>=3)hunters.forEach((h,i)=>{if(h.type==="hunter"&&!h.variant){h.x=(h.x+(i%2?1:-1)+COLS)%COLS}})};
   bossStep=function(){if(boss&&boss.phase>=2&&bossTelegraphUntil<=performance.now()){bossTelegraphUntil=performance.now()+450;addTelegraph(boss.x,boss.y,"WARDEN STRIKE","#ff3f8f",450,{radius:boss.phase===3?4:3})}baseBossStepU()};
 
@@ -116,7 +117,7 @@
     if(layerZone!==currentZone()){layerZone=currentZone();zone=currentZone();generateArena()}
     if(performance.now()>nextRiskAt&&currentZone()>=2){spawnRiskShrine();nextRiskAt=performance.now()+80000}
     if(performance.now()>nextSecretAt&&currentZone()>=2){spawnSecretPortal();nextSecretAt=performance.now()+90000}
-    if(riskShrine&&performance.now()>riskShrine.expires){riskShrine=null;say("RISK SHRINE // EXPIRED")}
+    if(riskShrine&&performance.now()>riskShrine.expires){riskShrine=null;say("RISK SHRINE // EXPIRED")}if(riskHeatUntil&&performance.now()>riskHeatUntil){riskHeatUntil=0;threatBonus=Math.max(0,threatBonus-15);say("RISK SHRINE // HEAT ENDED")}
     if(eventClock2!==layerEventClock&&eventClock2%420===0){layerEventClock=eventClock2;startEmergencyEvent()}
     if(runCondition?.[0]==="LOW VISIBILITY"&&eventClock2%180===0&&!advancedEventActive("BLACKOUT"))advancedZoneEvent={type:"BLACKOUT",until:performance.now()+7000};
     cleanTelegraphs();if(salvageChain&&performance.now()>salvageUntil)salvageChain=0;
@@ -147,7 +148,7 @@
     baseWinU()
   };
 
-  persist=function(winResult){saveGhost();saveLeaderboard(advancedExitMode==="CASH OUT"?"CASH OUT":winResult?"SURVIVED":"ENDED");basePersistU(winResult);const s=ultimateStats();if(dailyMode)s.dailyRuns++;s.perfectSeconds=Math.max(s.perfectSeconds,Math.floor((performance.now()-perfectStart)/1000));s.ghostRuns+=runPath.length?1:0;saveUltimateStats(s);restoreRng();renderLeaderboard();renderUltimateAchievements()};
+  persist=function(winResult){saveGhost();saveLeaderboard(advancedExitMode==="CASH OUT"?"CASH OUT":winResult?"SURVIVED":"ENDED");basePersistU(winResult);const s=ultimateStats();if(dailyMode)s.dailyRuns++;if(!perfectBroken)s.perfectSeconds=Math.max(s.perfectSeconds,Math.floor((performance.now()-perfectStart)/1000));if(runPath.length&&!ghostSaved){s.ghostRuns++;ghostSaved=true}saveUltimateStats(s);restoreRng();renderLeaderboard();renderUltimateAchievements()};
   statsMarkup=function(winResult){return baseStatsMarkupU(winResult)+'<div class="analysis-grid"><span>CAUSE<strong>'+deathCause+'</strong></span><span>MAX THREAT<strong>'+maxThreat+'%</strong></span><span>CONDITION<strong>'+conditionName()+'</strong></span><span>MODE<strong>'+(endlessMode?"ENDLESS":dailyMode?"DAILY":"STANDARD")+'</strong></span></div><p class="result-copy">'+(perfectBroken?"PERFECT RUN // BROKEN":"PERFECT RUN // 1.25X ACTIVE")+'</p>'};
 
   hud=function(){
@@ -155,7 +156,7 @@
     const cond=document.querySelector("#condition"),condLabel=document.querySelector("#conditionLabel"),mode=document.querySelector("#runMode"),bounty=document.querySelector("#bounty"),bountyLabel=document.querySelector("#bountyLabel"),perfect=document.querySelector("#perfectLabel"),maxD=document.querySelector("#maxThreat"),perk=document.querySelector("#evoPerk");
     if(cond)cond.textContent=conditionName();if(condLabel)condLabel.textContent=runCondition?.[1]||"STANDARD";if(mode)mode.textContent=endlessMode?"ENDLESS C"+endlessCycle:dailyMode?"DAILY":"STANDARD";
     if(bounty)bounty.textContent=bountyClaimed?"CLEARED":bountyTarget?"TARGET":"SEARCHING";if(bountyLabel)bountyLabel.textContent=bountyTarget&&!bountyClaimed?(bountyTarget.variant||bountyTarget.type||"TARGET").toUpperCase():"READY";
-    if(perfect){const sec=Math.floor((performance.now()-perfectStart)/1000);perfect.textContent=!perfectBroken&&sec>=30?"PERFECT x1.25":perfectBroken?"BROKEN":"BUILDING";const s=ultimateStats();s.perfectSeconds=Math.max(s.perfectSeconds,sec);saveUltimateStats(s)}
+    if(perfect){const sec=Math.floor((performance.now()-perfectStart)/1000);perfect.textContent=!perfectBroken&&sec>=30?"PERFECT x1.25":perfectBroken?"BROKEN":"BUILDING";if(!perfectBroken){const s=ultimateStats();s.perfectSeconds=Math.max(s.perfectSeconds,sec);saveUltimateStats(s)}}
     if(maxD)maxD.textContent=maxThreat+"%";if(perk)perk.textContent=evolution()===1?"SPEED":evolution()===2?"DASH BOOST":evolution()===3?"PHASED HIT":evolution()===4?"PULSE+":"STANDARD";
     if(secretUntil>performance.now()&&zoneEl)zoneEl.textContent="SECRET VAULT";else if(zoneEl)zoneEl.textContent=(dailyMode?zoneNames[zone]+" // DAILY":zoneNames[zone]);
     if(endlessMode){const total=Math.floor((performance.now()-endlessTotalStart)/1000);timeEl.textContent="∞ "+Math.floor(total/60)+":"+String(total%60).padStart(2,"0")}
