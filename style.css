@@ -105,3 +105,14 @@ canvas{touch-action:none}
 /* Pre-boot isolation: only the standalone menu is visible before START RUN. */
 #app.preboot{visibility:hidden;pointer-events:none}
 .boot-menu{visibility:visible}
+
+/* Live run intel: threat + objective */
+.run-intel{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:0 0 10px}
+.intel-card{padding:9px 10px;border:2px solid #26372d;background:#0a0f0c;box-shadow:3px 3px 0 #020302}
+.intel-top{display:grid;grid-template-columns:auto 1fr auto;gap:8px;align-items:center;font-size:5px}
+.intel-top span{color:var(--muted)}.intel-top strong{font-size:7px;color:var(--ink)}.intel-top b{font-size:5px;color:var(--green);justify-self:end}
+.intel-track{height:7px;margin-top:7px;border:1px solid #304238;background:#111912;overflow:hidden}.intel-track i{display:block;height:100%;width:0;background:var(--green);transition:width .12s linear}
+.danger-card .intel-track i{background:var(--red)}.danger-card .intel-top b{color:var(--green)}
+.danger-card:has(#dangerLabel),.objective-card{min-height:43px}
+@media(max-width:700px){.run-intel{grid-template-columns:1fr 1fr;gap:7px}.intel-card{padding:8px}.intel-top{grid-template-columns:auto 1fr;gap:5px}.intel-top b{grid-column:1 / -1;justify-self:start;font-size:4px}.intel-top strong{justify-self:end;font-size:6px}}
+@media(max-width:420px){.run-intel{gap:6px;margin-bottom:7px}.intel-card{padding:7px}.intel-top{font-size:4px}.intel-top strong{font-size:5px}.intel-track{height:6px;margin-top:5px}}
