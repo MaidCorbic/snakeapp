@@ -127,6 +127,14 @@ function hud(){
    if(objectiveLabel){objectiveLabel.textContent=objectiveDone?"COMPLETE":value+"/"+objective[3];objectiveLabel.classList.toggle("complete",objectiveDone)}if(objectiveFill)objectiveFill.parentElement?.classList.toggle("complete",objectiveDone);
    if(objectiveFill)objectiveFill.style.width=pct+"%";
  }
+ const contractEl=document.querySelector("#contract"),contractFill=document.querySelector("#contractFill"),contractLabel=document.querySelector("#contractLabel"),contractCard=document.querySelector(".contract-card");
+ if(contract){
+   const value=Math.min(contract[3],contractValue()),pct=Math.min(100,value/contract[3]*100);
+   if(contractEl)contractEl.textContent=contract[0];
+   if(contractLabel){contractLabel.textContent=contractDone?"COMPLETE":value+"/"+contract[3];contractLabel.classList.toggle("complete",contractDone)}
+   if(contractFill)contractFill.style.width=pct+"%";
+   if(contractCard)contractCard.classList.toggle("complete",contractDone);
+ }
  if(boss){bossHud.classList.add("show");bossHp.textContent=boss.hp+"/"+boss.maxHp}else bossHud.classList.remove("show")
 }
 function say(t){toast.textContent=t;toast.classList.add("show");clearTimeout(say.t);say.t=setTimeout(()=>toast.classList.remove("show"),1000)}
