@@ -41,3 +41,7 @@ canvas{touch-action:none}
   .menu-card .menu-action{min-height:48px;font-size:7px}
   .how-panel{max-height:calc(100vh - 90px);overflow:auto}
 }
+
+/* Mobile menu tap reliability */
+.menu-action{touch-action:manipulation;-webkit-tap-highlight-color:transparent;-webkit-user-select:none;user-select:none}
+.menu-actions,.how-panel{touch-action:manipulation}
