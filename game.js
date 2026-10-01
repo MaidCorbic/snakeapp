@@ -59,7 +59,7 @@ function checkContract(){
 function spawnSupplyDrop(){
   if(supplyDrop)return;
   const roll=Math.random(),late=currentZone()>=3;
-  const supplyBoost=runMutation?.[0]==="SUPPLY RUSH";const legendaryChance=(late?.16:.10)+(supplyBoost?.08:0),rareChance=(late?.48:.38)+(supplyBoost?.12:0);const rarity=roll<legendaryChance?"legendary":roll<rareChance?"rare":"common";
+  const supplyBoost=runMutation?.[0]==="SUPPLY RUSH";const legendaryChance=(late?.16:.10)+(supplyBoost?0.08:0),rareChance=(late?.48:.38)+(supplyBoost?0.12:0);const rarity=roll<legendaryChance?"legendary":roll<rareChance?"rare":"common";
   const pos=free();
   supplyDrop={x:pos.x,y:pos.y,rarity,expires:performance.now()+14000};
   const hazardCount=rarity==="legendary"?5:rarity==="rare"?4:3;
