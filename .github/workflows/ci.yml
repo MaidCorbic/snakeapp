@@ -23,44 +23,41 @@ jobs:
           node-version: 20
 
       - name: Check JavaScript syntax
-        run: node --check game.js
+        run: |
+          node --check game.js
+          node --check menu.js
 
       - name: Check required files
         run: |
           test -f index.html
           test -f style.css
           test -f game.js
+          test -f menu.js
 
-      - name: Check required UI hooks
+      - name: Check standalone menu and gameplay hooks
         run: |
-          grep -q 'id="menuStart"' index.html
-          grep -q 'id="how"' index.html
-          grep -q 'id="howBack"' index.html
+          grep -q 'id="bootMenu"' index.html
+          grep -q 'id="bootStart"' index.html
+          grep -q 'id="bootHow"' index.html
+          grep -q 'id="bootOptions"' index.html
           grep -q 'id="game"' index.html
           grep -q 'id="start"' index.html
           grep -q 'id="dash"' index.html
           grep -q 'id="shield"' index.html
           grep -q 'id="pulse"' index.html
+          grep -q 'id="fury"' index.html
+          grep -q 'menu.js' index.html
 
-      - name: Check menu controls and options
+      - name: Check gameplay hardening
         run: |
-          grep -q 'id="menuStart"' index.html
-          grep -q 'id="how"' index.html
-          grep -q 'id="options"' index.html
-          grep -q 'id="optionsPanel"' index.html
-          grep -q 'id="howBack"' index.html
-          grep -q 'id="optionsBack"' index.html
-          grep -q 'id="missionList"' index.html
-          grep -q 'menuStart?.addEventListener("click",openGameFromMenu)' game.js
-          grep -q 'howBtn?.addEventListener("click",openTutorial)' game.js
-          grep -q 'optionsBtn?.addEventListener("click",openOptions)' game.js
-          grep -q 'optionsBack?.addEventListener("click",closeOptions)' game.js
-          grep -q 'function openGameFromMenu' game.js
-          grep -q 'function openTutorial' game.js
-          grep -q 'function openOptions' game.js
+          grep -q 'window.SnakeEvolution' game.js
+          grep -q 'showBootMenu' game.js
+          grep -q 'function useFury' game.js
           grep -q 'const missionDefs=' game.js
+          grep -q 'APEX CORE' index.html
+          grep -q 'FURY</b>' index.html
 
-      - name: Check mobile tutorial text
+      - name: Check mobile controls
         run: |
           grep -q 'MOVE</b> WASD / ARROWS' index.html
           grep -q 'PHONE</b>' index.html
