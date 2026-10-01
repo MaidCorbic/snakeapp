@@ -28,8 +28,8 @@ function key(e){const k=e.key.toLowerCase();if(k==="escape"||k==="p"){pause();re
 addEventListener("keydown",key);
 const howPanel=document.querySelector("#howPanel"),howBack=document.querySelector("#howBack");
 menuStart.onclick=()=>{reset()};
-howBtn.onclick=()=>{howPanel.classList.remove("hidden");menuStart.classList.add("hidden");howBtn.classList.add("hidden")};
-howBack.onclick=()=>{howPanel.classList.add("hidden");menuStart.classList.remove("hidden");howBtn.classList.remove("hidden")};
+howBtn.onclick=()=>{howPanel.classList.remove("hidden");howBtn.setAttribute("aria-expanded","true")};
+howBack.onclick=()=>{howPanel.classList.add("hidden");howBtn.setAttribute("aria-expanded","false")};
 start.onclick=reset;
 showSave();
 document.querySelectorAll("[data-dir]").forEach(b=>b.addEventListener("pointerdown",e=>{
