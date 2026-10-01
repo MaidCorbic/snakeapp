@@ -126,3 +126,11 @@ canvas{touch-action:none}
 /* Streak + elite presentation */
 .life-module small{display:block;margin-top:5px;font-size:4px;color:var(--yellow)}
 .intel-card.critical .intel-top strong{color:var(--red)}
+
+
+/* Contract + supply drop HUD */
+.contract-card .intel-track i{background:var(--yellow)}
+.contract-card .intel-top b{color:var(--yellow)}
+.contract-card.complete{border-color:var(--green);box-shadow:4px 4px 0 #1d4020}
+.run-intel{grid-template-columns:repeat(3,minmax(0,1fr))}
+@media(max-width:700px){.run-intel{grid-template-columns:1fr}.contract-card .intel-top{grid-template-columns:auto 1fr}.contract-card .intel-top b{grid-column:1 / -1;justify-self:start}}
