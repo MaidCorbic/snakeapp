@@ -30,9 +30,18 @@ const howPanel=document.querySelector("#howPanel"),howBack=document.querySelecto
 function openGameFromMenu(e){e?.preventDefault();e?.stopPropagation();howPanel.classList.add("hidden");menu.classList.add("hidden");message.style.display="none";reset()}
 function openTutorial(e){e?.preventDefault();e?.stopPropagation();menu.classList.remove("hidden");howPanel.classList.remove("hidden");howBtn.setAttribute("aria-expanded","true")}
 function closeTutorial(e){e?.preventDefault();e?.stopPropagation();howPanel.classList.add("hidden");howBtn.setAttribute("aria-expanded","false")}
-menuStart.addEventListener("pointerup",openGameFromMenu,{passive:false});
-howBtn.addEventListener("pointerup",openTutorial,{passive:false});
-howBack.addEventListener("pointerup",closeTutorial,{passive:false});
+/* Native click is the primary activation path: Android/iOS, mouse, keyboard and accessibility all converge here. */
+menuStart.onclick=openGameFromMenu;
+howBtn.onclick=openTutorial;
+howBack.onclick=closeTutorial;
+/* Capture-phase delegation is a second safety net for mobile browsers that retarget taps. */
+document.addEventListener("click",e=>{
+ const button=e.target?.closest?.("#menuStart,#how,#howBack");
+ if(!button)return;
+ if(button===menuStart)return openGameFromMenu(e);
+ if(button===howBtn)return openTutorial(e);
+ if(button===howBack)return closeTutorial(e);
+},{capture:true});
 start.onclick=()=>{message.style.display="none";reset()};
 showSave();
 document.querySelectorAll("[data-dir]").forEach(b=>b.addEventListener("pointerdown",e=>{
