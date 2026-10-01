@@ -53,6 +53,8 @@ jobs:
           grep -q 'id="dangerFill"' index.html
           grep -q 'id="objective"' index.html
           grep -q 'id="objectiveFill"' index.html
+          grep -q 'id="contract"' index.html
+          grep -q 'id="contractFill"' index.html
           grep -q 'id="streakMark"' index.html
           grep -q 'menu.js' index.html
 
@@ -67,6 +69,10 @@ jobs:
           grep -q 'function checkObjective' game.js
           grep -q 'function handleZoneTransition' game.js
           grep -q 'function checkStreakRewards' game.js
+          grep -q 'function checkContract' game.js
+          grep -q 'function spawnSupplyDrop' game.js
+          grep -q 'function collectSupplyDrop' game.js
+          grep -q 'supplyDropClock' game.js
           grep -q 'type==="elite"' game.js
           grep -q 'stats.elites' game.js
           grep -q 'danger=Math.min' game.js
