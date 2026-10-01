@@ -1,18 +1,25 @@
 # Snake Evolution
 
-Pixel-art arcade Snake MVP for web and mobile.
+Pixel-art arcade survival Snake built as a lightweight static web game.
 
-## Features
-- Grid Snake movement
-- Keyboard and touch controls
+## Current build
+- Five-minute survival run with a clear end condition
 - Energy and high-value Core pickups
-- Combo multiplier
+- Combo multiplier and score progression
 - Progressive hazards
-- Local high score
-- Responsive pixel-art UI
+- Hunter enemies with simple tracking AI
+- Three abilities: Dash, Shield and Pulse
+- Mobile touch controls
+- Desktop keyboard controls
+- Local best score
+- Responsive pixel-art presentation
+- No framework or build step required
 
 ## Controls
-- Desktop: WASD or arrow keys
-- Mobile: on-screen directional controls
+- Move: WASD / arrow keys
+- Dash: Space
+- Shield: Shift
+- Pulse: E
+- Mobile: directional buttons + ability buttons
 
-Open `index.html` directly or serve the folder with a static web server.
+Open `index.html` directly or serve the folder with any static HTTP server.
