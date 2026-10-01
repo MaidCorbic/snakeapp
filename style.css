@@ -28,3 +28,16 @@ button{appearance:none;-webkit-appearance:none;border-radius:0;outline:none}butt
 .desktop-commands{display:block;width:100%;color:var(--ink);font-size:6px;margin-bottom:4px}.touch-label{display:none;font-size:5px;color:var(--green);margin-bottom:3px}.controls{touch-action:none;-webkit-user-select:none;user-select:none}.controls button,.ability{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
 @media(max-width:700px){.desktop-commands{display:none}.touch-label{display:block}.controls{display:block}footer{align-items:flex-start}}
 canvas{touch-action:none}
+
+/* Menu/tutorial interaction fix */
+.menu-card{position:relative}
+.menu-actions{position:relative;z-index:2}
+.menu-action{cursor:pointer;pointer-events:auto;position:relative}
+.how-panel{position:relative;z-index:3}
+.how-panel .menu-action{display:block!important}
+@media(max-width:700px){
+  .menu-card{width:min(560px,92%);padding:22px 18px}
+  .menu-actions{gap:12px}
+  .menu-card .menu-action{min-height:48px;font-size:7px}
+  .how-panel{max-height:calc(100vh - 90px);overflow:auto}
+}
