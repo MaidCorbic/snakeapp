@@ -122,3 +122,7 @@ canvas{touch-action:none}
 .intel-card.critical{border-color:var(--red);box-shadow:4px 4px 0 #300b10}.intel-card.critical .intel-top b,.intel-top b.critical{color:var(--red)}
 .intel-card.complete{border-color:var(--green);box-shadow:4px 4px 0 #1d4020}.intel-card .intel-top b.complete{color:var(--green)}
 .objective-card .intel-track i{background:var(--green)}
+
+/* Streak + elite presentation */
+.life-module small{display:block;margin-top:5px;font-size:4px;color:var(--yellow)}
+.intel-card.critical .intel-top strong{color:var(--red)}
