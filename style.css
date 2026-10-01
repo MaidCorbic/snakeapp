@@ -116,3 +116,9 @@ canvas{touch-action:none}
 .danger-card:has(#dangerLabel),.objective-card{min-height:43px}
 @media(max-width:700px){.run-intel{grid-template-columns:1fr 1fr;gap:7px}.intel-card{padding:8px}.intel-top{grid-template-columns:auto 1fr;gap:5px}.intel-top b{grid-column:1 / -1;justify-self:start;font-size:4px}.intel-top strong{justify-self:end;font-size:6px}}
 @media(max-width:420px){.run-intel{gap:6px;margin-bottom:7px}.intel-card{padding:7px}.intel-top{font-size:4px}.intel-top strong{font-size:5px}.intel-track{height:6px;margin-top:5px}}
+
+/* Live danger/objective states */
+.intel-card.high{border-color:#8d6c20}.intel-card.high .intel-top b{color:#ffd85c}.intel-card.elevated .intel-top b{color:#ffd85c}
+.intel-card.critical{border-color:var(--red);box-shadow:4px 4px 0 #300b10}.intel-card.critical .intel-top b,.intel-top b.critical{color:var(--red)}
+.intel-card.complete{border-color:var(--green);box-shadow:4px 4px 0 #1d4020}.intel-card .intel-top b.complete{color:var(--green)}
+.objective-card .intel-track i{background:var(--green)}
