@@ -31,7 +31,27 @@ menuStart.onclick=()=>{reset()};
 howBtn.onclick=()=>{howPanel.classList.remove("hidden");menuStart.classList.add("hidden");howBtn.classList.add("hidden")};
 howBack.onclick=()=>{howPanel.classList.add("hidden");menuStart.classList.remove("hidden");howBtn.classList.remove("hidden")};
 start.onclick=reset;
-showSave();document.querySelectorAll("[data-dir]").forEach(b=>b.addEventListener("pointerdown",()=>{const d={up:[0,-1],down:[0,1],left:[-1,0],right:[1,0]}[b.dataset.dir];setDir(...d)}));dashBtn.onclick=useDash;shieldBtn.onclick=useShield;pulseBtn.onclick=usePulse;
+showSave();
+document.querySelectorAll("[data-dir]").forEach(b=>b.addEventListener("pointerdown",e=>{
+ e.preventDefault();
+ const d={up:[0,-1],down:[0,1],left:[-1,0],right:[1,0]}[b.dataset.dir];
+ setDir(...d);
+},{passive:false}));
+dashBtn.addEventListener("pointerdown",e=>{e.preventDefault();useDash()},{passive:false});
+shieldBtn.addEventListener("pointerdown",e=>{e.preventDefault();useShield()},{passive:false});
+pulseBtn.addEventListener("pointerdown",e=>{e.preventDefault();usePulse()},{passive:false});
+let touchStart=null;
+canvas.addEventListener("touchstart",e=>{
+ if(!alive||paused)return;
+ const t=e.changedTouches[0]; touchStart={x:t.clientX,y:t.clientY};
+},{passive:true});
+canvas.addEventListener("touchend",e=>{
+ if(!touchStart||!alive||paused)return;
+ const t=e.changedTouches[0],dx=t.clientX-touchStart.x,dy=t.clientY-touchStart.y;
+ touchStart=null;
+ if(Math.max(Math.abs(dx),Math.abs(dy))<24)return;
+ if(Math.abs(dx)>Math.abs(dy))setDir(Math.sign(dx),0);else setDir(0,Math.sign(dy));
+},{passive:true});
 function spawnWave(){const lv=Math.min(5,1+Math.floor((performance.now()-startedAt)/60000));const count=Math.min(1+Math.floor(lv/2),5);while(hunters.length<count)hunters.push({...free(),type:Math.random()<.35?"interceptor":"hunter"});if(lv>=2&&hazards.length<4+lv)hazards.push(free());if(lv>=3&&Math.random()<.65)powerups.push({...free(),type:["overdrive","magnet","repair"][Math.floor(Math.random()*3)]});say("WAVE // LV"+lv)}
 function hunterStep(){hunters.forEach(h=>{const dx=snake[0].x-h.x,dy=snake[0].y;if(h.type==="interceptor"&&Math.abs(dx)+Math.abs(dy)<10){h.x+=Math.sign(dx);h.y+=Math.sign(dy)}else if(Math.abs(dx)>Math.abs(dy))h.x+=Math.sign(dx);else h.y+=Math.sign(dy);h.x=(h.x+COLS)%COLS;h.y=(h.y+ROWS)%ROWS})}
 function spawnBoss(){if(boss)return;boss={...free(),hp:12,maxHp:12,phase:1};event("WARDEN INCOMING");say("WARDEN // BOSS INBOUND")}

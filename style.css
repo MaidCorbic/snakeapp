@@ -59,3 +59,14 @@ button:focus-visible{outline:2px solid var(--yellow);outline-offset:2px}
 .menu{z-index:20}
 .message{z-index:15}
 @media(max-width:420px){.menu-card .menu-action{min-height:42px}.how-panel p{font-size:5px}}
+
+.desktop-commands{display:block;width:100%;color:var(--ink);font-size:6px;margin-bottom:4px}
+.touch-label{display:none;font-size:5px;color:var(--green);margin-bottom:3px}
+.controls{touch-action:none;-webkit-user-select:none;user-select:none}
+.controls button,.ability{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+@media(max-width:700px){
+ .desktop-commands{display:none}
+ .touch-label{display:block}
+ .controls{display:block}
+ footer{align-items:flex-start}
+}
