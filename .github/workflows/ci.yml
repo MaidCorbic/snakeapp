@@ -1,0 +1,49 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    name: Validate game
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Check JavaScript syntax
+        run: node --check game.js
+
+      - name: Check required files
+        run: |
+          test -f index.html
+          test -f style.css
+          test -f game.js
+
+      - name: Check required UI hooks
+        run: |
+          grep -q 'id="menuStart"' index.html
+          grep -q 'id="how"' index.html
+          grep -q 'id="howBack"' index.html
+          grep -q 'id="game"' index.html
+          grep -q 'id="start"' index.html
+          grep -q 'id="dash"' index.html
+          grep -q 'id="shield"' index.html
+          grep -q 'id="pulse"' index.html
+
+      - name: Check menu handlers
+        run: |
+          grep -q 'bindMenuButton(menuStart,openGameFromMenu)' game.js
+          grep -q 'bindMenuButton(howBtn,openTutorial)' game.js
+          grep -q 'bindMenuButton(howBack,closeTutorial)' game.js
