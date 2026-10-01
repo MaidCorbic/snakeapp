@@ -1,1 +1,1 @@
-# snakeapp
+.
