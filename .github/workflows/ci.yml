@@ -46,6 +46,9 @@ jobs:
           grep -q 'id="shield"' index.html
           grep -q 'id="pulse"' index.html
           grep -q 'id="fury"' index.html
+          grep -q 'id="lives"' index.html
+          grep -q 'id="xp"' index.html
+          grep -q 'id="xpFill"' index.html
           grep -q 'menu.js' index.html
 
       - name: Check gameplay hardening
@@ -53,6 +56,9 @@ jobs:
           grep -q 'window.SnakeEvolution' game.js
           grep -q 'showBootMenu' game.js
           grep -q 'function useFury' game.js
+          grep -q 'function gainXp' game.js
+          grep -q 'function takeDamage' game.js
+          grep -q 'ctx.setTransform(canvas.width/COLS,0,0,canvas.height/ROWS,0,0)' game.js
           grep -q 'const missionDefs=' game.js
           grep -q 'APEX CORE' index.html
           grep -q 'FURY</b>' index.html
