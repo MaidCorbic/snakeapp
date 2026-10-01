@@ -94,3 +94,10 @@ canvas{touch-action:none}
 .ability.ready:hover{filter:brightness(1.08)}
 @media(max-width:700px){.ability-bar{grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}.ability{min-height:50px}.ability span{font-size:4px}}
 @media(max-width:420px){.ability-bar{grid-template-columns:repeat(2,minmax(0,1fr));margin-top:7px}.ability{min-height:46px;padding:7px 8px;font-size:5px}.ability span{font-size:4px}}
+
+/* RPG survival HUD */
+.survival-hud{display:grid;grid-template-columns:auto 1fr;gap:10px;margin:0 0 10px;padding:9px 11px;border:2px solid #26372d;background:#0a0f0c;box-shadow:4px 4px 0 #020302}
+.life-module{min-width:115px;padding:6px 9px;border-right:1px solid #26372d}.life-module span,.xp-row span{display:block;font-size:5px;color:var(--muted)}.life-module strong{display:block;margin-top:6px;font-size:14px;letter-spacing:2px;color:#ff6b8b;text-shadow:2px 2px #3b101b}
+.xp-module{padding:3px 2px}.xp-row{display:grid;grid-template-columns:auto auto 1fr;gap:9px;align-items:center}.xp-row strong{font-size:6px;color:var(--green)}.xp-row b{justify-self:end;font-size:5px;color:var(--ink)}.xp-track{height:8px;margin-top:7px;border:1px solid #304238;background:#111912;overflow:hidden}.xp-track i{display:block;height:100%;width:0;background:var(--green);transition:width .12s linear}
+@media(max-width:700px){.survival-hud{grid-template-columns:105px 1fr;gap:8px;padding:8px}.life-module{min-width:0}.life-module strong{font-size:12px}.xp-row span,.life-module span{font-size:4px}.xp-row strong{font-size:5px}.xp-row b{font-size:4px}}
+@media(max-width:420px){.survival-hud{grid-template-columns:88px 1fr;margin-bottom:7px;padding:7px}.life-module strong{font-size:10px;letter-spacing:1px}.xp-row{gap:5px}.xp-row strong{font-size:4px}.xp-row b{font-size:4px}.xp-track{height:7px;margin-top:5px}}
