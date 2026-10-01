@@ -42,17 +42,20 @@ jobs:
           grep -q 'id="shield"' index.html
           grep -q 'id="pulse"' index.html
 
-      - name: Check mobile menu handlers
+      - name: Check menu controls and options
         run: |
-          grep -q 'onpointerup="window.openGameFromMenu(event)"' index.html
-          grep -q 'onpointerup="window.openTutorial(event)"' index.html
-          grep -q 'onpointerup="window.closeTutorial(event)"' index.html
-          grep -q 'onclick="window.openGameFromMenu(event)"' index.html
-          grep -q 'onclick="window.openTutorial(event)"' index.html
-          grep -q 'onclick="window.closeTutorial(event)"' index.html
-          grep -q 'window.openGameFromMenu=openGameFromMenu' game.js
-          grep -q 'window.openTutorial=openTutorial' game.js
-          grep -q 'window.closeTutorial=closeTutorial' game.js
+          grep -q 'id="menuStart"' index.html
+          grep -q 'id="how"' index.html
+          grep -q 'id="options"' index.html
+          grep -q 'id="optionsPanel"' index.html
+          grep -q 'id="howBack"' index.html
+          grep -q 'id="optionsBack"' index.html
+          grep -q 'id="missionList"' index.html
+          grep -q 'document.addEventListener("pointerdown",handleMenuPointer' game.js
+          grep -q 'function openGameFromMenu' game.js
+          grep -q 'function openTutorial' game.js
+          grep -q 'function openOptions' game.js
+          grep -q 'const missionDefs=' game.js
 
       - name: Check mobile tutorial text
         run: |
