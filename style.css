@@ -78,3 +78,19 @@ canvas{touch-action:none}
 .boot-menu{position:fixed;inset:0;z-index:10000;display:grid;place-items:center;padding:20px;background:#020403f7;isolation:isolate}.boot-menu.hidden{display:none!important}.boot-card{width:min(560px,94vw);max-height:94vh;overflow:auto;padding:30px;text-align:center;border:3px solid var(--green);background:#090f0b;box-shadow:10px 10px 0 #000}.boot-card h2{font-size:clamp(19px,4vw,30px);margin:15px 0 10px}.boot-card h2 b{color:var(--green)}.boot-card>p{font-size:7px;color:var(--muted);line-height:1.9;margin:0 0 20px}.boot-actions{display:grid;gap:11px}.boot-action{display:block;width:100%;min-height:50px;padding:12px;border:2px solid var(--green);background:var(--green);color:#081008;font:7px "Press Start 2P",monospace;cursor:pointer;touch-action:manipulation;box-shadow:4px 4px 0 #355d2e}.boot-action:active{transform:translate(2px,2px);box-shadow:none}.boot-panel{margin-top:14px;padding:15px;border:2px solid #304238;background:#070c09;text-align:left}.boot-panel h3,.boot-error h3{color:var(--green);font-size:9px;text-align:center;margin:0 0 12px}.boot-panel p{font-size:6px;line-height:1.8;color:var(--muted);margin:7px 0}.boot-panel p b{color:var(--ink)}.boot-panel .boot-action{margin-top:12px}.boot-error{margin-top:14px;padding:15px;border:2px solid var(--red);background:#17090c;text-align:center}.boot-error p{font-size:6px;line-height:1.8;color:#ff9aa2}.boot-error .boot-action{border-color:var(--red);background:var(--red)}.boot-menu .option-row{font-family:"Press Start 2P",monospace}.boot-menu button{appearance:none;-webkit-appearance:none;border-radius:0}.ability.ready{border-color:var(--yellow)!important;box-shadow:4px 4px 0 #6a5420}.ability.active{border-color:var(--red)!important;background:var(--red)!important}.ability.active #furyFill{background:#fff}
 @media(max-width:700px){.boot-card{padding:22px 17px;width:min(560px,94vw)}.boot-card>p{font-size:6px}.boot-panel p{font-size:5px}.boot-action{min-height:48px}}
 @media(max-width:420px){.boot-card{padding:18px 13px}.boot-card h2{font-size:17px}.boot-action{min-height:44px;font-size:6px}.boot-panel{padding:11px}.boot-panel p{font-size:4px}.boot-panel h3,.boot-error h3{font-size:8px}}
+
+/* State-driven gameplay HUD */
+#message.message{display:none!important}
+#message.message.show{display:grid!important}
+.ability-bar{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-top:10px}
+.ability{position:relative;min-height:56px;padding:9px 11px;text-align:left;overflow:hidden}
+.ability b,.ability span{display:block;position:relative;z-index:2}
+.ability span{font-size:5px;color:var(--muted);margin-top:6px}
+.ability i{position:absolute;left:0;bottom:0;height:4px;width:0;background:var(--green);transition:width .08s linear}
+.ability.cooldown{filter:saturate(.45);opacity:.72}
+.ability.ready{filter:none;opacity:1;border-color:var(--green)!important}
+.ability.active{filter:none;opacity:1;background:var(--red)!important;border-color:var(--red)!important}
+.ability:disabled{cursor:not-allowed}
+.ability.ready:hover{filter:brightness(1.08)}
+@media(max-width:700px){.ability-bar{grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}.ability{min-height:50px}.ability span{font-size:4px}}
+@media(max-width:420px){.ability-bar{grid-template-columns:repeat(2,minmax(0,1fr));margin-top:7px}.ability{min-height:46px;padding:7px 8px;font-size:5px}.ability span{font-size:4px}}
