@@ -1,6 +1,7 @@
 (() => {
   "use strict";
   const bootMenu = document.querySelector("#bootMenu");
+  const app = document.querySelector("#app");
   const startBtn = document.querySelector("#bootStart");
   const howBtn = document.querySelector("#bootHow");
   const optionsBtn = document.querySelector("#bootOptions");
@@ -42,6 +43,7 @@
   };
 
   const showBootMenu = () => {
+    app?.classList.add("preboot");
     bootMenu?.classList.remove("hidden");
     errorPanel?.classList.add("hidden");
     hidePanels();
@@ -60,6 +62,7 @@
     hidePanels();
     if (gameLoaded) {
       bootMenu?.classList.add("hidden");
+      app?.classList.remove("preboot");
       window.SnakeEvolution?.start?.();
       return;
     }
@@ -67,6 +70,7 @@
     gameLoading = true;
     bootFailed = false;
     bootMenu?.classList.add("hidden");
+    app?.classList.remove("preboot");
 
     const onRuntimeError = (event) => {
       if (!gameLoading) return;
