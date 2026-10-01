@@ -124,8 +124,8 @@
     hud();draw()
   };
 
-  currentZone=function(){return endlessMode&&alive?4:baseCurrentZoneU()};
   const baseCurrentZoneU=currentZone;
+  currentZone=function(){return endlessMode&&alive?4:baseCurrentZoneU()};
 
   reset=function(){prepareRun("standard")};
   function prepareRun(mode){
