@@ -27,9 +27,15 @@ function usePulse(){if(!alive||paused||performance.now()<pulseReady)return;const
 function key(e){const k=e.key.toLowerCase();if(["arrowup","arrowdown","arrowleft","arrowright"," ","w","a","s","d","shift"].includes(k))e.preventDefault();if(k==="escape"||k==="p"){pause();return}if(k==="arrowup"||k==="w")setDir(0,-1);if(k==="arrowdown"||k==="s")setDir(0,1);if(k==="arrowleft"||k==="a")setDir(-1,0);if(k==="arrowright"||k==="d")setDir(1,0);if(k===" ")useDash();if(k==="shift")useShield();if(k==="e")usePulse()}
 addEventListener("keydown",key);
 const howPanel=document.querySelector("#howPanel"),howBack=document.querySelector("#howBack");
-menuStart.onclick=()=>{howPanel.classList.add("hidden");menu.classList.add("hidden");reset()};
-howBtn.onclick=()=>{howPanel.classList.remove("hidden");howBtn.setAttribute("aria-expanded","true");menuStart.setAttribute("aria-hidden","true")};
-howBack.onclick=()=>{howPanel.classList.add("hidden");howBtn.setAttribute("aria-expanded","false");menuStart.removeAttribute("aria-hidden")};
+function openGameFromMenu(e){e?.preventDefault();e?.stopPropagation();howPanel.classList.add("hidden");menu.classList.add("hidden");message.style.display="none";reset()}
+function openTutorial(e){e?.preventDefault();e?.stopPropagation();menu.classList.remove("hidden");howPanel.classList.remove("hidden");howBtn.setAttribute("aria-expanded","true")}
+function closeTutorial(e){e?.preventDefault();e?.stopPropagation();howPanel.classList.add("hidden");howBtn.setAttribute("aria-expanded","false")}
+menuStart.addEventListener("click",openGameFromMenu);
+menuStart.addEventListener("pointerup",openGameFromMenu);
+howBtn.addEventListener("click",openTutorial);
+howBtn.addEventListener("pointerup",openTutorial);
+howBack.addEventListener("click",closeTutorial);
+howBack.addEventListener("pointerup",closeTutorial);
 start.onclick=()=>{message.style.display="none";reset()};
 showSave();
 document.querySelectorAll("[data-dir]").forEach(b=>b.addEventListener("pointerdown",e=>{
