@@ -2,7 +2,7 @@ const canvas=document.querySelector("#game"),ctx=canvas.getContext("2d"),message
 const dashBtn=document.querySelector("#dash"),shieldBtn=document.querySelector("#shield"),pulseBtn=document.querySelector("#pulse"),furyBtn=document.querySelector("#fury"),dashFill=document.querySelector("#dashFill"),shieldFill=document.querySelector("#shieldFill"),pulseFill=document.querySelector("#pulseFill"),furyFill=document.querySelector("#furyFill");
 const COLS=32,ROWS=20,RUN_TIME=300000;const settingsKey="snake-evolution-settings";const defaultSettings={grid:true,vibration:true,reducedMotion:false};let settings={...defaultSettings};try{settings={...defaultSettings,...JSON.parse(localStorage.getItem(settingsKey)||"{}")}}catch{}
 let snake=[],dir,next,energy=null,core=null,hazards=[],hunters=[],powerups=[],boss=null,score=0,combo=1,alive=false,paused=false,startedAt=0,timer,spawnClock=0,eventClock=0,hunterClock=0,bossClock=0,level=1,zone=0,shieldUntil=0,pulseUntil=0,dashReady=0,shieldReady=0,pulseReady=0,furyUntil=0,fury=0,chain=0,eventClock2=0,stats={energy:0,cores:0,hunters:0,wardens:0,damage:0,runCount:0,powerups:0,pulses:0,furyUses:0};
-const best=()=>Number(localStorage.getItem("snake-evolution-best")||0);
+const missionList=document.querySelector("#missionList");const best=()=>Number(localStorage.getItem("snake-evolution-best")||0);
 const missions=()=>{try{return JSON.parse(localStorage.getItem("snake-evolution-missions")||"{}")}catch{return {}}};
 const saveMissions=m=>localStorage.setItem("snake-evolution-missions",JSON.stringify(m));
 const same=(a,b)=>a.x===b.x&&a.y===b.y,rand=()=>({x:Math.floor(Math.random()*COLS),y:Math.floor(Math.random()*ROWS)});
