@@ -82,7 +82,7 @@
 
     const script = document.createElement("script");
     script.id = "snakeGameScript";
-    script.src = "game.js?v=game-hud-v2";
+    script.src = "game.js?v=rpg-update-v3";
     script.onload = () => {
       window.removeEventListener("error", onRuntimeError);
       gameLoading = false;
