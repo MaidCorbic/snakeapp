@@ -44,9 +44,9 @@ jobs:
 
       - name: Check mobile menu handlers
         run: |
-          grep -q 'ontouchstart="window.openGameFromMenu(event)"' index.html
-          grep -q 'ontouchstart="window.openTutorial(event)"' index.html
-          grep -q 'ontouchstart="window.closeTutorial(event)"' index.html
+          grep -q 'onpointerup="window.openGameFromMenu(event)"' index.html
+          grep -q 'onpointerup="window.openTutorial(event)"' index.html
+          grep -q 'onpointerup="window.closeTutorial(event)"' index.html
           grep -q 'onclick="window.openGameFromMenu(event)"' index.html
           grep -q 'onclick="window.openTutorial(event)"' index.html
           grep -q 'onclick="window.closeTutorial(event)"' index.html
