@@ -82,7 +82,7 @@
 
     const script = document.createElement("script");
     script.id = "snakeGameScript";
-    script.src = "game.js?v=survival-v6";
+    script.src = "game.js?v=survival-v7";
     script.onload = () => {
       window.removeEventListener("error", onRuntimeError);
       gameLoading = false;
