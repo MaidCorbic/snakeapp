@@ -6,16 +6,16 @@
 <div id="menu" class="menu"><div class="menu-card">
 <span class="eyebrow">PIXEL ARCADE // 05:00 RUN</span><h2>SNAKE <b>EVOLUTION</b></h2><p>Survive. Evolve. Break the record.</p>
 <div class="menu-actions">
-<button type="button" id="menuStart" class="menu-action">START RUN</button>
-<button type="button" id="how" class="menu-action" aria-expanded="false">HOW TO PLAY</button>
-<button type="button" id="options" class="menu-action">OPTIONS</button>
+<button type="button" id="menuStart" class="menu-action" onclick="return window.openGameFromMenu(event)">START RUN</button>
+<button type="button" id="how" class="menu-action" aria-expanded="false" onclick="return window.openTutorial(event)">HOW TO PLAY</button>
+<button type="button" id="options" class="menu-action" onclick="return window.openOptions(event)">OPTIONS</button>
 </div>
 <div id="optionsPanel" class="how-panel options-panel hidden">
 <h3>OPTIONS</h3>
 <div class="option-row"><span>GRID</span><button type="button" class="option-toggle" id="gridToggle" aria-pressed="true">ON</button></div>
 <div class="option-row"><span>VIBRATION</span><button type="button" class="option-toggle" id="vibrationToggle" aria-pressed="true">ON</button></div>
 <div class="option-row"><span>REDUCED MOTION</span><button type="button" class="option-toggle" id="motionToggle" aria-pressed="false">OFF</button></div>
-<button type="button" id="optionsBack" class="menu-action">BACK</button>
+<button type="button" id="optionsBack" class="menu-action" onclick="return window.closeOptions(event)">BACK</button>
 </div>
 <div id="howPanel" class="how-panel hidden">
 <h3>HOW TO PLAY</h3>
@@ -25,7 +25,7 @@
 <p><b>PULSE</b> E — On phone, press PULSE to clear nearby hazards and hurt the WARDEN.</p>
 <p><b>GOAL</b> Survive 5 minutes, collect ENERGY and CORE, build your combo, defeat Hunters and destroy the WARDEN.</p>
 <p><b>PHONE</b> Keep the phone in landscape for the most comfortable controls.</p>
-<button type="button" id="howBack" class="menu-action">BACK</button>
+<button type="button" id="howBack" class="menu-action" onclick="return window.closeTutorial(event)">BACK</button>
 </div></div></div>
 <canvas id="game" aria-label="Snake Evolution game"></canvas>
 <div id="bossHud" class="boss-hud"><span>WARDEN</span><strong id="bossHp">12/12</strong></div>
@@ -36,4 +36,4 @@
 <section id="missions" class="missions"><b>MISSIONS // PROGRESSION</b><div id="missionList" class="mission-list"></div></section>
 <section class="ability-bar"><button id="dash" class="ability"><b>DASH</b><span>SPACE</span><i id="dashFill"></i></button><button id="shield" class="ability"><b>SHIELD</b><span>SHIFT</span><i id="shieldFill"></i></button><button id="pulse" class="ability"><b>PULSE</b><span>E</span><i id="pulseFill"></i></button></section>
 <footer><div class="legend"><span class="desktop-commands">KEYBOARD: WASD / ARROWS · SPACE DASH · SHIFT SHIELD · E PULSE · P / ESC PAUSE</span><span>ENERGY +10</span><span>CORE +50</span><span>HUNTER</span><span>HAZARD</span><span>POWER-UP</span></div><div class="controls" aria-label="Mobile touch controls"><span class="touch-label">TOUCH</span><button data-dir="up">▲</button><div><button data-dir="left">◀</button><button data-dir="down">▼</button><button data-dir="right">▶</button></div></div></footer>
-</main><script src="game.js?v=mobilefix02"></script></body></html>
+</main><script src="game.js?v=menu-fix03"></script></body></html>
