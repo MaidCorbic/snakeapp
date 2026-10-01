@@ -44,11 +44,15 @@ jobs:
 
       - name: Check mobile menu handlers
         run: |
-          grep -q 'onclick="openGameFromMenu(event)"' index.html
-          grep -q 'onclick="openTutorial(event)"' index.html
-          grep -q 'onclick="closeTutorial(event)"' index.html
-          grep -q 'document.addEventListener("touchend"' game.js
+          grep -q 'ontouchstart="window.openGameFromMenu(event)"' index.html
+          grep -q 'ontouchstart="window.openTutorial(event)"' index.html
+          grep -q 'ontouchstart="window.closeTutorial(event)"' index.html
+          grep -q 'onclick="window.openGameFromMenu(event)"' index.html
+          grep -q 'onclick="window.openTutorial(event)"' index.html
+          grep -q 'onclick="window.closeTutorial(event)"' index.html
           grep -q 'window.openGameFromMenu=openGameFromMenu' game.js
+          grep -q 'window.openTutorial=openTutorial' game.js
+          grep -q 'window.closeTutorial=closeTutorial' game.js
 
       - name: Check mobile tutorial text
         run: |
