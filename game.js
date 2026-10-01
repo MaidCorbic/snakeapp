@@ -43,15 +43,15 @@ function hud(){
  if(xpFillEl)xpFillEl.style.width=Math.min(100,xp/xpNext*100)+"%";
  if(xpLevelEl)xpLevelEl.textContent="LVL "+xpLevel;
  danger=Math.min(100,Math.round(zone*13+hunters.length*9+hazards.length*4+Math.min(28,(performance.now()-startedAt)/12000)));
- const dangerEl=document.querySelector("#danger"),dangerFill=document.querySelector("#dangerFill"),dangerLabel=document.querySelector("#dangerLabel");
+ const dangerEl=document.querySelector("#danger"),dangerFill=document.querySelector("#dangerFill"),dangerLabel=document.querySelector("#dangerLabel"),dangerCard=document.querySelector(".danger-card");
  if(dangerEl)dangerEl.textContent=danger+"%";
  if(dangerFill)dangerFill.style.width=danger+"%";
- if(dangerLabel)dangerLabel.textContent=danger>=85?"CRITICAL":danger>=60?"HIGH":danger>=35?"ELEVATED":"STABLE";
+ if(dangerLabel){dangerLabel.textContent=danger>=85?"CRITICAL":danger>=60?"HIGH":danger>=35?"ELEVATED":"STABLE";dangerLabel.classList.toggle("elevated",danger>=35&&danger<60);dangerLabel.classList.toggle("high",danger>=60&&danger<85);dangerLabel.classList.toggle("critical",danger>=85)}if(dangerCard){dangerCard.classList.toggle("elevated",danger>=35&&danger<60);dangerCard.classList.toggle("high",danger>=60&&danger<85);dangerCard.classList.toggle("critical",danger>=85)}
  const objectiveEl=document.querySelector("#objective"),objectiveFill=document.querySelector("#objectiveFill"),objectiveLabel=document.querySelector("#objectiveLabel");
  if(objective){
    const value=Math.min(objective[3],objective[2]()),pct=Math.min(100,value/objective[3]*100);
    if(objectiveEl)objectiveEl.textContent=objective[0];
-   if(objectiveLabel)objectiveLabel.textContent=objectiveDone?"COMPLETE":value+"/"+objective[3];
+   if(objectiveLabel){objectiveLabel.textContent=objectiveDone?"COMPLETE":value+"/"+objective[3];objectiveLabel.classList.toggle("complete",objectiveDone)}if(objectiveFill)objectiveFill.parentElement?.classList.toggle("complete",objectiveDone);
    if(objectiveFill)objectiveFill.style.width=pct+"%";
  }
  if(boss){bossHud.classList.add("show");bossHp.textContent=boss.hp+"/"+boss.maxHp}else bossHud.classList.remove("show")
