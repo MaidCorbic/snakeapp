@@ -62,6 +62,13 @@ jobs:
           grep -q 'id="extractCashOut"' index.html
           grep -q 'id="upgradeList"' index.html
           grep -q 'id="achievementList"' index.html
+          grep -q 'id="bootDaily"' index.html
+          grep -q 'id="bootEndless"' index.html
+          grep -q 'id="bootSound"' index.html
+          grep -q 'id="bounty"' index.html
+          grep -q 'id="perfectLabel"' index.html
+          grep -q 'id="leaderboardList"' index.html
+          grep -q 'id="dailyLeaderboardList"' index.html
           grep -q 'id="streakMark"' index.html
           grep -q 'id="mutation"' index.html
           grep -q 'id="mutationLabel"' index.html
@@ -92,6 +99,17 @@ jobs:
           grep -q 'boss.hp<=6?3' game.js
           grep -q 'function buyUpgrade' game.js
           grep -q 'function checkAchievements' game.js
+          grep -q 'ultimate-gameplay-v1.js' menu.js
+          grep -q 'startDaily' ultimate-gameplay-v1.js
+          grep -q 'startEndless' ultimate-gameplay-v1.js
+          grep -q 'function generateArena' ultimate-gameplay-v1.js
+          grep -q 'function addTelegraph' ultimate-gameplay-v1.js
+          grep -q 'function saveLeaderboard' ultimate-gameplay-v1.js
+          grep -q 'function spawnRiskShrine' ultimate-gameplay-v1.js
+          grep -q 'function spawnSecretPortal' ultimate-gameplay-v1.js
+          grep -q 'CHAIN FINISHER' ultimate-gameplay-v1.js
+          grep -q 'PERFECT' ultimate-gameplay-v1.js
+          grep -q 'AudioContext' ultimate-gameplay-v1.js
           grep -q 'const mutationDefs=' game.js
           grep -q 'function selectMutation' game.js
           grep -q 'function mutationName' game.js
