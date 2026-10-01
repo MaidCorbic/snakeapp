@@ -41,7 +41,17 @@ function openGameFromMenu(e){e?.preventDefault();e?.stopPropagation();clearTimeo
 function openTutorial(e){e?.preventDefault();e?.stopPropagation();menu.classList.remove("hidden");optionsPanel.classList.add("hidden");howPanel.classList.remove("hidden");howBtn.setAttribute("aria-expanded","true");optionsBtn.setAttribute("aria-expanded","false")}
 function closeTutorial(e){e?.preventDefault();e?.stopPropagation();howPanel.classList.add("hidden");howBtn.setAttribute("aria-expanded","false")}
 function closeOptions(e){e?.preventDefault();e?.stopPropagation();optionsPanel.classList.add("hidden");optionsBtn.setAttribute("aria-expanded","false")}
-// Explicit click bindings for every menu control.\n// The previous delegated pointer handler could be intercepted by mobile touch handling.\nmenuStart?.addEventListener("click",openGameFromMenu);\nhowBtn?.addEventListener("click",openTutorial);\nhowBack?.addEventListener("click",closeTutorial);\noptionsBtn?.addEventListener("click",openOptions);\noptionsBack?.addEventListener("click",closeOptions);\ngridToggle?.addEventListener("click",()=>{settings.grid=!settings.grid;saveSettings();draw()});\nvibrationToggle?.addEventListener("click",()=>{settings.vibration=!settings.vibration;saveSettings();haptic(8)});\nmotionToggle?.addEventListener("click",()=>{settings.reducedMotion=!settings.reducedMotion;saveSettings()});\nstart.onclick=()=>{message.style.display="none";reset()};
+// Explicit click bindings for every menu control.
+// The previous delegated pointer handler could be intercepted by mobile touch handling.
+menuStart?.addEventListener("click",openGameFromMenu);
+howBtn?.addEventListener("click",openTutorial);
+howBack?.addEventListener("click",closeTutorial);
+optionsBtn?.addEventListener("click",openOptions);
+optionsBack?.addEventListener("click",closeOptions);
+gridToggle?.addEventListener("click",()=>{settings.grid=!settings.grid;saveSettings();draw()});
+vibrationToggle?.addEventListener("click",()=>{settings.vibration=!settings.vibration;saveSettings();haptic(8)});
+motionToggle?.addEventListener("click",()=>{settings.reducedMotion=!settings.reducedMotion;saveSettings()});
+start.onclick=()=>{message.style.display="none";reset()};
 showSave();
 document.querySelectorAll("[data-dir]").forEach(b=>b.addEventListener("pointerdown",e=>{
  e.preventDefault();
