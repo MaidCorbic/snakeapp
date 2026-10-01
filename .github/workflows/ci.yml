@@ -56,6 +56,8 @@ jobs:
           grep -q 'id="contract"' index.html
           grep -q 'id="contractFill"' index.html
           grep -q 'id="streakMark"' index.html
+          grep -q 'id="mutation"' index.html
+          grep -q 'id="mutationLabel"' index.html
           grep -q 'menu.js' index.html
 
       - name: Check gameplay hardening
@@ -71,6 +73,13 @@ jobs:
           grep -q 'function checkStreakRewards' game.js
           grep -q 'function checkContract' game.js
           grep -q 'function spawnSupplyDrop' game.js
+          grep -q 'const mutationDefs=' game.js
+          grep -q 'function selectMutation' game.js
+          grep -q 'function mutationName' game.js
+          grep -q 'HUNTER ALERT' game.js
+          grep -q 'HAZARD SHIFT' game.js
+          grep -q 'SUPPLY RUSH' game.js
+          grep -q 'OVERCLOCK' game.js
           grep -q 'function collectSupplyDrop' game.js
           grep -q 'supplyDropClock' game.js
           grep -q 'type==="elite"' game.js
