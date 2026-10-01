@@ -38,9 +38,9 @@ howBack.onclick=closeTutorial;
 document.addEventListener("click",e=>{
  const button=e.target?.closest?.("#menuStart,#how,#howBack");
  if(!button)return;
- if(button===menuStart)return openGameFromMenu(e);
- if(button===howBtn)return openTutorial(e);
- if(button===howBack)return closeTutorial(e);
+ if(button===menuStart){e.stopImmediatePropagation();return openGameFromMenu(e)}
+ if(button===howBtn){e.stopImmediatePropagation();return openTutorial(e)}
+ if(button===howBack){e.stopImmediatePropagation();return closeTutorial(e)}
 },{capture:true});
 start.onclick=()=>{message.style.display="none";reset()};
 showSave();
