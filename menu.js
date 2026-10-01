@@ -19,6 +19,7 @@
   let settings = {...defaults};
   let gameLoaded = false;
   let gameLoading = false;
+  let bootFailed = false;
 
   try { settings = {...defaults, ...JSON.parse(localStorage.getItem(settingsKey) || "{}")}; } catch {}
 
@@ -64,10 +65,12 @@
     }
     if (gameLoading) return;
     gameLoading = true;
+    bootFailed = false;
     bootMenu?.classList.add("hidden");
 
     const onRuntimeError = (event) => {
       if (!gameLoading) return;
+      bootFailed = true;
       window.removeEventListener("error", onRuntimeError);
       failLoad("GAME BOOT ERROR: " + (event.message || "unknown runtime error"));
     };
@@ -79,6 +82,7 @@
     script.onload = () => {
       window.removeEventListener("error", onRuntimeError);
       gameLoading = false;
+      if (bootFailed) return;
       gameLoaded = true;
       window.SnakeEvolution?.start?.();
     };
