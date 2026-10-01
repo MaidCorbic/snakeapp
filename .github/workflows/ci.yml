@@ -51,7 +51,10 @@ jobs:
           grep -q 'id="howBack"' index.html
           grep -q 'id="optionsBack"' index.html
           grep -q 'id="missionList"' index.html
-          grep -q 'document.addEventListener("pointerdown",handleMenuPointer' game.js
+          grep -q 'menuStart?.addEventListener("click",openGameFromMenu)' game.js
+          grep -q 'howBtn?.addEventListener("click",openTutorial)' game.js
+          grep -q 'optionsBtn?.addEventListener("click",openOptions)' game.js
+          grep -q 'optionsBack?.addEventListener("click",closeOptions)' game.js
           grep -q 'function openGameFromMenu' game.js
           grep -q 'function openTutorial' game.js
           grep -q 'function openOptions' game.js
