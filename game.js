@@ -30,25 +30,40 @@ const howPanel=document.querySelector("#howPanel"),howBack=document.querySelecto
 function openGameFromMenu(e){e?.preventDefault();e?.stopPropagation();clearTimeout(timer);alive=false;paused=false;document.querySelector("#pauseOverlay")?.remove();howPanel.classList.add("hidden");menu.classList.add("hidden");message.style.display="none";reset()}
 function openTutorial(e){e?.preventDefault();e?.stopPropagation();menu.classList.remove("hidden");howPanel.classList.remove("hidden");howBtn.setAttribute("aria-expanded","true")}
 function closeTutorial(e){e?.preventDefault();e?.stopPropagation();howPanel.classList.add("hidden");howBtn.setAttribute("aria-expanded","false")}
-/* Menu activation: pointerdown is used for immediate Android/iOS response.
-   A short click guard prevents the browser's follow-up synthetic click from firing twice. */
-let menuTapLock=0;
-function bindMenuButton(button,handler){
- const activate=e=>{
+/* Mobile-safe menu controls.
+   The HTML buttons call these functions directly, while these globals also
+   provide a delegated fallback for browsers that suppress button activation. */
+window.openGameFromMenu=openGameFromMenu;
+window.openTutorial=openTutorial;
+window.closeTutorial=closeTutorial;
+
+let menuTouchLock=0;
+document.addEventListener("touchend",e=>{
+ const button=e.target.closest?.("#menuStart,#how,#howBack");
+ if(!button)return;
+ e.preventDefault();
+ e.stopPropagation();
+ const now=Date.now();
+ if(now-menuTouchLock<650)return;
+ menuTouchLock=now;
+ if(button.id==="menuStart")openGameFromMenu(e);
+ else if(button.id==="how")openTutorial(e);
+ else closeTutorial(e);
+},{passive:false});
+
+document.addEventListener("click",e=>{
+ const button=e.target.closest?.("#menuStart,#how,#howBack");
+ if(!button)return;
+ const now=Date.now();
+ if(now-menuTouchLock<650){
   e.preventDefault();
   e.stopPropagation();
-  const now=Date.now();
-  if(now-menuTapLock<700)return;
-  menuTapLock=now;
-  handler(e);
- };
- button.addEventListener("pointerdown",activate,{passive:false});
- button.addEventListener("touchstart",activate,{passive:false});
- button.addEventListener("click",activate,{passive:false});
-}
-bindMenuButton(menuStart,openGameFromMenu);
-bindMenuButton(howBtn,openTutorial);
-bindMenuButton(howBack,closeTutorial);
+  return;
+ }
+ if(button.id==="menuStart")openGameFromMenu(e);
+ else if(button.id==="how")openTutorial(e);
+ else closeTutorial(e);
+},{capture:true});
 start.onclick=()=>{message.style.display="none";reset()};
 showSave();
 document.querySelectorAll("[data-dir]").forEach(b=>b.addEventListener("pointerdown",e=>{
