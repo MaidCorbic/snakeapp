@@ -33,6 +33,7 @@ jobs:
           test -f style.css
           test -f game.js
           test -f menu.js
+          test -f ultimate-gameplay-v1.js
 
       - name: Check standalone menu and gameplay hooks
         run: |
