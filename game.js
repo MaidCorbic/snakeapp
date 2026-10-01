@@ -50,7 +50,7 @@ function evolution(){return currentLevel()}
 function event(t){eventBanner.textContent="⚠ "+t;eventBanner.classList.add("show");clearTimeout(event.t);event.t=setTimeout(()=>eventBanner.classList.remove("show"),1300)}
 function floatText(t,p=snake[0]){const el=document.createElement("span");el.className="floater";el.textContent=t;el.style.left=((p.x/COLS)*100)+"%";el.style.top=((p.y/ROWS)*100)+"%";floaters.appendChild(el);setTimeout(()=>el.remove(),700)}
 function pause(){if(!alive)return;paused=!paused;if(paused){clearTimeout(timer);const o=document.createElement("div");o.className="pause-overlay";o.id="pauseOverlay";o.innerHTML="<div><h2>PAUSED</h2><button id=\"resume\">RESUME</button><button id=\"restartPause\">RESTART</button><button id=\"menuPause\">MAIN MENU</button></div>";document.querySelector(".game-shell").appendChild(o);o.querySelector("#resume").onclick=pause;o.querySelector("#restartPause").onclick=()=>{o.remove();paused=false;reset()};o.querySelector("#menuPause").onclick=()=>{o.remove();alive=false;message.style.display="none";window.showBootMenu?.()}}else{document.querySelector("#pauseOverlay")?.remove();move()}}
-function showSave(){let s={};try{s=JSON.parse(localStorage.getItem("snake-evolution-save")||"{}")}catch{}saveStats.innerHTML="RUNS <strong>"+(s.runs||0)+"</strong> · WINS <strong>"+(s.wins||0)+"</strong> · BEST COMBO <strong>x"+(s.combo||1)+"</strong> · WARDENS <strong>"+(s.wardens||0)+"</strong> · EVOLUTION <strong>"+(evoNames[s.evo-1]||"RUNNER")+"</strong>"}
+function showSave(){let s={};try{s=JSON.parse(localStorage.getItem("snake-evolution-save")||"{}")}catch{}saveStats.innerHTML="RUNS <strong>"+(s.runs||0)+"</strong> · WINS <strong>"+(s.wins||0)+"</strong> · BEST COMBO <strong>x"+(s.combo||1)+"</strong> · WARDENS <strong>"+(s.wardens||0)+"</strong> · ELITES <strong>"+(s.elites||0)+"</strong> · EVOLUTION <strong>"+(evoNames[s.evo-1]||"RUNNER")+"</strong>"}
 function hud(){
  scoreEl.textContent=score;
  comboEl.textContent=chain>1?"x"+combo+" / CHAIN x"+chain:"x"+combo;
@@ -59,8 +59,8 @@ function hud(){
  timeEl.textContent=Math.floor(left/60000)+":"+String(Math.ceil((left%60000)/1000)).padStart(2,"0");
  zone=currentZone();level=currentLevel();
  zoneEl.textContent=zoneNames[zone];evoEl.textContent=evoNames[level-1];
- const lifeEl=document.querySelector("#lives"),xpEl=document.querySelector("#xp"),xpFillEl=document.querySelector("#xpFill"),xpLevelEl=document.querySelector("#xpLevel");
- if(lifeEl)lifeEl.textContent="♥".repeat(lives)+"♡".repeat(Math.max(0,3-lives));
+ const lifeEl=document.querySelector("#lives"),streakEl=document.querySelector("#streakMark"),xpEl=document.querySelector("#xp"),xpFillEl=document.querySelector("#xpFill"),xpLevelEl=document.querySelector("#xpLevel");
+ if(lifeEl)lifeEl.textContent="♥".repeat(lives)+"♡".repeat(Math.max(0,3-lives));if(streakEl)streakEl.textContent="STREAK x"+chain;
  if(xpEl)xpEl.textContent=xp+"/"+xpNext;
  if(xpFillEl)xpFillEl.style.width=Math.min(100,xp/xpNext*100)+"%";
  if(xpLevelEl)xpLevelEl.textContent="LVL "+xpLevel;
@@ -115,7 +115,13 @@ canvas.addEventListener("touchend",e=>{
  if(Math.abs(dx)>Math.abs(dy))setDir(Math.sign(dx),0);else setDir(0,Math.sign(dy));
 },{passive:true});
 function spawnWave(){const lv=Math.min(5,1+Math.floor((performance.now()-startedAt)/60000));const count=Math.min(1+Math.floor(lv/2),5);while(hunters.length<count){const elite=lv>=3&&Math.random()<.22;hunters.push({...free(),type:elite?"elite":Math.random()<.35?"interceptor":"hunter",hp:elite?2:1})};if(lv>=2&&hazards.length<4+lv)hazards.push(free());if(lv>=3&&Math.random()<.65){const roll=Math.random();const type=roll<.08?"medkit":roll<.16?"apex":["overdrive","magnet","repair"][Math.floor(Math.random()*3)];powerups.push({...free(),type})}say("WAVE // LV"+lv)}
-function hunterStep(){hunters.forEach(h=>{const dx=snake[0].x-h.x,dy=snake[0].y;if(h.type==="interceptor"&&Math.abs(dx)+Math.abs(dy)<10){h.x+=Math.sign(dx);h.y+=Math.sign(dy)}else if(Math.abs(dx)>Math.abs(dy))h.x+=Math.sign(dx);else h.y+=Math.sign(dy);h.x=(h.x+COLS)%COLS;h.y=(h.y+ROWS)%ROWS})}
+function hunterStep(){
+ hunters.forEach(h=>{
+   const step=()=>{const dx=snake[0].x-h.x,dy=snake[0].y;if(h.type==="interceptor"&&Math.abs(dx)+Math.abs(dy)<10){h.x+=Math.sign(dx);h.y+=Math.sign(dy)}else if(Math.abs(dx)>Math.abs(dy))h.x+=Math.sign(dx);else h.y+=Math.sign(dy);h.x=(h.x+COLS)%COLS;h.y=(h.y+ROWS)%ROWS};
+   step();
+   if(h.type==="elite")step();
+ })
+}
 function spawnBoss(){if(boss)return;boss={...free(),hp:12,maxHp:12,phase:1};event("WARDEN INCOMING");say("WARDEN // BOSS INBOUND")}
 function destroyBoss(){if(!boss)return;boss=null;stats.wardens++;gainXp(150);chain++;const points=1000+chain*100;gain(points);chargeFury(25);floatText("+"+points);say("WARDEN DESTROYED // +"+points)}
 function bossStep(){if(!boss)return;bossClock++;boss.phase=boss.hp<=6?2:1;if(boss.phase===2&&bossClock%3)return;if(boss.phase===1&&bossClock%5)return;const dx=snake[0].x-boss.x,dy=snake[0].y-boss.y;if(Math.abs(dx)>Math.abs(dy))boss.x+=Math.sign(dx);else boss.y+=Math.sign(dy);boss.x=(boss.x+COLS)%COLS;boss.y=(boss.y+ROWS)%ROWS;if(bossClock%(boss.phase===2?7:15)===0)hazards.push(free());if(boss.phase===2&&bossClock%21===0){event("WARDEN PHASE 2");say("WARDEN // ENRAGED")}}
@@ -139,7 +145,7 @@ if(eventClock%70===0){combo=Math.max(1,combo-1);if(combo===1)chain=0}
 const elapsed=performance.now()-startedAt;if(elapsed>=RUN_TIME)return win();
 missionCheck();checkObjective();handleZoneTransition();checkStreakRewards();hud();if(danger>=85&&lastDangerBand<85){say("DANGER // CRITICAL HEAT");event("CRITICAL HEAT")}lastDangerBand=danger>=85?85:danger>=60?60:0;updateAbilityUI();draw();timer=setTimeout(move,Math.max(48,118-combo*6-(force?35:0)))}
 function statsMarkup(win){const bestScore=best(),newRecord=score>=bestScore&&score>0;return '<h2>'+(win?"SURVIVAL COMPLETE":"RUN OVER")+'</h2><div class="stats-grid"><span>SCORE<strong>'+score+'</strong></span><span>XP LVL<strong>'+xpLevel+'</strong></span><span>LIVES<strong>'+lives+'/3</strong></span><span>TIME<strong>'+timeEl.textContent+'</strong></span><span>COMBO<strong>x'+combo+'</strong></span><span>ENERGY<strong>'+stats.energy+'</strong></span><span>CORES<strong>'+stats.cores+'</strong></span><span>HUNTERS<strong>'+stats.hunters+'</strong></span><span>ELITES<strong>'+stats.elites+'</strong></span><span>WARDENS<strong>'+stats.wardens+'</strong></span><span>ZONE<strong>'+zoneNames[zone]+'</strong></span><span>OBJECTIVE<strong>'+(objective?objective[0]:"-")+(objectiveDone?" // DONE":"") +'</strong></span><span>DANGER<strong>'+danger+'%</strong></span></div>'+(newRecord?'<b class="record">NEW RECORD!</b>':'')}
-function persist(win){let s={};try{s=JSON.parse(localStorage.getItem("snake-evolution-save")||"{}")}catch{}s.runs=(s.runs||0)+1;s.wins=(s.wins||0)+(win?1:0);s.combo=Math.max(s.combo||1,combo);s.wardens=(s.wardens||0)+stats.wardens;s.evo=Math.max(s.evo||1,evolution());localStorage.setItem("snake-evolution-save",JSON.stringify(s));showSave()}
+function persist(win){let s={};try{s=JSON.parse(localStorage.getItem("snake-evolution-save")||"{}")}catch{}s.runs=(s.runs||0)+1;s.wins=(s.wins||0)+(win?1:0);s.combo=Math.max(s.combo||1,combo);s.wardens=(s.wardens||0)+stats.wardens;s.elites=(s.elites||0)+stats.elites;s.evo=Math.max(s.evo||1,evolution());localStorage.setItem("snake-evolution-save",JSON.stringify(s));showSave()}
 function end(){alive=false;clearTimeout(timer);if(score>best())localStorage.setItem("snake-evolution-best",score);missionCheck();persist(false);message.querySelector("p").textContent="The run ended. Review your stats below.";statsPanel.innerHTML=statsMarkup(false);statsPanel.classList.add("show");missionPanel.classList.add("show");message.classList.remove("hidden");message.classList.add("show");hud();updateAbilityUI()}
 function win(){alive=false;clearTimeout(timer);const bonus=500+level*100;gain(bonus);missionCheck();if(score>best())localStorage.setItem("snake-evolution-best",score);persist(true);message.querySelector("p").textContent="Five minutes survived. Bonus +"+bonus+".";message.classList.remove("hidden");message.classList.add("show");statsPanel.innerHTML=statsMarkup(true);statsPanel.classList.add("show");missionPanel.classList.add("show");say("SURVIVED // BONUS +"+bonus);hud();updateAbilityUI()}
 function renderAbility(button,fill,readyAt,fullCooldown,label,key){
