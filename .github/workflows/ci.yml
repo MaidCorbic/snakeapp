@@ -55,6 +55,13 @@ jobs:
           grep -q 'id="objectiveFill"' index.html
           grep -q 'id="contract"' index.html
           grep -q 'id="contractFill"' index.html
+          grep -q 'id="contractAccept"' index.html
+          grep -q 'id="contractDecline"' index.html
+          grep -q 'id="chainFill"' index.html
+          grep -q 'id="extractionPanel"' index.html
+          grep -q 'id="extractCashOut"' index.html
+          grep -q 'id="upgradeList"' index.html
+          grep -q 'id="achievementList"' index.html
           grep -q 'id="streakMark"' index.html
           grep -q 'id="mutation"' index.html
           grep -q 'id="mutationLabel"' index.html
@@ -73,6 +80,18 @@ jobs:
           grep -q 'function checkStreakRewards' game.js
           grep -q 'function checkContract' game.js
           grep -q 'function spawnSupplyDrop' game.js
+          grep -q 'function cashOut' game.js
+          grep -q 'function keepRunning' game.js
+          grep -q 'function acceptContract' game.js
+          grep -q 'function declineContract' game.js
+          grep -q 'function checkAdvancedChain' game.js
+          grep -q 'function registerAdvancedLoot' game.js
+          grep -q 'function startAdvancedZoneEvent' game.js
+          grep -q 'variant==="charger"' game.js
+          grep -q 'variant==="watcher"' game.js
+          grep -q 'boss.hp<=6?3' game.js
+          grep -q 'function buyUpgrade' game.js
+          grep -q 'function checkAchievements' game.js
           grep -q 'const mutationDefs=' game.js
           grep -q 'function selectMutation' game.js
           grep -q 'function mutationName' game.js
