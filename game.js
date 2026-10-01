@@ -27,21 +27,28 @@ function usePulse(){if(!alive||paused||performance.now()<pulseReady)return;const
 function key(e){const k=e.key.toLowerCase();if(["arrowup","arrowdown","arrowleft","arrowright"," ","w","a","s","d","shift"].includes(k))e.preventDefault();if(k==="escape"||k==="p"){pause();return}if(k==="arrowup"||k==="w")setDir(0,-1);if(k==="arrowdown"||k==="s")setDir(0,1);if(k==="arrowleft"||k==="a")setDir(-1,0);if(k==="arrowright"||k==="d")setDir(1,0);if(k===" ")useDash();if(k==="shift")useShield();if(k==="e")usePulse()}
 addEventListener("keydown",key);
 const howPanel=document.querySelector("#howPanel"),howBack=document.querySelector("#howBack");
-function openGameFromMenu(e){e?.preventDefault();e?.stopPropagation();howPanel.classList.add("hidden");menu.classList.add("hidden");message.style.display="none";reset()}
+function openGameFromMenu(e){e?.preventDefault();e?.stopPropagation();clearTimeout(timer);alive=false;paused=false;document.querySelector("#pauseOverlay")?.remove();howPanel.classList.add("hidden");menu.classList.add("hidden");message.style.display="none";reset()}
 function openTutorial(e){e?.preventDefault();e?.stopPropagation();menu.classList.remove("hidden");howPanel.classList.remove("hidden");howBtn.setAttribute("aria-expanded","true")}
 function closeTutorial(e){e?.preventDefault();e?.stopPropagation();howPanel.classList.add("hidden");howBtn.setAttribute("aria-expanded","false")}
-/* Native click is the primary activation path: Android/iOS, mouse, keyboard and accessibility all converge here. */
-menuStart.onclick=openGameFromMenu;
-howBtn.onclick=openTutorial;
-howBack.onclick=closeTutorial;
-/* Capture-phase delegation is a second safety net for mobile browsers that retarget taps. */
-document.addEventListener("click",e=>{
- const button=e.target?.closest?.("#menuStart,#how,#howBack");
- if(!button)return;
- if(button===menuStart){e.stopImmediatePropagation();return openGameFromMenu(e)}
- if(button===howBtn){e.stopImmediatePropagation();return openTutorial(e)}
- if(button===howBack){e.stopImmediatePropagation();return closeTutorial(e)}
-},{capture:true});
+/* Menu activation: pointerdown is used for immediate Android/iOS response.
+   A short click guard prevents the browser's follow-up synthetic click from firing twice. */
+let menuTapLock=0;
+function bindMenuButton(button,handler){
+ const activate=e=>{
+  e.preventDefault();
+  e.stopPropagation();
+  const now=Date.now();
+  if(now-menuTapLock<700)return;
+  menuTapLock=now;
+  handler(e);
+ };
+ button.addEventListener("pointerdown",activate,{passive:false});
+ button.addEventListener("touchstart",activate,{passive:false});
+ button.addEventListener("click",activate,{passive:false});
+}
+bindMenuButton(menuStart,openGameFromMenu);
+bindMenuButton(howBtn,openTutorial);
+bindMenuButton(howBack,closeTutorial);
 start.onclick=()=>{message.style.display="none";reset()};
 showSave();
 document.querySelectorAll("[data-dir]").forEach(b=>b.addEventListener("pointerdown",e=>{
