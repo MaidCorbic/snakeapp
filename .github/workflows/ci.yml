@@ -53,6 +53,7 @@ jobs:
           grep -q 'id="dangerFill"' index.html
           grep -q 'id="objective"' index.html
           grep -q 'id="objectiveFill"' index.html
+          grep -q 'id="streakMark"' index.html
           grep -q 'menu.js' index.html
 
       - name: Check gameplay hardening
@@ -64,6 +65,10 @@ jobs:
           grep -q 'function takeDamage' game.js
           grep -q 'function selectObjective' game.js
           grep -q 'function checkObjective' game.js
+          grep -q 'function handleZoneTransition' game.js
+          grep -q 'function checkStreakRewards' game.js
+          grep -q 'type==="elite"' game.js
+          grep -q 'stats.elites' game.js
           grep -q 'danger=Math.min' game.js
           grep -q 'ctx.setTransform(canvas.width/COLS,0,0,canvas.height/ROWS,0,0)' game.js
           grep -q 'ctx.setTransform(canvas.width/COLS,0,0,canvas.height/ROWS,0,0)' game.js
