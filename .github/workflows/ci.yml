@@ -42,8 +42,15 @@ jobs:
           grep -q 'id="shield"' index.html
           grep -q 'id="pulse"' index.html
 
-      - name: Check menu handlers
+      - name: Check mobile menu handlers
         run: |
-          grep -q 'bindMenuButton(menuStart,openGameFromMenu)' game.js
-          grep -q 'bindMenuButton(howBtn,openTutorial)' game.js
-          grep -q 'bindMenuButton(howBack,closeTutorial)' game.js
+          grep -q 'onclick="openGameFromMenu(event)"' index.html
+          grep -q 'onclick="openTutorial(event)"' index.html
+          grep -q 'onclick="closeTutorial(event)"' index.html
+          grep -q 'document.addEventListener("touchend"' game.js
+          grep -q 'window.openGameFromMenu=openGameFromMenu' game.js
+
+      - name: Check mobile tutorial text
+        run: |
+          grep -q 'MOVE</b> WASD / ARROWS' index.html
+          grep -q 'PHONE</b>' index.html
