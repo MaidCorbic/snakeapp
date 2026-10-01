@@ -30,12 +30,9 @@ const howPanel=document.querySelector("#howPanel"),howBack=document.querySelecto
 function openGameFromMenu(e){e?.preventDefault();e?.stopPropagation();howPanel.classList.add("hidden");menu.classList.add("hidden");message.style.display="none";reset()}
 function openTutorial(e){e?.preventDefault();e?.stopPropagation();menu.classList.remove("hidden");howPanel.classList.remove("hidden");howBtn.setAttribute("aria-expanded","true")}
 function closeTutorial(e){e?.preventDefault();e?.stopPropagation();howPanel.classList.add("hidden");howBtn.setAttribute("aria-expanded","false")}
-menuStart.addEventListener("click",openGameFromMenu);
-menuStart.addEventListener("pointerup",openGameFromMenu);
-howBtn.addEventListener("click",openTutorial);
-howBtn.addEventListener("pointerup",openTutorial);
-howBack.addEventListener("click",closeTutorial);
-howBack.addEventListener("pointerup",closeTutorial);
+menuStart.addEventListener("pointerup",openGameFromMenu,{passive:false});
+howBtn.addEventListener("pointerup",openTutorial,{passive:false});
+howBack.addEventListener("pointerup",closeTutorial,{passive:false});
 start.onclick=()=>{message.style.display="none";reset()};
 showSave();
 document.querySelectorAll("[data-dir]").forEach(b=>b.addEventListener("pointerdown",e=>{
