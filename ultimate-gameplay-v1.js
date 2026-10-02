@@ -1,7 +1,8 @@
 /* ULTIMATE GAMEPLAY LAYER V1 */
 (() => {
   "use strict";
-  let dailyMode=false,endlessMode=false,endlessCycle=0,endlessTotalStart=0,dailySeed=0,riskHeatUntil=0,ghostSaved=false;
+  window.__snakeUltimateLayerActive=true;
+  let dailyMode=false,endlessMode=false,endlessCycle=0,endlessTotalStart=0,dailySeed=0,riskHeatUntil=0,ghostSaved=false,lastPerfectMilestone=0;
   let runCondition=null,arenaBlocks=[],telegraphs=[],riskShrine=null,secretPortal=null,secretUntil=0;
   let perfectStart=0,perfectBroken=false,deathCause="NONE",maxThreat=0,bountyTarget=null,bountyClaimed=false;
   let enemyId=0,ghostPath=[],ghostIndex=0,runPath=[],nextRiskAt=0,nextSecretAt=0,bossTelegraphUntil=0,layerZone=-1,layerEventClock=0,audioCtx=null;
@@ -112,13 +113,13 @@
     const before={energy:stats.energy,cores:stats.cores,powerups:stats.powerups,supplyDrops:stats.supplyDrops,elites:stats.elites};
     baseMoveU(force);if(!alive)return;
     recordStep();const head=snake[0];collectRiskShrine(head);enterSecret(head);
-    if(stats.energy>before.energy||stats.cores>before.cores||stats.powerups>before.powerups||stats.supplyDrops>before.supplyDrops){touchAdvancedChain();registerAdvancedLoot()}
+    if(stats.energy>before.energy){registerAdvancedLoot()}
     maxThreat=Math.max(maxThreat,danger);
     if(layerZone!==currentZone()){layerZone=currentZone();zone=currentZone();generateArena()}
     if(performance.now()>nextRiskAt&&currentZone()>=2){spawnRiskShrine();nextRiskAt=performance.now()+80000}
     if(performance.now()>nextSecretAt&&currentZone()>=2){spawnSecretPortal();nextSecretAt=performance.now()+90000}
     if(riskShrine&&performance.now()>riskShrine.expires){riskShrine=null;say("RISK SHRINE // EXPIRED")}if(riskHeatUntil&&performance.now()>riskHeatUntil){riskHeatUntil=0;threatBonus=Math.max(0,threatBonus-15);say("RISK SHRINE // HEAT ENDED")}
-    if(eventClock2!==layerEventClock&&eventClock2%420===0){layerEventClock=eventClock2;startEmergencyEvent()}
+    if(eventClock2!==layerEventClock&&eventClock2%420===105){layerEventClock=eventClock2;startEmergencyEvent()}
     if(runCondition?.[0]==="LOW VISIBILITY"&&eventClock2%180===0&&!advancedEventActive("BLACKOUT"))advancedZoneEvent={type:"BLACKOUT",until:performance.now()+7000};
     cleanTelegraphs();if(salvageChain&&performance.now()>salvageUntil)salvageChain=0;
     if(chain&&performance.now()>chainUntil){chain=0;combo=Math.max(1,combo-1);say("CHAIN LOST // COMBO -1")}
@@ -132,7 +133,7 @@
   function prepareRun(mode){
     dailyMode=mode==="daily";endlessMode=mode==="endless";endlessCycle=0;endlessTotalStart=performance.now();
     if(dailyMode)enableDailyRng();else restoreRng();
-    chooseCondition();deathCause="NONE";perfectBroken=false;maxThreat=0;bountyTarget=null;bountyClaimed=false;enemyId=0;arenaBlocks=[];telegraphs=[];riskShrine=null;secretPortal=null;secretUntil=0;layerZone=-1;layerEventClock=0;nextRiskAt=performance.now()+60000;nextSecretAt=performance.now()+90000;
+    chooseCondition();deathCause="NONE";perfectBroken=false;lastPerfectMilestone=0;ghostSaved=false;maxThreat=0;bountyTarget=null;bountyClaimed=false;enemyId=0;arenaBlocks=[];telegraphs=[];riskShrine=null;secretPortal=null;secretUntil=0;layerZone=-1;layerEventClock=0;nextRiskAt=performance.now()+60000;nextSecretAt=performance.now()+90000;
     loadGhost();contractOfferOpen=true;extractionOpen=false;baseResetU();if(runCondition?.[0]==="ONE CHANCE")lives=1;
     perfectStart=performance.now();generateArena();hud();draw();renderLeaderboard();baseRenderAchievementsU();renderUltimateAchievements()
   }
@@ -156,7 +157,7 @@
     const cond=document.querySelector("#condition"),condLabel=document.querySelector("#conditionLabel"),mode=document.querySelector("#runMode"),bounty=document.querySelector("#bounty"),bountyLabel=document.querySelector("#bountyLabel"),perfect=document.querySelector("#perfectLabel"),maxD=document.querySelector("#maxThreat"),perk=document.querySelector("#evoPerk");
     if(cond)cond.textContent=conditionName();if(condLabel)condLabel.textContent=runCondition?.[1]||"STANDARD";if(mode)mode.textContent=endlessMode?"ENDLESS C"+endlessCycle:dailyMode?"DAILY":"STANDARD";
     if(bounty)bounty.textContent=bountyClaimed?"CLEARED":bountyTarget?"TARGET":"SEARCHING";if(bountyLabel)bountyLabel.textContent=bountyTarget&&!bountyClaimed?(bountyTarget.variant||bountyTarget.type||"TARGET").toUpperCase():"READY";
-    if(perfect){const sec=Math.floor((performance.now()-perfectStart)/1000);perfect.textContent=!perfectBroken&&sec>=30?"PERFECT x1.25":perfectBroken?"BROKEN":"BUILDING";if(!perfectBroken){const s=ultimateStats();s.perfectSeconds=Math.max(s.perfectSeconds,sec);saveUltimateStats(s)}}
+    if(perfect){const sec=Math.floor((performance.now()-perfectStart)/1000);perfect.textContent=!perfectBroken&&sec>=30?"PERFECT x1.25":perfectBroken?"BROKEN":"BUILDING";if(!perfectBroken&&sec>=60&&lastPerfectMilestone<60){lastPerfectMilestone=60;const s=ultimateStats();s.perfectSeconds=Math.max(s.perfectSeconds,sec);saveUltimateStats(s);renderUltimateAchievements()}}
     if(maxD)maxD.textContent=maxThreat+"%";if(perk)perk.textContent=evolution()===1?"SPEED":evolution()===2?"DASH BOOST":evolution()===3?"PHASED HIT":evolution()===4?"PULSE+":"STANDARD";
     if(secretUntil>performance.now()&&zoneEl)zoneEl.textContent="SECRET VAULT";else if(zoneEl)zoneEl.textContent=(dailyMode?zoneNames[zone]+" // DAILY":zoneNames[zone]);
     if(endlessMode){const total=Math.floor((performance.now()-endlessTotalStart)/1000);timeEl.textContent="∞ "+Math.floor(total/60)+":"+String(total%60).padStart(2,"0")}
