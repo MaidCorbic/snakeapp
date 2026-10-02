@@ -72,7 +72,7 @@
 
   function loadGhost(){try{ghostPath=JSON.parse(localStorage.getItem(dailyMode?"snake-evolution-daily-ghost":"snake-evolution-ghost")||"[]")}catch{ghostPath=[]}ghostIndex=0;runPath=[]}
   function recordStep(){if(alive){const p=snake[0];runPath.push({x:p.x,y:p.y});ghostIndex=Math.min(ghostIndex+1,ghostPath.length)}}
-  function saveGhost(){const key=dailyMode?"snake-evolution-daily-ghost":"snake-evolution-ghost",bestKey=dailyMode?"snake-evolution-daily-best":"snake-evolution-best",best=Number(localStorage.getItem(bestKey)||0);if(score>best||ghostPath.length===0){try{localStorage.setItem(key,JSON.stringify(runPath.slice(0,5000)));localStorage.setItem(bestKey,String(score));ghostSaved=true}catch{}}}
+  function saveGhost(){const key=dailyMode?"snake-evolution-daily-ghost":"snake-evolution-ghost",bestKey=dailyMode?"snake-evolution-daily-ghost-best":"snake-evolution-ghost-best",best=Number(localStorage.getItem(bestKey)||0);if(score>best||ghostPath.length===0){try{localStorage.setItem(key,JSON.stringify(runPath.slice(0,5000)));localStorage.setItem(bestKey,String(score));ghostSaved=true}catch{}}}
   function saveLeaderboard(mode){const key=dailyMode?"snake-evolution-daily-leaderboard":"snake-evolution-leaderboard";let list=[];try{list=JSON.parse(localStorage.getItem(key)||"[]")}catch{}list.push({score:Math.round(score),combo,zone:currentZone(),evolution:evoNames[evolution()-1],mutation:mutationName(),condition:conditionName(),mode,date:dailyDateKey()});list.sort((a,b)=>b.score-a.score);writeStore(key,list.slice(0,10))}
   function renderLeaderboard(){
     const render=(el,key)=>{if(!el)return;let list=[];try{list=JSON.parse(localStorage.getItem(key)||"[]")}catch{}el.innerHTML=list.length?list.map((r,n)=>"<div class=\"leader-row\"><b>#"+(n+1)+"</b><strong>"+r.score+"</strong><span>x"+r.combo+" // "+r.evolution+"</span><small>"+r.mutation+" // "+r.mode+"</small></div>").join(""):"<div class=\"leader-empty\">NO RUNS RECORDED</div>"};
@@ -138,7 +138,7 @@
   function prepareRun(mode){
     dailyMode=mode==="daily";endlessMode=mode==="endless";endlessCycle=0;endlessTotalStart=performance.now();
     if(dailyMode)enableDailyRng();else restoreRng();
-    chooseCondition();deathCause="NONE";perfectBroken=false;lastPerfectMilestone=0;ghostSaved=false;maxThreat=0;bountyTarget=null;bountyClaimed=false;enemyId=0;arenaBlocks=[];telegraphs=[];riskShrine=null;secretPortal=null;secretUntil=0;layerZone=-1;layerEventClock=0;nextRiskAt=performance.now()+60000;nextSecretAt=performance.now()+90000;
+    chooseCondition();deathCause="NONE";perfectBroken=false;lastPerfectMilestone=0;ghostSaved=false;maxThreat=0;threatBonus=runCondition?.[0]==="DOUBLE DOWN"?10:0;bountyTarget=null;bountyClaimed=false;enemyId=0;arenaBlocks=[];telegraphs=[];riskShrine=null;secretPortal=null;secretUntil=0;layerZone=-1;layerEventClock=0;nextRiskAt=performance.now()+60000;nextSecretAt=performance.now()+90000;
     loadGhost();contractOfferOpen=true;extractionOpen=false;baseResetU();if(runCondition?.[0]==="ONE CHANCE")lives=1;
     perfectStart=performance.now();generateArena();hud();draw();renderLeaderboard();baseRenderAchievementsU();renderUltimateAchievements()
   }
@@ -155,7 +155,7 @@
   };
 
   persist=function(winResult){saveGhost();saveLeaderboard(advancedExitMode==="CASH OUT"?"CASH OUT":winResult?"SURVIVED":"ENDED");basePersistU(winResult);const s=ultimateStats();if(dailyMode)s.dailyRuns++;if(!perfectBroken)s.perfectSeconds=Math.max(s.perfectSeconds,Math.floor((performance.now()-perfectStart)/1000));if(runPath.length&&!ghostSaved){s.ghostRuns++;ghostSaved=true}saveUltimateStats(s);restoreRng();renderLeaderboard();renderUltimateAchievements()};
-  statsMarkup=function(winResult){return baseStatsMarkupU(winResult)+'<div class="analysis-grid"><span>CAUSE<strong>'+deathCause+'</strong></span><span>MAX THREAT<strong>'+maxThreat+'%</strong></span><span>CONDITION<strong>'+conditionName()+'</strong></span><span>MODE<strong>'+(endlessMode?"ENDLESS":dailyMode?"DAILY":"STANDARD")+'</strong></span></div><p class="result-copy">'+(perfectBroken?"PERFECT RUN // BROKEN":"PERFECT RUN // 1.25X ACTIVE")+'</p>'};
+  statsMarkup=function(winResult){const cause=advancedExitMode==="CASH OUT"?"CASH OUT":winResult?"TIME CLEARED":deathCause;return baseStatsMarkupU(winResult)+'<div class="analysis-grid"><span>CAUSE<strong>'+cause+'</strong></span><span>MAX THREAT<strong>'+maxThreat+'%</strong></span><span>CONDITION<strong>'+conditionName()+'</strong></span><span>MODE<strong>'+(endlessMode?"ENDLESS":dailyMode?"DAILY":"STANDARD")+'</strong></span></div><p class="result-copy">'+(perfectBroken?"PERFECT RUN // BROKEN":"PERFECT RUN // 1.25X ACTIVE")+'</p>'};
 
   hud=function(){
     baseHudU();maxThreat=Math.max(maxThreat,danger);
