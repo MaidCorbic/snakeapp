@@ -353,3 +353,70 @@ body{background:radial-gradient(ellipse at 50% -18%,#142219 0,transparent 52%),v
   .brief-controls kbd{font-size:3px}
 }
 @media(prefers-reduced-motion:reduce){.boot-status i{animation:none}.boot-action,.ability{transition:none}}
+
+
+/* Readability pass: larger type on both sides of the landing screen */
+.boot-topline .eyebrow{font-size:8px;line-height:1.7}
+.boot-status{font-size:7px}
+.boot-title{font-size:clamp(26px,4.2vw,42px)!important;line-height:1.4}
+.boot-tagline{font-size:9px!important;line-height:1.9!important}
+.boot-pills span{font-size:6px;line-height:1.6;padding:8px 9px}
+.boot-action{font-size:8px;line-height:1.7;min-height:50px}
+.boot-action.boot-primary{font-size:9px;min-height:58px}
+.brief-heading{font-size:8px;line-height:1.7}
+.brief-heading b{font-size:6px}
+.brief-item>strong{font-size:7px;width:27px;height:27px}
+.brief-item{grid-template-columns:29px 1fr;gap:11px;padding:14px 0}
+.brief-item div b{font-size:7px;line-height:1.7;margin-bottom:7px}
+.brief-item div small{font-size:6px;line-height:1.9}
+.brief-controls{font-size:6px;line-height:1.8;gap:7px}
+.brief-controls kbd{font-size:6px;padding:6px 7px}
+.boot-panel h3{font-size:9px}
+.boot-panel p{font-size:7px;line-height:1.9}
+.boot-menu .option-row{font-size:7px}
+.boot-menu .option-toggle{font-size:7px!important}
+@media(max-width:900px){
+  .boot-topline .eyebrow{font-size:7px}
+  .boot-title{font-size:clamp(24px,5vw,36px)!important}
+  .boot-tagline{font-size:8px!important}
+  .boot-action{font-size:7px}
+  .brief-heading{font-size:7px}
+  .brief-item div b{font-size:6px}
+  .brief-item div small{font-size:5.5px}
+  .brief-controls,.brief-controls kbd{font-size:5px}
+}
+@media(max-width:700px){
+  .boot-topline .eyebrow{font-size:6px}
+  .boot-status{font-size:5px}
+  .boot-title{font-size:clamp(23px,6vw,32px)!important}
+  .boot-tagline{font-size:7px!important}
+  .boot-pills span{font-size:5px}
+  .boot-action{font-size:7px;min-height:46px}
+  .boot-action.boot-primary{font-size:8px;min-height:52px}
+  .brief-heading{font-size:7px}
+  .brief-heading b{font-size:5px}
+  .brief-item div b{font-size:6px}
+  .brief-item div small{font-size:5.5px}
+  .brief-controls,.brief-controls kbd{font-size:5px}
+  .boot-panel p{font-size:6px}
+  .boot-menu .option-row{font-size:6px}
+}
+@media(max-width:420px){
+  .boot-topline .eyebrow{font-size:5px}
+  .boot-status{font-size:4px}
+  .boot-title{font-size:22px!important;line-height:1.5}
+  .boot-tagline{font-size:6px!important;line-height:1.9!important}
+  .boot-pills span{font-size:4px;padding:6px}
+  .boot-action{font-size:6px;min-height:43px}
+  .boot-action.boot-primary{font-size:7px;min-height:49px}
+  .brief-heading{font-size:6px}
+  .brief-heading b{font-size:4px}
+  .brief-item{grid-template-columns:24px 1fr;gap:8px;padding:8px 0}
+  .brief-item>strong{width:22px;height:22px;font-size:5px}
+  .brief-item div b{font-size:5px;line-height:1.8}
+  .brief-item div small{font-size:5px;line-height:1.8}
+  .brief-controls,.brief-controls kbd{font-size:4px}
+  .brief-controls kbd{padding:5px}
+  .boot-panel p{font-size:5px}
+  .boot-menu .option-row{font-size:5px}
+}
