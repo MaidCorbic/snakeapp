@@ -79,7 +79,7 @@ check("redundant duplicate run telemetry row is removed", [...html.matchAll(/id=
 check("energy pickup respawns on a distinct unoccupied non-arena tile", /function safeEnergyRespawnU/.test(ultimate) && /cellBlockedU\(p,previous\)/.test(ultimate) && /const energyCollected=stats\.energy>before\.energy/.test(ultimate) && /energy=safeEnergyRespawnU\(consumedEnergy\)/.test(ultimate));
 check("energy surge rewards every tenth collected green cell", /energyPickupCount % 10 === 0/.test(updateV2) && /ENERGY SURGE/.test(updateV2) && /gainXp\(25\)/.test(updateV2) && /chargeFury\(8\)/.test(updateV2));
 check("landing page copy remains readable at desktop and compact widths", /\.brief-item div small\{font-size:6px;line-height:1\.9\}/.test(css) && /\.brief-item div small\{font-size:5px;line-height:1\.8\}/.test(css));
-check("energy respawn enforces meaningful movement away from the consumed tile", /minDistance=/.test(ultimate) && /toroidalDistance\(p,previous\)>=minDistance/.test(ultimate));
+check("energy respawn enforces meaningful movement away from the consumed tile", /minDistance=/.test(ultimate) && /farEnough=/.test(ultimate) && /dx\+dy>=minDistance/.test(ultimate));
 check("playground and HUD have enhanced visual treatment", /\.game-shell:before/.test(css) && /\.game-shell:after/.test(css) && /\.life-module strong\{/.test(css) && /\.intel-card:hover/.test(css));
 check("updated gameplay assets use fresh cache keys", /ultimate-gameplay-v1\.js\?v=ultimate-v7/.test(menu) && /gameplay-update-v2\.js\?v=update-v7/.test(menu));
 
@@ -97,7 +97,7 @@ process.stdout.write("\nAll Snake Evolution regression checks passed.\n");
 check("expanded landing options, music and version are wired", /bootMusic/.test(html) && /bootVolume/.test(html) && /GAME_VERSION/.test(menu) && /1\.10\.0/.test(menu));
 check("contract can be accepted with keyboard confirmation", /contractOfferOpen&&\(k===" "||k==="enter"\)\{acceptContract\(\);return\}/.test(game));
 check("extra life capacity and pickup mechanics exist", /maxLives=4/.test(game) && /GUARDIAN CUBE/.test(ultimate) && /lives=Math\.min\(maxLives,lives\+1\)/.test(ultimate));
-check("ally and enemy cube encounters are active", /encounterDefsU/.test(ultimate) && /spawnEncounterU/.test(ultimate) && /handleEncounterU/.test(ultimate) && /ENEMY CUBE/.test(ultimate));
+check("ally and enemy cube encounters are active", /encounterDefsU/.test(ultimate) && /friend:true/.test(ultimate) && /friend:false/.test(ultimate) && /spawnEncounterU/.test(ultimate) && /handleEncounterU/.test(ultimate) && /def\.friend\?"ALLY":"ENEMY"/.test(ultimate));
 check("green energy avoids recent spawn tiles", /recentEnergyCells/.test(ultimate) && /avoidRecent/.test(ultimate) && /rememberEnergyPointU/.test(ultimate));
 check("ghost run has trail, sync rewards and saved best score", /ghostSyncUntil/.test(ultimate) && /GHOST SYNC/.test(ultimate) && /ghostBestScore/.test(ultimate) && /const trail=/.test(ultimate));
 check("mobile gameplay uses enlarged controls and swipe threshold", /controls button\{width:52px;height:48px/.test(css) && /<18>/.test(game) || /<18/.test(game) || /Math\.max\(Math\.abs\(dx\),Math\.abs\(dy\)\)<18/.test(game));
