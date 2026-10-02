@@ -73,8 +73,8 @@ check("procedural arena, telegraphs, shrine and secret zone exist", /function\s+
 check("combo finisher, perfect run, ghost and local leaderboard exist", /CHAIN FINISHER/.test(ultimate) && /PERFECT x1\.25/.test(ultimate) && /function\s+saveGhost\s*\(/.test(ultimate) && /function\s+saveLeaderboard\s*\(/.test(ultimate));
 check("mobile touch controls retain touch-action support", /data-dir=["']up["']/.test(html) && /canvas\s*\{\s*touch-action\s*:\s*none/s.test(css));
 check("update pack includes pause, visibility pause, checkpoints and near-miss", /pauseControl\?\.addEventListener/.test(updateV2) && /visibilitychange/.test(updateV2) && /ZONE CHECKPOINT/.test(updateV2) && /function checkNearMiss/.test(updateV2));
-check("gameplay update recovers the tick timer after callback errors", /function moveWithV2Recovery/.test(updateV2) && /finally[\\s\\S]*?timer = setTimeout\\(move, delay\\)/.test(updateV2));
-check("landing screen has a mission briefing and responsive action groups", /class="boot-layout"/.test(html) && /class="boot-brief"/.test(html) && /class="boot-primary"/.test(html) && /\.boot-layout\\s*\\{grid-template-columns:1fr/s.test(css));
+check("gameplay update recovers the tick timer after callback errors", /function moveWithV2Recovery/.test(updateV2) && /finally[\s\S]*?timer = setTimeout\(move, delay\)/.test(updateV2));
+check("landing screen has a mission briefing and responsive action groups", /class="boot-layout"/.test(html) && /class="boot-brief"/.test(html) && /class="boot-primary"/.test(html) && /\.boot-layout\s*\{grid-template-columns:1fr/s.test(css));
 check("redundant duplicate run telemetry row is removed", [...html.matchAll(/id="runMode"/g)].length === 1 && [...html.matchAll(/id="evoPerk"/g)].length === 1 && [...html.matchAll(/id="maxThreat"/g)].length === 1);
 check("CI validates this regression script and update module", fs.existsSync(path.join(root, ".github/workflows/ci.yml")) && /node scripts\/validate-game\.cjs/.test(read(".github/workflows/ci.yml")) && /node --check gameplay-update-v2\.js/.test(read(".github/workflows/ci.yml")));
 
