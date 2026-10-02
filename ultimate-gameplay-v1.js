@@ -84,12 +84,17 @@
     if(!point)return;
     recentEnergyCells=[point,...recentEnergyCells.filter(p=>!same(p,point))].slice(0,8);
   }
+  function toroidalDistance(a,b){
+    if(!a||!b)return Infinity;
+    const dx=Math.min(Math.abs(a.x-b.x),COLS-Math.abs(a.x-b.x)),dy=Math.min(Math.abs(a.y-b.y),ROWS-Math.abs(a.y-b.y));
+    return dx+dy;
+  }
   function safeEnergyRespawnU(previous){
     const cells=COLS*ROWS,start=(Math.floor(Math.random()*cells)+energyRespawnSerial++*137+17)%cells,minDistance=Math.min(10,Math.max(7,Math.floor(COLS/4)));
     const avoidRecent=p=>recentEnergyCells.some(r=>same(r,p));
     for(let offset=0;offset<cells;offset++){
       const index=(start+offset)%cells,p={x:index%COLS,y:Math.floor(index/COLS)};
-      const farEnough=!previous||(()=>{const dx=Math.min(Math.abs(p.x-previous.x),COLS-Math.abs(p.x-previous.x));const dy=Math.min(Math.abs(p.y-previous.y),ROWS-Math.abs(p.y-previous.y));return dx+dy>=minDistance})();
+      const farEnough=!previous||toroidalDistance(p,previous)>=minDistance;
       if(!cellBlockedU(p,previous)&&!avoidRecent(p)&&farEnough){rememberEnergyPointU(p);return p}
     }
     for(let offset=0;offset<cells;offset++){
