@@ -96,7 +96,7 @@
       if (bootFailed) return;
       const ultimate = document.createElement("script");
       ultimate.id = "snakeUltimateScript";
-      ultimate.src = "ultimate-gameplay-v1.js?v=ultimate-v2";
+      ultimate.src = "ultimate-gameplay-v1.js?v=ultimate-v3";
       ultimate.onload = () => {
         if (bootFailed) return;
         window.removeEventListener("error", onRuntimeError);
