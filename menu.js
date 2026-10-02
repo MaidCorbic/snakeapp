@@ -15,15 +15,29 @@
   const vibrationToggle = document.querySelector("#bootVibration");
   const motionToggle = document.querySelector("#bootMotion");
   const soundToggle = document.querySelector("#bootSound");
+  const musicToggle = document.querySelector("#bootMusic");
+  const crtToggle = document.querySelector("#bootCrt");
+  const contrastToggle = document.querySelector("#bootContrast");
+  const volumeSlider = document.querySelector("#bootVolume");
+  const volumeValue = document.querySelector("#bootVolumeValue");
+  const fullscreenBtn = document.querySelector("#bootFullscreen");
+  const resetSettingsBtn = document.querySelector("#bootResetSettings");
+  const settingsState = document.querySelector("#bootSettingsState");
+  const versionLabel = document.querySelector("#bootGameVersion");
+  const GAME_VERSION = "1.9.0";
   const errorPanel = document.querySelector("#bootError");
   const errorText = document.querySelector("#bootErrorText");
   const retryBtn = document.querySelector("#bootErrorRetry");
   const settingsKey = "snake-evolution-settings";
-  const defaults = {grid:true,vibration:true,reducedMotion:false,sound:true};
+  const defaults = {grid:true,vibration:true,reducedMotion:false,crt:true,highContrast:false,sound:true,music:true,volume:65};
   let settings = {...defaults};
   let gameLoaded = false;
   let gameLoading = false;
   let bootFailed = false;
+  let musicContext = null;
+  let musicGain = null;
+  let musicTimer = null;
+  let musicStep = 0;
 
   try { settings = {...defaults, ...JSON.parse(localStorage.getItem(settingsKey) || "{}")}; } catch {}
 
@@ -32,17 +46,73 @@
     optionsPanel?.classList.add("hidden");
   };
 
+  const applyVisualSettings = () => {
+    document.documentElement.classList.toggle("reduced-motion", !!settings.reducedMotion);
+    document.body.classList.toggle("no-crt", !settings.crt);
+    document.body.classList.toggle("high-contrast", !!settings.highContrast);
+  };
+
   const renderSettings = () => {
-    [[gridToggle,"grid"],[vibrationToggle,"vibration"],[motionToggle,"reducedMotion"],[soundToggle,"sound"]].forEach(([button,key]) => {
+    [[gridToggle,"grid"],[vibrationToggle,"vibration"],[motionToggle,"reducedMotion"],[crtToggle,"crt"],[contrastToggle,"highContrast"],[soundToggle,"sound"],[musicToggle,"music"]].forEach(([button,key]) => {
       if (!button) return;
       button.textContent = settings[key] ? "ON" : "OFF";
       button.setAttribute("aria-pressed", String(!!settings[key]));
     });
+    if (volumeSlider) volumeSlider.value = String(settings.volume ?? 65);
+    if (volumeValue) volumeValue.textContent = String(settings.volume ?? 65) + "%";
+    if (settingsState) settingsState.textContent = "LOCAL // SAVED";
+    applyVisualSettings();
+  };
+
+  const getMusicVolume = () => Math.max(0,Math.min(1,(Number(settings.volume ?? 65)/100)*0.09));
+  const musicNotes = [220,261.63,329.63,392,329.63,293.66,246.94,329.63,220,261.63,349.23,440,392,349.23,293.66,261.63];
+  const bassNotes = [110,110,146.83,146.83,130.81,130.81,98,98];
+  const playMusicTone = (frequency,duration=.22,type="square",level=.45,octave=1) => {
+    if(!musicContext || !settings.music || settings.volume<=0) return;
+    const now=musicContext.currentTime;
+    const oscillator=musicContext.createOscillator();
+    const gain=musicContext.createGain();
+    oscillator.type=type;
+    oscillator.frequency.setValueAtTime(frequency*octave,now);
+    gain.gain.setValueAtTime(0.0001,now);
+    gain.gain.exponentialRampToValueAtTime(Math.max(0.0001,getMusicVolume()*level),now+0.012);
+    gain.gain.exponentialRampToValueAtTime(0.0001,now+duration);
+    oscillator.connect(gain);gain.connect(musicGain);
+    oscillator.start(now);oscillator.stop(now+duration+0.03);
+  };
+  const startMusic = () => {
+    if(!settings.music || settings.volume<=0) return;
+    try {
+      const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return;
+      if(!musicContext) {
+        musicContext=new AC();
+        musicGain=musicContext.createGain();
+        musicGain.gain.value=1;
+        musicGain.connect(musicContext.destination);
+      }
+      if(musicContext.state==="suspended") musicContext.resume().catch(()=>{});
+      if(musicTimer) return;
+      musicStep=0;
+      const tick=()=>{
+        if(!settings.music || settings.volume<=0){musicTimer=null;return}
+        const note=musicNotes[musicStep%musicNotes.length];
+        playMusicTone(note,.19,"square",.32,1);
+        if(musicStep%2===0) playMusicTone(bassNotes[Math.floor(musicStep/2)%bassNotes.length],.34,"triangle",.22,1);
+        if(musicStep%4===0) playMusicTone(note*2,.08,"sine",.12,1);
+        musicStep++;
+        musicTimer=setTimeout(tick,230);
+      };
+      tick();
+    } catch {}
+  };
+  const stopMusic = () => {
+    if(musicTimer){clearTimeout(musicTimer);musicTimer=null}
   };
 
   const saveSettings = () => {
     try { localStorage.setItem(settingsKey, JSON.stringify(settings)); } catch {}
     renderSettings();
+    if (settings.music) startMusic(); else stopMusic();
   };
 
   const showBootMenu = () => {
@@ -96,7 +166,7 @@
       if (bootFailed) return;
       const ultimate = document.createElement("script");
       ultimate.id = "snakeUltimateScript";
-      ultimate.src = "ultimate-gameplay-v1.js?v=ultimate-v5";
+      ultimate.src = "ultimate-gameplay-v1.js?v=ultimate-v6";
       ultimate.onload = () => {
         if (bootFailed) return;
         const update = document.createElement("script");
@@ -128,6 +198,7 @@
     document.body.appendChild(script);
   };
 
+  [startBtn,dailyBtn,endlessBtn,howBtn,optionsBtn].forEach(button=>button?.addEventListener("click",()=>startMusic(),{once:true}));
   startBtn?.addEventListener("click", () => loadGame("normal"));
   dailyBtn?.addEventListener("click", () => loadGame("daily"));
   endlessBtn?.addEventListener("click", () => loadGame("endless"));
@@ -147,10 +218,35 @@
   gridToggle?.addEventListener("click", () => { settings.grid=!settings.grid; saveSettings(); });
   vibrationToggle?.addEventListener("click", () => { settings.vibration=!settings.vibration; saveSettings(); });
   motionToggle?.addEventListener("click", () => { settings.reducedMotion=!settings.reducedMotion; saveSettings(); });
-  soundToggle?.addEventListener("click", () => { settings.sound=!settings.sound; try { localStorage.setItem("snake-evolution-sound", settings.sound ? "on" : "off"); } catch {} saveSettings(); });
+  soundToggle?.addEventListener("click", () => {
+    settings.sound=!settings.sound;
+    try { localStorage.setItem("snake-evolution-sound", settings.sound ? "on" : "off"); } catch {}
+    saveSettings();
+  });
+  musicToggle?.addEventListener("click", () => { settings.music=!settings.music; saveSettings(); });
+  crtToggle?.addEventListener("click", () => { settings.crt=!settings.crt; saveSettings(); });
+  contrastToggle?.addEventListener("click", () => { settings.highContrast=!settings.highContrast; saveSettings(); });
+  volumeSlider?.addEventListener("input", () => {
+    settings.volume=Number(volumeSlider.value)||0;
+    if(volumeValue) volumeValue.textContent=settings.volume+"%";
+    saveSettings();
+  });
+  fullscreenBtn?.addEventListener("click", async () => {
+    try {
+      if(!document.fullscreenElement) await document.documentElement.requestFullscreen?.();
+      else await document.exitFullscreen?.();
+    } catch {}
+  });
+  resetSettingsBtn?.addEventListener("click", () => {
+    settings={...defaults};
+    saveSettings();
+    try { localStorage.removeItem("snake-evolution-sound"); } catch {}
+  });
 
   window.showBootMenu = showBootMenu;
+  if(versionLabel) versionLabel.textContent = "V"+GAME_VERSION;
   renderSettings();
+  if (settings.music) startMusic();
   if (settings.sound === false) { try { localStorage.setItem("snake-evolution-sound", "off"); } catch {} }
   showBootMenu();
 })();
