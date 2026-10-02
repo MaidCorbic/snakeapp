@@ -61,6 +61,30 @@
   say=function(t){audioCue(/WARDEN|CRITICAL|BREACH|LOCKDOWN/.test(t)?"warning":/FURY|DASH|SHIELD|PULSE/.test(t)?"ability":/COMPLETE|SURVIVED|EXTRACTED|ACHIEVEMENT/.test(t)?"success":/CORE|ENERGY|SUPPLY|SALVAGE/.test(t)?"pickup":"ui");sayU(t)};
   event=function(t){audioCue(/WARDEN|LOCKDOWN/.test(t)?"boss":"warning");eventU(t)};
 
+  function cellBlockedU(p, previous){
+    return !p
+      ||(previous&&same(p,previous))
+      ||arenaBlocks.some(b=>same(b,p))
+      ||snake.some(s=>same(s,p))
+      ||hunters.some(h=>same(h,p))
+      ||hazards.some(h=>same(h,p))
+      ||powerups.some(x=>same(x,p))
+      ||(energy&&same(energy,p))
+      ||(core&&same(core,p))
+      ||(boss&&same(boss,p))
+      ||(supplyDrop&&same(supplyDrop,p))
+      ||(riskShrine&&same(riskShrine,p))
+      ||(secretPortal&&same(secretPortal,p));
+  }
+  function safeEnergyRespawnU(previous){
+    const cells=COLS*ROWS,start=Math.floor(Math.random()*cells);
+    for(let offset=0;offset<cells;offset++){
+      const index=(start+offset)%cells,p={x:index%COLS,y:Math.floor(index/COLS)};
+      if(!cellBlockedU(p,previous))return p;
+    }
+    // A completely full board is not expected, but never return the consumed tile.
+    return energy&&(!previous||!same(energy,previous))?energy:null;
+  }
   function safePointU(){
     let p,t=0;
     do{p=rand();t++}while(t<800&&(arenaBlocks.some(b=>same(b,p))||snake.some(s=>same(s,p))||hunters.some(h=>same(h,p))||(riskShrine&&same(riskShrine,p))||(secretPortal&&same(secretPortal,p))));
@@ -127,7 +151,9 @@
       return
     }
     const before={energy:stats.energy,cores:stats.cores,powerups:stats.powerups,supplyDrops:stats.supplyDrops,elites:stats.elites};
+    const consumedEnergy=energy?{x:energy.x,y:energy.y}:null;
     baseMoveU(force);if(!alive)return;
+    if(stats.energy>before.energy)energy=safeEnergyRespawnU(consumedEnergy);
     recordStep();const head=snake[0];collectRiskShrine(head);enterSecret(head);
     if(stats.energy>before.energy){registerAdvancedLoot()}
     maxThreat=Math.max(maxThreat,danger);
