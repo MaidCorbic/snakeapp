@@ -98,6 +98,7 @@
       ultimate.id = "snakeUltimateScript";
       ultimate.src = "ultimate-gameplay-v1.js?v=ultimate-v2";
       ultimate.onload = () => {
+        if (bootFailed) return;
         window.removeEventListener("error", onRuntimeError);
         gameLoading = false;
         gameLoaded = true;
