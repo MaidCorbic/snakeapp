@@ -584,3 +584,199 @@ body.boot-open{overflow:hidden}
   .controls button{width:48px;height:45px;font-size:13px;margin:2px}
   .ability{min-height:55px}
 }
+
+
+/* HUD REFINEMENT // presentation only — gameplay logic unchanged */
+.run-intel{
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:9px;
+  margin:0 0 10px;
+}
+.run-intel::before{
+  content:"LIVE RUN INTEL";
+  grid-column:1 / -1;
+  color:var(--green);
+  font-size:5px;
+  letter-spacing:1px;
+  padding:0 2px 1px;
+}
+.intel-card{
+  position:relative;
+  min-height:58px;
+  padding:9px 10px;
+  border:1px solid #304238;
+  border-top:2px solid #3b5143;
+  border-radius:2px;
+  background:linear-gradient(180deg,#101812 0%,#0a100c 100%);
+  box-shadow:3px 3px 0 #020302;
+  transition:border-color .15s,transform .15s,box-shadow .15s;
+}
+.intel-card:hover{transform:translateY(-1px);border-color:#526d5a}
+.intel-top{min-height:25px}
+.intel-top span{font-size:4px;letter-spacing:.6px}
+.intel-top strong{font-size:6px;letter-spacing:.2px}
+.intel-top b{font-size:4px;letter-spacing:.4px}
+.intel-track{
+  height:5px;
+  margin-top:8px;
+  border:0;
+  background:#172219;
+  box-shadow:inset 0 0 0 1px #253528;
+}
+.intel-track i{box-shadow:0 0 7px rgba(121,227,91,.18)}
+.danger-card .intel-track i{box-shadow:0 0 7px rgba(255,91,98,.25)}
+.extract-card{border-top-color:#ffd85c}
+.extract-card .intel-top strong{color:var(--yellow)}
+.extract-card .intel-top b{color:var(--yellow)}
+.extract-card .intel-track i{background:var(--yellow)}
+.intel-card.high,.intel-card.elevated,.intel-card.critical,.intel-card.complete{
+  border-top-width:2px;
+}
+.intel-card.critical{box-shadow:3px 3px 0 #300b10,0 0 12px rgba(255,91,98,.08)}
+.intel-card.complete{box-shadow:3px 3px 0 #1d4020}
+
+/* MODE / run state strip */
+.run-mode-bar{
+  display:grid;
+  grid-template-columns:auto minmax(90px,1fr) auto minmax(90px,1fr) auto minmax(70px,1fr) auto minmax(55px,1fr) auto;
+  gap:7px;
+  align-items:center;
+  margin:0 0 10px;
+  padding:7px;
+  border:1px solid #304238;
+  background:#090f0b;
+  box-shadow:4px 4px 0 #020302;
+}
+.run-mode-bar>span{
+  padding:7px 8px;
+  border:1px solid #26372d;
+  background:#0e1711;
+  color:var(--muted);
+  font-size:4px;
+  letter-spacing:.5px;
+}
+.run-mode-bar>strong,.run-mode-bar>b{
+  min-width:0;
+  padding:7px 8px;
+  border:1px solid #304238;
+  background:#101a13;
+  color:var(--yellow);
+  font-size:5px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.run-mode-bar>b{color:var(--ink)}
+.run-mode-bar .run-pause-btn{
+  min-width:74px;
+  min-height:30px;
+  border:1px solid var(--green);
+  background:#122017;
+  box-shadow:2px 2px 0 #27432e;
+}
+
+/* Centered full-result Game Over / Survival Complete */
+#message.message{
+  z-index:30;
+  padding:18px;
+  background:rgba(3,6,4,.88);
+  backdrop-filter:blur(3px);
+}
+#message .message-card{
+  width:min(900px,96%);
+  max-height:calc(100% - 10px);
+  overflow:auto;
+  padding:18px;
+  border:2px solid #3b5143;
+  background:linear-gradient(180deg,rgba(13,21,15,.98),rgba(7,12,9,.98));
+  box-shadow:8px 8px 0 #020302,0 0 35px rgba(121,227,91,.08);
+  scrollbar-width:thin;
+}
+#message .message-card h2{
+  margin:0 0 8px;
+  color:var(--green);
+  font-size:18px;
+  letter-spacing:1px;
+}
+#message .message-card .result-copy{
+  margin:0 0 12px;
+  text-align:center;
+  color:var(--muted);
+  font-size:6px;
+  line-height:1.7;
+}
+#message .message-card .stats-grid{
+  display:grid;
+  grid-template-columns:repeat(5,minmax(0,1fr));
+  gap:6px;
+  margin:0;
+}
+#message .message-card .stats-grid span{
+  min-height:47px;
+  padding:7px;
+  border:1px solid #26372d;
+  background:#0d150f;
+  font-size:4px;
+  color:var(--muted);
+}
+#message .message-card .stats-grid strong{
+  display:block;
+  margin-top:6px;
+  color:var(--ink);
+  font-size:6px;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+#message .message-card .record{
+  display:block;
+  margin:11px 0 0;
+  color:var(--yellow);
+  font-size:7px;
+  text-align:center;
+}
+#message .message-card #start{
+  display:block;
+  margin:14px auto 0;
+  min-width:190px;
+}
+#runStats{display:none!important}
+#missions{display:none!important}
+
+@media(max-width:900px){
+  .run-intel{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .run-mode-bar{grid-template-columns:repeat(5,minmax(0,1fr))}
+  .run-mode-bar>span,.run-mode-bar>strong,.run-mode-bar>b{font-size:4px}
+  .run-mode-bar .run-pause-btn{grid-column:5}
+}
+@media(max-width:700px){
+  .run-intel{grid-template-columns:1fr 1fr}
+  .run-intel::before{font-size:4px}
+  .intel-card{min-height:54px;padding:8px}
+  .run-mode-bar{
+    grid-template-columns:1fr 1fr;
+    gap:5px;
+  }
+  .run-mode-bar>span,.run-mode-bar>strong,.run-mode-bar>b{min-height:29px;display:flex;align-items:center}
+  .run-mode-bar .run-pause-btn{grid-column:auto;min-width:0}
+  #message.message{padding:9px}
+  #message .message-card{width:100%;padding:12px}
+  #message .message-card h2{font-size:12px}
+  #message .message-card .stats-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:5px}
+  #message .message-card .stats-grid span{min-height:40px;padding:6px}
+  #message .message-card .stats-grid strong{font-size:5px}
+}
+@media(max-width:420px){
+  .run-intel{gap:5px}
+  .intel-card{min-height:49px;padding:6px}
+  .intel-top strong{font-size:5px}
+  .intel-track{height:4px;margin-top:6px}
+  .run-mode-bar{margin-bottom:7px}
+  #message .message-card{max-height:96%;padding:9px}
+  #message .message-card h2{font-size:9px}
+  #message .message-card .result-copy{font-size:4px}
+  #message .message-card .stats-grid{gap:4px}
+  #message .message-card .stats-grid span{min-height:34px;font-size:3px}
+  #message .message-card .stats-grid strong{font-size:4px;margin-top:4px}
+  #message .message-card #start{min-width:150px;padding:11px 13px;font-size:7px}
+}
