@@ -56,8 +56,8 @@ check("boot menu loads ultimate layer after base game", /script\.onload\s*=\s*\(
 check("boot menu loads update pack after ultimate layer", /ultimate\.onload\s*=\s*\(\)\s*=>\s*\{[\s\S]*?update\.src\s*=\s*["']gameplay-update-v2\.js\?v=/.test(menu));
 check("menu guards duplicate/in-progress loads", /if\s*\(gameLoaded\)/.test(menu) && /if\s*\(gameLoading\)\s*return/.test(menu));
 check("boot failure does not start a partial game", /ultimate\.onload\s*=\s*\(\)\s*=>\s*\{\s*if\s*\(bootFailed\)\s*return;/.test(menu));
-check("HTML references the current menu cache key", /menu\.js\?v=boot-v13/.test(html));
-check("menu asset versions are current", /game\.js\?v=survival-v9/.test(menu) && /ultimate-gameplay-v1\.js\?v=ultimate-v3/.test(menu) && /gameplay-update-v2\.js\?v=update-v2/.test(menu));
+check("HTML references the current menu cache key", /menu\.js\?v=boot-v14/.test(html));
+check("menu asset versions are current", /game\.js\?v=survival-v9/.test(menu) && /ultimate-gameplay-v1\.js\?v=ultimate-v3/.test(menu) && /gameplay-update-v2\.js\?v=update-v3/.test(menu));
 check("main game exposes the start API", /window\.SnakeEvolution\s*=/.test(game));
 check("permanent upgrades have a purchase handler", /function\s+buyUpgrade\s*\(/.test(game) && /data-upgrade/.test(game));
 check("mission persistence is guarded and render-throttled", /const\s+saveMissions\s*=\s*m\s*=>\s*\{\s*try\s*\{\s*localStorage\.setItem/.test(game) && /now\s*-\s*missionRenderAt\s*>=\s*500/.test(game) && /if\s*\(\s*done\.length\s*\)\s*saveMissions\(m\)/.test(game));
@@ -73,6 +73,9 @@ check("procedural arena, telegraphs, shrine and secret zone exist", /function\s+
 check("combo finisher, perfect run, ghost and local leaderboard exist", /CHAIN FINISHER/.test(ultimate) && /PERFECT x1\.25/.test(ultimate) && /function\s+saveGhost\s*\(/.test(ultimate) && /function\s+saveLeaderboard\s*\(/.test(ultimate));
 check("mobile touch controls retain touch-action support", /data-dir=["']up["']/.test(html) && /canvas\s*\{\s*touch-action\s*:\s*none/s.test(css));
 check("update pack includes pause, visibility pause, checkpoints and near-miss", /pauseControl\?\.addEventListener/.test(updateV2) && /visibilitychange/.test(updateV2) && /ZONE CHECKPOINT/.test(updateV2) && /function checkNearMiss/.test(updateV2));
+check("gameplay update recovers the tick timer after callback errors", /function moveWithV2Recovery/.test(updateV2) && /finally[\\s\\S]*?timer = setTimeout\\(move, delay\\)/.test(updateV2));
+check("landing screen has a mission briefing and responsive action groups", /class="boot-layout"/.test(html) && /class="boot-brief"/.test(html) && /class="boot-primary"/.test(html) && /\.boot-layout\\s*\\{grid-template-columns:1fr/s.test(css));
+check("redundant duplicate run telemetry row is removed", [...html.matchAll(/id="runMode"/g)].length === 1 && [...html.matchAll(/id="evoPerk"/g)].length === 1 && [...html.matchAll(/id="maxThreat"/g)].length === 1);
 check("CI validates this regression script and update module", fs.existsSync(path.join(root, ".github/workflows/ci.yml")) && /node scripts\/validate-game\.cjs/.test(read(".github/workflows/ci.yml")) && /node --check gameplay-update-v2\.js/.test(read(".github/workflows/ci.yml")));
 
 process.stdout.write("\nAll Snake Evolution regression checks passed.\n");
