@@ -54,7 +54,7 @@ check("boot menu loads ultimate layer after base game", /script\.onload\s*=\s*\(
 check("menu guards duplicate/in-progress loads", /if\s*\(gameLoaded\)/.test(menu) && /if\s*\(gameLoading\)\s*return/.test(menu));
 check("boot failure does not start a partial game", /ultimate\.onload\s*=\s*\(\)\s*=>\s*\{\s*if\s*\(bootFailed\)\s*return;/.test(menu));
 check("HTML references the current menu cache key", /menu\.js\?v=boot-v11/.test(html));
-check("menu asset versions are current", /game\.js\?v=survival-v8/.test(menu) && /ultimate-gameplay-v1\.js\?v=ultimate-v2/.test(menu));
+check("menu asset versions are current", /game\.js\?v=survival-v8/.test(menu) && /ultimate-gameplay-v1\.js\?v=ultimate-v3/.test(menu));
 check("main game exposes the start API", /window\.SnakeEvolution\s*=/.test(game));
 check("permanent upgrades have a purchase handler", /function\s+buyUpgrade\s*\(/.test(game) && /data-upgrade/.test(game));
 check("mission persistence is guarded and render-throttled", /const\s+saveMissions\s*=\s*m\s*=>\s*\{\s*try\s*\{\s*localStorage\.setItem/.test(game) && /now\s*-\s*missionRenderAt\s*>=\s*500/.test(game) && /if\s*\(\s*done\.length\s*\)\s*saveMissions\(m\)/.test(game));
