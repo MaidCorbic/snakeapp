@@ -101,7 +101,7 @@
         if (bootFailed) return;
         const update = document.createElement("script");
         update.id = "snakeGameplayUpdateV2";
-        update.src = "gameplay-update-v2.js?v=update-v2";
+        update.src = "gameplay-update-v2.js?v=update-v3";
         update.onload = () => {
           if (bootFailed) return;
           window.removeEventListener("error", onRuntimeError);
