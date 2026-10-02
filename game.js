@@ -209,7 +209,11 @@ function missionCheck(){
 }
 function takeDamage(reason="COLLISION"){stats.damage++;lives=Math.max(0,lives-1);haptic(30);if(lives<=0){say("NO LIVES // RUN OVER");return end()}snake=[{x:10,y:10},{x:9,y:10},{x:8,y:10}];dir=next={x:1,y:0};shieldUntil=performance.now()+1800;hazards=hazards.filter(h=>Math.abs(h.x-10)+Math.abs(h.y-10)>4);hunters=hunters.filter(h=>Math.abs(h.x-10)+Math.abs(h.y-10)>5);say(reason+" // LIFE LOST // "+lives+" LEFT");hud();draw()}
 function move(force=false){if(!alive)return;dir=next;const head={x:snake[0].x+dir.x,y:snake[0].y+dir.y};if(head.x<0||head.x>=COLS||head.y<0||head.y>=ROWS)return end();const protectedNow=performance.now()<shieldUntil||performance.now()<pulseUntil;
-if(!protectedNow&&(snake.some((s,i)=>i>0&&same(s,head))||hazards.some(h=>same(h,head))||hunters.some(h=>same(h,head))||(boss&&same(boss,head)))){takeDamage(hunters.some(h=>same(h,head))?"HUNTER HIT":hazards.some(h=>same(h,head))?"HAZARD HIT":"SELF HIT");return}
+if(!protectedNow&&(snake.some((s,i)=>i>0&&same(s,head))||hazards.some(h=>same(h,head))||hunters.some(h=>same(h,head))||(boss&&same(boss,head)))){
+ takeDamage(hunters.some(h=>same(h,head))?"HUNTER HIT":hazards.some(h=>same(h,head))?"HAZARD HIT":"SELF HIT");
+ if(alive&&!paused)timer=setTimeout(move,Math.max(60,118-combo*6-(force?35:0)-(runMutation?.[0]==="OVERCLOCK"?14:0)));
+ return
+}
 snake.unshift(head);let grow=false;
 if(energy&&same(head,energy)){haptic(8);const points=10*combo;gain(points);combo=Math.min(9,combo+1);chain++;stats.energy++;gainXp(12);chargeFury(8);floatText("+"+points);energy=free();grow=true;const coreEvery=runMutation?.[0]==="HAZARD SHIFT"?2:3;if(stats.energy%coreEvery===0){core=free();say("CORE SPAWNED")}}
 if(core&&same(head,core)){haptic(14);const points=50*combo+chain*5;gain(points);combo=Math.min(9,combo+1);stats.cores++;gainXp(45);chargeFury(15);core=null;energy=free();grow=true;say("CORE +"+points)}
