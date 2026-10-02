@@ -52,11 +52,12 @@
   }
 
   function audioInit(){try{if(localStorage.getItem("snake-evolution-sound")==="off")return;const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return;if(!audioCtx)audioCtx=new AC();if(audioCtx.state==="suspended")audioCtx.resume().catch(()=>{})}catch{}}
+  function audioSettingsU(){try{return JSON.parse(localStorage.getItem("snake-evolution-settings")||"{}")}catch{return {}}}
   function audioCue(kind="ui"){
     if(localStorage.getItem("snake-evolution-sound")==="off")return;
     audioInit();if(!audioCtx)return;
-    const f={ui:320,pickup:540,ability:280,warning:130,boss:70,success:700,kill:180}[kind]||320,now=audioCtx.currentTime,o=audioCtx.createOscillator(),v=audioCtx.createGain();
-    o.frequency.setValueAtTime(f,now);o.frequency.exponentialRampToValueAtTime(Math.max(55,f*.72),now+.07);v.gain.setValueAtTime(.0001,now);v.gain.exponentialRampToValueAtTime(.04,now+.01);v.gain.exponentialRampToValueAtTime(.0001,now+.08);o.connect(v);v.connect(audioCtx.destination);o.start(now);o.stop(now+.09)
+    const settings=audioSettingsU(),master=Math.max(0,Math.min(1,Number(settings.volume??65)/100)),f={ui:320,pickup:540,ability:280,warning:130,boss:70,success:700,kill:180}[kind]||320,now=audioCtx.currentTime,o=audioCtx.createOscillator(),v=audioCtx.createGain();
+    o.frequency.setValueAtTime(f,now);o.frequency.exponentialRampToValueAtTime(Math.max(55,f*.72),now+.07);v.gain.setValueAtTime(.0001,now);v.gain.exponentialRampToValueAtTime(.04*master,now+.01);v.gain.exponentialRampToValueAtTime(.0001,now+.08);o.connect(v);v.connect(audioCtx.destination);o.start(now);o.stop(now+.09)
   }
   const sayU=say,eventU=event;
   say=function(t){audioCue(/WARDEN|CRITICAL|BREACH|LOCKDOWN/.test(t)?"warning":/FURY|DASH|SHIELD|PULSE/.test(t)?"ability":/COMPLETE|SURVIVED|EXTRACTED|ACHIEVEMENT/.test(t)?"success":/CORE|ENERGY|SUPPLY|SALVAGE/.test(t)?"pickup":"ui");sayU(t)};
