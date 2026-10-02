@@ -524,3 +524,63 @@ body{background:radial-gradient(ellipse at 50% -18%,#142219 0,transparent 52%),v
 .evolution-build{margin-top:12px;padding:12px;border:1px solid #2d4232;background:linear-gradient(145deg,#0d1710,#080e0a);box-shadow:inset 0 0 22px #0006}.evolution-build-head{display:flex;justify-content:space-between;align-items:end;gap:10px}.evolution-build-head div{display:grid;gap:5px}.evolution-build-head span{font-size:5px;color:var(--muted)}.evolution-build-head strong{font-size:9px;color:var(--green)}.evolution-build-head>b{font-size:5px;color:var(--yellow);white-space:nowrap}.evolution-build-track{height:9px;margin:9px 0 7px;border:1px solid #304437;background:#071009;border-radius:5px;overflow:hidden}.evolution-build-track i{display:block;height:100%;width:0;background:linear-gradient(90deg,#4ea943,#a1ff87);box-shadow:0 0 10px #79e35b66;border-radius:5px;transition:width .2s ease}.evolution-build>small{font-size:4px;line-height:1.8;color:var(--muted)}
 .card-collection{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.evolution-card{min-height:130px;padding:10px;border:1px solid #2a3b2e;background:linear-gradient(145deg,#0c1510,#080d0a);box-shadow:inset 0 0 14px #0006;position:relative;overflow:hidden}.evolution-card.common{border-color:#314235}.evolution-card.rare{border-color:#35607a}.evolution-card.epic{border-color:#78639d}.evolution-card-top{display:flex;justify-content:space-between;align-items:center;gap:7px}.evolution-card-top b{font-size:4px;color:var(--muted)}.evolution-card-top strong{font-size:6px;color:var(--yellow)}.evolution-card h4{margin:11px 0 7px;font-size:6px;color:var(--ink);line-height:1.6}.evolution-card p{margin:0;color:var(--muted);font-size:4px;line-height:1.8;min-height:42px}.evolution-card small{display:block;margin-top:8px;color:#556755;font-size:4px}.evolution-card.rare .evolution-card-top b,.evolution-card.rare small{color:#66c7ff}.evolution-card.epic .evolution-card-top b,.evolution-card.epic small{color:#c9a9ff}.evolution-card.collected{box-shadow:inset 0 0 18px #79e35b08,0 0 12px #79e35b08}
 @media(max-width:900px){.card-collection{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:700px){.collapsible-panel .progression-head{min-height:58px;padding:10px}.collapsible-panel .progression-head b{font-size:6px}.collapsible-panel .progression-head small{font-size:3.5px}.collapsible-panel .progression-head>strong{font-size:5px}.evolution-build-head strong{font-size:8px}.evolution-build-head>b{font-size:4px}.evolution-card{min-height:124px;padding:8px}.evolution-card h4{font-size:5px}.evolution-card p,.evolution-card small{font-size:3.5px}}@media(max-width:420px){.progression-body{padding:0 9px 9px}.card-collection{grid-template-columns:1fr}.evolution-card{min-height:112px}.evolution-card p{min-height:32px}.collapsible-panel .progression-head b{font-size:5px}.evolution-build-head strong{font-size:7px}}
+
+/* v1.10 gameplay readability + touch + landing polish */
+html,body{scrollbar-width:none;overscroll-behavior:none}
+html::-webkit-scrollbar,body::-webkit-scrollbar,.boot-menu::-webkit-scrollbar,.boot-card::-webkit-scrollbar,.how-console::-webkit-scrollbar{display:none;width:0;height:0}
+body.boot-open{overflow:hidden}
+.boot-menu{overflow:auto;scrollbar-width:none}
+.boot-card{scrollbar-width:none}
+.how-console{scrollbar-width:none}
+.how-row p{font-size:5.5px;line-height:2}
+.how-row kbd{font-size:5.5px}
+.how-card>header b{font-size:6.5px}
+.boot-panel-heading b{font-size:9px}
+.boot-panel-heading small{font-size:5px}
+#app>header .eyebrow,.subhud,.stats span{font-size:7px}
+#app>header .stats strong{font-size:12px}
+.survival-hud{gap:11px}
+.life-module span,.xp-row span{font-size:6px}
+.life-module strong{font-size:17px}
+.life-module small{font-size:5px}
+.xp-row strong{font-size:7px}.xp-row b{font-size:6px}
+.mutation-module span,.condition-module span{font-size:6px}
+.mutation-module strong,.condition-module strong{font-size:8px}
+.mutation-module small,.condition-module small{font-size:5px}
+.intel-top span{font-size:6px}.intel-top strong{font-size:8px}.intel-top b{font-size:6px}
+.run-mode-bar span{font-size:6px}.run-mode-bar strong,.run-mode-bar b{font-size:7px}
+.ability b{font-size:8px}.ability span{font-size:6px}
+.desktop-commands,.legend{font-size:6px}
+.run-mode-bar{display:grid;grid-template-columns:auto minmax(0,1fr) auto minmax(0,1fr) auto minmax(0,1fr) auto minmax(0,1fr) auto;align-items:center;gap:8px}
+.run-pause-btn{justify-self:stretch}
+@media(max-width:900px){
+  .run-mode-bar{grid-template-columns:auto minmax(0,1fr) auto minmax(0,1fr);row-gap:8px}
+  .run-pause-btn{grid-column:1/-1}
+}
+@media(max-width:700px){
+  .how-row p{font-size:5px;line-height:2}
+  .how-row kbd{font-size:5px}
+  #app>header .eyebrow{font-size:6px}
+  #app>header .stats span{font-size:5px}
+  #app>header .stats strong{font-size:10px}
+  .life-module span,.xp-row span,.mutation-module span,.condition-module span{font-size:5px}
+  .life-module strong{font-size:15px}
+  .xp-row strong{font-size:6px}.xp-row b{font-size:5px}
+  .mutation-module strong,.condition-module strong{font-size:7px}
+  .intel-top span{font-size:5px}.intel-top strong{font-size:7px}.intel-top b{font-size:5px}
+  .run-mode-bar span{font-size:5px}.run-mode-bar strong,.run-mode-bar b{font-size:5px}
+  .ability b{font-size:7px}.ability span{font-size:5px}
+  footer .controls{min-width:170px}
+  .controls button{width:52px;height:48px;font-size:15px;margin:3px}
+  .touch-label{font-size:6px}
+  .ability{min-height:58px}
+}
+@media(max-width:420px){
+  .how-row p{font-size:4.5px}
+  .how-row kbd{font-size:4.5px}
+  #app>header .stats strong{font-size:9px}
+  .life-module strong{font-size:14px}
+  .controls{min-width:154px!important}
+  .controls button{width:48px;height:45px;font-size:13px;margin:2px}
+  .ability{min-height:55px}
+}
