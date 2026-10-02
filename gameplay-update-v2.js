@@ -1,4 +1,4 @@
-/* GAMEPLAY UPDATE PACK V2: input safety, checkpoints, near-miss feedback */
+/* GAMEPLAY UPDATE PACK V3: tick recovery, safe energy respawns, checkpoint and surge feedback */
 (() => {
   "use strict";
   if (window.__snakeGameplayUpdateV2) return;
@@ -8,6 +8,8 @@
   let lastNearMissAt = 0;
   let lastCheckpointZone = 0;
   let checkpointCount = 0;
+  let energyPickupCount = 0;
+  let energySurgeCount = 0;
   let visibilityPause = false;
 
   const pauseControl = document.querySelector("#pauseBtn");
@@ -26,8 +28,23 @@
     if (!alive || paused || contractOfferOpen || extractionOpen) return;
     clearTimeout(timer);
     timer = null;
+    const beforeEnergy = stats?.energy || 0;
     try {
-      return baseMoveV2(force);
+      const result = baseMoveV2(force);
+      if (alive && (stats?.energy || 0) > beforeEnergy) {
+        energyPickupCount = stats.energy;
+        if (energyPickupCount % 10 === 0) {
+          energySurgeCount += 1;
+          const bonus = 100 + Math.floor(energyPickupCount / 10) * 10;
+          gain(bonus);
+          gainXp(25);
+          chargeFury(8);
+          say("ENERGY SURGE x" + energySurgeCount + " // +" + bonus);
+          event("ENERGY SURGE // XP +25 // FURY +8");
+          haptic(18);
+        }
+      }
+      return result;
     } catch (error) {
       console.error("[Snake Evolution] recovered gameplay tick:", error);
       say("SYSTEM RECOVERY // RUN CONTINUES");
@@ -47,6 +64,8 @@
     lastNearMissAt = 0;
     lastCheckpointZone = 0;
     checkpointCount = 0;
+    energyPickupCount = 0;
+    energySurgeCount = 0;
     visibilityPause = false;
     syncPauseButton();
   }
@@ -150,7 +169,8 @@
     return baseStatsMarkupV2(winResult)
       + '<div class="update-pack-stats"><span>NEAR MISSES <b>' + nearMissCount
       + '</b></span><span>ZONE CHECKPOINTS <b>' + checkpointCount
-      + '</b></span><span>UPDATE PACK <b>V2</b></span></div>';
+      + '</b></span><span>ENERGY SURGES <b>' + energySurgeCount
+      + '</b></span><span>UPDATE PACK <b>V3</b></span></div>';
   };
 
   reset = function resetWithV2Counters() {
@@ -174,7 +194,9 @@
         ...baseGetStateV2(),
         nearMisses: nearMissCount,
         zoneCheckpoints: checkpointCount,
-        updatePack: "V2"
+        energySurges: energySurgeCount,
+        energyPickups: energyPickupCount,
+        updatePack: "V3"
       });
     }
   }
