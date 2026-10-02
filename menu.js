@@ -91,12 +91,12 @@
 
     const script = document.createElement("script");
     script.id = "snakeGameScript";
-    script.src = "game.js?v=survival-v7";
+    script.src = "game.js?v=survival-v8";
     script.onload = () => {
       if (bootFailed) return;
       const ultimate = document.createElement("script");
       ultimate.id = "snakeUltimateScript";
-      ultimate.src = "ultimate-gameplay-v1.js?v=ultimate-v1";
+      ultimate.src = "ultimate-gameplay-v1.js?v=ultimate-v2";
       ultimate.onload = () => {
         window.removeEventListener("error", onRuntimeError);
         gameLoading = false;
