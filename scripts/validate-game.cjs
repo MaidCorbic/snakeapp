@@ -56,7 +56,7 @@ check("boot menu loads ultimate layer after base game", /script\.onload\s*=\s*\(
 check("boot menu loads update pack after ultimate layer", /ultimate\.onload\s*=\s*\(\)\s*=>\s*\{[\s\S]*?update\.src\s*=\s*["']gameplay-update-v2\.js\?v=/.test(menu));
 check("menu guards duplicate/in-progress loads", /if\s*\(gameLoaded\)/.test(menu) && /if\s*\(gameLoading\)\s*return/.test(menu));
 check("boot failure does not start a partial game", /ultimate\.onload\s*=\s*\(\)\s*=>\s*\{\s*if\s*\(bootFailed\)\s*return;/.test(menu));
-check("HTML references the current menu cache key", /menu\.js\?v=boot-v11/.test(html));
+check("HTML references the current menu cache key", /menu\.js\?v=boot-v12/.test(html));
 check("menu asset versions are current", /game\.js\?v=survival-v9/.test(menu) && /ultimate-gameplay-v1\.js\?v=ultimate-v3/.test(menu) && /gameplay-update-v2\.js\?v=update-v1/.test(menu));
 check("main game exposes the start API", /window\.SnakeEvolution\s*=/.test(game));
 check("permanent upgrades have a purchase handler", /function\s+buyUpgrade\s*\(/.test(game) && /data-upgrade/.test(game));
