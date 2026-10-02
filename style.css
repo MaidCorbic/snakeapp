@@ -780,3 +780,90 @@ body.boot-open{overflow:hidden}
   #message .message-card .stats-grid strong{font-size:4px;margin-top:4px}
   #message .message-card #start{min-width:150px;padding:11px 13px;font-size:7px}
 }
+
+
+/* GAME OVER RESULT // single compact box, no scrolling */
+#message.message{
+  overflow:hidden;
+  padding:12px;
+}
+#message .message-card{
+  width:min(860px,94%);
+  max-height:none;
+  overflow:hidden;
+  padding:14px;
+}
+#message .message-card h2{
+  margin:0 0 6px;
+  font-size:16px;
+}
+#message .message-card .result-copy{
+  margin:0 0 8px;
+  font-size:5px;
+  line-height:1.5;
+}
+#message .message-card .stats-grid{
+  grid-template-columns:repeat(5,minmax(0,1fr));
+  gap:4px;
+}
+#message .message-card .stats-grid span{
+  min-height:38px;
+  padding:5px;
+  font-size:3.5px;
+  line-height:1.35;
+}
+#message .message-card .stats-grid strong{
+  margin-top:4px;
+  font-size:5px;
+}
+#message .message-card .record{
+  margin:7px 0 0;
+  font-size:5px;
+}
+#message .message-card #start{
+  margin:9px auto 0;
+  min-height:36px;
+  padding:9px 13px;
+  font-size:6px;
+}
+@media(max-width:700px){
+  #message.message{padding:7px}
+  #message .message-card{
+    width:96%;
+    padding:9px;
+  }
+  #message .message-card h2{font-size:11px;margin-bottom:4px}
+  #message .message-card .result-copy{font-size:4px;margin-bottom:6px}
+  #message .message-card .stats-grid{
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:3px;
+  }
+  #message .message-card .stats-grid span{
+    min-height:31px;
+    padding:4px;
+    font-size:3px;
+  }
+  #message .message-card .stats-grid strong{
+    font-size:4px;
+    margin-top:3px;
+  }
+  #message .message-card .record{font-size:4px;margin-top:5px}
+  #message .message-card #start{
+    margin-top:7px;
+    min-height:32px;
+    padding:7px 10px;
+    font-size:5px;
+  }
+}
+@media(max-width:420px){
+  #message .message-card{
+    width:98%;
+    padding:7px;
+  }
+  #message .message-card h2{font-size:8px}
+  #message .message-card .result-copy{font-size:3.5px}
+  #message .message-card .stats-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:2px}
+  #message .message-card .stats-grid span{min-height:28px;padding:3px;font-size:2.7px}
+  #message .message-card .stats-grid strong{font-size:3.5px;margin-top:2px}
+  #message .message-card #start{min-height:29px;font-size:4.5px;margin-top:5px}
+}
