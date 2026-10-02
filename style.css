@@ -1116,3 +1116,108 @@ body.boot-open{overflow:hidden}
 #bootStart span{
   color:#ffffff!important;
 }
+
+/* FINAL UX PASS // snake identity, start spacing, scrolling, readable progression, no-select */
+.boot-emblem{
+  display:grid;
+  place-items:center;
+  overflow:hidden;
+}
+.boot-emblem img{
+  display:block;
+  width:100%;
+  height:100%;
+  image-rendering:pixelated;
+  object-fit:cover;
+}
+.boot-emblem span{display:none!important}
+.boot-action.boot-primary{
+  justify-content:center!important;
+  gap:16px!important;
+}
+.boot-action.boot-primary span{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  margin-left:2px;
+}
+
+/* Landing panels stay scrollable without trapping the page. */
+body.boot-open{overflow:auto!important}
+.boot-menu{
+  overflow-y:auto!important;
+  overflow-x:hidden!important;
+  align-items:start!important;
+  padding:20px!important;
+}
+.boot-card{
+  margin:0 auto;
+}
+.boot-panel{
+  scroll-margin-top:18px;
+}
+
+/* Progression / achievements / leaderboard readability */
+.progression-panel .progression-head b{font-size:9px!important}
+.progression-panel .progression-head small{font-size:5px!important}
+.progression-panel .progression-head>strong{font-size:7px!important}
+.progression-subhead,
+.progression-subhead b{font-size:7px!important}
+.progression-subhead span{font-size:5px!important}
+.evolution-build-head span{font-size:6px!important}
+.evolution-build-head strong{font-size:11px!important}
+.evolution-build-head>b{font-size:6px!important}
+.evolution-build>small{font-size:5px!important;line-height:1.9!important}
+.upgrade-item b{font-size:7px!important}
+.upgrade-item span{font-size:5px!important;line-height:1.8!important}
+.upgrade-item strong{font-size:6px!important}
+.evolution-card-top b{font-size:5px!important}
+.evolution-card-top strong{font-size:7px!important}
+.evolution-card h4{font-size:7px!important}
+.evolution-card p{font-size:5px!important;line-height:1.9!important}
+.evolution-card small{font-size:5px!important}
+.achievement-item b{font-size:6px!important}
+.achievement-item span{font-size:5px!important;line-height:1.8!important}
+.leaderboard-columns h4{font-size:7px!important}
+.leader-row b{font-size:6px!important}
+.leader-row strong{font-size:8px!important}
+.leader-row span,.leader-row small{font-size:5px!important}
+.leader-empty{font-size:5px!important}
+@media(max-width:700px){
+  .progression-panel .progression-head b{font-size:7px!important}
+  .progression-panel .progression-head small{font-size:4.5px!important}
+  .progression-panel .progression-head>strong{font-size:6px!important}
+  .progression-subhead,.progression-subhead b{font-size:6px!important}
+  .evolution-build-head strong{font-size:9px!important}
+  .upgrade-item b{font-size:6px!important}
+  .upgrade-item span{font-size:4.5px!important}
+  .evolution-card h4{font-size:6px!important}
+  .evolution-card p,.evolution-card small{font-size:4.5px!important}
+  .achievement-item b{font-size:5.5px!important}
+  .achievement-item span{font-size:4.5px!important}
+  .leader-row strong{font-size:7px!important}
+  .leader-row span,.leader-row small{font-size:4.5px!important}
+}
+@media(max-width:420px){
+  .progression-panel .progression-head b{font-size:6px!important}
+  .progression-panel .progression-head small{font-size:4px!important}
+  .progression-subhead,.progression-subhead b{font-size:5.5px!important}
+  .upgrade-item b{font-size:5.5px!important}
+  .upgrade-item span{font-size:4px!important}
+  .evolution-card h4{font-size:5.5px!important}
+  .evolution-card p,.evolution-card small{font-size:4px!important}
+  .achievement-item b{font-size:5px!important}
+  .achievement-item span{font-size:4px!important}
+}
+
+/* Harden against ordinary text copying/drag selection in the page. */
+html,body,#app,#bootMenu,button,canvas{
+  -webkit-user-select:none!important;
+  -moz-user-select:none!important;
+  user-select:none!important;
+  -webkit-touch-callout:none!important;
+}
+img,svg,canvas{
+  -webkit-user-drag:none!important;
+  user-drag:none!important;
+}
