@@ -26,6 +26,7 @@ jobs:
         run: |
           node --check game.js
           node --check menu.js
+          node --check ultimate-gameplay-v1.js
 
       - name: Check required files
         run: |
@@ -113,7 +114,7 @@ jobs:
           grep -q 'function spawnRiskShrine' ultimate-gameplay-v1.js
           grep -q 'function spawnSecretPortal' ultimate-gameplay-v1.js
           grep -q 'PERFECT x1.25' ultimate-gameplay-v1.js
-          grep -q 'variant==="watcher"' game.js
+          grep -q 'variant==="watcher"' ultimate-gameplay-v1.js
           grep -q 'boss.hp<=6?3' game.js
           grep -q 'function buyUpgrade' game.js
           grep -q 'function checkAchievements' game.js
