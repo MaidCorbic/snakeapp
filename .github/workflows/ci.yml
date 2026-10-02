@@ -27,7 +27,10 @@ jobs:
           node --check game.js
           node --check menu.js
           node --check ultimate-gameplay-v1.js
+          node --check gameplay-update-v2.js
           node --check scripts/validate-game.cjs
 
       - name: Run integration and regression checks
-        run: node scripts/validate-game.cjs
+        run: |
+          test -f gameplay-update-v2.js
+          node scripts/validate-game.cjs
