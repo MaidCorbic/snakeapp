@@ -1103,3 +1103,16 @@ body.boot-open{overflow:hidden}
   .boot-actions{grid-template-columns:1fr!important}
   .boot-actions #bootStart{min-height:44px}
 }
+
+
+/* LANDING START // centered white label */
+#bootStart{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  text-align:center!important;
+  color:#ffffff!important;
+}
+#bootStart span{
+  color:#ffffff!important;
+}
