@@ -1,8 +1,33 @@
 <!doctype html>
-<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no"><meta name="theme-color" content="#080b09"><title>Snake Evolution — Survival Run</title><link rel="stylesheet" href="style.css?v=survival-v13"></head>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no"><meta name="theme-color" content="#080b09"><title>Snake Evolution — Survival Run</title><link rel="stylesheet" href="style.css?v=survival-v14"><style id="landing-enhancements">
+/* Landing page / Options / How-to-Play enhancement pass */
+.boot-top-meta{display:flex;align-items:center;gap:14px}
+.game-version{padding:6px 8px;border:1px solid #38533c;background:#0a120d;color:var(--green);font-size:6px;letter-spacing:.5px;box-shadow:inset 0 0 12px #79e35b08}
+.boot-panel-heading{display:flex;justify-content:space-between;align-items:start;gap:16px;margin-bottom:12px;padding-bottom:11px;border-bottom:1px solid #25382a}
+.boot-panel-heading>div{display:grid;gap:6px}.boot-panel-heading b{font-size:8px;color:var(--green)}.boot-panel-heading small{font-size:4px;line-height:1.8;color:var(--muted)}.boot-panel-heading>strong{font-size:5px;color:var(--yellow);white-space:nowrap}
+.options-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 18px}
+.options-grid .option-row{min-height:65px;margin:0!important;padding:11px 0!important;display:flex!important}
+.option-row>div:first-child{display:grid;gap:5px}.option-row>div:first-child b{font-size:6px;color:var(--ink)}.option-row>div:first-child small{font-size:4px;line-height:1.7;color:var(--muted)}
+.range-control{display:flex;align-items:center;gap:8px;min-width:145px}.range-control input{width:100%;accent-color:var(--green);cursor:pointer}.range-control output{min-width:38px;text-align:right;font-size:5px;color:var(--green)}
+.option-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:9px}.option-actions .boot-action{margin:0!important}
+.how-console{padding:16px}.how-intro{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:0 0 12px;padding:10px 11px;border:1px solid #2d4232;background:#0a120d}.how-intro strong{font-size:6px;color:var(--yellow)}.how-intro span{font-size:4px;color:#9ab09a}
+.how-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.how-card{padding:11px;border:1px solid #2a3d2e;background:linear-gradient(145deg,#0d1610,#080d0a);box-shadow:inset 0 0 16px #0005}
+.how-card>header{display:flex;align-items:center;gap:8px;margin:0 0 8px;padding-bottom:8px;border-bottom:1px solid #1e2f23}.how-card>header span{display:grid;place-items:center;width:23px;height:23px;border:1px solid #35543a;background:#0c170e;color:var(--green);font-size:5px}.how-card>header b{font-size:6px;color:var(--ink)}
+.how-row{display:grid;grid-template-columns:auto 1fr;align-items:start;gap:7px;padding:7px 0;border-bottom:1px solid #17251b}.how-row:last-child{border-bottom:0}.how-row kbd{justify-self:start;padding:5px 6px;border:1px solid #314638;background:#0a120d;color:var(--green);font:5px "Press Start 2P",monospace;white-space:nowrap}.how-row p{margin:0;color:#789079;font-size:4.5px;line-height:1.9}.how-row p strong{color:var(--ink)}
+.boot-card:has(.boot-panel:not(.hidden)){width:min(900px,96vw)}
+@media(max-width:900px){.boot-card:has(.boot-panel:not(.hidden)){width:min(900px,96vw)}.how-grid{grid-template-columns:1fr 1fr}.options-grid{grid-template-columns:1fr}.boot-top-meta{gap:9px}.game-version{font-size:5px}}
+@media(max-width:700px){.boot-top-meta{gap:7px}.game-version{font-size:4px;padding:5px 6px}.boot-panel-heading b{font-size:7px}.boot-panel-heading small{font-size:3.5px}.boot-panel-heading>strong{font-size:4px}.how-intro{display:grid;gap:5px}.how-intro strong{font-size:5px}.how-intro span{font-size:3.5px;line-height:1.7}.how-grid{grid-template-columns:1fr}.how-card{padding:9px}.how-card>header b{font-size:5px}.how-row p{font-size:4px}.how-row kbd{font-size:4px;padding:4px 5px}.options-grid .option-row{min-height:60px}.option-row>div:first-child b{font-size:5px}.option-row>div:first-child small{font-size:3.5px}.range-control{min-width:125px}}
+@media(max-width:420px){.boot-topline{align-items:flex-start}.boot-top-meta{align-items:flex-end}.game-version{font-size:3px;padding:4px 5px}.boot-panel-heading{gap:8px}.boot-panel-heading b{font-size:6px}.how-console{padding:10px}.how-row{grid-template-columns:1fr;gap:5px}.how-row kbd{justify-self:start}.how-card>header span{width:20px;height:20px;font-size:4px}.how-card>header b{font-size:4.5px}.how-row p{font-size:3.5px;line-height:1.8}.option-actions{grid-template-columns:1fr}.range-control{min-width:110px}.range-control output{font-size:4px}}
+.options-console{padding:16px}
+body.no-crt .game-shell:after{display:none!important}
+html.reduced-motion *,html.reduced-motion *:before,html.reduced-motion *:after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important}
+body.high-contrast{--muted:#91ad92;--ink:#efffeb}
+body.high-contrast .boot-card,body.high-contrast .boot-brief,body.high-contrast .boot-panel,body.high-contrast .how-card{border-color:#5c7f60}
+body.high-contrast .boot-panel-heading>strong,body.high-contrast .game-version{color:#fff36a}
+</style></head>
 <body><section id="bootMenu" class="boot-menu" role="dialog" aria-modal="true" aria-label="Snake Evolution main menu">
   <div class="boot-card">
-    <div class="boot-topline"><span class="eyebrow">PIXEL ARCADE // SURVIVAL SYSTEM</span><span class="boot-status"><i></i> SYSTEM READY</span></div>
+    <div class="boot-topline"><span class="eyebrow">PIXEL ARCADE // SURVIVAL SYSTEM</span><div class="boot-top-meta"><span class="boot-status"><i></i> SYSTEM READY</span><span id="bootGameVersion" class="game-version">V1.9.0</span></div></div>
     <div class="boot-layout">
       <section class="boot-hero" aria-labelledby="bootTitle">
         <div class="boot-emblem" aria-hidden="true"><span>SE</span><i></i></div>
@@ -27,8 +52,74 @@
       </aside>
     </div>
     <div class="boot-panels">
-      <div id="bootOptionsPanel" class="boot-panel hidden"><h3>OPTIONS</h3><div class="option-row"><span>GRID</span><button type="button" class="option-toggle" id="bootGrid" aria-pressed="true">ON</button></div><div class="option-row"><span>VIBRATION</span><button type="button" class="option-toggle" id="bootVibration" aria-pressed="true">ON</button></div><div class="option-row"><span>REDUCED MOTION</span><button type="button" class="option-toggle" id="bootMotion" aria-pressed="false">OFF</button></div><div class="option-row"><span>SOUND</span><button type="button" class="option-toggle" id="bootSound" aria-pressed="true">ON</button></div><button type="button" id="bootOptionsBack" class="boot-action secondary">BACK</button></div>
-      <div id="bootHowPanel" class="boot-panel hidden"><h3>HOW TO PLAY</h3><p><b>MOVE</b> WASD / ARROWS — Phone: direction buttons or swipe.</p><p><b>DASH</b> SPACE — burst forward.</p><p><b>SHIELD</b> SHIFT — block damage briefly.</p><p><b>PULSE</b> E — clear nearby threats and damage the WARDEN.</p><p><b>FURY</b> Q — charge the meter, then activate 2X SCORE + threat wipe.</p><p><b>LIFE</b> You have 3 lives. A hit removes one. MEDKIT can restore one life.</p><p><b>XP</b> ENERGY, CORE and enemy takedowns build XP and level you up. Level-up restores one LIFE.</p><p><b>THREAT</b> The danger meter rises with zone, hunters, hazards and survival time. Critical heat means the run is becoming lethal.</p><p><b>ELITE HUNTER</b> Elite Hunters appear later, move more aggressively and require two PULSE hits to defeat.</p><p><b>STREAK</b> Chain milestones at x5, x10 and x15 grant bonus score, XP and FURY.</p><p><b>OBJECTIVE</b> Every run gets a different target. Complete it for score, XP and FURY charge.</p><p><b>CONTRACT</b> One high-value contract is assigned every run. REDLINE increases THREAT while active; clear the contract for extra score, XP and FURY.</p><p><b>SUPPLY DROP</b> Drops appear in later zones, create a hazard ring and expire after 14 seconds. RARE and LEGENDARY drops give stronger emergency rewards.</p><p><b>MUTATIONS</b> Every run rolls one rule-set: SALVAGE RUN, HUNTER ALERT, HAZARD SHIFT, SUPPLY RUSH or OVERCLOCK. Each changes risk, spawn rate or rewards.</p><p><b>EXTRACTION</b> From 2:00 onward, extraction windows pause the run. CASH OUT secures a score bonus; KEEP RUNNING adds temporary heat and unlocks another window later.</p><p><b>RISK CONTRACTS</b> At run start, ACCEPT adds threat and enables the contract reward. DECLINE removes the contract for that run.</p><p><b>CHAIN</b> Combo has a live decay window. Collect energy, cores or enemies before the bar empties to preserve your chain.</p><p><b>CHARGER / WATCHER</b> Elite variants behave differently: CHARGER bursts toward you; WATCHER backs away and raises threat.</p><p><b>WARDEN</b> The boss now has 3 phases. Phase 3 enters LOCKDOWN and can teleport.</p><p><b>ZONE EVENTS</b> HAZARD STORM, HUNTER SWARM, POWER SURGE, BLACKOUT, DOUBLE CORE and HUNTER LOCK temporarily alter the rules.</p><p><b>UPGRADES</b> Finish runs to earn DATA for permanent DASH, CORE, FURY and ARMOR upgrades.</p><p><b>ACHIEVEMENTS</b> Long-term milestones are tracked across runs.</p><p><b>DAILY RUN</b> Uses a date-seeded rule set and has its own local leaderboard and ghost route.</p><p><b>ENDLESS MODE</b> After each five-minute cycle, the run continues with higher heat and another cycle.</p><p><b>PROCEDURAL ARENA</b> Each zone gets new blocking cells. Hitting one costs a LIFE.</p><p><b>TELEGRAPHS</b> Dangerous attacks show a warning marker before/around impact.</p><p><b>PERFECT RUN</b> After 30 seconds without damage, score rewards gain a temporary 1.25x bonus. Any hit breaks it.</p><p><b>BOUNTY TARGET</b> One enemy is marked during each run. Destroy it for an extra reward.</p><p><b>RISK SHRINE</b> Optional pickup adds temporary threat for a large reward.</p><p><b>SECRET VAULT</b> Rare portal leads to a short loot surge.</p><p><b>SOUND</b> Arcade feedback uses lightweight WebAudio cues and can be disabled in OPTIONS.</p><p><b>RUN ANALYSIS</b> End screen reports death cause, maximum threat, condition and mode.</p><p><b>GOAL</b> Survive 5 minutes, evolve, build combo, hunt enemies, destroy the WARDEN.</p><p><b>APEX CORE</b> Rare power-up: massive score, combo boost and hazard wipe.</p><p><b>QUICK PAUSE</b> Tap PAUSE or press P / ESC. The game automatically pauses when you switch tabs; resume manually when ready.</p><p><b>ZONE CHECKPOINT</b> Reaching a new sector grants bonus score, XP, FURY and a short shield.</p><p><b>NEAR MISS</b> Pass within one tile of a hazard or hunter to earn a small bonus. The reward has a short cooldown to prevent farming.</p><p><b>PHONE</b> Landscape gives the best control layout.</p><button type="button" id="bootHowBack" class="boot-action secondary">BACK</button></div>
+      <div id="bootOptionsPanel" class="boot-panel options-console hidden">
+  <div class="boot-panel-heading"><div><b>CONTROL DECK</b><small>LOCAL PREFERENCES · SAVED ON THIS DEVICE</small></div><strong id="bootSettingsState">SYNCED</strong></div>
+  <div class="options-grid">
+    <div class="option-row"><div><b>GRID</b><small>Show gameplay tile grid.</small></div><button type="button" class="option-toggle" id="bootGrid" aria-pressed="true">ON</button></div>
+    <div class="option-row"><div><b>VIBRATION</b><small>Phone haptic feedback.</small></div><button type="button" class="option-toggle" id="bootVibration" aria-pressed="true">ON</button></div>
+    <div class="option-row"><div><b>REDUCED MOTION</b><small>Minimise interface animation.</small></div><button type="button" class="option-toggle" id="bootMotion" aria-pressed="false">OFF</button></div>
+    <div class="option-row"><div><b>CRT SCANLINES</b><small>Arcade display overlay.</small></div><button type="button" class="option-toggle" id="bootCrt" aria-pressed="true">ON</button></div>
+    <div class="option-row"><div><b>HIGH CONTRAST</b><small>Sharper landing and HUD contrast.</small></div><button type="button" class="option-toggle" id="bootContrast" aria-pressed="false">OFF</button></div>
+    <div class="option-row"><div><b>SFX</b><small>Pickups, abilities and warnings.</small></div><button type="button" class="option-toggle" id="bootSound" aria-pressed="true">ON</button></div>
+    <div class="option-row"><div><b>MUSIC</b><small>Dark arcade loop during menu and run.</small></div><button type="button" class="option-toggle" id="bootMusic" aria-pressed="true">ON</button></div>
+    <div class="option-row range-row"><div><b>MASTER VOLUME</b><small>Controls music and SFX intensity.</small></div><div class="range-control"><input id="bootVolume" type="range" min="0" max="100" step="5" value="65" aria-label="Master volume"><output id="bootVolumeValue">65%</output></div></div>
+  </div>
+  <div class="option-actions"><button type="button" id="bootFullscreen" class="boot-action secondary">FULLSCREEN</button><button type="button" id="bootResetSettings" class="boot-action secondary">RESET DEFAULTS</button></div>
+  <button type="button" id="bootOptionsBack" class="boot-action secondary">BACK</button>
+</div><div id="bootHowPanel" class="boot-panel how-console hidden">
+  <div class="boot-panel-heading"><div><b>HOW TO PLAY</b><small>READ THE RUN AS 8 SIMPLE SYSTEMS</small></div><strong>FIELD GUIDE</strong></div>
+  <div class="how-intro"><strong>THE LOOP</strong><span>MOVE → COLLECT → BUILD → FIGHT → SURVIVE 05:00</span></div>
+  <div class="how-grid">
+    <section class="how-card"><header><span>01</span><b>MOVE & SURVIVE</b></header>
+      <div class="how-row"><kbd>WASD</kbd><kbd>ARROWS</kbd><p>Change direction. Avoid your body, arena walls and active threats.</p></div>
+      <div class="how-row"><kbd>PHONE</kbd><p>Use the touch arrows or swipe. Landscape gives the cleanest layout.</p></div>
+      <div class="how-row"><kbd>3 LIVES</kbd><p>Collision costs a life. A MEDKIT can restore one when available.</p></div>
+    </section>
+    <section class="how-card"><header><span>02</span><b>ABILITIES</b></header>
+      <div class="how-row"><kbd>SPACE</kbd><p><strong>DASH</strong> — burst forward and cut through danger.</p></div>
+      <div class="how-row"><kbd>SHIFT</kbd><p><strong>SHIELD</strong> — temporary damage protection.</p></div>
+      <div class="how-row"><kbd>E</kbd><p><strong>PULSE</strong> — hit nearby hunters, hazards and the Warden.</p></div>
+      <div class="how-row"><kbd>Q</kbd><p><strong>FURY</strong> — charge to 100%, then trigger 2X SCORE + threat wipe.</p></div>
+    </section>
+    <section class="how-card"><header><span>03</span><b>BUILD YOUR RUN</b></header>
+      <div class="how-row"><kbd>ENERGY</kbd><p>Green cells give score, XP, FURY and growth. Keep collecting without losing the chain.</p></div>
+      <div class="how-row"><kbd>CORE</kbd><p>High-value pickup that accelerates score and XP progression.</p></div>
+      <div class="how-row"><kbd>CARDS</kbd><p>Collectible EVOLUTION CARDS add XP, score and small build bonuses. Their collection persists.</p></div>
+      <div class="how-row"><kbd>XP</kbd><p>Level up your SNAKE BUILD from LVL 1 to LVL 10.</p></div>
+    </section>
+    <section class="how-card"><header><span>04</span><b>THREAT SYSTEM</b></header>
+      <div class="how-row"><kbd>HAZARDS</kbd><p>Red danger tiles force routing decisions. Near misses can reward careful movement.</p></div>
+      <div class="how-row"><kbd>HUNTERS</kbd><p>Enemies increase pressure. ELITES are tougher; CHARGER and WATCHER variants behave differently.</p></div>
+      <div class="how-row"><kbd>WARDEN</kbd><p>Boss encounter with 3 phases. LOCKDOWN is the final pressure state.</p></div>
+      <div class="how-row"><kbd>TELEGRAPHS</kbd><p>Attack markers give you a short warning before high-risk impacts.</p></div>
+    </section>
+    <section class="how-card"><header><span>05</span><b>MISSION SYSTEMS</b></header>
+      <div class="how-row"><kbd>OBJECTIVE</kbd><p>Every run gets a target. Finish it for score, XP and FURY.</p></div>
+      <div class="how-row"><kbd>CONTRACT</kbd><p>Accept a high-value contract for extra rewards; REDLINE adds threat while active.</p></div>
+      <div class="how-row"><kbd>MUTATION</kbd><p>Each run rolls a rule set such as SALVAGE RUN, HUNTER ALERT or OVERCLOCK.</p></div>
+      <div class="how-row"><kbd>CHAIN</kbd><p>Collect energy, cores or enemies before the decay window empties.</p></div>
+    </section>
+    <section class="how-card"><header><span>06</span><b>RISK / REWARD</b></header>
+      <div class="how-row"><kbd>SUPPLY</kbd><p>Later-zone drops create a danger ring but can provide rare emergency rewards.</p></div>
+      <div class="how-row"><kbd>EXTRACT</kbd><p>From 2:00 onward, CASH OUT secures a bonus or KEEP RUNNING adds temporary heat.</p></div>
+      <div class="how-row"><kbd>SHRINE</kbd><p>Risk Shrine raises temporary threat for a larger reward.</p></div>
+      <div class="how-row"><kbd>VAULT</kbd><p>A rare portal opens a short SECRET VAULT loot surge.</p></div>
+    </section>
+    <section class="how-card"><header><span>07</span><b>PROGRESSION</b></header>
+      <div class="how-row"><kbd>UPGRADES</kbd><p>Finished runs award DATA for permanent DASH, CORE, FURY and ARMOR upgrades.</p></div>
+      <div class="how-row"><kbd>ACHIEVEMENTS</kbd><p>Long-term milestones are tracked across runs.</p></div>
+      <div class="how-row"><kbd>PERFECT</kbd><p>30 seconds without damage activates a temporary 1.25X score bonus.</p></div>
+      <div class="how-row"><kbd>BOUNTY</kbd><p>One enemy can be marked as the run target for an extra reward.</p></div>
+    </section>
+    <section class="how-card"><header><span>08</span><b>MODES & PAUSE</b></header>
+      <div class="how-row"><kbd>P / ESC</kbd><p>Pause at any time. Switching tabs also auto-pauses the run.</p></div>
+      <div class="how-row"><kbd>DAILY</kbd><p>Date-seeded rules with a dedicated local leaderboard and ghost route.</p></div>
+      <div class="how-row"><kbd>ENDLESS</kbd><p>After 05:00 the run cycles again with higher heat.</p></div>
+      <div class="how-row"><kbd>GOAL</kbd><p>Survive the lockdown, evolve your build, defeat the Warden and set a record.</p></div>
+    </section>
+  </div>
+  <button type="button" id="bootHowBack" class="boot-action secondary">BACK</button>
+</div>
     </div>
     <div id="bootError" class="boot-error hidden"><h3>SYSTEM ERROR</h3><p id="bootErrorText">GAME BOOT FAILED</p><button type="button" id="bootErrorRetry" class="boot-action">RETRY</button></div>
   </div>
@@ -74,4 +165,4 @@
 </details>
 <section id="leaderboards" class="progression-panel"><div class="progression-head"><b>LOCAL LEADERBOARDS</b><strong>TOP 10</strong></div><div class="leaderboard-columns"><div><h4>ALL RUNS</h4><div id="leaderboardList" class="leaderboard-list"></div></div><div><h4>DAILY // TODAY</h4><div id="dailyLeaderboardList" class="leaderboard-list"></div></div></div></section>
 <footer><div class="legend"><span class="desktop-commands">KEYBOARD: WASD / ARROWS · SPACE DASH · SHIFT SHIELD · E PULSE · Q FURY · P / ESC PAUSE</span><span>ENERGY +10</span><span>CORE +50</span><span>HUNTER</span><span>HAZARD</span><span>POWER-UP</span><span>SUPPLY DROP</span></div><div class="controls" aria-label="Mobile touch controls"><span class="touch-label">TOUCH</span><button data-dir="up">▲</button><div><button data-dir="left">◀</button><button data-dir="down">▼</button><button data-dir="right">▶</button></div></div></footer>
-</main><script src="menu.js?v=boot-v17"></script></body></html>
+</main><script src="menu.js?v=boot-v18"></script></body></html>
