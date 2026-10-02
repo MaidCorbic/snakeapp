@@ -247,6 +247,24 @@
     try { localStorage.removeItem("snake-evolution-sound"); } catch {}
   });
 
+  const blockPageCopy = () => {
+    const block = (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      return false;
+    };
+    ["contextmenu","selectstart","dragstart","copy","cut","paste"].forEach(type => {
+      document.addEventListener(type, block, true);
+    });
+    document.addEventListener("keydown", (event) => {
+      const key = String(event.key || "").toLowerCase();
+      if ((event.ctrlKey || event.metaKey) && ["a","c","x","v","s","u"].includes(key)) {
+        block(event);
+      }
+    }, true);
+  };
+  blockPageCopy();
+
   window.showBootMenu = showBootMenu;
   if(versionLabel) versionLabel.textContent = "V"+GAME_VERSION;
   document.body.classList.add("boot-open");
