@@ -56,8 +56,8 @@ check("boot menu loads ultimate layer after base game", /script\.onload\s*=\s*\(
 check("boot menu loads update pack after ultimate layer", /ultimate\.onload\s*=\s*\(\)\s*=>\s*\{[\s\S]*?update\.src\s*=\s*["']gameplay-update-v2\.js\?v=/.test(menu));
 check("menu guards duplicate/in-progress loads", /if\s*\(gameLoaded\)/.test(menu) && /if\s*\(gameLoading\)\s*return/.test(menu));
 check("boot failure does not start a partial game", /ultimate\.onload\s*=\s*\(\)\s*=>\s*\{\s*if\s*\(bootFailed\)\s*return;/.test(menu));
-check("HTML references the current menu cache key", /menu\.js\?v=boot-v16/.test(html));
-check("menu asset versions are current", /game\.js\?v=survival-v9/.test(menu) && /ultimate-gameplay-v1\.js\?v=ultimate-v4/.test(menu) && /gameplay-update-v2\.js\?v=update-v5/.test(menu));
+check("HTML references the current menu cache key", /menu\.js\?v=boot-v17/.test(html));
+check("menu asset versions are current", /game\.js\?v=survival-v9/.test(menu) && /ultimate-gameplay-v1\.js\?v=ultimate-v5/.test(menu) && /gameplay-update-v2\.js\?v=update-v6/.test(menu));
 check("main game exposes the start API", /window\.SnakeEvolution\s*=/.test(game));
 check("permanent upgrades have a purchase handler", /function\s+buyUpgrade\s*\(/.test(game) && /data-upgrade/.test(game));
 check("mission persistence is guarded and render-throttled", /const\s+saveMissions\s*=\s*m\s*=>\s*\{\s*try\s*\{\s*localStorage\.setItem/.test(game) && /now\s*-\s*missionRenderAt\s*>=\s*500/.test(game) && /if\s*\(\s*done\.length\s*\)\s*saveMissions\(m\)/.test(game));
@@ -81,8 +81,14 @@ check("energy surge rewards every tenth collected green cell", /energyPickupCoun
 check("landing page copy remains readable at desktop and compact widths", /\.brief-item div small\{font-size:6px;line-height:1\.9\}/.test(css) && /\.brief-item div small\{font-size:5px;line-height:1\.8\}/.test(css));
 check("energy respawn enforces meaningful movement away from the consumed tile", /minDistance=/.test(ultimate) && /toroidalDistance\(p,previous\)>=minDistance/.test(ultimate));
 check("playground and HUD have enhanced visual treatment", /\.game-shell:before/.test(css) && /\.game-shell:after/.test(css) && /\.life-module strong\{/.test(css) && /\.intel-card:hover/.test(css));
-check("updated gameplay assets use fresh cache keys", /ultimate-gameplay-v1\.js\?v=ultimate-v4/.test(menu) && /gameplay-update-v2\.js\?v=update-v5/.test(menu));
+check("updated gameplay assets use fresh cache keys", /ultimate-gameplay-v1\.js\?v=ultimate-v5/.test(menu) && /gameplay-update-v2\.js\?v=update-v6/.test(menu));
 
+
+check("progression and achievements are collapsible", /<details id="progression"/.test(html) && /<details id="achievements"/.test(html) && /class="collapse-chevron"/.test(html));
+check("evolution build level panel is wired to XP", /id="evolutionBuildLevel"/.test(html) && /id="evolutionBuildFill"/.test(html) && /buildLevelEl/.test(ultimate) && /buildFillEl/.test(ultimate));
+check("collectible evolution cards are spawned and persisted", /evolutionCardDefs/.test(ultimate) && /spawnEvolutionCardU/.test(ultimate) && /collectEvolutionCardU/.test(ultimate) && /snake-evolution-card-collection/.test(ultimate) && /id="cardCollection"/.test(html));
+check("green energy respawn has varied deterministic starts and distance guard", /energyRespawnSerial/.test(ultimate) && /\*137/.test(ultimate) && /toroidalDistance\(p,previous\)>=minDistance/.test(ultimate));
+check("card collection UI is styled", /\.card-collection/.test(css) && /\.evolution-card/.test(css));
 
 check("CI validates this regression script and update module", fs.existsSync(path.join(root, ".github/workflows/ci.yml")) && /node scripts\/validate-game\.cjs/.test(read(".github/workflows/ci.yml")) && /node --check gameplay-update-v2\.js/.test(read(".github/workflows/ci.yml")));
 
