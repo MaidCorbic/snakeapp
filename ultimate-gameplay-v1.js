@@ -2,7 +2,7 @@
 (() => {
   "use strict";
   window.__snakeUltimateLayerActive=true;
-  let dailyMode=false,endlessMode=false,endlessCycle=0,endlessTotalStart=0,dailySeed=0,riskHeatUntil=0,ghostSaved=false,lastPerfectMilestone=0;
+  let dailyMode=false,endlessMode=false,endlessCycle=0,endlessTotalStart=0,dailySeed=0,riskHeatUntil=0,ghostSaved=false,lastPerfectMilestone=0,activeMode="standard";
   let runCondition=null,arenaBlocks=[],telegraphs=[],riskShrine=null,secretPortal=null,secretUntil=0;
   let perfectStart=0,perfectBroken=false,deathCause="NONE",maxThreat=0,bountyTarget=null,bountyClaimed=false;
   let enemyId=0,ghostPath=[],ghostIndex=0,runPath=[],nextRiskAt=0,nextSecretAt=0,bossTelegraphUntil=0,layerZone=-1,layerEventClock=0,audioCtx=null;
@@ -145,9 +145,9 @@
   const baseCurrentZoneU=currentZone;
   currentZone=function(){return endlessMode&&alive?4:baseCurrentZoneU()};
 
-  reset=function(){prepareRun("standard")};
+  reset=function(){prepareRun(activeMode)};
   function prepareRun(mode){
-    dailyMode=mode==="daily";endlessMode=mode==="endless";endlessCycle=0;endlessTotalStart=performance.now();
+    activeMode=mode;dailyMode=mode==="daily";endlessMode=mode==="endless";endlessCycle=0;endlessTotalStart=performance.now();
     if(dailyMode)enableDailyRng();else restoreRng();
     chooseCondition();deathCause="NONE";perfectBroken=false;lastPerfectMilestone=0;ghostSaved=false;maxThreat=0;threatBonus=runCondition?.[0]==="DOUBLE DOWN"?10:0;bountyTarget=null;bountyClaimed=false;enemyId=0;arenaBlocks=[];telegraphs=[];riskShrine=null;secretPortal=null;secretUntil=0;layerZone=-1;layerEventClock=0;nextRiskAt=performance.now()+60000;nextSecretAt=performance.now()+90000;
     loadGhost();contractOfferOpen=true;extractionOpen=false;baseResetU();if(runCondition?.[0]==="ONE CHANCE")lives=1;
@@ -192,5 +192,5 @@
 
   baseRenderAchievementsU();renderUltimateAchievements();renderLeaderboard();
   if(!window.startDailyRun)window.startDailyRun=startDaily;if(!window.startEndlessRun)window.startEndlessRun=startEndless;
-  window.SnakeEvolution={start:reset,startDaily,startEndless,getState:()=>({alive,score,combo,fury,lives,xp,xpLevel,xpNext,danger,level,zone,objective:objective?.[0]||null,objectiveDone,contract:contract?.[0]||null,contractAccepted,contractOfferOpen,contractDone,supplyDrop:supplyDrop?.rarity||null,mutation:mutationName(),condition:conditionName(),daily:dailyMode,endless:endlessMode,endlessCycle,salvageChain,zoneEvent:advancedZoneEvent?.type||null,secretZone:secretUntil>performance.now(),riskShrine:!!riskShrine,perfectBroken,maxThreat,deathCause,bountyClaimed,ghostLength:ghostPath.length})};
+  window.SnakeEvolution={start:()=>prepareRun("standard"),startDaily,startEndless,getState:()=>({alive,score,combo,fury,lives,xp,xpLevel,xpNext,danger,level,zone,objective:objective?.[0]||null,objectiveDone,contract:contract?.[0]||null,contractAccepted,contractOfferOpen,contractDone,supplyDrop:supplyDrop?.rarity||null,mutation:mutationName(),condition:conditionName(),daily:dailyMode,endless:endlessMode,endlessCycle,salvageChain,zoneEvent:advancedZoneEvent?.type||null,secretZone:secretUntil>performance.now(),riskShrine:!!riskShrine,perfectBroken,maxThreat,deathCause,bountyClaimed,ghostLength:ghostPath.length})};
 })();
