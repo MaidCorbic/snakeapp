@@ -96,12 +96,12 @@
       if (bootFailed) return;
       const ultimate = document.createElement("script");
       ultimate.id = "snakeUltimateScript";
-      ultimate.src = "ultimate-gameplay-v1.js?v=ultimate-v4";
+      ultimate.src = "ultimate-gameplay-v1.js?v=ultimate-v5";
       ultimate.onload = () => {
         if (bootFailed) return;
         const update = document.createElement("script");
         update.id = "snakeGameplayUpdateV2";
-        update.src = "gameplay-update-v2.js?v=update-v5";
+        update.src = "gameplay-update-v2.js?v=update-v6";
         update.onload = () => {
           if (bootFailed) return;
           window.removeEventListener("error", onRuntimeError);
