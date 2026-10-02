@@ -1,4 +1,4 @@
-/* GAMEPLAY UPDATE PACK V3: tick recovery, safe energy respawns, checkpoint and surge feedback */
+/* GAMEPLAY UPDATE PACK V4: tick recovery, safe energy respawns, checkpoint and surge feedback */
 (() => {
   "use strict";
   if (window.__snakeGameplayUpdateV2) return;
@@ -170,7 +170,7 @@
       + '<div class="update-pack-stats"><span>NEAR MISSES <b>' + nearMissCount
       + '</b></span><span>ZONE CHECKPOINTS <b>' + checkpointCount
       + '</b></span><span>ENERGY SURGES <b>' + energySurgeCount
-      + '</b></span><span>UPDATE PACK <b>V3</b></span></div>';
+      + '</b></span><span>UPDATE PACK <b>V4</b></span></div>';
   };
 
   reset = function resetWithV2Counters() {
@@ -196,7 +196,7 @@
         zoneCheckpoints: checkpointCount,
         energySurges: energySurgeCount,
         energyPickups: energyPickupCount,
-        updatePack: "V3"
+        updatePack: "V4"
       });
     }
   }
