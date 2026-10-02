@@ -371,7 +371,7 @@
   };
 
   persist=function(winResult){saveGhost();saveLeaderboard(advancedExitMode==="CASH OUT"?"CASH OUT":winResult?"SURVIVED":"ENDED");basePersistU(winResult);const s=ultimateStats();if(dailyMode)s.dailyRuns++;if(!perfectBroken)s.perfectSeconds=Math.max(s.perfectSeconds,Math.floor((performance.now()-perfectStart)/1000));if(runPath.length&&!ghostSaved){s.ghostRuns++;ghostSaved=true}saveUltimateStats(s);restoreRng();renderLeaderboard();renderUltimateAchievements()};
-  statsMarkup=function(winResult){const cause=advancedExitMode==="CASH OUT"?"CASH OUT":winResult?"TIME CLEARED":deathCause;return baseStatsMarkupU(winResult)+'<div class="analysis-grid"><span>CAUSE<strong>'+cause+'</strong></span><span>MAX THREAT<strong>'+maxThreat+'%</strong></span><span>CONDITION<strong>'+conditionName()+'</strong></span><span>MODE<strong>'+(endlessMode?"ENDLESS":dailyMode?"DAILY":"STANDARD")+'</strong></span></div><p class="result-copy">'+(perfectBroken?"PERFECT RUN // BROKEN":"PERFECT RUN // 1.25X ACTIVE")+'</p>'};
+  statsMarkup=function(winResult){const cause=advancedExitMode==="CASH OUT"?"CASH OUT":winResult?"TIME CLEARED":deathCause;return baseStatsMarkupU(winResult)+'<div class="analysis-grid"><span>CAUSE<strong>'+cause+'</strong></span><span>MAX THREAT<strong>'+maxThreat+'%</strong></span><span>CONDITION<strong>'+conditionName()+'</strong></span><span>MODE<strong>'+(endlessMode?"ENDLESS":dailyMode?"DAILY":"STANDARD")+'</strong></span></div>'};
 
   hud=function(){
     baseHudU();maxThreat=Math.max(maxThreat,danger);
