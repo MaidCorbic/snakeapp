@@ -109,7 +109,12 @@
   move=function(force=false){
     if(!alive||contractOfferOpen||extractionOpen)return;
     const nh={x:snake[0].x+next.x,y:snake[0].y+next.y};
-    if(arenaBlocks.some(b=>same(b,nh))){addTelegraph(nh.x,nh.y,"WALL","#ff5b62",260);takeDamage("ARENA WALL");return}
+    if(arenaBlocks.some(b=>same(b,nh))){
+      addTelegraph(nh.x,nh.y,"WALL","#ff5b62",260);
+      takeDamage("ARENA WALL");
+      if(alive&&!paused&&!contractOfferOpen&&!extractionOpen)timer=setTimeout(move,Math.max(60,118-combo*6-(force?35:0)-(runMutation?.[0]==="OVERCLOCK"?14:0)));
+      return
+    }
     const before={energy:stats.energy,cores:stats.cores,powerups:stats.powerups,supplyDrops:stats.supplyDrops,elites:stats.elites};
     baseMoveU(force);if(!alive)return;
     recordStep();const head=snake[0];collectRiskShrine(head);enterSecret(head);
