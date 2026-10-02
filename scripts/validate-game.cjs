@@ -63,6 +63,7 @@ check("ultimate layer prevents duplicate base HUD redraw", /window\.__snakeUltim
 check("arena collisions continue the timer when survivable", /if\s*\(\s*alive\s*&&\s*!paused\s*&&\s*!contractOfferOpen\s*&&\s*!extractionOpen\s*\)\s*timer\s*=\s*setTimeout\(move/.test(ultimate));
 check("loot chain is registered once per energy pickup", /if\s*\(\s*stats\.energy\s*>\s*before\.energy\s*\)\s*\{\s*registerAdvancedLoot\(\)\s*\}/.test(ultimate));
 check("daily and endless entry points exist", /function\s+startDaily\s*\(/.test(ultimate) && /function\s+startEndless\s*\(/.test(ultimate) && /enableDailyRng/.test(ultimate));
+check("restart preserves selected mode while menu Start remains standard", /reset=function\(\)\{prepareRun\(activeMode\)\}/.test(ultimate) && /start:\(\)=>prepareRun\("standard"\)/.test(ultimate));
 check("elite Charger and Watcher behaviors exist", /h\.type\s*===\s*["']elite["']&&h\.variant\s*===\s*["']charger["']/.test(ultimate) && /h\.type\s*===\s*["']elite["']&&h\.variant\s*===\s*["']watcher["']/.test(ultimate));
 check("risk contracts, extraction and progression hooks exist", /function\s+acceptContract\s*\(/.test(game) && /function\s+cashOut\s*\(/.test(game) && /function\s+buyUpgrade\s*\(/.test(game));
 check("procedural arena, telegraphs, shrine and secret zone exist", /function\s+generateArena\s*\(/.test(ultimate) && /function\s+addTelegraph\s*\(/.test(ultimate) && /function\s+spawnRiskShrine\s*\(/.test(ultimate) && /function\s+spawnSecretPortal\s*\(/.test(ultimate));
