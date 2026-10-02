@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no"><meta name="theme-color" content="#080b09"><title>Snake Evolution — Survival Run</title><link rel="stylesheet" href="style.css?v=survival-v12"></head>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no"><meta name="theme-color" content="#080b09"><title>Snake Evolution — Survival Run</title><link rel="stylesheet" href="style.css?v=survival-v13"></head>
 <body><section id="bootMenu" class="boot-menu" role="dialog" aria-modal="true" aria-label="Snake Evolution main menu">
   <div class="boot-card">
     <div class="boot-topline"><span class="eyebrow">PIXEL ARCADE // SURVIVAL SYSTEM</span><span class="boot-status"><i></i> SYSTEM READY</span></div>
@@ -60,8 +60,18 @@
 <section id="runStats" class="run-stats"></section><section id="saveStats" class="save-stats"></section>
 
 <section id="missions" class="missions"><b>MISSIONS // PROGRESSION</b><div id="missionList" class="mission-list"></div></section>
-<section id="upgrades" class="progression-panel"><div class="progression-head"><b>PERMANENT UPGRADES</b><strong id="upgradeData">DATA 0</strong></div><div id="upgradeList" class="upgrade-list"></div></section>
-<section id="achievements" class="progression-panel"><div class="progression-head"><b>ADVANCED ACHIEVEMENTS</b><strong>RECORD</strong></div><div id="achievementList" class="achievement-list"></div></section>
+<details id="progression" class="progression-panel collapsible-panel" data-collapse-key="progression">
+<summary class="progression-head"><span><b>PROGRESSION // SNAKE BUILD</b><small>XP LEVEL · UPGRADES · CARDS</small></span><strong id="upgradeData">DATA 0</strong><i class="collapse-chevron" aria-hidden="true">+</i></summary>
+<div class="progression-body">
+<div class="evolution-build"><div class="evolution-build-head"><div><span>EVOLUTION BUILD</span><strong id="evolutionBuildLevel">BUILD LVL 1</strong></div><b id="evolutionBuildNext">100 XP TO NEXT</b></div><div class="evolution-build-track"><i id="evolutionBuildFill"></i></div><small>Collect ENERGY, CORES, cards and takedowns to grow your XP level.</small></div>
+<section id="upgrades" class="progression-subsection"><div class="progression-subhead"><b>PERMANENT UPGRADES</b><span>DATA</span></div><div id="upgradeList" class="upgrade-list"></div></section>
+<section class="progression-subsection"><div class="progression-subhead"><b>EVOLUTION CARDS</b><span>COLLECTIBLE</span></div><div id="cardCollection" class="card-collection"></div></section>
+</div>
+</details>
+<details id="achievements" class="progression-panel collapsible-panel" data-collapse-key="achievements">
+<summary class="progression-head"><span><b>ADVANCED ACHIEVEMENTS</b><small>LONG-TERM RECORD · COLLECTION</small></span><strong>RECORD</strong><i class="collapse-chevron" aria-hidden="true">+</i></summary>
+<div class="progression-body"><div id="achievementList" class="achievement-list"></div></div>
+</details>
 <section id="leaderboards" class="progression-panel"><div class="progression-head"><b>LOCAL LEADERBOARDS</b><strong>TOP 10</strong></div><div class="leaderboard-columns"><div><h4>ALL RUNS</h4><div id="leaderboardList" class="leaderboard-list"></div></div><div><h4>DAILY // TODAY</h4><div id="dailyLeaderboardList" class="leaderboard-list"></div></div></div></section>
 <footer><div class="legend"><span class="desktop-commands">KEYBOARD: WASD / ARROWS · SPACE DASH · SHIFT SHIELD · E PULSE · Q FURY · P / ESC PAUSE</span><span>ENERGY +10</span><span>CORE +50</span><span>HUNTER</span><span>HAZARD</span><span>POWER-UP</span><span>SUPPLY DROP</span></div><div class="controls" aria-label="Mobile touch controls"><span class="touch-label">TOUCH</span><button data-dir="up">▲</button><div><button data-dir="left">◀</button><button data-dir="down">▼</button><button data-dir="right">▶</button></div></div></footer>
-</main><script src="menu.js?v=boot-v16"></script></body></html>
+</main><script src="menu.js?v=boot-v17"></script></body></html>
