@@ -100,18 +100,19 @@
   handleZoneTransition = function handleZoneTransitionWithCheckpoint() {
     const beforeZone = zone;
     baseZoneTransitionV2();
+    const reachedZone = currentZone();
     const state = api?.getState?.();
-    if (!alive || state?.endless || zone <= beforeZone || zone <= lastCheckpointZone) return;
+    if (!alive || state?.endless || reachedZone <= beforeZone || reachedZone <= lastCheckpointZone) return;
 
-    lastCheckpointZone = zone;
+    lastCheckpointZone = reachedZone;
     checkpointCount += 1;
-    const bonus = 50 + zone * 50;
+    const bonus = 50 + reachedZone * 50;
     gain(bonus);
     gainXp(20 + zone * 10);
     chargeFury(10);
     shieldUntil = Math.max(shieldUntil, performance.now() + 1200);
     say("ZONE CHECKPOINT // +" + bonus + " // SHIELD");
-    event("CHECKPOINT SECURED // ZONE " + (zone + 1));
+    event("CHECKPOINT SECURED // ZONE " + (reachedZone + 1));
     haptic(16);
   };
 
