@@ -5,7 +5,7 @@ let snake=[],dir,next,energy=null,core=null,hazards=[],hunters=[],powerups=[],bo
 let contractAccepted=false,contractOfferOpen=false,contractDeclined=false,extractionOpen=false,extractionNextAt=0,extractionHeatUntil=0,advancedExitMode="RUNNING",chainUntil=0,chainBest=0,salvageChain=0,salvageUntil=0,advancedZoneEvent=null;
 const missionList=document.querySelector("#missionList");const best=()=>Number(localStorage.getItem("snake-evolution-best")||0);
 const missions=()=>{try{return JSON.parse(localStorage.getItem("snake-evolution-missions")||"{}")}catch{return {}}};
-const saveMissions=m=>localStorage.setItem("snake-evolution-missions",JSON.stringify(m));
+const saveMissions=m=>{try{localStorage.setItem("snake-evolution-missions",JSON.stringify(m))}catch{}};
 const same=(a,b)=>a.x===b.x&&a.y===b.y,rand=()=>({x:Math.floor(Math.random()*COLS),y:Math.floor(Math.random()*ROWS)});
 const zoneNames=["NEON GRID","HAZARD SECTOR","DARK SECTOR","Warden Territory","FINAL LOCKDOWN"];
 const evoNames=["RUNNER","CHARGER","PHANTOM","OVERLORD"];const evoColors=["#79e35b","#ffd85c","#a66cff","#ff3f8f"];
@@ -199,7 +199,14 @@ function bossStep(){if(!boss)return;bossClock++;boss.phase=boss.hp<=6?2:1;if(bos
 function collectPowerup(head){const i=powerups.findIndex(x=>same(x,head));if(i<0)return;const type=powerups[i].type;powerups.splice(i,1);stats.powerups++;chargeFury(6);haptic(10);if(type==="overdrive"){dashReady=performance.now();gain(100);say("OVERDRIVE // DASH READY")}else if(type==="magnet"){energy=free();core=free();gain(75);say("MAGNET // LOOT RELOCATED")}else if(type==="apex"){gain(400);gainXp(80);combo=Math.min(9,combo+2);chain+=2;chargeFury(30);hazards=[];say("APEX CORE // THREAT WIPE")}else if(type==="medkit"){lives=Math.min(3,lives+1);gainXp(40);gain(125);say("MEDKIT // LIFE +1")}else{snake.push({...snake[snake.length-1]});gainXp(25);gain(150);say("REPAIR // +LENGTH")}}
 const missionDefs=[["energy25","COLLECTOR","Collect 25 ENERGY",()=>stats.energy,25],["core5","CORE HUNTER","Collect 5 CORES",()=>stats.cores,5],["hunter10","HUNTER","Defeat 10 HUNTERS",()=>stats.hunters,10],["combo9","COMBO MASTER","Reach COMBO x9",()=>combo,9],["fury1","FURY","Activate FURY once",()=>stats.furyUses,1],["warden","WARDEN SLAYER","Destroy 1 WARDEN",()=>stats.wardens,1],["nohit","NO HIT","Finish a run without damage",()=>stats.damage===0&&!alive?1:0,1],["score2500","SCORE BREAKER","Score 2,500 points",()=>score,2500],["powerups3","POWER USER","Collect 3 power-ups",()=>stats.powerups,3],["pulses3","PULSE RUNNER","Use PULSE 3 times",()=>stats.pulses,3],["survive120","LONG RUN","Survive 120 seconds",()=>Math.min(120,Math.floor((performance.now()-startedAt)/1000)),120]];
 function renderMissions(){if(!missionList)return;const m=missions();missionList.innerHTML=missionDefs.map(([id,name,label,get,target])=>{const done=!!m[id];const value=Math.min(target,get());const pct=Math.round(value/target*100);return `<div class="mission-item ${done?"done":""}"><div><b>${name}</b><span>${label}</span></div><strong>${done?"DONE":value+"/"+target}</strong><i><em style="width:${pct}%"></em></i></div>`}).join("")}
-function missionCheck(){const m=missions(),done=[];missionDefs.forEach(([id,name,label,get,target])=>{if(!m[id]&&get()>=target){m[id]=1;done.push(name)}});saveMissions(m);renderMissions();if(done.length){say("MISSION // "+done.join(" + "));haptic(24)}}
+let missionRenderAt=0;
+function missionCheck(){
+ const m=missions(),done=[];missionDefs.forEach(([id,name,label,get,target])=>{if(!m[id]&&get()>=target){m[id]=1;done.push(name)}});
+ const now=performance.now();
+ if(done.length)saveMissions(m);
+ if(done.length||now-missionRenderAt>=500){missionRenderAt=now;renderMissions()}
+ if(done.length){say("MISSION // "+done.join(" + "));haptic(24)}
+}
 function takeDamage(reason="COLLISION"){stats.damage++;lives=Math.max(0,lives-1);haptic(30);if(lives<=0){say("NO LIVES // RUN OVER");return end()}snake=[{x:10,y:10},{x:9,y:10},{x:8,y:10}];dir=next={x:1,y:0};shieldUntil=performance.now()+1800;hazards=hazards.filter(h=>Math.abs(h.x-10)+Math.abs(h.y-10)>4);hunters=hunters.filter(h=>Math.abs(h.x-10)+Math.abs(h.y-10)>5);say(reason+" // LIFE LOST // "+lives+" LEFT");hud();draw()}
 function move(force=false){if(!alive)return;dir=next;const head={x:snake[0].x+dir.x,y:snake[0].y+dir.y};if(head.x<0||head.x>=COLS||head.y<0||head.y>=ROWS)return end();const protectedNow=performance.now()<shieldUntil||performance.now()<pulseUntil;
 if(!protectedNow&&(snake.some((s,i)=>i>0&&same(s,head))||hazards.some(h=>same(h,head))||hunters.some(h=>same(h,head))||(boss&&same(boss,head)))){takeDamage(hunters.some(h=>same(h,head))?"HUNTER HIT":hazards.some(h=>same(h,head))?"HAZARD HIT":"SELF HIT");return}
@@ -352,7 +359,7 @@ move=function(force=false){
   if(stats.energy>before.energy)touchAdvancedChain();
   const u=getUpgrades();const scanner=u.scanner||0;if(stats.energy>before.energy){const every=advancedEventActive("DOUBLE_CORE")?1:Math.max(1,3-scanner-(runMutation?.[0]==="HAZARD SHIFT"?1:0));if(stats.energy%every===0&&!core)core=free()}
   checkAdvancedChain();clearAdvancedLoot();tickAdvancedEvent();
-  hud();draw();
+  if(!window.__snakeUltimateLayerActive){hud();draw()}
 };
 reset=function(){baseReset();contractAccepted=false;contractOfferOpen=true;contractDeclined=false;extractionOpen=false;extractionNextAt=120000;extractionHeatUntil=0;advancedExitMode="RUNNING";chainUntil=performance.now()+4000;chainBest=0;salvageChain=0;salvageUntil=0;advancedZoneEvent=null;renderUpgrades();renderAchievements();hud();draw()};
 persist=function(win){basePersist(win);let s=readStore("snake-evolution-save",{runs:0,wins:0,wardens:0,elites:0,supplyDrops:0,contracts:0,extracts:0,bestSalvage:0,bestZone:0});s.extracts=(s.extracts||0)+(advancedExitMode==="CASH OUT"?1:0);s.bestSalvage=Math.max(s.bestSalvage||0,chainBest);s.bestZone=Math.max(s.bestZone||0,currentZone());writeStore("snake-evolution-save",s);const u=getUpgrades();u.data=(u.data||0)+1+currentZone()+Math.floor(score/2500)+(win?2:0)+(advancedExitMode==="CASH OUT"?1:0);writeStore("snake-evolution-upgrades",u);checkAchievements(win,win?"SURVIVED":advancedExitMode==="CASH OUT"?"CASH OUT":"ENDED");renderUpgrades();renderAchievements();showSave();advancedExitMode="ENDED"};
