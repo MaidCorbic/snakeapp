@@ -103,7 +103,18 @@
   usePulse=function(){const finisher=alive&&chain>=10,bountyBefore=bountyTarget;audioCue("ability");baseUsePulseU();if(finisher&&alive){gain(750);gainXp(100);hazards=[];chargeFury(25);const s=ultimateStats();s.finishers++;saveUltimateStats(s);say("CHAIN FINISHER // +750");event("CHAIN x10 // FINISHER")}if(evolution()>=4&&boss){boss.hp=Math.max(0,boss.hp-1);if(boss.hp===0)destroyBoss()}if(bountyBefore&&!hunters.includes(bountyBefore)&&!bountyClaimed){bountyClaimed=true;gain(450);gainXp(90);const s=ultimateStats();s.bounties++;saveUltimateStats(s);say("BOUNTY TARGET DOWN // +450");event("BOUNTY COMPLETE")}};
 
   spawnWave=function(){baseSpawnWaveU();hunters.forEach(h=>{if(!h.id)h.id=++enemyId;if(h.type==="elite"&&!h.variant)h.variant=Math.random()<.5?"charger":"watcher"});if(!bountyTarget&&!bountyClaimed){bountyTarget=hunters.find(h=>h.type==="elite")||hunters[0]||null;if(bountyTarget){bountyTarget.bounty=true;say("BOUNTY // TARGET MARKED")}}};
-  hunterStep=function(){hunters.filter(h=>h.type==="elite"&&h.variant==="charger").forEach(h=>{const dx=snake[0].x-h.x,dy=snake[0].y;if(Math.abs(dx)+Math.abs(dy)<9)addTelegraph(h.x,h.y,"CHARGER","#ff6a3d",450)});baseHunterStepU();if(hunters.length>=3)hunters.forEach((h,i)=>{if(h.type==="hunter"&&!h.variant){h.x=(h.x+(i%2?1:-1)+COLS)%COLS}})};
+  hunterStep=function(){
+    hunters.filter(h=>h.type==="elite"&&h.variant==="charger").forEach(h=>{const dx=snake[0].x-h.x,dy=snake[0].y-h.y;if(Math.abs(dx)+Math.abs(dy)<9)addTelegraph(h.x,h.y,"CHARGER","#ff6a3d",450)});
+    hunters.filter(h=>h.type==="elite"&&h.variant==="watcher").forEach(h=>{const d=Math.abs(snake[0].x-h.x)+Math.abs(snake[0].y-h.y);if(d<8)addTelegraph(h.x,h.y,"WATCHER","#d69bff",450)});
+    baseHunterStepU();
+    hunters.forEach((h,i)=>{
+      if(h.type==="hunter"&&!h.variant)h.x=(h.x+(i%2?1:-1)+COLS)%COLS;
+      if(h.type==="elite"&&h.variant==="watcher"&&Math.abs(snake[0].x-h.x)+Math.abs(snake[0].y-h.y)<7){
+        h.x=(h.x-Math.sign(snake[0].x-h.x)+COLS)%COLS;
+        h.y=(h.y-Math.sign(snake[0].y-h.y)+ROWS)%ROWS
+      }
+    })
+  };
   bossStep=function(){if(boss&&boss.phase>=2&&bossTelegraphUntil<=performance.now()){bossTelegraphUntil=performance.now()+450;addTelegraph(boss.x,boss.y,"WARDEN STRIKE","#ff3f8f",450,{radius:boss.phase===3?4:3})}baseBossStepU()};
 
   move=function(force=false){
