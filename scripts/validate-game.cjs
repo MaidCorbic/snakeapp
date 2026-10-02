@@ -64,7 +64,7 @@ check("mission persistence is guarded and render-throttled", /const\s+saveMissio
 check("nonfatal collisions restart the gameplay timer", /if\s*\(\s*alive\s*&&\s*!paused\s*\)\s*timer\s*=\s*setTimeout\(move/.test(game));
 check("ultimate layer prevents duplicate base HUD redraw", /window\.__snakeUltimateLayerActive\s*=\s*true/.test(ultimate) && /if\s*\(\s*!window\.__snakeUltimateLayerActive\s*\)\s*\{\s*hud\(\);\s*draw\(\)\s*\}/.test(game));
 check("arena collisions continue the timer when survivable", /if\s*\(\s*alive\s*&&\s*!paused\s*&&\s*!contractOfferOpen\s*&&\s*!extractionOpen\s*\)\s*timer\s*=\s*setTimeout\(move/.test(ultimate));
-check("loot chain is registered once per energy pickup", /if\s*\(\s*stats\.energy\s*>\s*before\.energy\s*\)\s*\{\s*registerAdvancedLoot\(\)\s*\}/.test(ultimate));
+check("loot chain is registered once per energy pickup", /const energyCollected=stats\.energy>before\.energy/.test(ultimate) && /if\(energyCollected\)\{[\s\S]*?registerAdvancedLoot\(\)/.test(ultimate));
 check("daily and endless entry points exist", /function\s+startDaily\s*\(/.test(ultimate) && /function\s+startEndless\s*\(/.test(ultimate) && /enableDailyRng/.test(ultimate));
 check("restart preserves selected mode while menu Start remains standard", /reset=function\(\)\{prepareRun\(activeMode\)\}/.test(ultimate) && /start:\(\)=>prepareRun\("standard"\)/.test(ultimate));
 check("elite Charger and Watcher behaviors exist", /h\.type\s*===\s*["']elite["']&&h\.variant\s*===\s*["']charger["']/.test(ultimate) && /h\.type\s*===\s*["']elite["']&&h\.variant\s*===\s*["']watcher["']/.test(ultimate));
