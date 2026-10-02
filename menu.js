@@ -24,7 +24,7 @@
   const resetSettingsBtn = document.querySelector("#bootResetSettings");
   const settingsState = document.querySelector("#bootSettingsState");
   const versionLabel = document.querySelector("#bootGameVersion");
-  const GAME_VERSION = "1.9.0";
+  const GAME_VERSION = "1.10.0";
   const errorPanel = document.querySelector("#bootError");
   const errorText = document.querySelector("#bootErrorText");
   const retryBtn = document.querySelector("#bootErrorRetry");
@@ -65,8 +65,8 @@
   };
 
   const getMusicVolume = () => Math.max(0,Math.min(1,(Number(settings.volume ?? 65)/100)*0.09));
-  const musicNotes = [220,261.63,329.63,392,329.63,293.66,246.94,329.63,220,261.63,349.23,440,392,349.23,293.66,261.63];
-  const bassNotes = [110,110,146.83,146.83,130.81,130.81,98,98];
+  const musicNotes = [196,246.94,293.66,392,293.66,261.63,220,293.66,196,246.94,329.63,392,349.23,293.66,246.94,220];
+  const bassNotes = [98,98,130.81,130.81,110,110,87.31,87.31];
   const playMusicTone = (frequency,duration=.22,type="square",level=.45,octave=1) => {
     if(!musicContext || !settings.music || settings.volume<=0) return;
     const now=musicContext.currentTime;
@@ -117,6 +117,7 @@
 
   const showBootMenu = () => {
     app?.classList.add("preboot");
+    document.body.classList.add("boot-open");
     bootMenu?.classList.remove("hidden");
     errorPanel?.classList.add("hidden");
     hidePanels();
@@ -125,6 +126,7 @@
 
   const failLoad = (detail) => {
     gameLoading = false;
+    document.body.classList.add("boot-open");
     bootMenu?.classList.remove("hidden");
     hidePanels();
     errorPanel?.classList.remove("hidden");
@@ -141,6 +143,7 @@
     hidePanels();
     if (gameLoaded) {
       bootMenu?.classList.add("hidden");
+      document.body.classList.remove("boot-open");
       app?.classList.remove("preboot");
       startLoadedMode(mode);
       return;
@@ -149,6 +152,7 @@
     gameLoading = true;
     bootFailed = false;
     bootMenu?.classList.add("hidden");
+    document.body.classList.remove("boot-open");
     app?.classList.remove("preboot");
 
     const onRuntimeError = (event) => {
@@ -245,6 +249,7 @@
 
   window.showBootMenu = showBootMenu;
   if(versionLabel) versionLabel.textContent = "V"+GAME_VERSION;
+  document.body.classList.add("boot-open");
   renderSettings();
   if (settings.music) startMusic();
   if (settings.sound === false) { try { localStorage.setItem("snake-evolution-sound", "off"); } catch {} }
