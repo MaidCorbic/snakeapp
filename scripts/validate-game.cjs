@@ -95,7 +95,7 @@ check("CI validates this regression script and update module", fs.existsSync(pat
 process.stdout.write("\nAll Snake Evolution regression checks passed.\n");
 
 check("expanded landing options, music and version are wired", /bootMusic/.test(html) && /bootVolume/.test(html) && /GAME_VERSION/.test(menu) && /1\.10\.0/.test(menu));
-check("contract can be accepted with keyboard confirmation", /contractOfferOpen&&\(k===["'] ["']\|\|k===["']enter["']\)/.test(game) || /contractOfferOpen.*acceptContract/.test(game));
+check("contract can be accepted with keyboard confirmation", /contractOfferOpen&&\(k===" "||k==="enter"\)\{acceptContract\(\);return\}/.test(game));
 check("extra life capacity and pickup mechanics exist", /maxLives=4/.test(game) && /GUARDIAN CUBE/.test(ultimate) && /lives=Math\.min\(maxLives,lives\+1\)/.test(ultimate));
 check("ally and enemy cube encounters are active", /encounterDefsU/.test(ultimate) && /spawnEncounterU/.test(ultimate) && /handleEncounterU/.test(ultimate) && /ENEMY CUBE/.test(ultimate));
 check("green energy avoids recent spawn tiles", /recentEnergyCells/.test(ultimate) && /avoidRecent/.test(ultimate) && /rememberEnergyPointU/.test(ultimate));
