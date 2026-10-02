@@ -18,6 +18,29 @@
   const baseHudV2 = hud;
   const baseStatsMarkupV2 = statsMarkup;
   const baseResetV2 = reset;
+  const baseMoveV2 = move;
+
+  // The gameplay clock is the single source of progression. Recover it if a
+  // pickup/event callback throws before the normal next-tick timeout is armed.
+  move = function moveWithV2Recovery(force = false) {
+    if (!alive || paused || contractOfferOpen || extractionOpen) return;
+    clearTimeout(timer);
+    timer = null;
+    try {
+      return baseMoveV2(force);
+    } catch (error) {
+      console.error("[Snake Evolution] recovered gameplay tick:", error);
+      say("SYSTEM RECOVERY // RUN CONTINUES");
+    } finally {
+      if (alive && !paused && !contractOfferOpen && !extractionOpen && !timer) {
+        const delay = Math.max(
+          40,
+          118 - combo * 6 - (force ? 35 : 0) - (runMutation?.[0] === "OVERCLOCK" ? 14 : 0)
+        );
+        timer = setTimeout(move, delay);
+      }
+    }
+  };
 
   function resetUpdateCounters() {
     nearMissCount = 0;
