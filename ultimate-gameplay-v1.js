@@ -3,12 +3,12 @@
   "use strict";
   window.__snakeUltimateLayerActive=true;
   let dailyMode=false,endlessMode=false,endlessCycle=0,endlessTotalStart=0,dailySeed=0,riskHeatUntil=0,ghostSaved=false,lastPerfectMilestone=0,activeMode="standard";
-  let evolutionCards=[],energyRespawnSerial=0;
+  let evolutionCards=[],energyRespawnSerial=0,recentEnergyCells=[],encounters=[],encounterClock=0,encounterSerial=0,encounterBoostUntil=0,ghostSyncUntil=0,ghostBestScore=0;
   let runCondition=null,arenaBlocks=[],telegraphs=[],riskShrine=null,secretPortal=null,secretUntil=0;
   let perfectStart=0,perfectBroken=false,deathCause="NONE",maxThreat=0,bountyTarget=null,bountyClaimed=false;
   let enemyId=0,ghostPath=[],ghostIndex=0,runPath=[],nextRiskAt=0,nextSecretAt=0,bossTelegraphUntil=0,layerZone=-1,layerEventClock=0,audioCtx=null;
   const originalRandom=Math.random;
-  const baseGainU=gain,baseHudU=hud,baseDrawU=draw,baseMoveU=move,baseResetU=reset,baseTakeDamageU=takeDamage,baseUseDashU=useDash,baseUsePulseU=usePulse,baseUseFuryU=useFury,baseCollectPowerupU=collectPowerup,baseSpawnWaveU=spawnWave,baseHunterStepU=hunterStep,baseBossStepU=bossStep,basePersistU=persist,baseStatsMarkupU=statsMarkup,baseRenderAchievementsU=renderAchievements;
+  const baseGainU=gain,baseHudU=hud,baseDrawU=draw,baseMoveU=move,baseResetU=reset,baseTakeDamageU=takeDamage,baseUseDashU=useDash,baseUsePulseU=usePulse,baseUseFuryU=useFury,baseCollectPowerupU=collectPowerup,baseSpawnWaveU=spawnWave,baseHunterStepU=hunterStep,baseBossStepU=bossStep,basePersistU=persist,baseStatsMarkupU=statsMarkup,baseRenderAchievementsU=renderAchievements,baseGainXpU=gainXp;
 
   function hashSeed(input){let h=2166136261;for(let i=0;i<input.length;i++){h^=input.charCodeAt(i);h=Math.imul(h,16777619)}return h>>>0}
   function dailyDateKey(){const d=new Date();return d.getUTCFullYear()+"-"+String(d.getUTCMonth()+1).padStart(2,"0")+"-"+String(d.getUTCDate()).padStart(2,"0")}
@@ -59,6 +59,7 @@
     const settings=audioSettingsU(),master=Math.max(0,Math.min(1,Number(settings.volume??65)/100)),f={ui:320,pickup:540,ability:280,warning:130,boss:70,success:700,kill:180}[kind]||320,now=audioCtx.currentTime,o=audioCtx.createOscillator(),v=audioCtx.createGain();
     o.frequency.setValueAtTime(f,now);o.frequency.exponentialRampToValueAtTime(Math.max(55,f*.72),now+.07);v.gain.setValueAtTime(.0001,now);v.gain.exponentialRampToValueAtTime(.04*master,now+.01);v.gain.exponentialRampToValueAtTime(.0001,now+.08);o.connect(v);v.connect(audioCtx.destination);o.start(now);o.stop(now+.09)
   }
+  gainXp=function(amount){baseGainXpU(amount*(encounterBoostUntil>performance.now()?2:1))};
   const sayU=say,eventU=event;
   say=function(t){audioCue(/WARDEN|CRITICAL|BREACH|LOCKDOWN/.test(t)?"warning":/FURY|DASH|SHIELD|PULSE/.test(t)?"ability":/COMPLETE|SURVIVED|EXTRACTED|ACHIEVEMENT/.test(t)?"success":/CORE|ENERGY|SUPPLY|SALVAGE/.test(t)?"pickup":"ui");sayU(t)};
   event=function(t){audioCue(/WARDEN|LOCKDOWN/.test(t)?"boss":"warning");eventU(t)};
@@ -76,32 +77,111 @@
       ||(boss&&same(boss,p))
       ||(supplyDrop&&same(supplyDrop,p))
       ||(riskShrine&&same(riskShrine,p))
-      ||(secretPortal&&same(secretPortal,p));
+      ||(secretPortal&&same(secretPortal,p))
+      ||encounters.some(e=>same(e,p));
+  }
+  function rememberEnergyPointU(point){
+    if(!point)return;
+    recentEnergyCells=[point,...recentEnergyCells.filter(p=>!same(p,point))].slice(0,8);
   }
   function safeEnergyRespawnU(previous){
-    const cells=COLS*ROWS,start=(energyRespawnSerial++*137+17)%cells,minDistance=Math.min(9,Math.max(6,Math.floor(COLS/4)));
-    const toroidalDistance=(a,b)=>{
-      if(!a||!b)return Infinity;
-      const dx=Math.min(Math.abs(a.x-b.x),COLS-Math.abs(a.x-b.x));
-      const dy=Math.min(Math.abs(a.y-b.y),ROWS-Math.abs(a.y-b.y));
-      return dx+dy;
-    };
+    const cells=COLS*ROWS,start=(Math.floor(Math.random()*cells)+energyRespawnSerial++*137+17)%cells,minDistance=Math.min(10,Math.max(7,Math.floor(COLS/4)));
+    const avoidRecent=p=>recentEnergyCells.some(r=>same(r,p));
     for(let offset=0;offset<cells;offset++){
       const index=(start+offset)%cells,p={x:index%COLS,y:Math.floor(index/COLS)};
-      if(!cellBlockedU(p,previous)&&toroidalDistance(p,previous)>=minDistance)return p;
+      const farEnough=!previous||(()=>{const dx=Math.min(Math.abs(p.x-previous.x),COLS-Math.abs(p.x-previous.x));const dy=Math.min(Math.abs(p.y-previous.y),ROWS-Math.abs(p.y-previous.y));return dx+dy>=minDistance})();
+      if(!cellBlockedU(p,previous)&&!avoidRecent(p)&&farEnough){rememberEnergyPointU(p);return p}
     }
     for(let offset=0;offset<cells;offset++){
       const index=(start+offset)%cells,p={x:index%COLS,y:Math.floor(index/COLS)};
-      if(!cellBlockedU(p,previous))return p;
+      if(!cellBlockedU(p,previous)&&!avoidRecent(p)){rememberEnergyPointU(p);return p}
     }
-    // A completely full board is not expected; never reuse the consumed tile.
+    for(let offset=0;offset<cells;offset++){
+      const index=(start+offset)%cells,p={x:index%COLS,y:Math.floor(index/COLS)};
+      if(!cellBlockedU(p,previous)&&(!previous||!same(p,previous))){rememberEnergyPointU(p);return p}
+    }
     return previous?{x:(previous.x+minDistance)%COLS,y:previous.y}:null;
   }
   function safePointU(){
     let p,t=0;
     do{p=rand();t++}while(t<800&&(arenaBlocks.some(b=>same(b,p))||snake.some(s=>same(s,p))||hunters.some(h=>same(h,p))||(riskShrine&&same(riskShrine,p))||(secretPortal&&same(secretPortal,p))));
     return p
-  }  const evolutionCardDefs=[
+  }
+
+  const encounterDefsU=[
+    {type:"guardian",name:"GUARDIAN CUBE",friend:true,color:"#66c7ff",desc:"+1 LIFE or emergency shield.",score:160,xp:55},
+    {type:"booster",name:"BOOST CUBE",friend:true,color:"#ffd85c",desc:"2X XP for 10s.",score:220,xp:70},
+    {type:"leech",name:"LEECH CUBE",friend:false,color:"#c66cff",desc:"Contact costs a LIFE.",score:0,xp:0},
+    {type:"jammer",name:"JAMMER CUBE",friend:false,color:"#ff8b5a",desc:"Breaks chain and raises threat.",score:0,xp:10}
+  ];
+  function encounterPointU(){
+    const cells=COLS*ROWS,start=(encounterSerial*173+53)%cells;
+    for(let offset=0;offset<cells;offset++){
+      const index=(start+offset)%cells,p={x:index%COLS,y:Math.floor(index/COLS)};
+      if(!cellBlockedU(p,null)&&(!snake[0]||Math.abs(p.x-snake[0].x)+Math.abs(p.y-snake[0].y)>=6))return p;
+    }
+    return null;
+  }
+  function spawnEncounterU(){
+    if(!alive||encounters.length>=2)return;
+    const point=encounterPointU();if(!point)return;
+    const friendly=encounterSerial%2===0;
+    const pool=encounterDefsU.filter(d=>d.friend===friendly);
+    const def=pool[Math.floor(Math.random()*pool.length)];
+    encounterSerial++;
+    const entity={...point,type:def.type,friend:def.friend,spawned:performance.now(),expires:performance.now()+19000};
+    encounters.push(entity);
+    addTelegraph(point.x,point.y,def.name,def.color,700);
+    event((def.friend?"ALLY":"ENEMY")+" CUBE // "+def.name);
+    say(def.name+" // "+def.desc);
+  }
+  function stepEncountersU(){
+    if(!encounters.length)return;
+    const head=snake[0];
+    encounters.forEach((e,i)=>{
+      if(e.type==="leech"&&head&&Math.random()<.34){
+        const sx=Math.sign(head.x-e.x),sy=Math.sign(head.y-e.y);
+        if(Math.abs(head.x-e.x)>=Math.abs(head.y-e.y))e.x=(e.x+sx+COLS)%COLS;
+        else e.y=(e.y+sy+ROWS)%ROWS;
+      }else if(e.type==="jammer"&&Math.random()<.15){
+        e.x=(e.x+(i%2?1:-1)+COLS)%COLS;
+      }else if(e.type==="guardian"&&Math.random()<.2){
+        e.x=(e.x+(i%2?1:-1)+COLS)%COLS;
+      }
+    });
+    encounters=encounters.filter(e=>performance.now()<e.expires);
+  }
+  function handleEncounterU(head){
+    const index=encounters.findIndex(e=>same(e,head));if(index<0)return false;
+    const hit=encounters.splice(index,1)[0];
+    if(hit.type==="guardian"){
+      if(lives<maxLives){
+        lives=Math.min(maxLives,lives+1);gain(160);gainXp(55);chargeFury(14);shieldUntil=Math.max(shieldUntil,performance.now()+1800);
+        say("GUARDIAN CUBE // +1 LIFE // SHIELD");
+      }else{
+        gain(110);gainXp(25);chargeFury(8);shieldUntil=Math.max(shieldUntil,performance.now()+2800);
+        say("GUARDIAN CUBE // LIFE FULL // SHIELD");
+      }
+      haptic(20);
+    }else if(hit.type==="booster"){
+      encounterBoostUntil=performance.now()+10000;gain(hit.score);gainXp(hit.xp);chargeFury(12);chain+=1;
+      say("BOOST CUBE // 2X XP // 10s");event("BUILD BOOST // XP x2");haptic(17);
+    }else if(hit.type==="leech"){
+      chain=0;combo=Math.max(1,combo-2);takeDamage("LEECH CUBE");
+      if(alive)say("LEECH CUBE // LIFE -1 // CHAIN BROKEN");
+    }else if(hit.type==="jammer"){
+      chain=0;combo=Math.max(1,combo-1);threatBonus=Math.min(50,threatBonus+10);gainXp(10);
+      say("JAMMER CUBE // CHAIN BROKEN // THREAT +10");event("SIGNAL JAM // THREAT +10");haptic(11);
+    }
+    return true;
+  }
+  function encounterStatusU(){
+    if(encounterBoostUntil>performance.now())return "BOOST x2 XP";
+    if(encounters.length)return encounters[0].friend?"ALLY "+encounters[0].type.toUpperCase():"ENEMY "+encounters[0].type.toUpperCase();
+    return "SCANNING";
+  }
+
+  const evolutionCardDefs=[
     {id:"scout",name:"SCOUT CHIP",rarity:"COMMON",xp:45,score:90,desc:"Arena data. +45 XP on collect."},
     {id:"core",name:"CORE MATRIX",rarity:"COMMON",xp:60,score:120,desc:"Stable core. +60 XP on collect."},
     {id:"guardian",name:"GUARDIAN SCALE",rarity:"RARE",xp:75,score:170,desc:"Recovery pattern. +75 XP and short shield."},
@@ -153,9 +233,31 @@
   function addTelegraph(x,y,type,color="#ff5b62",ttl=500,extra={}){telegraphs.push({x,y,type,color,until:performance.now()+ttl,...extra})}
   function cleanTelegraphs(){telegraphs=telegraphs.filter(t=>performance.now()<t.until)}
 
-  function loadGhost(){try{ghostPath=JSON.parse(localStorage.getItem(dailyMode?"snake-evolution-daily-ghost":"snake-evolution-ghost")||"[]")}catch{ghostPath=[]}ghostIndex=0;runPath=[]}
-  function recordStep(){if(alive){const p=snake[0];runPath.push({x:p.x,y:p.y});ghostIndex=Math.min(ghostIndex+1,ghostPath.length)}}
-  function saveGhost(){const key=dailyMode?"snake-evolution-daily-ghost":"snake-evolution-ghost",bestKey=dailyMode?"snake-evolution-daily-ghost-best":"snake-evolution-ghost-best",best=Number(localStorage.getItem(bestKey)||0);if(score>best||ghostPath.length===0){try{localStorage.setItem(key,JSON.stringify(runPath.slice(0,5000)));localStorage.setItem(bestKey,String(score));ghostSaved=true}catch{}}}
+  function loadGhost(){
+    const key=dailyMode?"snake-evolution-daily-ghost":"snake-evolution-ghost";
+    try{ghostPath=JSON.parse(localStorage.getItem(key)||"[]")}catch{ghostPath=[]}
+    try{ghostBestScore=Number(localStorage.getItem(key+"-meta")||0)}catch{ghostBestScore=0}
+    ghostIndex=0;ghostSyncUntil=0;runPath=[];
+  }
+  function recordStep(){
+    if(!alive)return;
+    const p=snake[0];runPath.push({x:p.x,y:p.y});ghostIndex=Math.min(ghostIndex+1,ghostPath.length);
+    if(ghostPath.length){
+      const gp=ghostPath[Math.min(ghostIndex,ghostPath.length-1)];
+      if(gp&&performance.now()>ghostSyncUntil){
+        const dx=Math.min(Math.abs(p.x-gp.x),COLS-Math.abs(p.x-gp.x)),dy=Math.min(Math.abs(p.y-gp.y),ROWS-Math.abs(p.y-gp.y));
+        if(dx+dy<=2){ghostSyncUntil=performance.now()+6000;gain(40);gainXp(8);chargeFury(3);say("GHOST SYNC // +40")}
+      }
+    }
+  }
+  function saveGhost(){
+    const key=dailyMode?"snake-evolution-daily-ghost":"snake-evolution-ghost";
+    const bestKey=dailyMode?"snake-evolution-daily-ghost-best":"snake-evolution-ghost-best";
+    const best=Number(localStorage.getItem(bestKey)||0);
+    if(score>best||ghostPath.length===0){
+      try{localStorage.setItem(key,JSON.stringify(runPath.slice(0,5000)));localStorage.setItem(bestKey,String(score));localStorage.setItem(key+"-meta",String(score));ghostBestScore=score;ghostSaved=true}catch{}
+    }
+  }
   function saveLeaderboard(mode){const key=dailyMode?"snake-evolution-daily-leaderboard":"snake-evolution-leaderboard";let list=[];try{list=JSON.parse(localStorage.getItem(key)||"[]")}catch{}list.push({score:Math.round(score),combo,zone:currentZone(),evolution:evoNames[evolution()-1],mutation:mutationName(),condition:conditionName(),mode,date:dailyDateKey()});list.sort((a,b)=>b.score-a.score);writeStore(key,list.slice(0,10))}
   function renderLeaderboard(){
     const render=(el,key)=>{if(!el)return;let list=[];try{list=JSON.parse(localStorage.getItem(key)||"[]")}catch{}el.innerHTML=list.length?list.map((r,n)=>"<div class=\"leader-row\"><b>#"+(n+1)+"</b><strong>"+r.score+"</strong><span>x"+r.combo+" // "+r.evolution+"</span><small>"+r.mutation+" // "+r.mode+"</small></div>").join(""):"<div class=\"leader-empty\">NO RUNS RECORDED</div>"};
@@ -211,14 +313,21 @@
     }
     const before={energy:stats.energy,cores:stats.cores,powerups:stats.powerups,supplyDrops:stats.supplyDrops,elites:stats.elites};
     const consumedEnergy=energy?{x:energy.x,y:energy.y}:null;
+    stepEncountersU();
     baseMoveU(force);if(!alive)return;
+    const beforeEnergyPoint=consumedEnergy;
     const energyCollected=stats.energy>before.energy;
     recordStep();const head=snake[0];collectRiskShrine(head);enterSecret(head);
     if(energyCollected){
       energy=safeEnergyRespawnU(consumedEnergy);
       registerAdvancedLoot();
       if(stats.energy%15===0)spawnEvolutionCardU();
+    }else if(beforeEnergyPoint&&energy&&!same(beforeEnergyPoint,energy)){
+      energy=safeEnergyRespawnU(beforeEnergyPoint);
     }
+    handleEncounterU(head);if(!alive)return;
+    encounterClock++;
+    if(encounterClock%120===0&&encounters.length<2)spawnEncounterU();
     collectEvolutionCardU(head);
     if(evolutionCards.length&&performance.now()>evolutionCards[0].expires){evolutionCards=[];say("EVOLUTION CARD // EXPIRED")}
     maxThreat=Math.max(maxThreat,danger);
@@ -241,7 +350,7 @@
     activeMode=mode;dailyMode=mode==="daily";endlessMode=mode==="endless";endlessCycle=0;endlessTotalStart=performance.now();
     if(dailyMode)enableDailyRng();else restoreRng();
     chooseCondition();deathCause="NONE";perfectBroken=false;lastPerfectMilestone=0;ghostSaved=false;maxThreat=0;threatBonus=runCondition?.[0]==="DOUBLE DOWN"?10:0;bountyTarget=null;bountyClaimed=false;enemyId=0;arenaBlocks=[];telegraphs=[];riskShrine=null;secretPortal=null;secretUntil=0;layerZone=-1;layerEventClock=0;nextRiskAt=performance.now()+60000;nextSecretAt=performance.now()+90000;
-    loadGhost();contractOfferOpen=true;extractionOpen=false;evolutionCards=[];energyRespawnSerial=0;baseResetU();if(runCondition?.[0]==="ONE CHANCE")lives=1;
+    loadGhost();contractOfferOpen=true;extractionOpen=false;evolutionCards=[];energyRespawnSerial=0;recentEnergyCells=[];encounters=[];encounterClock=0;encounterSerial=0;encounterBoostUntil=0;baseResetU();if(energy){const initial={x:energy.x,y:energy.y};energy=safeEnergyRespawnU(initial)}if(runCondition?.[0]==="ONE CHANCE")lives=1;
     perfectStart=performance.now();generateArena();hud();draw();renderLeaderboard();baseRenderAchievementsU();renderUltimateAchievements();renderEvolutionCardsU()
   }
   function startDaily(){prepareRun("daily")}
@@ -267,10 +376,12 @@
     if(perfect){const sec=Math.floor((performance.now()-perfectStart)/1000);perfect.textContent=!perfectBroken&&sec>=30?"PERFECT x1.25":perfectBroken?"BROKEN":"BUILDING";if(!perfectBroken&&sec>=60&&lastPerfectMilestone<60){lastPerfectMilestone=60;const s=ultimateStats();s.perfectSeconds=Math.max(s.perfectSeconds,sec);saveUltimateStats(s);renderUltimateAchievements()}}
     if(maxD)maxD.textContent=maxThreat+"%";if(perk)perk.textContent=evolution()===1?"SPEED":evolution()===2?"DASH BOOST":evolution()===3?"PHASED HIT":evolution()===4?"PULSE+":"STANDARD";
     if(secretUntil>performance.now()&&zoneEl)zoneEl.textContent="SECRET VAULT";else if(zoneEl)zoneEl.textContent=(dailyMode?zoneNames[zone]+" // DAILY":zoneNames[zone]);
-    const buildLevelEl=document.querySelector("#evolutionBuildLevel"),buildNextEl=document.querySelector("#evolutionBuildNext"),buildFillEl=document.querySelector("#evolutionBuildFill");
+    const buildLevelEl=document.querySelector("#evolutionBuildLevel"),buildNextEl=document.querySelector("#evolutionBuildNext"),buildFillEl=document.querySelector("#evolutionBuildFill"),encounterEl=document.querySelector("#encounterStatus"),ghostEl=document.querySelector("#ghostStatus");
     if(buildLevelEl)buildLevelEl.textContent="BUILD LVL "+xpLevel;
     if(buildNextEl)buildNextEl.textContent=xpLevel>=10?"MAX BUILD":"NEXT "+Math.max(0,xpNext-xp)+" XP";
     if(buildFillEl)buildFillEl.style.width=(xpLevel>=10?100:Math.min(100,xp/xpNext*100))+"%";
+    if(encounterEl)encounterEl.textContent=encounterStatusU();
+    if(ghostEl)ghostEl.textContent=ghostPath.length?(ghostBestScore?"PB "+ghostBestScore:"ACTIVE")+" // "+Math.min(ghostIndex,ghostPath.length)+"/"+ghostPath.length:"NONE";
     if(endlessMode){const total=Math.floor((performance.now()-endlessTotalStart)/1000);timeEl.textContent="∞ "+Math.floor(total/60)+":"+String(total%60).padStart(2,"0")}
   };
 
@@ -289,11 +400,24 @@
     if(riskShrine){pixel(riskShrine,"#ffd85c");ctx.strokeStyle="#fff1a0";ctx.lineWidth=.16;ctx.strokeRect(riskShrine.x+.02,riskShrine.y+.02,.96,.96)}
     if(secretPortal){pixel(secretPortal,"#a66cff");ctx.strokeStyle="#e1c9ff";ctx.lineWidth=.16;ctx.strokeRect(secretPortal.x+.02,secretPortal.y+.02,.96,.96)}
     if(secretUntil>performance.now()){ctx.fillStyle="#210b38aa";ctx.fillRect(0,0,COLS,ROWS)}
-    if(ghostPath.length&&ghostIndex<ghostPath.length&&!perfectBroken){const gp=ghostPath[ghostIndex];if(gp)pixel(gp,"#4d7561")}
+    if(ghostPath.length&&ghostIndex<ghostPath.length&&!perfectBroken){
+      const trail=Math.min(5,ghostPath.length-ghostIndex);
+      for(let i=trail;i>0;i--){const gp=ghostPath[ghostIndex+i-1];if(!gp)continue;ctx.globalAlpha=.10+.045*(trail-i);pixel(gp,"#6f9781")}
+      ctx.globalAlpha=1;
+      const gp=ghostPath[ghostIndex];if(gp){pixel(gp,"#a5ffc0");ctx.strokeStyle="#a5ffc0";ctx.lineWidth=.10;ctx.strokeRect(gp.x+.04,gp.y+.04,.92,.92)}
+    }
+    encounters.forEach(e=>{
+      const data=encounterDefsU.find(d=>d.type===e.type)||encounterDefsU[0],pulse=.55+.45*Math.sin(performance.now()/180+(e.x+e.y));
+      pixel(e,data.color);ctx.globalAlpha=.4+.3*pulse;ctx.strokeStyle=data.color;ctx.lineWidth=.12;ctx.strokeRect(e.x+.05,e.y+.05,.90,.90);ctx.globalAlpha=1;
+      ctx.fillStyle="#081008";
+      if(data.friend){ctx.fillRect(e.x+.30,e.y+.20,.14,.14);ctx.fillRect(e.x+.56,e.y+.20,.14,.14);ctx.fillRect(e.x+.38,e.y+.56,.24,.08)}
+      else{ctx.fillRect(e.x+.25,e.y+.28,.16,.16);ctx.fillRect(e.x+.59,e.y+.28,.16,.16);ctx.fillRect(e.x+.42,e.y+.52,.16,.12)}
+    });
+    if(encounterBoostUntil>performance.now()&&snake[0]){ctx.globalAlpha=.25;ctx.strokeStyle="#ffd85c";ctx.lineWidth=.18;ctx.strokeRect(snake[0].x+.02,snake[0].y+.02,.96,.96);ctx.globalAlpha=1}
     if(bountyTarget&&!bountyClaimed&&hunters.includes(bountyTarget)){ctx.strokeStyle="#fff";ctx.lineWidth=.12;ctx.strokeRect(bountyTarget.x+.02,bountyTarget.y+.02,.96,.96)}
   };
 
   baseRenderAchievementsU();renderUltimateAchievements();renderLeaderboard();
   if(!window.startDailyRun)window.startDailyRun=startDaily;if(!window.startEndlessRun)window.startEndlessRun=startEndless;
-  window.SnakeEvolution={start:()=>prepareRun("standard"),startDaily,startEndless,getState:()=>({alive,score,combo,fury,lives,xp,xpLevel,xpNext,danger,level,zone,objective:objective?.[0]||null,objectiveDone,contract:contract?.[0]||null,contractAccepted,contractOfferOpen,contractDone,supplyDrop:supplyDrop?.rarity||null,mutation:mutationName(),condition:conditionName(),daily:dailyMode,endless:endlessMode,endlessCycle,salvageChain,zoneEvent:advancedZoneEvent?.type||null,secretZone:secretUntil>performance.now(),riskShrine:!!riskShrine,perfectBroken,maxThreat,deathCause,bountyClaimed,ghostLength:ghostPath.length,evolutionCardDrops:evolutionCards.length,evolutionCardCollection:cardStore(),buildLevel:xpLevel})};
+  window.SnakeEvolution={start:()=>prepareRun("standard"),startDaily,startEndless,getState:()=>({alive,score,combo,fury,lives,xp,xpLevel,xpNext,danger,level,zone,objective:objective?.[0]||null,objectiveDone,contract:contract?.[0]||null,contractAccepted,contractOfferOpen,contractDone,supplyDrop:supplyDrop?.rarity||null,mutation:mutationName(),condition:conditionName(),daily:dailyMode,endless:endlessMode,endlessCycle,salvageChain,zoneEvent:advancedZoneEvent?.type||null,secretZone:secretUntil>performance.now(),riskShrine:!!riskShrine,perfectBroken,maxThreat,deathCause,bountyClaimed,ghostLength:ghostPath.length,evolutionCardDrops:evolutionCards.length,evolutionCardCollection:cardStore(),buildLevel:xpLevel,extraLifeCapacity:maxLives,encounterCount:encounters.length,encounterBoost:encounterBoostUntil>performance.now(),ghostBestScore:ghostBestScore})};
 })();
