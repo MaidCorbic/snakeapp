@@ -420,3 +420,96 @@ body{background:radial-gradient(ellipse at 50% -18%,#142219 0,transparent 52%),v
   .boot-panel p{font-size:5px}
   .boot-menu .option-row{font-size:5px}
 }
+
+
+/* HUD + PLAYGROUND FINISH — stronger hierarchy, type and arcade effects */
+#app>header,.survival-hud,.run-intel,.run-mode-bar,.game-shell,.ability-bar{position:relative}
+#app>header:before,.survival-hud:before,.run-intel:before,.run-mode-bar:before,.ability-bar:before{
+  content:"";position:absolute;left:0;right:0;top:0;height:1px;
+  background:linear-gradient(90deg,transparent,#79e35b66,transparent);pointer-events:none
+}
+#app>header{border-color:#304533;background:linear-gradient(115deg,#101911,#090e0b 65%,#0d1710);box-shadow:0 8px 28px #0008,0 0 28px #79e35b0b}
+#app>header .stats span{border-color:#2c3e30;box-shadow:inset 0 1px 0 #ffffff05}
+#app>header .stats strong{font-size:11px;text-shadow:0 0 10px #79e35b22}
+.survival-hud{border-color:#304533;background:linear-gradient(90deg,#090f0b,#0b120d,#090f0b);box-shadow:0 5px 18px #0005}
+.life-module,.xp-module,.mutation-module,.condition-module{
+  border-color:#2a3d30;background:linear-gradient(145deg,#111b14,#0a110d);
+  box-shadow:inset 0 1px 0 #ffffff05,0 3px 10px #0005
+}
+.life-module{overflow:hidden}
+.life-module:after{
+  content:"";position:absolute;right:-18px;bottom:-24px;width:80px;height:80px;
+  border:1px solid #ff6b8b22;border-radius:50%;box-shadow:0 0 24px #ff6b8b12;pointer-events:none
+}
+.life-module strong{
+  font-size:15px;color:#ff7c9a;text-shadow:0 0 9px #ff6b8b55,2px 2px #35111d;
+  font-variant-numeric:tabular-nums
+}
+.life-module small{font-size:5px;letter-spacing:.5px}
+.xp-module .xp-row b{font-size:6px}
+.xp-track{height:9px;border-color:#2c4031;background:#071009;box-shadow:inset 0 2px 4px #0008}
+.xp-track i{box-shadow:0 0 9px #79e35b55}
+.mutation-module strong,.condition-module strong{font-size:7px;text-shadow:0 0 8px #ffd85c18}
+.run-intel{gap:8px}
+.intel-card{border-color:#2b3f30;background:linear-gradient(145deg,#0e1711,#080e0a);box-shadow:0 4px 14px #0005,inset 0 1px 0 #ffffff05}
+.intel-card:hover{border-color:#3d5942;box-shadow:0 5px 18px #0006,0 0 15px #79e35b08}
+.intel-top strong{font-size:7px}
+.intel-top span{font-size:5px;letter-spacing:.4px}
+.intel-track{height:7px;margin-top:8px;background:#071009;box-shadow:inset 0 1px 3px #0008}
+.intel-track i{box-shadow:0 0 7px #79e35b35}
+.danger-card.critical .intel-track i{box-shadow:0 0 9px #ff5b6266}
+.run-mode-bar{
+  border-color:#304533;background:linear-gradient(90deg,#080f0a,#0d1510,#080f0a);
+  box-shadow:0 4px 14px #0005
+}
+.run-mode-bar span{letter-spacing:.3px}
+.run-mode-bar strong,.run-mode-bar b{text-shadow:0 0 8px #ffd85c19}
+.run-pause-btn:hover{box-shadow:0 0 14px #79e35b1f;transform:translateY(-1px)}
+.game-shell{
+  isolation:isolate;
+  background:#040704;
+  border-color:#38503d;
+  box-shadow:0 12px 30px #0009,0 0 0 1px #79e35b0a,0 0 36px #79e35b0a
+}
+.game-shell:before{
+  content:"";position:absolute;inset:7px;z-index:2;pointer-events:none;
+  border:1px solid #79e35b12;
+  box-shadow:inset 0 0 28px #0009,0 0 12px #79e35b08
+}
+.game-shell:after{
+  content:"";position:absolute;inset:0;z-index:3;pointer-events:none;
+  background:linear-gradient(180deg,transparent 0,transparent 48%,#79e35b06 50%,transparent 52%,transparent 100%);
+  background-size:100% 8px;mix-blend-mode:screen;opacity:.65
+}
+.ability{
+  min-height:62px;
+  border-color:#334a38!important;
+  box-shadow:0 4px 0 #020403,0 0 0 1px #ffffff02!important
+}
+.ability:hover{transform:translateY(-1px);box-shadow:0 5px 0 #020403,0 0 16px #79e35b12!important}
+.ability b{font-size:7px;text-shadow:0 0 7px #79e35b18}
+.ability.ready{box-shadow:0 4px 0 #20351f,0 0 17px #79e35b18!important}
+.ability.active{box-shadow:0 4px 0 #300b10,0 0 17px #ff5b6214!important}
+@keyframes hudBreath{0%,100%{opacity:.75}50%{opacity:1}}
+.life-module strong,.xp-track i,.ability.ready{animation:hudBreath 2.8s ease-in-out infinite}
+@media(max-width:700px){
+  #app>header .stats strong{font-size:9px}
+  .life-module strong{font-size:13px}
+  .xp-row b{font-size:5px}
+  .mutation-module strong,.condition-module strong{font-size:6px}
+  .intel-top strong{font-size:6px}
+  .ability{min-height:54px}
+}
+@media(max-width:420px){
+  #app>header .stats strong{font-size:8px}
+  .life-module strong{font-size:12px}
+  .life-module small{font-size:4px}
+  .xp-row b{font-size:4px}
+  .mutation-module strong,.condition-module strong{font-size:5px}
+  .intel-top strong{font-size:5px}
+  .ability{min-height:51px}
+}
+@media(prefers-reduced-motion:reduce){
+  .life-module strong,.xp-track i,.ability.ready{animation:none}
+  .game-shell:after{opacity:.2}
+}
