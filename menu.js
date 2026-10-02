@@ -91,7 +91,7 @@
 
     const script = document.createElement("script");
     script.id = "snakeGameScript";
-    script.src = "game.js?v=survival-v8";
+    script.src = "game.js?v=survival-v9";
     script.onload = () => {
       if (bootFailed) return;
       const ultimate = document.createElement("script");
@@ -99,10 +99,21 @@
       ultimate.src = "ultimate-gameplay-v1.js?v=ultimate-v3";
       ultimate.onload = () => {
         if (bootFailed) return;
-        window.removeEventListener("error", onRuntimeError);
-        gameLoading = false;
-        gameLoaded = true;
-        startLoadedMode(mode);
+        const update = document.createElement("script");
+        update.id = "snakeGameplayUpdateV2";
+        update.src = "gameplay-update-v2.js?v=update-v1";
+        update.onload = () => {
+          if (bootFailed) return;
+          window.removeEventListener("error", onRuntimeError);
+          gameLoading = false;
+          gameLoaded = true;
+          startLoadedMode(mode);
+        };
+        update.onerror = () => {
+          window.removeEventListener("error", onRuntimeError);
+          failLoad("GAMEPLAY UPDATE PACK COULD NOT LOAD");
+        };
+        document.body.appendChild(update);
       };
       ultimate.onerror = () => {
         window.removeEventListener("error", onRuntimeError);
