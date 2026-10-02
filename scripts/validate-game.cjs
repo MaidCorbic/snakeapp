@@ -19,13 +19,15 @@ function check(name, condition) {
 const game = read("game.js");
 const menu = read("menu.js");
 const ultimate = read("ultimate-gameplay-v1.js");
+const updateV2 = read("gameplay-update-v2.js");
 const html = read("index.html");
 const css = read("style.css");
 
 for (const [file, source] of [
   ["game.js", game],
   ["menu.js", menu],
-  ["ultimate-gameplay-v1.js", ultimate]
+  ["ultimate-gameplay-v1.js", ultimate],
+  ["gameplay-update-v2.js", updateV2]
 ]) {
   new vm.Script(source, { filename: file });
   process.stdout.write("PASS  JavaScript syntax: " + file + "\n");
@@ -44,17 +46,18 @@ const requiredIds = [
   "shield", "shieldFill", "pulse", "pulseFill", "fury", "furyFill",
   "missionList", "upgradeList", "upgradeData", "achievementList",
   "runMode", "evoPerk", "maxThreat", "bounty", "bountyLabel", "perfectLabel",
-  "leaderboardList", "dailyLeaderboardList"
+  "leaderboardList", "dailyLeaderboardList", "pauseBtn", "nearMiss"
 ];
 const missingIds = requiredIds.filter(id => !htmlIds.has(id));
 check("required HTML controls and HUD ids", missingIds.length === 0 && (missingIds.length ? missingIds.join(", ") : true));
 
 check("boot menu loads base game", /script\.src\s*=\s*["']game\.js\?v=/.test(menu));
 check("boot menu loads ultimate layer after base game", /script\.onload\s*=\s*\(\)\s*=>\s*\{[\s\S]*?ultimate\.src\s*=\s*["']ultimate-gameplay-v1\.js\?v=/.test(menu));
+check("boot menu loads update pack after ultimate layer", /ultimate\.onload\s*=\s*\(\)\s*=>\s*\{[\s\S]*?update\.src\s*=\s*["']gameplay-update-v2\.js\?v=/.test(menu));
 check("menu guards duplicate/in-progress loads", /if\s*\(gameLoaded\)/.test(menu) && /if\s*\(gameLoading\)\s*return/.test(menu));
 check("boot failure does not start a partial game", /ultimate\.onload\s*=\s*\(\)\s*=>\s*\{\s*if\s*\(bootFailed\)\s*return;/.test(menu));
 check("HTML references the current menu cache key", /menu\.js\?v=boot-v11/.test(html));
-check("menu asset versions are current", /game\.js\?v=survival-v8/.test(menu) && /ultimate-gameplay-v1\.js\?v=ultimate-v3/.test(menu));
+check("menu asset versions are current", /game\.js\?v=survival-v9/.test(menu) && /ultimate-gameplay-v1\.js\?v=ultimate-v3/.test(menu) && /gameplay-update-v2\.js\?v=update-v1/.test(menu));
 check("main game exposes the start API", /window\.SnakeEvolution\s*=/.test(game));
 check("permanent upgrades have a purchase handler", /function\s+buyUpgrade\s*\(/.test(game) && /data-upgrade/.test(game));
 check("mission persistence is guarded and render-throttled", /const\s+saveMissions\s*=\s*m\s*=>\s*\{\s*try\s*\{\s*localStorage\.setItem/.test(game) && /now\s*-\s*missionRenderAt\s*>=\s*500/.test(game) && /if\s*\(\s*done\.length\s*\)\s*saveMissions\(m\)/.test(game));
@@ -69,6 +72,7 @@ check("risk contracts, extraction and progression hooks exist", /function\s+acce
 check("procedural arena, telegraphs, shrine and secret zone exist", /function\s+generateArena\s*\(/.test(ultimate) && /function\s+addTelegraph\s*\(/.test(ultimate) && /function\s+spawnRiskShrine\s*\(/.test(ultimate) && /function\s+spawnSecretPortal\s*\(/.test(ultimate));
 check("combo finisher, perfect run, ghost and local leaderboard exist", /CHAIN FINISHER/.test(ultimate) && /PERFECT x1\.25/.test(ultimate) && /function\s+saveGhost\s*\(/.test(ultimate) && /function\s+saveLeaderboard\s*\(/.test(ultimate));
 check("mobile touch controls retain touch-action support", /data-dir=["']up["']/.test(html) && /canvas\s*\{\s*touch-action\s*:\s*none/s.test(css));
-check("CI validates this regression script", fs.existsSync(path.join(root, ".github/workflows/ci.yml")) && /node scripts\/validate-game\.cjs/.test(read(".github/workflows/ci.yml")));
+check("update pack includes pause, visibility pause, checkpoints and near-miss", /pauseControl\?\.addEventListener/.test(updateV2) && /visibilitychange/.test(updateV2) && /ZONE CHECKPOINT/.test(updateV2) && /function checkNearMiss/.test(updateV2));
+check("CI validates this regression script and update module", fs.existsSync(path.join(root, ".github/workflows/ci.yml")) && /node scripts\/validate-game\.cjs/.test(read(".github/workflows/ci.yml")) && /node --check gameplay-update-v2\.js/.test(read(".github/workflows/ci.yml")));
 
 process.stdout.write("\nAll Snake Evolution regression checks passed.\n");
