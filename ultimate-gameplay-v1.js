@@ -77,13 +77,23 @@
       ||(secretPortal&&same(secretPortal,p));
   }
   function safeEnergyRespawnU(previous){
-    const cells=COLS*ROWS,start=Math.floor(Math.random()*cells);
+    const cells=COLS*ROWS,start=Math.floor(Math.random()*cells),minDistance=Math.min(7,Math.max(4,Math.floor(COLS/5)));
+    const toroidalDistance=(a,b)=>{
+      if(!a||!b)return Infinity;
+      const dx=Math.min(Math.abs(a.x-b.x),COLS-Math.abs(a.x-b.x));
+      const dy=Math.min(Math.abs(a.y-b.y),ROWS-Math.abs(a.y-b.y));
+      return dx+dy;
+    };
+    for(let offset=0;offset<cells;offset++){
+      const index=(start+offset)%cells,p={x:index%COLS,y:Math.floor(index/COLS)};
+      if(!cellBlockedU(p,previous)&&toroidalDistance(p,previous)>=minDistance)return p;
+    }
     for(let offset=0;offset<cells;offset++){
       const index=(start+offset)%cells,p={x:index%COLS,y:Math.floor(index/COLS)};
       if(!cellBlockedU(p,previous))return p;
     }
-    // A completely full board is not expected, but never return the consumed tile.
-    return energy&&(!previous||!same(energy,previous))?energy:null;
+    // A completely full board is not expected; never reuse the consumed tile.
+    return previous?{x:(previous.x+minDistance)%COLS,y:previous.y}:null;
   }
   function safePointU(){
     let p,t=0;
@@ -207,6 +217,13 @@
 
   draw=function(){
     baseDrawU();cleanTelegraphs();
+    const pulse=0.5+0.5*Math.sin(performance.now()/260);
+    if(energy){
+      ctx.strokeStyle="rgba(121,227,91,"+(0.24+0.22*pulse)+")";
+      ctx.lineWidth=.12+.04*pulse;
+      const ring=.06+.06*pulse;
+      ctx.strokeRect(energy.x+ring,energy.y+ring,.88-ring*2,.88-ring*2);
+    }
     arenaBlocks.forEach(b=>{ctx.fillStyle="#303b34";ctx.fillRect(b.x+.04,b.y+.04,.92,.92);ctx.fillStyle="#141b16";ctx.fillRect(b.x+.22,b.y+.22,.56,.56)});
     telegraphs.forEach(t=>{ctx.strokeStyle=t.color;ctx.lineWidth=.14;if(t.type==="WARDEN STRIKE"){const r=t.radius||2;ctx.strokeRect(t.x-r+.05,t.y-r+.05,r*2-.1,r*2-.1)}else ctx.strokeRect(t.x+.06,t.y+.06,.88,.88)});
     if(riskShrine){pixel(riskShrine,"#ffd85c");ctx.strokeStyle="#fff1a0";ctx.lineWidth=.16;ctx.strokeRect(riskShrine.x+.02,riskShrine.y+.02,.96,.96)}
