@@ -151,7 +151,13 @@ function hud(){
 }
 function say(t){toast.textContent=t;toast.classList.add("show");clearTimeout(say.t);say.t=setTimeout(()=>toast.classList.remove("show"),1000)}
 function reset(){clearTimeout(timer);paused=false;document.querySelector("#pauseOverlay")?.remove();selectMutation();snake=[{x:10,y:10},{x:9,y:10},{x:8,y:10}];dir=next={x:1,y:0};score=0;combo=1;hazards=[];hunters=[];powerups=[];boss=null;supplyDrop=null;spawnClock=0;eventClock=0;hunterClock=0;bossClock=0;supplyDropClock=0;level=1;zone=0;stats={energy:0,cores:0,elites:0,hunters:0,wardens:0,damage:0,runCount:0,powerups:0,pulses:0,furyUses:0,supplyDrops:0,contracts:0};chain=0;eventClock2=0;fury=0;furyUntil=0;streakRewards=0;lastZone=-1;lastDangerBand=0;lives=3;xp=0;xpLevel=1;xpNext=100;danger=0;threatBonus=0;contract=null;contractDone=false;contractRewarded=false;selectObjective();selectContract();energy=free();core=null;shieldUntil=pulseUntil=0;dashReady=shieldReady=pulseReady=0;alive=true;startedAt=performance.now();message.classList.remove("show");message.classList.add("hidden");statsPanel.classList.remove("show");missionPanel.classList.remove("show");start.textContent="RUN AGAIN";event("MUTATION // "+mutationName());say(mutationName()+" // "+(runMutation?.[1]||"STANDARD"));hud();draw();move()}
+function setDir(x,y){
+ if(!alive||paused||!x&&!y)return;
+ if(x===-dir.x&&y===-dir.y)return;
+ next={x,y};
+}
 function setDir(x,y){if(alive&&!(x===-dir.x&&y===-dir.y))next={x,y}}
+
 function useDash(){if(!alive||paused||performance.now()<dashReady)return;clearTimeout(timer);const baseCd=evolution()>=3?5500:7000,cd=runMutation?.[0]==="OVERCLOCK"?Math.round(baseCd*.8):baseCd;dashReady=performance.now()+cd;say("DASH // OVERRIDE");move(true)}
 function useShield(){if(!alive||paused||performance.now()<shieldReady)return;shieldReady=performance.now()+12000;shieldUntil=performance.now()+2500;say("SHIELD // ACTIVE");hud();updateAbilityUI();draw()}
 function usePulse(){if(!alive||paused||performance.now()<pulseReady)return;stats.pulses++;chargeFury(20);haptic(18);const cd=evolution()>=3?10500:15000;pulseReady=performance.now()+cd;pulseUntil=performance.now()+350;const nearby=hunters.filter(h=>Math.abs(h.x-snake[0].x)+Math.abs(h.y-snake[0].y)<=8);
