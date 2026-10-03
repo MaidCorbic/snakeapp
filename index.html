@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no"><meta name="theme-color" content="#080b09"><title>Snake Evolution — Survival Run</title><link rel="icon" href="favicon.svg?v=snake1" type="image/svg+xml"><link rel="stylesheet" href="style.css?v=survival-v22"><link rel="stylesheet" href="arcade-polish-v1.css?v=arcade-v1"><link rel="stylesheet" href="snake-rework-v2.css?v=rework-v3"><style id="landing-enhancements">
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no"><meta name="theme-color" content="#080b09"><title>Snake Evolution — Survival Run</title><link rel="icon" href="favicon.svg?v=snake1" type="image/svg+xml"><link rel="stylesheet" href="style.css?v=survival-v23"><link rel="stylesheet" href="arcade-polish-v1.css?v=arcade-v1"><link rel="stylesheet" href="snake-rework-v2.css?v=rework-v3"><style id="landing-enhancements">
 /* Landing page / Options / How-to-Play enhancement pass */
 .boot-top-meta{display:flex;align-items:center;gap:14px}
 .game-version{padding:6px 8px;border:1px solid #38533c;background:#0a120d;color:var(--green);font-size:6px;letter-spacing:.5px;box-shadow:inset 0 0 12px #79e35b08}
@@ -1331,14 +1331,105 @@ body.rework-v2 .landing-profile .profile-block:nth-child(4) strong{
     <div id="bootError" class="boot-error hidden"><h3>SYSTEM ERROR</h3><p id="bootErrorText">GAME BOOT FAILED</p><button type="button" id="bootErrorRetry" class="boot-action">RETRY</button></div>
   </div>
 </section><main id="app">
-<header><div><span class="eyebrow">PIXEL ARCADE // SURVIVAL RUN</span><h1>SNAKE <b>EVOLUTION</b></h1><div class="subhud"><span>ZONE <strong id="zone">NEON GRID</strong></span><span>EVOLUTION <strong id="evo">RUNNER</strong></span></div></div><div class="stats"><span>SCORE<strong id="score">0</strong></span><span>COMBO<strong id="combo">x1</strong></span><span>TIME<strong id="time">5:00</strong></span><span>BEST<strong id="best">0</strong></span></div></header><section class="survival-hud" aria-label="Run status"><div class="life-module"><span>LIFE</span><strong id="lives">♥♥♥</strong><small id="streakMark">STREAK x0</small></div><div class="xp-module"><div class="xp-row"><span>XP</span><strong id="xpLevel">LVL 1</strong><b id="xp">0/100</b></div><div class="xp-track"><i id="xpFill"></i></div></div><div class="mutation-module"><span>MUTATION</span><strong id="mutation">LOADING</strong><small id="mutationLabel">STANDARD</small></div><div class="condition-module"><span>CONDITION</span><strong id="condition">STANDARD</strong><small id="conditionLabel">STANDARD</small></div></section>
-<section class="run-intel" aria-label="Live run intel">
-  <div class="intel-card danger-card"><div class="intel-top"><span>THREAT</span><strong id="danger">0%</strong><b id="dangerLabel">STABLE</b></div><div class="intel-track"><i id="dangerFill"></i></div></div>
-  <div class="intel-card objective-card"><div class="intel-top"><span>OBJECTIVE</span><strong id="objective">LOADING</strong><b id="objectiveLabel">0/0</b></div><div class="intel-track"><i id="objectiveFill"></i></div></div>
-  <div class="intel-card contract-card"><div class="intel-top"><span>CONTRACT</span><strong id="contract">LOADING</strong><b id="contractLabel">0/0</b></div><div class="intel-track"><i id="contractFill"></i></div><div class="contract-actions"><button id="contractAccept" type="button">ACCEPT</button><button id="contractDecline" type="button">DECLINE</button></div></div>
-  <div class="intel-card chain-card"><div class="intel-top"><span>CHAIN</span><strong id="chainLabel">CHAIN READY</strong><b>DECAY</b></div><div class="intel-track"><i id="chainFill"></i></div></div>
-  <div class="intel-card salvage-card"><div class="intel-top"><span>SALVAGE</span><strong id="salvage">x0</strong><b id="salvageLabel">READY</b></div><div class="intel-track"><i style="width:0%"></i></div></div><div class="intel-card bounty-card"><div class="intel-top"><span>BOUNTY</span><strong id="bounty">SEARCHING</strong><b id="bountyLabel">READY</b></div><div class="intel-track"><i style="width:0%"></i></div></div><div class="intel-card perfect-card"><div class="intel-top"><span>PERFECT</span><strong id="perfectLabel">BUILDING</strong><b>30s</b></div><div class="intel-track"><i style="width:0%"></i></div></div>
-  <div class="intel-card extract-card"><div class="intel-top"><span>EXTRACT</span><strong id="extractStatus">LOCKED</strong><b>CASH OUT</b></div><div class="intel-track"><i></i></div></div>
+<section class="run-hud-v3" aria-label="Run HUD">
+  <div class="run-command-bar">
+    <div class="run-identity">
+      <span class="run-eyebrow">LIVE RUN // SNAKE EVOLUTION</span>
+      <h1>SNAKE <b>EVOLUTION</b></h1>
+      <div class="subhud">
+        <span>ZONE <strong id="zone">NEON GRID</strong></span>
+        <span>EVOLUTION <strong id="evo">RUNNER</strong></span>
+      </div>
+    </div>
+    <div class="run-stat-tile score-tile">
+      <span>SCORE</span>
+      <strong id="score">0</strong>
+      <small>COMBO <b id="combo">x1</b></small>
+    </div>
+    <div class="run-stat-tile time-tile">
+      <span>TIME REMAINING</span>
+      <strong id="time">5:00</strong>
+      <small>RUN WINDOW</small>
+    </div>
+    <div class="run-stat-tile best-tile">
+      <span>BEST</span>
+      <strong id="best">0</strong>
+      <small>LOCAL RECORD</small>
+    </div>
+    <button type="button" id="pauseBtn" class="run-pause-btn" aria-label="Pause game" aria-pressed="false" disabled>PAUSE</button>
+  </div>
+
+  <div class="run-status-v3">
+    <div class="life-module">
+      <span>LIVES</span>
+      <strong id="lives">♥♥♥</strong>
+      <small id="streakMark">STREAK x0</small>
+    </div>
+    <div class="xp-module">
+      <div class="xp-row">
+        <span>XP</span>
+        <strong id="xpLevel">LVL 1</strong>
+        <b id="xp">0/100</b>
+      </div>
+      <div class="xp-track"><i id="xpFill"></i></div>
+    </div>
+    <div class="mutation-module">
+      <span>MUTATION</span>
+      <strong id="mutation">LOADING</strong>
+      <small id="mutationLabel">STANDARD</small>
+    </div>
+    <div class="condition-module">
+      <span>CONDITION</span>
+      <strong id="condition">STANDARD</strong>
+      <small id="conditionLabel">STANDARD</small>
+    </div>
+  </div>
+
+  <section class="run-intel run-intel-v3" aria-label="Live run intel">
+    <div class="intel-card intel-primary-card danger-card">
+      <div class="intel-top"><span>THREAT</span><strong id="danger">0%</strong><b id="dangerLabel">STABLE</b></div>
+      <div class="intel-track"><i id="dangerFill"></i></div>
+    </div>
+    <div class="intel-card intel-primary-card objective-card">
+      <div class="intel-top"><span>OBJECTIVE</span><strong id="objective">LOADING</strong><b id="objectiveLabel">0/0</b></div>
+      <div class="intel-track"><i id="objectiveFill"></i></div>
+    </div>
+    <div class="intel-card intel-primary-card contract-card">
+      <div class="intel-top"><span>CONTRACT</span><strong id="contract">LOADING</strong><b id="contractLabel">0/0</b></div>
+      <div class="intel-track"><i id="contractFill"></i></div>
+      <div class="contract-actions"><button id="contractAccept" type="button">ACCEPT</button><button id="contractDecline" type="button">DECLINE</button></div>
+    </div>
+    <div class="intel-card intel-primary-card chain-card">
+      <div class="intel-top"><span>CHAIN</span><strong id="chainLabel">CHAIN READY</strong><b>DECAY</b></div>
+      <div class="intel-track"><i id="chainFill"></i></div>
+    </div>
+
+    <div class="intel-card intel-secondary-card salvage-card">
+      <div class="intel-top"><span>SALVAGE</span><strong id="salvage">x0</strong><b id="salvageLabel">READY</b></div>
+      <div class="intel-track"><i style="width:0%"></i></div>
+    </div>
+    <div class="intel-card intel-secondary-card bounty-card">
+      <div class="intel-top"><span>BOUNTY</span><strong id="bounty">SEARCHING</strong><b id="bountyLabel">READY</b></div>
+      <div class="intel-track"><i style="width:0%"></i></div>
+    </div>
+    <div class="intel-card intel-secondary-card perfect-card">
+      <div class="intel-top"><span>PERFECT</span><strong id="perfectLabel">BUILDING</strong><b>30s</b></div>
+      <div class="intel-track"><i style="width:0%"></i></div>
+    </div>
+    <div class="intel-card intel-secondary-card extract-card">
+      <div class="intel-top"><span>EXTRACT</span><strong id="extractStatus">LOCKED</strong><b>CASH OUT</b></div>
+      <div class="intel-track"><i></i></div>
+    </div>
+  </section>
+
+  <div class="run-mode-bar run-mode-v3">
+    <span>MODE</span><strong id="runMode">STANDARD</strong>
+    <span>EVOLUTION</span><b id="evoPerk">SPEED</b>
+    <span>MAX THREAT</span><b id="maxThreat">0%</b>
+    <span>NEAR MISSES</span><b id="nearMiss">0</b>
+    <span>ENCOUNTER</span><b id="encounterStatus">SCANNING</b>
+    <span>GHOST</span><b id="ghostStatus">NONE</b>
+  </div>
 </section>
 <section id="extractionPanel" class="extraction-panel hidden" aria-label="Extraction decision"><div><span class="eyebrow">EXTRACTION WINDOW // RISK VS REWARD</span><h3>SECURE THE RUN?</h3><p>Cash out a score bonus now, or keep running toward 5:00 with temporary heat.</p><div class="extraction-actions"><button id="extractCashOut" type="button">CASH OUT</button><button id="extractContinue" type="button">KEEP RUNNING</button></div></div></section>
 <section class="run-mode-bar"><span>MODE</span><strong id="runMode">STANDARD</strong><span>EVOLUTION</span><b id="evoPerk">SPEED</b><span>MAX THREAT</span><b id="maxThreat">0%</b><span>NEAR MISSES</span><b id="nearMiss">0</b><span>ENCOUNTER</span><b id="encounterStatus">SCANNING</b><span>GHOST</span><b id="ghostStatus">NONE</b><button type="button" id="pauseBtn" class="run-pause-btn" aria-label="Pause game" aria-pressed="false" disabled>PAUSE</button></section>
