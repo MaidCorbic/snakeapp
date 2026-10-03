@@ -23,7 +23,8 @@ const files = [
   "menu.js",
   "ultimate-gameplay-v1.js",
   "gameplay-update-v2.js",
-  "arcade-polish-v1.js"
+  "arcade-polish-v1.js",
+  "snake-rework-v2.js"
 ];
 
 for (const file of files) {
@@ -60,7 +61,9 @@ const requiredIds = [
 ];
 
 check("arcade polish stylesheet exists", fs.existsSync(path.join(root, "arcade-polish-v1.css")));
-check("arcade polish loader is wired", /arcade-polish-v1\.js\?v=arcade-v1/.test(menu));
+check("rework stylesheet exists", fs.existsSync(path.join(root, "snake-rework-v2.css")));
+check("party run wiring exists", /bootFun/.test(html) && /mode === "party"/.test(menu) && /FUN_RUN_TIME/.test(game));
+check("arcade polish loader is wired", /arcade-polish-v1\.js\?v=arcade-v1/.test(menu) && /snake-rework-v2\.js\?v=rework-v2/.test(menu));
 
 check("required project files exist", [
   "index.html",

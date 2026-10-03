@@ -7,6 +7,7 @@
   const optionsBtn = document.querySelector("#bootOptions");
   const dailyBtn = document.querySelector("#bootDaily");
   const endlessBtn = document.querySelector("#bootEndless");
+  const funBtn = document.querySelector("#bootFun");
   const howPanel = document.querySelector("#bootHowPanel");
   const optionsPanel = document.querySelector("#bootOptionsPanel");
   const howBack = document.querySelector("#bootHowBack");
@@ -24,7 +25,10 @@
   const resetSettingsBtn = document.querySelector("#bootResetSettings");
   const settingsState = document.querySelector("#bootSettingsState");
   const versionLabel = document.querySelector("#bootGameVersion");
-  const GAME_VERSION = "1.10.0";
+  const GAME_VERSION = "2.0.0";
+  const landingBest = document.querySelector("#landingBest");
+  const landingLastMode = document.querySelector("#landingLastMode");
+  const landingAudioState = document.querySelector("#landingAudioState");
   const errorPanel = document.querySelector("#bootError");
   const errorText = document.querySelector("#bootErrorText");
   const retryBtn = document.querySelector("#bootErrorRetry");
@@ -50,6 +54,16 @@
     document.documentElement.classList.toggle("reduced-motion", !!settings.reducedMotion);
     document.body.classList.toggle("no-crt", !settings.crt);
     document.body.classList.toggle("high-contrast", !!settings.highContrast);
+  };
+
+  const renderLandingProfile = () => {
+    try {
+      const best = Number(localStorage.getItem("snake-evolution-best") || 0);
+      if (landingBest) landingBest.textContent = best.toLocaleString();
+      const last = localStorage.getItem("snake-evolution-mode");
+      if (landingLastMode) landingLastMode.textContent = last === "party" ? "PARTY RUN" : "STANDARD";
+    } catch {}
+    if (landingAudioState) landingAudioState.textContent = settings.music && settings.volume > 0 ? "MUSIC ON" : "MUSIC OFF";
   };
 
   const renderSettings = () => {
@@ -122,6 +136,7 @@
     errorPanel?.classList.add("hidden");
     hidePanels();
     renderSettings();
+    renderLandingProfile();
   };
 
   const failLoad = (detail) => {
@@ -136,7 +151,7 @@
   const startLoadedMode = (mode) => {
     if (mode === "daily") window.SnakeEvolution?.startDaily?.();
     else if (mode === "endless") window.SnakeEvolution?.startEndless?.();
-    else window.SnakeEvolution?.start?.();
+    else { if (mode === "party") { try { localStorage.setItem("snake-evolution-mode","party"); } catch {} } else { try { localStorage.setItem("snake-evolution-mode","standard"); } catch {} } window.SnakeEvolution?.start?.(); }
   };
 
   const loadGame = (mode="normal") => {
@@ -187,7 +202,12 @@
             gameLoading = false;
             gameLoaded = true;
             window.SnakeArcadePolish?.start?.();
-            startLoadedMode(mode);
+            const rework = document.createElement("script");
+            rework.id = "snakeReworkV2";
+            rework.src = "snake-rework-v2.js?v=rework-v2";
+            rework.onload = () => startLoadedMode(mode);
+            rework.onerror = () => failLoad("REWORK PRESENTATION LAYER COULD NOT LOAD");
+            document.body.appendChild(rework);
           };
           polish.onerror = () => {
             window.removeEventListener("error", onRuntimeError);
@@ -214,10 +234,11 @@
     document.body.appendChild(script);
   };
 
-  [startBtn,dailyBtn,endlessBtn,howBtn,optionsBtn].forEach(button=>button?.addEventListener("click",()=>startMusic(),{once:true}));
+  [startBtn,dailyBtn,endlessBtn,funBtn,howBtn,optionsBtn].forEach(button=>button?.addEventListener("click",()=>startMusic(),{once:true}));
   startBtn?.addEventListener("click", () => loadGame("normal"));
-  dailyBtn?.addEventListener("click", () => loadGame("daily"));
-  endlessBtn?.addEventListener("click", () => loadGame("endless"));
+  dailyBtn?.addEventListener("click", () => { try { localStorage.setItem("snake-evolution-mode","standard"); } catch {} loadGame("daily"); });
+  endlessBtn?.addEventListener("click", () => { try { localStorage.setItem("snake-evolution-mode","standard"); } catch {} loadGame("endless"); });
+  funBtn?.addEventListener("click", () => { try { localStorage.setItem("snake-evolution-mode","party"); } catch {} loadGame("party"); });
   howBtn?.addEventListener("click", () => {
     optionsPanel?.classList.add("hidden");
     howPanel?.classList.remove("hidden");
@@ -282,6 +303,7 @@
   document.body.classList.add("boot-open");
   renderSettings();
   if (settings.music) startMusic();
+  renderLandingProfile();
   if (settings.sound === false) { try { localStorage.setItem("snake-evolution-sound", "off"); } catch {} }
   showBootMenu();
 })();

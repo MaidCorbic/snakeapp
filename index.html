@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no"><meta name="theme-color" content="#080b09"><title>Snake Evolution — Survival Run</title><link rel="icon" href="favicon.svg?v=snake1" type="image/svg+xml"><link rel="stylesheet" href="style.css?v=survival-v22"><link rel="stylesheet" href="arcade-polish-v1.css?v=arcade-v1"><style id="landing-enhancements">
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no"><meta name="theme-color" content="#080b09"><title>Snake Evolution — Survival Run</title><link rel="icon" href="favicon.svg?v=snake1" type="image/svg+xml"><link rel="stylesheet" href="style.css?v=survival-v22"><link rel="stylesheet" href="arcade-polish-v1.css?v=arcade-v1"><link rel="stylesheet" href="snake-rework-v2.css?v=rework-v2"><style id="landing-enhancements">
 /* Landing page / Options / How-to-Play enhancement pass */
 .boot-top-meta{display:flex;align-items:center;gap:14px}
 .game-version{padding:6px 8px;border:1px solid #38533c;background:#0a120d;color:var(--green);font-size:6px;letter-spacing:.5px;box-shadow:inset 0 0 12px #79e35b08}
@@ -213,7 +213,7 @@ body.high-contrast .boot-panel-heading>strong,body.high-contrast .game-version{c
 </style></head>
 <body><section id="bootMenu" class="boot-menu" role="dialog" aria-modal="true" aria-label="Snake Evolution main menu">
   <div class="boot-card">
-    <div class="boot-topline"><span class="eyebrow">PIXEL ARCADE // SURVIVAL SYSTEM</span><div class="boot-top-meta"><span class="boot-status"><i></i> SYSTEM READY</span><span id="bootGameVersion" class="game-version">V1.10.0</span></div></div>
+    <div class="boot-topline"><span class="eyebrow">PIXEL ARCADE // SURVIVAL SYSTEM</span><div class="boot-top-meta"><span class="boot-status"><i></i> SYSTEM READY</span><span id="bootGameVersion" class="game-version">V2.0 // REWORK</span></div></div>
     <div class="boot-layout">
       <section class="boot-hero" aria-labelledby="bootTitle">
         <div class="boot-emblem" aria-hidden="true"><img src="favicon.svg?v=snake1" alt="" width="58" height="58"><i></i></div>
@@ -221,7 +221,7 @@ body.high-contrast .boot-panel-heading>strong,body.high-contrast .game-version{c
         <p class="boot-tagline">Collect energy. Adapt to the threat. Survive the lockdown.</p>
         <div class="boot-pills"><span>05:00 SURVIVAL</span><span>4 ABILITIES</span><span>5 ZONES</span></div>
         <div class="boot-actions">
-          <button type="button" id="bootStart" class="boot-action boot-primary">START RUN <span>▶</span></button>
+          <button type="button" id="bootStart" class="boot-action boot-primary">START RUN <span>▶</span></button><button type="button" id="bootFun" class="boot-action secondary">PARTY RUN // CHAOS</button>
           <button type="button" id="bootDaily" class="boot-action secondary">DAILY RUN</button>
           <button type="button" id="bootEndless" class="boot-action secondary">ENDLESS MODE</button>
           <button type="button" id="bootHow" class="boot-action secondary">HOW TO PLAY</button>
@@ -236,6 +236,33 @@ body.high-contrast .boot-panel-heading>strong,body.high-contrast .game-version{c
         <div class="brief-item"><strong>04</strong><div><b>BREAK THE LOCKDOWN</b><small>Use your abilities, defeat the Warden and chase a record.</small></div></div>
         <div class="brief-controls"><span>MOVE</span><kbd>WASD</kbd><kbd>↑ ↓ ← →</kbd><span class="brief-separator"></span><span>DASH</span><kbd>SPACE</kbd><span>PAUSE</span><kbd>P</kbd></div>
       </aside>
+    </div>
+    <section class="landing-profile" aria-label="Player profile">
+      <div class="profile-block">
+        <span>PERSONAL BEST</span>
+        <strong id="landingBest">0</strong>
+      </div>
+      <div class="profile-block">
+        <span>LAST RUN</span>
+        <strong id="landingLastMode">STANDARD</strong>
+      </div>
+      <div class="profile-block">
+        <span>RUN FORMAT</span>
+        <strong>5 MIN // 5 ZONES</strong>
+      </div>
+      <div class="profile-block profile-audio">
+        <span>SOUNDTRACK</span>
+        <strong id="landingAudioState">MUSIC ON</strong>
+      </div>
+    </section>
+    <div class="landing-promise">
+      <span><b>01</b> COLLECT</span>
+      <i></i>
+      <span><b>02</b> EVOLVE</span>
+      <i></i>
+      <span><b>03</b> SURVIVE</span>
+      <i></i>
+      <span><b>04</b> BREAK THE RECORD</span>
     </div>
     <div class="boot-panels">
       <div id="bootOptionsPanel" class="boot-panel options-console hidden">

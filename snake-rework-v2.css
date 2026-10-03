@@ -1,0 +1,620 @@
+/* SNAKE EVOLUTION // REWORK V2
+   Focus: readable arcade hierarchy, less clutter, stronger run identity. */
+:root{
+  --rework-bg:#050706;
+  --rework-panel:#0a100c;
+  --rework-panel-2:#0e1711;
+  --rework-line:#29402f;
+  --rework-green:#8dff66;
+  --rework-yellow:#ffe36b;
+  --rework-red:#ff5574;
+  --rework-cyan:#66e7ff;
+}
+body.rework-v2{background:
+  radial-gradient(circle at 50% 20%,rgba(141,255,102,.06),transparent 34%),
+  linear-gradient(180deg,#030504,#080d09 48%,#030504);
+}
+body.rework-v2 .game-shell{border-color:#45644b;box-shadow:0 0 0 1px #132016,8px 8px 0 #020302,0 0 55px rgba(141,255,102,.08)}
+body.rework-v2 #app>header{border-color:var(--rework-line);background:linear-gradient(180deg,#0b120d,#070c09)}
+body.rework-v2 .survival-hud,
+body.rework-v2 .run-intel,
+body.rework-v2 .run-mode-bar,
+body.rework-v2 .ability-bar{filter:saturate(.9)}
+body.rework-v2 .run-intel .intel-card{background:#090f0b;border-color:#243a29}
+body.rework-v2 .run-intel .intel-card:first-child{border-left:2px solid var(--rework-yellow)}
+body.rework-v2 .run-intel .intel-card:last-child{border-left:2px solid var(--rework-red)}
+body.rework-v2 .ability{transition:transform .12s ease,box-shadow .12s ease,border-color .12s ease}
+body.rework-v2 .ability.ready{border-color:var(--rework-green);box-shadow:0 0 18px rgba(141,255,102,.12),3px 3px 0 #355d2e}
+body.rework-v2 .ability:active{transform:translateY(2px)}
+body.rework-v2 .boot-card{max-width:1080px}
+body.rework-v2 .boot-hero{border-color:#3a5740;background:
+  radial-gradient(circle at 50% 15%,rgba(141,255,102,.08),transparent 45%),
+  linear-gradient(145deg,#0d1710,#070c09)}
+body.rework-v2 .boot-title{font-size:clamp(24px,4vw,42px)!important}
+body.rework-v2 .boot-tagline{max-width:620px}
+body.rework-v2 .boot-actions{grid-template-columns:1.5fr 1fr 1fr!important}
+body.rework-v2 .boot-actions #bootFun{grid-column:1 / -1;min-height:42px;border-color:#ffe36b!important;color:#ffe36b!important;background:linear-gradient(180deg,#201d0c,#111108)!important}
+body.rework-v2 .rework-chip{display:inline-flex;align-items:center;gap:6px;padding:6px 8px;border:1px solid #36533c;background:#09110c;color:#9bb59d;font-size:5px;letter-spacing:.5px}
+body.rework-v2 .rework-chip b{color:var(--rework-green)}
+#reworkSegment{
+  position:absolute;left:50%;top:14px;transform:translate(-50%,-8px);
+  z-index:12;pointer-events:none;opacity:0;
+  padding:8px 12px;border:1px solid #45674a;background:#08100aee;
+  box-shadow:0 0 28px rgba(141,255,102,.10),4px 4px 0 #020302;
+  color:#d9f5da;text-align:center;transition:opacity .16s ease,transform .16s ease;
+}
+#reworkSegment.show{opacity:1;transform:translate(-50%,0)}
+#reworkSegment strong{display:block;color:var(--rework-green);font-size:7px;letter-spacing:1px}
+#reworkSegment span{display:block;margin-top:4px;color:#8ca28f;font-size:4px}
+body.rework-party #reworkSegment{border-color:#806f2d;box-shadow:0 0 30px rgba(255,227,107,.14),4px 4px 0 #020302}
+body.rework-party #reworkSegment strong{color:var(--rework-yellow)}
+#reworkModeBadge{
+  position:absolute;right:10px;top:10px;z-index:13;pointer-events:none;
+  padding:5px 7px;border:1px solid #36533c;background:#07100ae8;color:#9db99f;
+  font-size:4px;letter-spacing:.7px;opacity:.9
+}
+#reworkModeBadge.party{border-color:#806f2d;color:#ffe36b}
+@media(max-width:700px){
+  body.rework-v2 .boot-actions{grid-template-columns:1fr 1fr!important}
+  body.rework-v2 .boot-actions #bootFun{grid-column:1/-1}
+  #reworkSegment{top:8px;padding:7px 9px}
+  #reworkSegment strong{font-size:6px}
+  #reworkSegment span{font-size:4px}
+  #reworkModeBadge{right:6px;top:6px;font-size:4px}
+}
+@media(max-width:420px){
+  body.rework-v2 .boot-actions{grid-template-columns:1fr!important}
+  body.rework-v2 .boot-actions #bootFun{grid-column:auto}
+}
+
+
+/* =========================================================
+   REWORK V2 // BRUTAL VISUAL + CLEAN HUD PASS
+   Keep the systems. Remove the visual noise.
+   ========================================================= */
+
+:root{
+  --brutal-green:#b5ff72;
+  --brutal-green-dim:#4d8d50;
+  --brutal-bg:#030504;
+  --brutal-panel:rgba(5,10,7,.92);
+  --brutal-line:#203624;
+}
+
+/* ---------- LANDING ---------- */
+body.rework-v2 .boot-menu{
+  background:
+    radial-gradient(circle at 50% 30%,rgba(181,255,114,.09),transparent 25%),
+    radial-gradient(circle at 50% 100%,rgba(72,255,141,.035),transparent 35%),
+    repeating-linear-gradient(0deg,transparent 0 3px,rgba(255,255,255,.008) 4px),
+    #020403;
+}
+
+body.rework-v2 .boot-card{
+  width:min(940px,94vw);
+  border:1px solid #304b36;
+  background:rgba(4,8,5,.96);
+  box-shadow:
+    0 0 0 1px #0b160e,
+    14px 14px 0 #010201,
+    0 0 100px rgba(128,255,96,.08);
+}
+
+body.rework-v2 .boot-topline{
+  padding:8px 10px;
+  border-bottom:1px solid #18291d;
+}
+
+body.rework-v2 .boot-hero{
+  min-height:360px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  border:0;
+  border-right:1px solid #203624;
+  background:
+    radial-gradient(circle at 50% 45%,rgba(181,255,114,.07),transparent 34%),
+    linear-gradient(145deg,#09110b,#040805);
+}
+
+body.rework-v2 .boot-emblem{
+  transform:scale(1.08);
+  filter:drop-shadow(0 0 16px rgba(181,255,114,.25));
+}
+
+body.rework-v2 .boot-title{
+  font-size:clamp(30px,5vw,56px)!important;
+  letter-spacing:4px!important;
+  text-shadow:0 0 25px rgba(181,255,114,.13);
+}
+
+body.rework-v2 .boot-tagline{
+  color:#91a694!important;
+  font-size:5px!important;
+}
+
+body.rework-v2 .boot-pills span{
+  border:0!important;
+  border-left:2px solid var(--brutal-green-dim)!important;
+  border-radius:0!important;
+  padding:6px 8px!important;
+}
+
+body.rework-v2 .boot-actions{
+  grid-template-columns:1.6fr 1fr 1fr!important;
+  max-width:650px;
+  width:100%;
+  margin-left:auto!important;
+  margin-right:auto!important;
+}
+
+body.rework-v2 .boot-actions #bootStart{
+  grid-column:1/-1;
+  min-height:56px;
+  font-size:9px!important;
+  letter-spacing:2px;
+  border:1px solid var(--brutal-green)!important;
+  background:linear-gradient(180deg,#17351c,#0a170d)!important;
+  box-shadow:0 0 24px rgba(181,255,114,.08),5px 5px 0 #25472b;
+}
+
+body.rework-v2 .boot-actions #bootFun{
+  grid-column:auto;
+}
+
+body.rework-v2 .boot-actions #bootDaily{
+  grid-column:auto;
+}
+
+body.rework-v2 .boot-actions #bootEndless{
+  display:none!important;
+}
+
+body.rework-v2 .boot-actions #bootHow,
+body.rework-v2 .boot-actions #bootOptions{
+  min-height:34px;
+  font-size:4px;
+  opacity:.82;
+}
+
+body.rework-v2 .boot-brief{
+  padding:18px;
+  border:0!important;
+  background:#050b07!important;
+}
+
+body.rework-v2 .boot-brief .brief-heading{
+  color:#607665;
+  letter-spacing:1px;
+}
+
+body.rework-v2 .boot-brief .brief-item{
+  display:grid;
+  grid-template-columns:25px 1fr;
+  gap:9px;
+  padding:13px 0!important;
+}
+
+body.rework-v2 .boot-brief .brief-item strong{
+  color:var(--brutal-green);
+  font-size:5px;
+}
+
+body.rework-v2 .boot-brief .brief-item small{
+  color:#718473;
+}
+
+body.rework-v2 .boot-brief .brief-item:nth-of-type(4){
+  display:none;
+}
+
+body.rework-v2 .brief-controls{
+  opacity:.55;
+}
+
+/* ---------- GAMEPLAY SHELL ---------- */
+body.rework-v2 #app>header{
+  padding:8px 0 7px;
+  border-bottom:1px solid #17281b;
+  background:linear-gradient(180deg,#060b07,#030604);
+}
+
+body.rework-v2 #app>header h1{
+  font-size:14px;
+  letter-spacing:2px;
+}
+
+body.rework-v2 #app>header .subhud{
+  opacity:.55;
+}
+
+body.rework-v2 #app>header .stats{
+  gap:5px;
+}
+
+body.rework-v2 #app>header .stats span{
+  min-width:74px;
+  padding:7px 9px;
+  background:#060b07;
+  border:1px solid #18291d;
+}
+
+body.rework-v2 #app>header .stats span:nth-child(4){
+  display:none;
+}
+
+body.rework-v2 #app>header .stats strong{
+  color:var(--brutal-green);
+  font-size:10px;
+}
+
+/* Only the information needed while actively playing. */
+body.rework-v2 .survival-hud{
+  display:grid;
+  grid-template-columns:110px 1fr 110px;
+  gap:7px;
+  margin:7px 0;
+}
+
+body.rework-v2 .survival-hud .mutation-module,
+body.rework-v2 .survival-hud .condition-module{
+  display:none;
+}
+
+body.rework-v2 .life-module,
+body.rework-v2 .xp-module{
+  min-height:42px;
+  padding:7px 9px;
+  background:#050b07;
+  border:1px solid #1b3020;
+}
+
+body.rework-v2 .life-module strong{
+  color:#ff6680;
+  letter-spacing:2px;
+}
+
+body.rework-v2 .life-module small{
+  color:#607463;
+}
+
+/* Intel becomes two clean tactical cards instead of a dashboard. */
+body.rework-v2 .run-intel{
+  grid-template-columns:1fr 1fr;
+  gap:7px;
+  margin:7px 0;
+}
+
+body.rework-v2 .run-intel .intel-card{
+  min-height:40px;
+  padding:8px 10px;
+  background:linear-gradient(180deg,#070e09,#040805);
+  border:1px solid #1b3020;
+}
+
+body.rework-v2 .run-intel .intel-card:nth-child(n+3){
+  display:none;
+}
+
+body.rework-v2 .run-intel .intel-top{
+  align-items:center;
+}
+
+body.rework-v2 .run-intel .intel-top span{
+  font-size:4px;
+  color:#637a67;
+}
+
+body.rework-v2 .run-intel .intel-top strong{
+  color:#dcebdc;
+  font-size:6px;
+}
+
+body.rework-v2 .run-intel .intel-top b{
+  color:#719071;
+  font-size:4px;
+}
+
+/* Move secondary information away from the active play area. */
+body.rework-v2 .run-mode-bar{
+  display:none;
+}
+
+body.rework-v2 .game-shell{
+  position:relative;
+  margin-top:8px;
+  border:1px solid #304a36;
+  background:#010302;
+  box-shadow:
+    0 0 0 1px #0a120c,
+    8px 8px 0 #010201,
+    0 0 65px rgba(128,255,96,.07);
+}
+
+body.rework-v2 .game-shell:before{
+  content:"";
+  position:absolute;
+  inset:5px;
+  pointer-events:none;
+  z-index:2;
+  border:1px solid rgba(181,255,114,.055);
+}
+
+body.rework-v2 #reworkModeBadge{
+  top:10px;
+  right:10px;
+  opacity:.62;
+}
+
+body.rework-v2 .ability-bar{
+  margin-top:8px;
+  gap:7px;
+}
+
+body.rework-v2 .ability-bar .ability{
+  min-height:45px;
+  border:1px solid #1f3624;
+  background:linear-gradient(180deg,#09120b,#040805);
+}
+
+body.rework-v2 .ability-bar .ability b{
+  color:#cde3cf;
+}
+
+body.rework-v2 .ability-bar .ability span{
+  color:#536b57;
+}
+
+body.rework-v2 .ability-bar .ability.ready{
+  border-color:#6ba65e;
+}
+
+/* Secondary systems remain functional but stop dominating the screen. */
+body.rework-v2 #runStats,
+body.rework-v2 #saveStats,
+body.rework-v2 #missions,
+body.rework-v2 #progression,
+body.rework-v2 #achievements,
+body.rework-v2 #leaderboards{
+  margin-top:8px;
+}
+
+body.rework-v2 #missions,
+body.rework-v2 #leaderboards{
+  display:none;
+}
+
+body.rework-v2 #progression,
+body.rework-v2 #achievements{
+  opacity:.72;
+}
+
+/* Footer is a control hint, not another HUD. */
+body.rework-v2 footer{
+  margin-top:9px;
+  padding-top:7px;
+  border-top:1px solid #142319;
+}
+
+body.rework-v2 footer .legend{
+  opacity:.35;
+}
+
+body.rework-v2 footer .legend span:not(.desktop-commands){
+  display:none;
+}
+
+/* ---------- GAME OVER ---------- */
+body.rework-v2 #message .message-card{
+  border-color:#45634b;
+  border-top-color:var(--brutal-green);
+  box-shadow:12px 12px 0 #010201,0 0 80px rgba(181,255,114,.09);
+}
+
+body.rework-v2 #message .message-card h2{
+  font-size:clamp(17px,3vw,28px);
+  letter-spacing:4px;
+}
+
+body.rework-v2 #message .message-card .stats-grid span:nth-child(n+4){
+  display:none;
+}
+
+/* ---------- RESPONSIVE ---------- */
+@media(max-width:760px){
+  body.rework-v2 .boot-card{width:96vw}
+  body.rework-v2 .boot-layout{grid-template-columns:1fr}
+  body.rework-v2 .boot-hero{
+    min-height:0;
+    border-right:0;
+    border-bottom:1px solid #203624;
+  }
+  body.rework-v2 .boot-brief{display:none}
+  body.rework-v2 .survival-hud{
+    grid-template-columns:84px 1fr;
+  }
+  body.rework-v2 .life-module{grid-row:1}
+  body.rework-v2 .xp-module{grid-row:1}
+  body.rework-v2 .run-intel{grid-template-columns:1fr 1fr}
+  body.rework-v2 #app>header h1{font-size:11px}
+  body.rework-v2 #app>header .subhud{display:none}
+  body.rework-v2 #app>header .stats span{min-width:58px;padding:6px}
+  body.rework-v2 #app>header .stats span:nth-child(4){display:none}
+}
+
+@media(max-width:480px){
+  body.rework-v2 .boot-actions{
+    grid-template-columns:1fr 1fr!important;
+  }
+  body.rework-v2 .boot-actions #bootStart{
+    grid-column:1/-1;
+  }
+  body.rework-v2 .boot-actions #bootHow,
+  body.rework-v2 .boot-actions #bootOptions{
+    grid-column:1/-1;
+  }
+  body.rework-v2 #app>header .stats span{
+    min-width:0;
+    flex:1;
+  }
+  body.rework-v2 #app>header .stats{
+    width:100%;
+  }
+  body.rework-v2 .run-intel .intel-card{
+    min-height:37px;
+  }
+  body.rework-v2 .ability-bar{
+    grid-template-columns:repeat(2,1fr);
+  }
+}
+
+
+/* ---------- LANDING // PLAYER PROFILE + CORE LOOP ---------- */
+body.rework-v2 .landing-profile{
+  position:relative;
+  z-index:2;
+  display:grid;
+  grid-template-columns:1.15fr 1fr 1.2fr 1fr;
+  gap:1px;
+  margin:8px 0 0;
+  border:1px solid #1d3021;
+  background:#1d3021;
+  box-shadow:0 0 30px rgba(128,255,96,.025);
+}
+body.rework-v2 .profile-block{
+  min-height:52px;
+  padding:9px 11px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  gap:5px;
+  background:#050a07;
+}
+body.rework-v2 .profile-block span{
+  color:#536b57;
+  font-size:4px;
+  letter-spacing:1px;
+}
+body.rework-v2 .profile-block strong{
+  color:#d8e9da;
+  font-size:6px;
+  letter-spacing:.5px;
+}
+body.rework-v2 .profile-block:first-child strong{
+  color:var(--brutal-green);
+  font-size:9px;
+}
+body.rework-v2 .profile-audio strong{
+  color:#829987;
+}
+body.rework-v2 .landing-promise{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:12px;
+  padding:9px 0 2px;
+  color:#546b58;
+  font-size:4px;
+  letter-spacing:1px;
+}
+body.rework-v2 .landing-promise b{
+  color:var(--brutal-green);
+  margin-right:4px;
+}
+body.rework-v2 .landing-promise i{
+  width:18px;
+  height:1px;
+  background:#263d2a;
+}
+@media(max-width:760px){
+  body.rework-v2 .landing-profile{
+    grid-template-columns:1fr 1fr;
+  }
+  body.rework-v2 .profile-block{
+    min-height:44px;
+  }
+  body.rework-v2 .landing-promise{
+    gap:7px;
+    font-size:3.2px;
+  }
+  body.rework-v2 .landing-promise i{
+    width:8px;
+  }
+}
+@media(max-width:480px){
+  body.rework-v2 .landing-profile{
+    grid-template-columns:1fr 1fr;
+  }
+  body.rework-v2 .profile-block{
+    padding:7px 8px;
+  }
+  body.rework-v2 .profile-block span{
+    font-size:3.2px;
+  }
+  body.rework-v2 .profile-block strong{
+    font-size:4.5px;
+  }
+  body.rework-v2 .profile-block:first-child strong{
+    font-size:7px;
+  }
+  body.rework-v2 .landing-promise{
+    flex-wrap:wrap;
+    line-height:1.7;
+    padding-bottom:0;
+  }
+}
+
+
+/* ---------- BRUTAL GAMEPLAY FRAME ---------- */
+body.rework-v2 .game-shell{
+  position:relative;
+  isolation:isolate;
+}
+body.rework-v2 .game-shell::before,
+body.rework-v2 .game-shell::after{
+  content:"";
+  position:absolute;
+  pointer-events:none;
+  z-index:4;
+}
+body.rework-v2 .game-shell::before{
+  inset:7px;
+  border:1px solid rgba(181,255,114,.12);
+  box-shadow:inset 0 0 45px rgba(181,255,114,.025);
+}
+body.rework-v2 .game-shell::after{
+  width:42px;height:1px;
+  left:18px;top:18px;
+  background:var(--brutal-green);
+  box-shadow:0 0 12px rgba(181,255,114,.55);
+}
+body.rework-v2 #game{
+  filter:contrast(1.08) saturate(.92);
+}
+body.rework-v2 .ability-bar{
+  box-shadow:0 -1px 0 rgba(181,255,114,.08),0 12px 30px rgba(0,0,0,.45);
+}
+body.rework-v2 .ability-bar button{
+  position:relative;
+  overflow:hidden;
+  transition:transform .12s ease,filter .12s ease,border-color .12s ease;
+}
+body.rework-v2 .ability-bar button:hover{
+  transform:translateY(-2px);
+  filter:brightness(1.18);
+  border-color:rgba(181,255,114,.7);
+}
+body.rework-v2 .ability-bar button:active{
+  transform:translateY(1px) scale(.97);
+}
+body.rework-v2 .run-intel .intel-card{
+  position:relative;
+  overflow:hidden;
+}
+body.rework-v2 .run-intel .intel-card::after{
+  content:"";
+  position:absolute;
+  left:0;right:0;bottom:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--brutal-green),transparent);
+  opacity:.28;
+}
