@@ -3439,3 +3439,317 @@ img,svg,canvas{
   .gameover-detail-body .stats-grid span{min-height:43px;padding:6px}
   .gameover-detail-body .stats-grid strong{font-size:5.5px}
 }
+
+
+/* PROGRESSION + ACHIEVEMENTS V2 // OPEN CARD LAYOUT + LIVE LIVES */
+#progression.progression-panel,
+#achievements.progression-panel{
+  width:100%;
+}
+#progression .progression-head,
+#achievements .progression-head{
+  min-height:82px!important;
+  padding:17px 19px!important;
+  border-radius:9px 3px 9px 3px;
+}
+#progression .progression-head b,
+#achievements .progression-head b{
+  font-size:10.5px!important;
+  line-height:1.35;
+  letter-spacing:1.1px!important;
+}
+#progression .progression-head small,
+#achievements .progression-head small{
+  margin-top:4px;
+  font-size:5.8px!important;
+  line-height:1.75!important;
+}
+#progression .progression-body,
+#achievements .progression-body{
+  padding:7px 19px 20px!important;
+}
+#progression .evolution-build{
+  min-height:138px;
+  padding:19px!important;
+  border-radius:10px!important;
+}
+#progression .evolution-build-head span{
+  font-size:6px!important;
+}
+#progression .evolution-build-head strong{
+  font-size:15px!important;
+  letter-spacing:.5px;
+}
+#progression .evolution-build-head>b{
+  font-size:5.5px!important;
+  padding:6px 9px;
+}
+#progression .evolution-build-track{
+  height:15px!important;
+  margin:15px 0 10px!important;
+}
+#progression .evolution-build>small{
+  font-size:5px!important;
+  line-height:1.75!important;
+}
+
+#progression .progression-subsection{
+  padding:21px 0 5px!important;
+}
+#progression .progression-subhead{
+  min-height:32px;
+  margin-bottom:14px!important;
+  padding:0 3px 10px;
+}
+#progression .progression-subhead b{
+  font-size:8px!important;
+  letter-spacing:1px;
+}
+#progression .progression-subhead span{
+  font-size:4.7px!important;
+  padding:6px 9px;
+}
+
+#progression .upgrade-list{
+  grid-template-columns:repeat(4,minmax(0,1fr))!important;
+  gap:11px!important;
+}
+#progression .upgrade-item{
+  min-height:116px!important;
+  padding:15px!important;
+  border-radius:9px!important;
+  display:flex!important;
+  flex-direction:column;
+  justify-content:flex-start;
+}
+#progression .upgrade-item b{
+  font-size:8px!important;
+  line-height:1.45;
+  margin-bottom:9px!important;
+}
+#progression .upgrade-item span{
+  font-size:5.2px!important;
+  line-height:1.85!important;
+}
+#progression .upgrade-item strong{
+  margin-top:auto!important;
+  padding-top:9px;
+  font-size:6.2px!important;
+}
+
+#progression .card-collection{
+  grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  gap:11px!important;
+}
+#progression .evolution-card{
+  min-height:176px!important;
+  padding:15px!important;
+  border-radius:10px!important;
+}
+#progression .evolution-card-top b,
+#progression .evolution-card-top strong{
+  font-size:5.5px!important;
+}
+#progression .evolution-card h4{
+  font-size:8px!important;
+  line-height:1.5!important;
+}
+#progression .evolution-card p{
+  min-height:54px!important;
+  font-size:5px!important;
+  line-height:1.85!important;
+}
+#progression .evolution-card small{
+  font-size:4.5px!important;
+}
+
+#achievements.progression-panel{
+  margin-top:16px!important;
+  border-radius:12px!important;
+}
+#achievements .progression-head{
+  background:
+    radial-gradient(circle at 0 50%,rgba(166,108,255,.08),transparent 32%),
+    linear-gradient(110deg,rgba(18,14,26,.99),rgba(8,8,13,.99))!important;
+}
+#achievements .progression-body{
+  background:linear-gradient(180deg,rgba(10,8,14,.2),transparent);
+}
+#achievements .achievement-list{
+  grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  gap:11px!important;
+}
+#achievements .achievement-item{
+  min-height:112px!important;
+  padding:14px!important;
+  border-radius:9px!important;
+  display:flex;
+  flex-direction:column;
+  justify-content:flex-start;
+  overflow:hidden;
+}
+#achievements .achievement-item::after{
+  content:"";
+  position:absolute;
+  left:12px;
+  right:12px;
+  bottom:9px;
+  height:1px;
+  background:linear-gradient(90deg,transparent,#5a456e,transparent);
+  opacity:.65;
+}
+#achievements .achievement-item b{
+  padding-right:55px;
+  margin-bottom:10px!important;
+  font-size:6.8px!important;
+  line-height:1.55!important;
+  letter-spacing:.25px;
+}
+#achievements .achievement-item span{
+  font-size:5.1px!important;
+  line-height:1.85!important;
+  color:#76697d!important;
+}
+#achievements .achievement-item.unlocked{
+  background:
+    radial-gradient(circle at 90% 0,rgba(255,216,92,.12),transparent 34%),
+    linear-gradient(145deg,#171208,#0a0906)!important;
+}
+#achievements .achievement-item.unlocked::after{
+  background:linear-gradient(90deg,transparent,#8f742f,transparent);
+}
+#achievements .achievement-item.unlocked b{
+  color:#ffd85c!important;
+}
+#achievements .achievement-item.unlocked span{
+  color:#d7cba6!important;
+}
+
+#leaderboards.progression-panel{
+  margin-top:16px!important;
+  padding:14px!important;
+  border-radius:10px!important;
+}
+#leaderboards .progression-head{
+  min-height:62px;
+  padding:12px 14px;
+}
+#leaderboards .progression-head b{
+  font-size:8px!important;
+}
+#leaderboards .progression-head strong{
+  font-size:6px!important;
+}
+#leaderboards .leaderboard-columns{
+  gap:14px;
+}
+#leaderboards .leaderboard-columns h4{
+  font-size:6.5px!important;
+}
+#leaderboards .leader-row{
+  min-height:58px;
+  padding:9px!important;
+  border-radius:5px;
+}
+#leaderboards .leader-row b{font-size:5.5px}
+#leaderboards .leader-row strong{font-size:7.5px}
+#leaderboards .leader-row span,
+#leaderboards .leader-row small{font-size:4.5px}
+
+.run-status-v3 .life-module{
+  min-width:0;
+  overflow:hidden;
+}
+.run-status-v3 .life-module strong{
+  display:inline-block;
+  width:max-content;
+  max-width:100%;
+  letter-spacing:1px!important;
+  transform-origin:left center;
+  transform:scaleX(.9);
+  animation:livesPulse 1.8s ease-in-out infinite;
+  will-change:transform,filter;
+}
+.run-status-v3 .life-module small{
+  display:block;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+@keyframes livesPulse{
+  0%,100%{
+    transform:scaleX(.9) scale(1);
+    filter:drop-shadow(0 0 0 rgba(255,107,139,0));
+  }
+  45%,55%{
+    transform:scaleX(.9) scale(1.035);
+    filter:drop-shadow(0 0 7px rgba(255,107,139,.24));
+  }
+}
+
+@media(max-width:1000px){
+  #progression .upgrade-list{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  #progression .card-collection{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+  #achievements .achievement-list{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+}
+@media(max-width:700px){
+  #progression .progression-head,
+  #achievements .progression-head{
+    min-height:72px!important;
+    padding:13px!important;
+  }
+  #progression .progression-head b,
+  #achievements .progression-head b{font-size:8px!important}
+  #progression .progression-head small,
+  #achievements .progression-head small{font-size:4.7px!important}
+  #progression .progression-body,
+  #achievements .progression-body{padding:5px 12px 15px!important}
+  #progression .evolution-build{min-height:124px;padding:14px!important}
+  #progression .evolution-build-head strong{font-size:13px!important}
+  #progression .upgrade-list{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  #progression .upgrade-item{
+    min-height:104px!important;
+    padding:12px!important;
+  }
+  #progression .upgrade-item b{font-size:7px!important}
+  #progression .upgrade-item span{font-size:4.7px!important}
+  #progression .upgrade-item strong{font-size:5.7px!important}
+  #progression .card-collection{grid-template-columns:1fr 1fr!important}
+  #progression .evolution-card{min-height:154px!important;padding:12px!important}
+  #progression .evolution-card h4{font-size:7px!important}
+  #progression .evolution-card p{font-size:4.7px!important}
+  #achievements .achievement-list{grid-template-columns:1fr 1fr!important}
+  #achievements .achievement-item{
+    min-height:102px!important;
+    padding:12px!important;
+  }
+  #achievements .achievement-item b{font-size:6px!important}
+  #achievements .achievement-item span{font-size:4.7px!important}
+  .run-status-v3 .life-module strong{
+    transform:scaleX(.88);
+  }
+}
+@media(max-width:420px){
+  #progression .upgrade-list,
+  #progression .card-collection,
+  #achievements .achievement-list{grid-template-columns:1fr!important}
+  #progression .progression-head,
+  #achievements .progression-head{min-height:66px!important;padding:11px!important}
+  #progression .progression-head b,
+  #achievements .progression-head b{font-size:7px!important}
+  #progression .progression-head small,
+  #achievements .progression-head small{font-size:4.2px!important}
+  #progression .progression-body,
+  #achievements .progression-body{padding:3px 10px 12px!important}
+  #progression .evolution-build{min-height:114px}
+  #progression .upgrade-item{min-height:92px!important}
+  #progression .evolution-card{min-height:142px!important}
+  #achievements .achievement-item{min-height:94px!important}
+  #achievements .achievement-item b{font-size:5.7px!important}
+  #achievements .achievement-item span{font-size:4.4px!important}
+  .run-status-v3 .life-module strong{
+    font-size:18px!important;
+    letter-spacing:.5px!important;
+    transform:scaleX(.84);
+  }
+}
