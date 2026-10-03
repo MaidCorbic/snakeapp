@@ -363,6 +363,54 @@
   optionsBack?.addEventListener("click", hidePanels);
   retryBtn?.addEventListener("click", () => window.location.reload());
 
+  // Visual-only menu feedback. Existing menu handlers remain unchanged.
+  const menuAnimationMap = {
+    bootStart: "menu-tap-launch",
+    bootFun: "menu-tap-chaos",
+    bootDaily: "menu-tap-daily",
+    bootEndless: "menu-tap-endless",
+    bootHow: "menu-tap-panel",
+    bootOptions: "menu-tap-console",
+    bootOptionsBack: "menu-tap-back",
+    bootCardDeck: "menu-tap-meta",
+    bootBadgeArchive: "menu-tap-meta",
+    bootAutoAchievements: "menu-tap-meta",
+    bootCardDeckBack: "menu-tap-back",
+    bootBadgeBack: "menu-tap-back",
+    bootAchievementsBack: "menu-tap-back",
+    bootFullscreen: "menu-tap-meta",
+    bootResetSettings: "menu-tap-meta",
+    bootGrid: "menu-tap-toggle",
+    bootVibration: "menu-tap-toggle",
+    bootMotion: "menu-tap-toggle",
+    bootCrt: "menu-tap-toggle",
+    bootContrast: "menu-tap-toggle",
+    bootTimer: "menu-tap-toggle",
+    bootHomeClock: "menu-tap-toggle",
+    bootXp: "menu-tap-toggle",
+    bootIntel: "menu-tap-toggle",
+    bootMissions: "menu-tap-toggle",
+    bootAbilities: "menu-tap-toggle",
+    bootTouch: "menu-tap-toggle",
+    bootAutoPause: "menu-tap-toggle",
+    bootFx: "menu-tap-toggle",
+    bootSound: "menu-tap-toggle",
+    bootMusic: "menu-tap-toggle"
+  };
+  document.querySelectorAll("#bootMenu button").forEach(button => {
+    button.addEventListener("click", () => {
+      const className = menuAnimationMap[button.id] || "menu-tap-fallback";
+      button.classList.remove(
+        "menu-tap","menu-tap-launch","menu-tap-chaos","menu-tap-daily",
+        "menu-tap-endless","menu-tap-panel","menu-tap-console",
+        "menu-tap-toggle","menu-tap-back","menu-tap-meta","menu-tap-fallback"
+      );
+      void button.offsetWidth;
+      button.classList.add("menu-tap", className);
+      window.setTimeout(() => button.classList.remove("menu-tap", className), 650);
+    });
+  });
+
   gridToggle?.addEventListener("click", () => { settings.grid=!settings.grid; saveSettings(); });
   vibrationToggle?.addEventListener("click", () => { settings.vibration=!settings.vibration; saveSettings(); });
   motionToggle?.addEventListener("click", () => { settings.reducedMotion=!settings.reducedMotion; saveSettings(); });
