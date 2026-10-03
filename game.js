@@ -174,23 +174,43 @@ shieldBtn?.addEventListener("pointerdown",e=>{e.preventDefault();useShield()},{p
 pulseBtn?.addEventListener("pointerdown",e=>{e.preventDefault();usePulse()},{passive:false});
 furyBtn?.addEventListener("pointerdown",e=>{e.preventDefault();useFury()},{passive:false});
 let touchStart=null;
-canvas.addEventListener("touchstart",e=>{
+const beginTouch=(x,y)=>{
  if(!alive||paused)return;
+ touchStart={x,y};
+};
+const finishTouch=(x,y)=>{
+ if(!touchStart||!alive||paused){touchStart=null;return}
+ const dx=x-touchStart.x,dy=y-touchStart.y;
+ touchStart=null;
+ if(Math.max(Math.abs(dx),Math.abs(dy))<20)return;
+ if(Math.abs(dx)>Math.abs(dy))setDir(Math.sign(dx),0);else setDir(0,Math.sign(dy));
+};
+canvas.addEventListener("touchstart",e=>{
  if(e.touches.length!==1)return;
  const t=e.touches[0];
- touchStart={x:t.clientX,y:t.clientY};
+ beginTouch(t.clientX,t.clientY);
 },{passive:false});
 canvas.addEventListener("touchmove",e=>{
  if(alive&&!paused)e.preventDefault();
 },{passive:false});
 canvas.addEventListener("touchend",e=>{
- if(!touchStart||!alive||paused)return;
- const t=e.changedTouches[0],dx=t.clientX-touchStart.x,dy=t.clientY-touchStart.y;
- touchStart=null;
- if(Math.max(Math.abs(dx),Math.abs(dy))<22)return;
- if(Math.abs(dx)>Math.abs(dy))setDir(Math.sign(dx),0);else setDir(0,Math.sign(dy));
+ if(!e.changedTouches.length)return;
+ const t=e.changedTouches[0];
+ finishTouch(t.clientX,t.clientY);
 },{passive:false});
 canvas.addEventListener("touchcancel",()=>{touchStart=null},{passive:true});
+canvas.addEventListener("pointerdown",e=>{
+ if(e.pointerType!=="touch")return;
+ beginTouch(e.clientX,e.clientY);
+},{passive:false});
+canvas.addEventListener("pointermove",e=>{
+ if(e.pointerType==="touch"&&alive&&!paused)e.preventDefault();
+},{passive:false});
+canvas.addEventListener("pointerup",e=>{
+ if(e.pointerType!=="touch")return;
+ finishTouch(e.clientX,e.clientY);
+},{passive:false});
+canvas.addEventListener("pointercancel",()=>{touchStart=null},{passive:true});
 function spawnWave(){const lv=Math.min(5,1+Math.floor((performance.now()-startedAt)/60000));const count=Math.min(1+Math.floor(lv/2)+(runMutation?.[0]==="HUNTER ALERT"?1:0),6);while(hunters.length<count){const elite=lv>=3&&Math.random()<.22;hunters.push({...free(),type:elite?"elite":Math.random()<.35?"interceptor":"hunter",hp:elite?2:1})};if(lv>=2&&hazards.length<4+lv+(runMutation?.[0]==="HAZARD SHIFT"?3:0))hazards.push(free());if(lv>=3&&Math.random()<.65){const roll=Math.random();const type=roll<.08?"medkit":roll<.16?"apex":["overdrive","magnet","repair"][Math.floor(Math.random()*3)];powerups.push({...free(),type})}say("WAVE // LV"+lv)}
 function hunterStep(){
  hunters.forEach(h=>{
