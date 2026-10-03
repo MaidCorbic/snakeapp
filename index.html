@@ -833,11 +833,12 @@ body.rework-v2 .landing-promise{
         </div>
       </section>
       <aside class="boot-brief" aria-label="Mission briefing">
-        <div class="brief-heading"><span>MISSION BRIEF</span><b>01 — 04</b></div>
-        <div class="brief-item"><strong>01</strong><div><b>COLLECT ENERGY</b><small>Grab energy cells to score, level up and charge FURY.</small></div></div>
-        <div class="brief-item"><strong>02</strong><div><b>BUILD YOUR RUN</b><small>Keep the chain alive and use cores to build momentum.</small></div></div>
-        <div class="brief-item"><strong>03</strong><div><b>MANAGE THE THREAT</b><small>Read hunters and hazards as every zone raises the pressure.</small></div></div>
-        <div class="brief-item"><strong>04</strong><div><b>BREAK THE LOCKDOWN</b><small>Spend abilities smartly, survive 05:00 and break the Warden lockdown.</small></div></div>
+        <div class="brief-heading"><span>MISSION BRIEF</span><b>RUN WINDOW</b></div>
+        <div class="brief-item"><strong>01</strong><div><b>COLLECT ENERGY</b></div></div>
+        <div class="brief-item"><strong>02</strong><div><b>BUILD YOUR RUN</b></div></div>
+        <div class="brief-item"><strong>03</strong><div><b>MANAGE THE THREAT</b></div></div>
+        <div class="brief-item"><strong>04</strong><div><b>BREAK THE LOCKDOWN</b></div></div>
+        <div class="brief-time"><span>TIME LEFT</span><strong id="briefTime">05:00</strong><small id="briefTimeNote">STANDARD WINDOW</small></div>
         <div class="brief-controls"><span>MOVE</span><kbd>WASD</kbd><kbd>↑ ↓ ← →</kbd><span class="brief-separator"></span><span>DASH</span><kbd>SPACE</kbd><span>PAUSE</span><kbd>P</kbd></div>
       </aside>
     </div>
@@ -868,13 +869,40 @@ body.rework-v2 .landing-promise{
     <div class="option-row"><div><b>REDUCED MOTION</b><small>Minimise interface animation.</small></div><button type="button" class="option-toggle" id="bootMotion" aria-pressed="false">OFF</button></div>
     <div class="option-row"><div><b>CRT SCANLINES</b><small>Arcade display overlay.</small></div><button type="button" class="option-toggle" id="bootCrt" aria-pressed="true">ON</button></div>
     <div class="option-row"><div><b>HIGH CONTRAST</b><small>Sharper landing and HUD contrast.</small></div><button type="button" class="option-toggle" id="bootContrast" aria-pressed="false">OFF</button></div>
+    <div class="option-row"><div><b>HUD TIMER</b><small>Show or hide the live run countdown.</small></div><button type="button" class="option-toggle" id="bootTimer" aria-pressed="true">ON</button></div>
+    <div class="option-row"><div><b>COMBAT FX</b><small>Show event banners, toasts and floating hit feedback.</small></div><button type="button" class="option-toggle" id="bootFx" aria-pressed="true">ON</button></div>
     <div class="option-row"><div><b>SFX</b><small>Pickups, abilities and warnings.</small></div><button type="button" class="option-toggle" id="bootSound" aria-pressed="true">ON</button></div>
     <div class="option-row"><div><b>MUSIC</b><small>Dark arcade loop during menu and run.</small></div><button type="button" class="option-toggle" id="bootMusic" aria-pressed="true">ON</button></div>
     <div class="option-row range-row"><div><b>MASTER VOLUME</b><small>Controls music and SFX intensity.</small></div><div class="range-control"><input id="bootVolume" type="range" min="0" max="100" step="5" value="65" aria-label="Master volume"><output id="bootVolumeValue">65%</output></div></div>
   </div>
-  <div class="option-actions"><button type="button" id="bootFullscreen" class="boot-action secondary">FULLSCREEN</button><button type="button" id="bootResetSettings" class="boot-action secondary">RESET DEFAULTS</button></div>
+  <div class="option-actions">
+    <button type="button" id="bootFullscreen" class="boot-action secondary">FULLSCREEN</button>
+    <button type="button" id="bootResetSettings" class="boot-action secondary">RESET DEFAULTS</button>
+    <button type="button" id="bootCardDeck" class="boot-action secondary">CARD DECK</button>
+    <button type="button" id="bootBadgeArchive" class="boot-action secondary">BADGE ARCHIVE</button>
+    <button type="button" id="bootAutoAchievements" class="boot-action secondary">AUTO ACHIEVEMENTS</button>
+  </div>
   <button type="button" id="bootOptionsBack" class="boot-action secondary">BACK</button>
-</div><div id="bootHowPanel" class="boot-panel how-console hidden">
+</div>
+<div id="bootCardDeckPanel" class="boot-panel meta-panel hidden">
+  <div class="meta-panel-head"><div><b>CARD DECK // COLLECTION</b><small>EVOLUTION CARDS PERSIST ON THIS DEVICE.</small></div><strong>COLLECT</strong></div>
+  <div id="cardDeckSummary" class="meta-summary"></div>
+  <div class="meta-panel-scroll"><div id="bootCardDeckList" class="meta-card-grid"></div></div>
+  <button type="button" id="bootCardDeckBack" class="boot-action secondary meta-close">BACK TO OPTIONS</button>
+</div>
+<div id="bootBadgePanel" class="boot-panel meta-panel hidden">
+  <div class="meta-panel-head"><div><b>BADGE ARCHIVE // 120</b><small>EVERY BADGE HAS ITS OWN SHAPE, COLOR, ANGLE AND EMBLEM.</small></div><strong>100+</strong></div>
+  <div id="badgeSummary" class="meta-summary"></div>
+  <div class="meta-panel-scroll"><div id="bootBadgeList" class="badge-grid"></div></div>
+  <button type="button" id="bootBadgeBack" class="boot-action secondary meta-close">BACK TO OPTIONS</button>
+</div>
+<div id="bootAchievementPanel" class="boot-panel meta-panel hidden">
+  <div class="meta-panel-head"><div><b>AUTOMATIC ACHIEVEMENTS</b><small>NO CLAIM BUTTON. TIMED UNLOCKS ARE GRANTED AS SOON AS THE CONDITION IS MET.</small></div><strong>AUTO-CLAIM</strong></div>
+  <div id="timedSummary" class="meta-summary"></div>
+  <div class="meta-panel-scroll"><div id="bootTimedList" class="timed-list"></div></div>
+  <button type="button" id="bootAchievementsBack" class="boot-action secondary meta-close">BACK TO OPTIONS</button>
+</div>
+<div id="bootHowPanel" class="boot-panel how-console hidden">
   <div class="boot-panel-heading"><div><b>HOW TO PLAY</b><small>READ THE RUN AS 8 SIMPLE SYSTEMS</small></div><strong>FIELD GUIDE</strong></div>
   <div class="how-intro"><strong>THE LOOP</strong><span>MOVE → COLLECT → BUILD → FIGHT → SURVIVE 05:00</span></div>
   <div class="how-grid">
@@ -973,4 +1001,4 @@ body.rework-v2 .landing-promise{
 </details>
 <section id="leaderboards" class="progression-panel"><div class="progression-head"><b>LOCAL LEADERBOARDS</b><strong>TOP 10</strong></div><div class="leaderboard-columns"><div><h4>ALL RUNS</h4><div id="leaderboardList" class="leaderboard-list"></div></div><div><h4>DAILY // TODAY</h4><div id="dailyLeaderboardList" class="leaderboard-list"></div></div></div></section>
 <footer><div class="legend"><span class="desktop-commands">KEYBOARD: WASD / ARROWS · SPACE DASH · SHIFT SHIELD · E PULSE · Q FURY · P / ESC PAUSE</span><span>ENERGY +10</span><span>CORE +50</span><span>HUNTER</span><span>HAZARD</span><span>POWER-UP</span><span>SUPPLY DROP</span></div><div class="controls" aria-label="Mobile touch controls"><span class="touch-label">TOUCH</span><button data-dir="up">▲</button><div><button data-dir="left">◀</button><button data-dir="down">▼</button><button data-dir="right">▶</button></div></div></footer>
-</main><script src="menu.js?v=boot-v25"></script></body></html>
+</main><script src="menu.js?v=boot-v26"></script><script src="meta-progression-v1.js?v=meta-v1"></script></body></html>
