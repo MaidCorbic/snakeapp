@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no"><meta name="theme-color" content="#080b09"><title>Snake Evolution — Survival Run</title><link rel="icon" href="favicon.svg?v=snake1" type="image/svg+xml"><link rel="stylesheet" href="style.css?v=survival-v22"><link rel="stylesheet" href="arcade-polish-v1.css?v=arcade-v1"><link rel="stylesheet" href="snake-rework-v2.css?v=rework-v2"><style id="landing-enhancements">
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no"><meta name="theme-color" content="#080b09"><title>Snake Evolution — Survival Run</title><link rel="icon" href="favicon.svg?v=snake1" type="image/svg+xml"><link rel="stylesheet" href="style.css?v=survival-v22"><link rel="stylesheet" href="arcade-polish-v1.css?v=arcade-v1"><link rel="stylesheet" href="snake-rework-v2.css?v=rework-v3"><style id="landing-enhancements">
 /* Landing page / Options / How-to-Play enhancement pass */
 .boot-top-meta{display:flex;align-items:center;gap:14px}
 .game-version{padding:6px 8px;border:1px solid #38533c;background:#0a120d;color:var(--green);font-size:6px;letter-spacing:.5px;box-shadow:inset 0 0 12px #79e35b08}
@@ -437,8 +437,83 @@ body.rework-v2 .landing-profile .profile-block:first-child::after{
   }
 }
 
+
+/* LANDING PROFILE // READABLE FIX */
+body.rework-v2 .landing-profile{
+  grid-template-columns:repeat(4,minmax(0,1fr))!important;
+  border:1px solid #38523d!important;
+  background:#17251b!important;
+}
+body.rework-v2 .landing-profile .profile-block{
+  min-height:74px!important;
+  padding:12px 14px!important;
+  gap:7px!important;
+  background:linear-gradient(160deg,#0b140e,#060b08)!important;
+}
+body.rework-v2 .landing-profile .profile-block span{
+  color:#86a28a!important;
+  font-size:6px!important;
+  line-height:1.2!important;
+  letter-spacing:1.3px!important;
+  font-weight:700!important;
+}
+body.rework-v2 .landing-profile .profile-block strong{
+  color:#eef8ee!important;
+  font-size:10px!important;
+  line-height:1.25!important;
+  letter-spacing:.6px!important;
+  white-space:normal!important;
+}
+body.rework-v2 .landing-profile .profile-block:first-child strong{
+  color:#baff9d!important;
+  font-size:20px!important;
+  line-height:1!important;
+}
+body.rework-v2 .landing-profile .profile-audio strong{
+  color:#d9eadc!important;
+}
+body.rework-v2 .landing-promise{
+  color:#708a75!important;
+  font-size:5px!important;
+}
+@media(max-width:900px){
+  body.rework-v2 .landing-profile{
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  }
+}
+@media(max-width:700px){
+  body.rework-v2 .landing-profile .profile-block{
+    min-height:60px!important;
+    padding:10px 11px!important;
+  }
+  body.rework-v2 .landing-profile .profile-block span{
+    font-size:5px!important;
+  }
+  body.rework-v2 .landing-profile .profile-block strong{
+    font-size:8px!important;
+  }
+  body.rework-v2 .landing-profile .profile-block:first-child strong{
+    font-size:17px!important;
+  }
+}
+@media(max-width:480px){
+  body.rework-v2 .landing-profile .profile-block{
+    min-height:56px!important;
+    padding:9px 10px!important;
+  }
+  body.rework-v2 .landing-profile .profile-block span{
+    font-size:4.5px!important;
+  }
+  body.rework-v2 .landing-profile .profile-block strong{
+    font-size:6.5px!important;
+  }
+  body.rework-v2 .landing-profile .profile-block:first-child strong{
+    font-size:15px!important;
+  }
+}
+
 </style></head>
-<body><section id="bootMenu" class="boot-menu" role="dialog" aria-modal="true" aria-label="Snake Evolution main menu">
+<body class="rework-v2"><section id="bootMenu" class="boot-menu" role="dialog" aria-modal="true" aria-label="Snake Evolution main menu">
   <div class="boot-card">
     <div class="boot-topline"><span class="eyebrow">PIXEL ARCADE // SURVIVAL SYSTEM</span><div class="boot-top-meta"><span class="boot-status"><i></i> SYSTEM READY</span><span id="bootGameVersion" class="game-version">V2.0 // REWORK</span></div></div>
     <div class="boot-layout">
