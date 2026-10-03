@@ -930,10 +930,199 @@ body.rework-v2 .landing-promise{
   #bootOptionsPanel .option-row>div:first-child small{font-size:5.7px!important}
   #bootAchievementPanel .timed-achievement small{font-size:5.8px!important}
 }
+<style id="landing-readability-v3">
+/* PERSONAL BEST // stronger hierarchy */
+body.rework-v2 .landing-profile{
+  margin-top:10px!important;
+  border-color:#294631!important;
+  box-shadow:0 0 28px rgba(121,227,91,.055)!important;
+}
+body.rework-v2 .landing-profile .profile-block{
+  min-height:60px!important;
+  padding:11px 13px!important;
+}
+body.rework-v2 .landing-profile .profile-block span{
+  font-size:4.5px!important;
+  line-height:1.5!important;
+  letter-spacing:1.1px!important;
+}
+body.rework-v2 .landing-profile .profile-block:first-child{
+  background:
+    radial-gradient(circle at 18% 0%,rgba(121,227,91,.12),transparent 55%),
+    linear-gradient(145deg,#081009,#040806)!important;
+}
+body.rework-v2 .landing-profile .profile-block:first-child span{
+  color:#7fa582!important;
+}
+body.rework-v2 .landing-profile .profile-block:first-child strong{
+  font-size:13px!important;
+  line-height:1.1!important;
+  letter-spacing:1px!important;
+  color:#dfffd5!important;
+  text-shadow:0 0 16px rgba(121,227,91,.3)!important;
+}
+body.rework-v2 .landing-profile .profile-block:nth-child(2) strong,
+body.rework-v2 .landing-profile .profile-block:nth-child(3) strong,
+body.rework-v2 .landing-profile .profile-block:nth-child(4) strong{
+  font-size:7px!important;
+  line-height:1.35!important;
+}
+
+/* HOW TO PLAY // dedicated training-console identity */
+#bootHowPanel.how-console{
+  position:relative!important;
+  padding:22px!important;
+  border:2px solid #2e6d83!important;
+  background:
+    radial-gradient(circle at 85% 0%,rgba(83,208,255,.12),transparent 34%),
+    radial-gradient(circle at 12% 100%,rgba(72,120,255,.08),transparent 38%),
+    linear-gradient(145deg,#07151b,#061015 52%,#050a10)!important;
+  box-shadow:
+    inset 0 0 42px rgba(0,0,0,.38),
+    0 0 34px rgba(68,194,255,.11)!important;
+}
+#bootHowPanel.how-console::before{
+  content:"";
+  position:absolute;
+  inset:8px;
+  pointer-events:none;
+  border:1px solid rgba(93,211,255,.1);
+}
+#bootHowPanel .boot-panel-heading{
+  margin-bottom:15px!important;
+  padding:0 0 15px!important;
+  border-bottom:1px solid #21495a!important;
+}
+#bootHowPanel .boot-panel-heading b{
+  font-size:12px!important;
+  line-height:1.4!important;
+  letter-spacing:1.6px!important;
+  color:#e5f9ff!important;
+  text-shadow:0 0 14px rgba(82,206,255,.18)!important;
+}
+#bootHowPanel .boot-panel-heading small{
+  font-size:6.5px!important;
+  line-height:1.9!important;
+  color:#83aab5!important;
+}
+#bootHowPanel .boot-panel-heading>strong{
+  font-size:7px!important;
+  padding:7px 9px!important;
+  border:1px solid #2d657a!important;
+  border-radius:7px!important;
+  background:#07141a!important;
+  color:#8fddff!important;
+}
+#bootHowPanel .how-intro{
+  margin-bottom:15px!important;
+  padding:12px 13px!important;
+  border:1px solid #2b6679!important;
+  background:linear-gradient(90deg,#08171d,#0b1117)!important;
+  box-shadow:inset 0 0 18px rgba(55,174,220,.055)!important;
+}
+#bootHowPanel .how-intro strong{
+  font-size:7px!important;
+  letter-spacing:1.2px!important;
+  color:#91e2ff!important;
+}
+#bootHowPanel .how-intro span{
+  font-size:5.5px!important;
+  line-height:1.8!important;
+  color:#a8c6cd!important;
+}
+#bootHowPanel .how-grid{gap:11px!important}
+#bootHowPanel .how-card{
+  padding:13px!important;
+  border:1px solid #224756!important;
+  background:linear-gradient(145deg,#0a171d,#071016)!important;
+  box-shadow:inset 0 0 18px rgba(0,0,0,.34),0 0 0 rgba(76,199,245,0)!important;
+  transition:border-color .18s ease,box-shadow .18s ease,transform .18s ease!important;
+}
+#bootHowPanel .how-card:hover{
+  border-color:#347d95!important;
+  box-shadow:inset 0 0 18px rgba(0,0,0,.28),0 0 16px rgba(69,202,255,.09)!important;
+  transform:translateY(-1px);
+}
+#bootHowPanel .how-card>header{
+  margin-bottom:10px!important;
+  padding-bottom:10px!important;
+  border-bottom-color:#1b3d49!important;
+}
+#bootHowPanel .how-card>header span{
+  width:28px!important;
+  height:28px!important;
+  border-color:#347b93!important;
+  background:#081922!important;
+  color:#91e2ff!important;
+  font-size:6px!important;
+  box-shadow:0 0 12px rgba(61,195,243,.08)!important;
+}
+#bootHowPanel .how-card>header b{
+  font-size:7.5px!important;
+  line-height:1.4!important;
+  color:#e8f8fc!important;
+}
+#bootHowPanel .how-row{
+  gap:8px!important;
+  padding:8px 0!important;
+  border-bottom-color:#14303a!important;
+}
+#bootHowPanel .how-row kbd{
+  padding:6px 7px!important;
+  border-color:#2c6173!important;
+  background:#07141a!important;
+  color:#93dfff!important;
+  font-size:5.5px!important;
+  box-shadow:2px 2px 0 #102934!important;
+}
+#bootHowPanel .how-row p{
+  color:#a4bdc3!important;
+  font-size:5.5px!important;
+  line-height:1.95!important;
+}
+#bootHowPanel .how-row p strong{
+  color:#effcff!important;
+}
+#bootHowPanel #bootHowBack{
+  margin-top:14px!important;
+  min-height:48px!important;
+  font-size:7px!important;
+  border-color:#2f7389!important;
+  background:linear-gradient(180deg,#102a34,#091820)!important;
+  color:#d9f7ff!important;
+  box-shadow:4px 4px 0 #153744,0 0 18px rgba(71,199,246,.09)!important;
+}
+
+/* Panel entrance glow after HOW TO PLAY click */
+#bootHowPanel:not(.hidden){
+  animation:howPanelOpen .48s ease-out both,howPanelGlow 2.8s ease-in-out .48s infinite;
+}
+@keyframes howPanelOpen{
+  0%{opacity:0;transform:translateY(8px) scale(.985);filter:brightness(1.35)}
+  100%{opacity:1;transform:translateY(0) scale(1);filter:brightness(1)}
+}
+@keyframes howPanelGlow{
+  0%,100%{box-shadow:inset 0 0 42px rgba(0,0,0,.38),0 0 22px rgba(68,194,255,.08)}
+  50%{box-shadow:inset 0 0 42px rgba(0,0,0,.32),0 0 34px rgba(68,194,255,.17)}
+}
+@media(max-width:700px){
+  body.rework-v2 .landing-profile .profile-block:first-child strong{font-size:11px!important}
+  #bootHowPanel.how-console{padding:15px!important}
+  #bootHowPanel .boot-panel-heading b{font-size:9px!important}
+  #bootHowPanel .boot-panel-heading small{font-size:5.5px!important}
+  #bootHowPanel .how-intro span{font-size:5px!important}
+  #bootHowPanel .how-card>header b{font-size:7px!important}
+  #bootHowPanel .how-row p{font-size:5.2px!important}
+}
+@media(max-width:480px){
+  body.rework-v2 .landing-profile .profile-block:first-child strong{font-size:10px!important}
+  #bootHowPanel .how-row p{font-size:4.9px!important}
+  #bootHowPanel .how-row kbd{font-size:5px!important}
+}
 </style></style></head>
 <body class="rework-v2"><section id="bootMenu" class="boot-menu" role="dialog" aria-modal="true" aria-label="Snake Evolution main menu">
   <div class="boot-card">
-    <div class="boot-topline"><span class="eyebrow">PIXEL ARCADE</span><div class="boot-top-meta"><span id="bootVersion" class="game-version" aria-label="Current game version">V2.8.1 // BOOT HOTFIX</span><span id="bootClock" class="boot-clock" aria-label="Current time">00:00:00</span><span class="boot-status"><i></i> SYSTEM READY</span></div></div>
+    <div class="boot-topline"><span class="eyebrow">PIXEL ARCADE</span><div class="boot-top-meta"><span id="bootVersion" class="game-version" aria-label="Current game version">V2.8.2 // LANDING UI UPDATE</span><span id="bootClock" class="boot-clock" aria-label="Current time">00:00:00</span><span class="boot-status"><i></i> SYSTEM READY</span></div></div>
     <div class="boot-layout">
       <section class="boot-hero" aria-labelledby="bootTitle">
         <div class="boot-emblem" aria-hidden="true"><img src="favicon.svg?v=snake1" alt="" width="58" height="58"><i></i></div>
