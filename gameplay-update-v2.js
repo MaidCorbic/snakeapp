@@ -95,7 +95,7 @@
   }, { passive: false });
 
   document.addEventListener("visibilitychange", () => {
-    if (document.hidden && alive && !paused) {
+    if (document.hidden && settings?.autoPause !== false && alive && !paused) {
       visibilityPause = true;
       pause();
       say("AUTO PAUSE // TAB HIDDEN");
