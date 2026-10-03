@@ -1457,3 +1457,75 @@ img,svg,canvas{
   button{min-height:40px}
   .game-shell,.game-shell canvas{touch-action:none!important}
 }
+
+
+/* PHONE READABILITY + TOUCH CONTROL PASS */
+@media (max-width:700px){
+  body{font-size:12px}
+  #app>header .eyebrow{font-size:7px}
+  #app>header h1{font-size:16px;line-height:1.35}
+  #app>header .subhud{font-size:6px;line-height:1.6}
+  #app>header .stats{max-width:170px;gap:5px}
+  #app>header .stats span{font-size:5px;padding:6px 4px;line-height:1.5}
+  #app>header .stats strong{font-size:9px}
+  .survival-hud{grid-template-columns:92px 1fr;gap:7px;padding:7px}
+  .life-module{padding:7px}
+  .life-module strong{font-size:11px}
+  .life-module small{font-size:5px}
+  .xp-row span{font-size:5px}
+  .xp-row strong,.xp-row b{font-size:6px}
+  .xp-track{height:8px}
+  .run-intel{gap:6px}
+  .run-intel::before{font-size:5px}
+  .intel-card{min-height:48px;padding:7px}
+  .intel-top{font-size:5px}
+  .intel-top strong{font-size:7px}
+  .intel-top b{font-size:4.5px}
+  .run-mode-bar{gap:5px;padding:6px}
+  .run-mode-bar>span,.run-mode-bar>strong,.run-mode-bar>b{min-height:34px;padding:7px;font-size:5px;line-height:1.5}
+  .run-mode-bar .run-pause-btn{min-height:40px;font-size:6px}
+  .game-shell{
+    min-height:0;
+    border-width:3px;
+    touch-action:none!important;
+    -webkit-touch-callout:none;
+  }
+  .boss-hud{font-size:6px;padding:7px 8px}
+  .event-banner{font-size:6px;padding:9px 10px;line-height:1.6}
+  .toast{font-size:6px;padding:8px 9px;line-height:1.5}
+  .ability-bar{gap:6px}
+  .ability{
+    min-height:56px;
+    padding:9px 5px;
+    font-size:6px;
+    line-height:1.5;
+    touch-action:manipulation;
+  }
+  .ability span{font-size:4.5px;margin-top:5px;line-height:1.5}
+  .ability i{height:4px}
+  footer .legend:after{font-size:5px;line-height:1.7}
+  #message .message-card{padding:18px 14px}
+  #message .message-card:before{font-size:5px}
+  #message .message-card h2{font-size:16px}
+  #message .message-card .result-copy{font-size:5px;line-height:1.7}
+  #message .message-card .stats-grid span{font-size:4px;line-height:1.6}
+  #message .message-card .stats-grid strong{font-size:6px}
+  #message .message-card .record{font-size:5px;line-height:1.6}
+  #message .message-card #start{min-height:48px;font-size:7px}
+  .missions,.progression-panel,.leaderboard-columns{font-size:5px;line-height:1.7}
+}
+@media (max-width:420px){
+  #app>header h1{font-size:14px}
+  #app>header .stats{max-width:145px}
+  #app>header .stats span{font-size:4px}
+  #app>header .stats strong{font-size:8px}
+  .survival-hud{grid-template-columns:82px 1fr}
+  .life-module strong{font-size:10px}
+  .run-intel::before{font-size:4.5px}
+  .intel-card{min-height:44px}
+  .intel-top{font-size:4.5px}
+  .intel-top strong{font-size:6px}
+  .run-mode-bar>span,.run-mode-bar>strong,.run-mode-bar>b{font-size:4.5px}
+  .ability{min-height:54px;font-size:5.5px}
+  .ability span{font-size:4px}
+}
