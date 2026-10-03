@@ -92,7 +92,9 @@ check("menu loads cache-busted gameplay layers", /game\.js\?v=survival-v15/.test
   /ultimate-gameplay-v1\.js\?v=/.test(menu) &&
   /gameplay-update-v2\.js\?v=/.test(menu));
 
-check("pause control has one authoritative click handler", !/pauseBtn\?\.addEventListener\("click"/.test(game) && /pauseControl\?\.addEventListener\("click"/.test(update));\n\ncheck("menu prevents duplicate/in-progress game loads",
+check("pause control has one authoritative click handler", !/pauseBtn\?\.addEventListener\("click"/.test(game) && /pauseControl\?\.addEventListener\("click"/.test(update));
+
+check("menu prevents duplicate/in-progress game loads",
   /if\s*\(gameLoaded\)/.test(menu) &&
   /if\s*\(gameLoading\)\s*return/.test(menu));
 
