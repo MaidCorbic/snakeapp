@@ -180,22 +180,22 @@
 
     const script = document.createElement("script");
     script.id = "snakeGameScript";
-    script.src = "game.js?v=survival-v14";
+    script.src = "game.js?v=survival-v15";
     script.onload = () => {
       if (bootFailed) return;
       const ultimate = document.createElement("script");
       ultimate.id = "snakeUltimateScript";
-      ultimate.src = "ultimate-gameplay-v1.js?v=ultimate-v7";
+      ultimate.src = "ultimate-gameplay-v1.js?v=ultimate-v8";
       ultimate.onload = () => {
         if (bootFailed) return;
         const update = document.createElement("script");
         update.id = "snakeGameplayUpdateV2";
-        update.src = "gameplay-update-v2.js?v=update-v7";
+        update.src = "gameplay-update-v2.js?v=update-v8";
         update.onload = () => {
           if (bootFailed) return;
           const polish = document.createElement("script");
           polish.id = "snakeArcadePolishV1";
-          polish.src = "arcade-polish-v1.js?v=arcade-v1";
+          polish.src = "arcade-polish-v1.js?v=arcade-v2";
           polish.onload = () => {
             if (bootFailed) return;
             window.removeEventListener("error", onRuntimeError);
@@ -204,7 +204,7 @@
             window.SnakeArcadePolish?.start?.();
             const rework = document.createElement("script");
             rework.id = "snakeReworkV2";
-            rework.src = "snake-rework-v2.js?v=rework-v2";
+            rework.src = "snake-rework-v2.js?v=rework-v3";
             rework.onload = () => startLoadedMode(mode);
             rework.onerror = () => failLoad("REWORK PRESENTATION LAYER COULD NOT LOAD");
             document.body.appendChild(rework);
