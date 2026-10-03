@@ -9,7 +9,17 @@
   const CARD_KEY = "snake-evolution-card-collection";
   const BADGE_KEY = "snake-evolution-badges-v1";
   const TIMED_KEY = "snake-evolution-timed-achievements-v1";
-  const SETTINGS_DEFAULTS = {showTimer:true, combatFx:true};
+  const SETTINGS_DEFAULTS = {
+    showTimer:true,
+    homeClock:true,
+    showXp:true,
+    showIntel:true,
+    showMissions:true,
+    showAbilities:true,
+    touchControls:true,
+    autoPause:true,
+    combatFx:true
+  };
   const cardIds = ["scout","core","guardian","fury","hunter","apex"];
   const glyphs = ["◆","◇","✦","✧","⬢","⬡","✹","✷","✺","✸","✪","◈","◎","◉","△","▽","◁","▷","⊙","◌"];
 
@@ -38,6 +48,12 @@
   function applyPresentationSettings(){
     const settings=getSettings();
     document.documentElement.classList.toggle("meta-hide-timer",settings.showTimer===false);
+    document.body.classList.toggle("meta-hide-home-clock",settings.homeClock===false);
+    document.body.classList.toggle("meta-hide-xp",settings.showXp===false);
+    document.body.classList.toggle("meta-hide-intel",settings.showIntel===false);
+    document.body.classList.toggle("meta-hide-missions",settings.showMissions===false);
+    document.body.classList.toggle("meta-hide-abilities",settings.showAbilities===false);
+    document.body.classList.toggle("meta-hide-touch",settings.touchControls===false);
     document.body.classList.toggle("meta-no-combat-fx",settings.combatFx===false);
   }
 
@@ -115,6 +131,25 @@
 .meta-close{margin-top:2px}
 .meta-live{color:#ffad4f!important}
 html.meta-hide-timer #time,html.meta-hide-timer .stats span:has(#time){visibility:hidden}
+body.meta-hide-home-clock #bootClock{visibility:hidden!important}
+body.meta-hide-xp .xp-module{display:none!important}
+body.meta-hide-intel .run-intel{display:none!important}
+body.meta-hide-missions #missions{display:none!important}
+body.meta-hide-abilities .ability-bar{display:none!important}
+body.meta-hide-touch .controls{display:none!important}
+.options-section-label{
+  grid-column:1/-1;
+  margin:5px 0 1px;
+  padding:8px 0 7px;
+  border-bottom:1px solid #304536;
+  color:#94c58a;
+  font-size:6.5px;
+  line-height:1.5;
+  letter-spacing:1.6px;
+}
+@media(max-width:900px){.options-section-label{font-size:6px}}
+@media(max-width:480px){.options-section-label{font-size:5.5px}}
+
 body.meta-no-combat-fx .event-banner,body.meta-no-combat-fx .toast,body.meta-no-combat-fx .floaters{display:none!important}
 @media(max-width:700px){.meta-panel{padding:11px}.meta-card-grid,.badge-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.timed-list{grid-template-columns:1fr}.meta-actions{grid-template-columns:1fr}.meta-card{min-height:122px}.badge-emblem{width:58px;height:58px}.badge-emblem .badge-glyph{font-size:17px}}
 @media(max-width:480px){.meta-card-grid,.badge-grid{grid-template-columns:1fr 1fr}.meta-card h4{font-size:5px}.meta-badge{min-height:152px}.badge-emblem{width:52px;height:52px}}
