@@ -3111,3 +3111,117 @@ img,svg,canvas{
   .run-intel-v3 .intel-top strong{font-size:6.1px!important}
   .run-intel-v3 .intel-top b{font-size:4.2px!important}
 }
+
+
+/* GAMEPLAY HUD V5 // TYPOGRAPHY CLEANUP // NO LOGIC CHANGES */
+.run-command-bar .run-eyebrow{
+  display:none!important;
+}
+
+/* Center the XP header while keeping the progress track functional. */
+.run-status-v3 .xp-module .xp-row{
+  grid-template-columns:1fr auto 1fr!important;
+  align-items:center;
+  justify-content:center;
+}
+.run-status-v3 .xp-module .xp-row span{
+  justify-self:start;
+}
+.run-status-v3 .xp-module .xp-row strong{
+  justify-self:center;
+  text-align:center;
+  min-width:max-content;
+}
+.run-status-v3 .xp-module .xp-row b{
+  justify-self:end;
+  text-align:right;
+}
+
+/* Clean arcade masthead for the LIVE INTEL rail. */
+.run-intel-v3::before{
+  content:"LIVE INTEL  //  ADAPTIVE FEED";
+  top:5px;
+  left:50%;
+  transform:translateX(-50%)!important;
+  color:#81a687;
+  font-family:"Press Start 2P",monospace!important;
+  font-size:5px!important;
+  font-weight:400;
+  letter-spacing:2.2px!important;
+  line-height:1;
+  white-space:nowrap;
+  text-align:center;
+  text-shadow:0 0 12px rgba(121,227,91,.08);
+  font-style:normal!important;
+}
+.run-intel-v3::after{
+  background:
+    linear-gradient(90deg,transparent 0 12%,rgba(121,227,91,.045) 50%,transparent 88%),
+    repeating-linear-gradient(180deg,transparent 0 13px,rgba(121,227,91,.018) 13px 14px);
+  animation:intelScan 6.2s linear infinite;
+}
+.run-intel-v3 .intel-top span{
+  transform:none!important;
+  font-family:"Press Start 2P",monospace!important;
+  letter-spacing:1.05px!important;
+}
+.run-intel-v3 .intel-top span::after{
+  display:none!important;
+}
+
+/* Remove utility copy around the pause modal while keeping its controls untouched. */
+.pause-overlay div::before,
+.pause-overlay div::after{
+  display:none!important;
+}
+
+/* Stronger arcade COMBO badge. */
+.run-stat-tile.score-tile>small{
+  gap:6px;
+  justify-content:flex-start;
+}
+.run-stat-tile.score-tile>small::before{
+  font-family:"Press Start 2P",monospace!important;
+  font-size:5.5px!important;
+  letter-spacing:1.15px!important;
+  line-height:1;
+  font-weight:400;
+}
+.run-stat-tile.score-tile>small b{
+  min-height:26px;
+  padding:6px 10px;
+  font-family:"Press Start 2P",monospace!important;
+  font-size:8px!important;
+  font-weight:400;
+  letter-spacing:.9px!important;
+  line-height:1;
+  border-radius:4px 999px 999px 4px;
+  text-shadow:0 0 8px rgba(255,232,134,.16);
+  animation:comboLive 1.18s ease-in-out infinite;
+}
+@media(max-width:700px){
+  .run-status-v3 .xp-module .xp-row{
+    grid-template-columns:1fr auto 1fr!important;
+  }
+  .run-intel-v3::before{
+    font-size:4.2px!important;
+    letter-spacing:1.55px!important;
+  }
+  .run-stat-tile.score-tile>small::before{font-size:4.3px!important}
+  .run-stat-tile.score-tile>small b{
+    min-height:23px;
+    padding:5px 8px;
+    font-size:6.5px!important;
+  }
+}
+@media(max-width:420px){
+  .run-intel-v3::before{
+    font-size:3.8px!important;
+    letter-spacing:1.25px!important;
+  }
+  .run-stat-tile.score-tile>small b{
+    min-height:21px;
+    padding:4px 7px;
+    font-size:6px!important;
+  }
+}
