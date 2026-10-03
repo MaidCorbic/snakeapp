@@ -512,10 +512,141 @@ body.rework-v2 .landing-promise{
   }
 }
 
+
+/* LANDING V4 // FINAL MENU PRESENTATION */
+.boot-card{
+  border-radius:16px!important;
+  box-shadow:
+    0 0 0 1px rgba(141,255,102,.06),
+    0 18px 60px rgba(0,0,0,.58),
+    0 0 90px rgba(141,255,102,.10)!important;
+}
+.boot-topline{border-radius:10px}
+.boot-topline .eyebrow{
+  font-size:7px!important;
+  letter-spacing:2px!important;
+  color:#b8cdbb!important;
+}
+.boot-top-meta{
+  display:flex!important;
+  align-items:center!important;
+  gap:9px!important;
+}
+.boot-clock{
+  display:inline-grid;
+  place-items:center;
+  min-width:92px;
+  padding:7px 9px;
+  border:1px solid #7b4a1f;
+  border-radius:8px;
+  background:linear-gradient(180deg,#1b1008,#0e0a06);
+  color:#ff9a45;
+  font:7px "Press Start 2P",monospace;
+  letter-spacing:1.5px;
+  text-shadow:0 0 12px rgba(255,132,52,.45);
+  box-shadow:inset 0 0 14px rgba(255,132,52,.07),0 0 14px rgba(255,132,52,.09);
+}
+.boot-status{
+  padding:7px 9px;
+  border:1px solid #2f4934;
+  border-radius:8px;
+  background:#08100a;
+}
+.boot-hero,.boot-brief,.landing-profile,.boot-panel{
+  border-radius:12px!important;
+}
+.boot-hero{
+  box-shadow:
+    inset 0 0 40px rgba(141,255,102,.035),
+    0 0 34px rgba(141,255,102,.045)!important;
+}
+.boot-emblem{
+  border-radius:12px!important;
+  box-shadow:5px 5px 0 #020403,0 0 24px rgba(141,255,102,.13)!important;
+}
+.boot-action{
+  border-radius:9px!important;
+  box-shadow:0 4px 0 #17251a,0 0 18px rgba(141,255,102,.05)!important;
+}
+.boot-actions #bootStart{
+  box-shadow:0 4px 0 #29442e,0 0 30px rgba(141,255,102,.15)!important;
+}
+.boot-actions #bootFun{
+  box-shadow:0 4px 0 #4f431b,0 0 24px rgba(255,227,107,.08)!important;
+}
+.boot-actions #bootHow,.boot-actions #bootOptions{
+  min-height:44px!important;
+  font-size:6px!important;
+  opacity:1!important;
+  color:#dbe8dc!important;
+}
+.boot-brief{
+  box-shadow:
+    inset 2px 0 0 rgba(141,255,102,.12),
+    0 0 30px rgba(141,255,102,.04)!important;
+}
+.boot-brief .brief-heading{
+  padding-bottom:13px!important;
+  font-size:7px!important;
+  color:#a5c0a8!important;
+}
+.boot-brief .brief-heading b{
+  font-size:5px!important;
+  color:#708a75!important;
+}
+.boot-brief .brief-item{
+  padding:14px 0!important;
+}
+.boot-brief .brief-item strong{
+  width:27px!important;
+  height:27px!important;
+  border-radius:7px!important;
+  font-size:5.5px!important;
+}
+.boot-brief .brief-item div b{
+  font-size:6px!important;
+  margin-bottom:6px!important;
+  color:#e0eee1!important;
+}
+.boot-brief .brief-item div small{
+  font-size:5px!important;
+  line-height:1.8!important;
+  color:#8aa08c!important;
+}
+.boot-brief .brief-controls{
+  font-size:5px!important;
+  opacity:.75!important;
+}
+.landing-profile{
+  overflow:hidden;
+  box-shadow:0 0 28px rgba(141,255,102,.045)!important;
+}
+.profile-block{
+  border-radius:0!important;
+}
+@media(max-width:900px){
+  .boot-clock{min-width:82px;font-size:6px}
+}
+@media(max-width:700px){
+  .boot-topline .eyebrow{font-size:6px!important}
+  .boot-clock{min-width:72px;padding:6px 7px;font-size:5px}
+  .boot-status{font-size:4px!important}
+  .boot-actions #bootHow,.boot-actions #bootOptions{
+    min-height:44px!important;
+    font-size:5px!important;
+  }
+  .boot-brief .brief-item div b{font-size:5.5px!important}
+  .boot-brief .brief-item div small{font-size:4.5px!important}
+}
+@media(max-width:480px){
+  .boot-clock{min-width:68px;font-size:4px;letter-spacing:1px}
+  .boot-top-meta{gap:5px!important}
+}
+
 </style></head>
 <body class="rework-v2"><section id="bootMenu" class="boot-menu" role="dialog" aria-modal="true" aria-label="Snake Evolution main menu">
   <div class="boot-card">
-    <div class="boot-topline"><span class="eyebrow">PIXEL ARCADE // SURVIVAL SYSTEM</span><div class="boot-top-meta"><span class="boot-status"><i></i> SYSTEM READY</span><span id="bootGameVersion" class="game-version">V2.0 // REWORK</span></div></div>
+    <div class="boot-topline"><span class="eyebrow">PIXEL ARCADE</span><div class="boot-top-meta"><span id="bootClock" class="boot-clock" aria-label="Current time">00:00:00</span><span class="boot-status"><i></i> SYSTEM READY</span></div></div>
     <div class="boot-layout">
       <section class="boot-hero" aria-labelledby="bootTitle">
         <div class="boot-emblem" aria-hidden="true"><img src="favicon.svg?v=snake1" alt="" width="58" height="58"><i></i></div>
@@ -532,10 +663,10 @@ body.rework-v2 .landing-promise{
       </section>
       <aside class="boot-brief" aria-label="Mission briefing">
         <div class="brief-heading"><span>MISSION BRIEF</span><b>01 — 04</b></div>
-        <div class="brief-item"><strong>01</strong><div><b>COLLECT ENERGY</b><small>Green cells grant score, XP and evolution progress.</small></div></div>
-        <div class="brief-item"><strong>02</strong><div><b>BUILD YOUR RUN</b><small>Keep the chain alive, collect cores and complete objectives.</small></div></div>
-        <div class="brief-item"><strong>03</strong><div><b>MANAGE THE THREAT</b><small>Hunters, hazards and each new zone raise the pressure.</small></div></div>
-        <div class="brief-item"><strong>04</strong><div><b>BREAK THE LOCKDOWN</b><small>Use your abilities, defeat the Warden and chase a record.</small></div></div>
+        <div class="brief-item"><strong>01</strong><div><b>COLLECT ENERGY</b><small>Grab energy cells to score, level up and charge FURY.</small></div></div>
+        <div class="brief-item"><strong>02</strong><div><b>BUILD YOUR RUN</b><small>Keep the chain alive and use cores to build momentum.</small></div></div>
+        <div class="brief-item"><strong>03</strong><div><b>MANAGE THE THREAT</b><small>Read hunters and hazards as every zone raises the pressure.</small></div></div>
+        <div class="brief-item"><strong>04</strong><div><b>BREAK THE LOCKDOWN</b><small>Spend abilities smartly, survive 05:00 and break the Warden lockdown.</small></div></div>
         <div class="brief-controls"><span>MOVE</span><kbd>WASD</kbd><kbd>↑ ↓ ← →</kbd><span class="brief-separator"></span><span>DASH</span><kbd>SPACE</kbd><span>PAUSE</span><kbd>P</kbd></div>
       </aside>
     </div>
@@ -557,15 +688,6 @@ body.rework-v2 .landing-promise{
         <strong id="landingAudioState">MUSIC ON</strong>
       </div>
     </section>
-    <div class="landing-promise">
-      <span><b>01</b> COLLECT</span>
-      <i></i>
-      <span><b>02</b> EVOLVE</span>
-      <i></i>
-      <span><b>03</b> SURVIVE</span>
-      <i></i>
-      <span><b>04</b> BREAK THE RECORD</span>
-    </div>
     <div class="boot-panels">
       <div id="bootOptionsPanel" class="boot-panel options-console hidden">
   <div class="boot-panel-heading"><div><b>CONTROL DECK</b><small>LOCAL PREFERENCES · SAVED ON THIS DEVICE</small></div><strong id="bootSettingsState">SYNCED</strong></div>
@@ -680,4 +802,4 @@ body.rework-v2 .landing-promise{
 </details>
 <section id="leaderboards" class="progression-panel"><div class="progression-head"><b>LOCAL LEADERBOARDS</b><strong>TOP 10</strong></div><div class="leaderboard-columns"><div><h4>ALL RUNS</h4><div id="leaderboardList" class="leaderboard-list"></div></div><div><h4>DAILY // TODAY</h4><div id="dailyLeaderboardList" class="leaderboard-list"></div></div></div></section>
 <footer><div class="legend"><span class="desktop-commands">KEYBOARD: WASD / ARROWS · SPACE DASH · SHIFT SHIELD · E PULSE · Q FURY · P / ESC PAUSE</span><span>ENERGY +10</span><span>CORE +50</span><span>HUNTER</span><span>HAZARD</span><span>POWER-UP</span><span>SUPPLY DROP</span></div><div class="controls" aria-label="Mobile touch controls"><span class="touch-label">TOUCH</span><button data-dir="up">▲</button><div><button data-dir="left">◀</button><button data-dir="down">▼</button><button data-dir="right">▶</button></div></div></footer>
-</main><script src="menu.js?v=boot-v23"></script></body></html>
+</main><script src="menu.js?v=boot-v24"></script></body></html>
