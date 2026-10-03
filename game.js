@@ -6,6 +6,9 @@ let funMode=false,activeRunTime=RUN_TIME,funSegment=0;
 let snake=[],dir,next,energy=null,core=null,hazards=[],hunters=[],powerups=[],boss=null,supplyDrop=null,runMutation=null,score=0,combo=1,alive=false,paused=false,startedAt=0,timer,spawnClock=0,eventClock=0,hunterClock=0,bossClock=0,supplyDropClock=0,level=1,zone=0,shieldUntil=0,pulseUntil=0,dashReady=0,shieldReady=0,pulseReady=0,furyUntil=0,fury=0,lives=3,maxLives=4,lastStandAnnounced=false,xp=0,xpLevel=1,xpNext=100,danger=0,threatBonus=0,lastDangerBand=0,lastZone=-1,objective=null,objectiveDone=false,contract=null,contractDone=false,contractRewarded=false,streakRewards=0,chain=0,eventClock2=0,stats={energy:0,cores:0,elites:0,hunters:0,wardens:0,damage:0,runCount:0,powerups:0,pulses:0,furyUses:0,supplyDrops:0,contracts:0};
 let contractAccepted=false,contractOfferOpen=false,contractDeclined=false,extractionOpen=false,extractionNextAt=0,extractionHeatUntil=0,advancedExitMode="RUNNING",chainUntil=0,chainBest=0,salvageChain=0,salvageUntil=0,advancedZoneEvent=null;
 const missionList=document.querySelector("#missionList");const best=()=>Number(localStorage.getItem("snake-evolution-best")||0);
+/* BRUTAL GAMEPLAY FX // presentation only */
+const brutalFx={particles:[],flash:0,shake:0,lastScore:0,lastLives:0,lastCombo:1};
+
 const missions=()=>{try{return JSON.parse(localStorage.getItem("snake-evolution-missions")||"{}")}catch{return {}}};
 const saveMissions=m=>{try{localStorage.setItem("snake-evolution-missions",JSON.stringify(m))}catch{}};
 const same=(a,b)=>a.x===b.x&&a.y===b.y,rand=()=>({x:Math.floor(Math.random()*COLS),y:Math.floor(Math.random()*ROWS)});
@@ -452,8 +455,6 @@ function keepRunning(){if(!extractionOpen||!alive)return;extractionOpen=false;pa
 function acceptContract(){if(!contract||!contractOfferOpen)return;contractAccepted=true;contractOfferOpen=false;contractDeclined=false;threatBonus+=contract[2]==="danger"?8:5;say("CONTRACT ACCEPTED // "+contract[0]);event("RISK CONTRACT // LIVE");move()}
 function declineContract(){if(!contract||!contractOfferOpen)return;contractAccepted=false;contractOfferOpen=false;contractDeclined=true;threatBonus=0;say("CONTRACT DECLINED");event("CONTRACT // DECLINED");move()}
 
-/* BRUTAL GAMEPLAY FX // presentation only */
-const brutalFx={particles:[],flash:0,shake:0,lastScore:0,lastLives:0,lastCombo:1};
 function brutalBurst(x,y,color="#b8ff8d",count=8,power=1){
   for(let i=0;i<count;i++){const a=Math.random()*Math.PI*2,s=(.35+Math.random()*1.8)*power;brutalFx.particles.push({x:x+.5,y:y+.5,vx:Math.cos(a)*s,vy:Math.sin(a)*s,life:1,size:.035+Math.random()*.07,color})}
 }
