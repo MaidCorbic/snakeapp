@@ -9,7 +9,7 @@ const saveMissions=m=>{try{localStorage.setItem("snake-evolution-missions",JSON.
 const same=(a,b)=>a.x===b.x&&a.y===b.y,rand=()=>({x:Math.floor(Math.random()*COLS),y:Math.floor(Math.random()*ROWS)});
 const zoneNames=["NEON GRID","HAZARD SECTOR","DARK SECTOR","Warden Territory","FINAL LOCKDOWN"];
 const evoNames=["RUNNER","CHARGER","PHANTOM","OVERLORD"];const evoColors=["#79e35b","#ffd85c","#a66cff","#ff3f8f"];
-function resize(){const r=canvas.getBoundingClientRect(),d=Math.min(devicePixelRatio||1,2);canvas.width=r.width*d;canvas.height=r.height*d;ctx.setTransform(canvas.width/COLS,0,0,canvas.height/ROWS,0,0)}addEventListener("resize",resize);resize();
+function resize(){const r=canvas.getBoundingClientRect(),d=Math.min(devicePixelRatio||1,2);if(r.width<2||r.height<2)return;canvas.width=Math.max(1,Math.round(r.width*d));canvas.height=Math.max(1,Math.round(r.height*d));ctx.setTransform(canvas.width/COLS,0,0,canvas.height/ROWS,0,0)}addEventListener("resize",resize,{passive:true});addEventListener("orientationchange",()=>setTimeout(resize,80),{passive:true});if(window.visualViewport)visualViewport.addEventListener("resize",resize,{passive:true});resize();
 function gain(points){const mutationScore=runMutation?.[0]==="SALVAGE RUN"?1.35:1;const lastStandMultiplier=lives===1?1.25:1;score+=Math.round(points*mutationScore*lastStandMultiplier*(performance.now()<furyUntil?2:1))}
 const mutationDefs=[
   ["SALVAGE RUN","Loot +35%","All score rewards are amplified."],
