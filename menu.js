@@ -60,6 +60,7 @@
   const hidePanels = () => {
     howPanel?.classList.add("hidden");
     optionsPanel?.classList.add("hidden");
+    ["#bootCardDeckPanel","#bootBadgePanel","#bootAchievementPanel"].forEach(selector=>document.querySelector(selector)?.classList.add("hidden"));
   };
 
   const applyVisualSettings = () => {
