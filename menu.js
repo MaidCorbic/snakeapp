@@ -165,7 +165,7 @@
 
     const script = document.createElement("script");
     script.id = "snakeGameScript";
-    script.src = "game.js?v=survival-v11";
+    script.src = "game.js?v=survival-v12";
     script.onload = () => {
       if (bootFailed) return;
       const ultimate = document.createElement("script");
