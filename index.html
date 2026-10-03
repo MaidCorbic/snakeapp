@@ -386,59 +386,12 @@ body.high-contrast .boot-panel-heading>strong,body.high-contrast .game-version{c
 }
 
 
-/* LANDING RECORD // COMPACT HERO STAT */
-body.rework-v2 .landing-profile .profile-block:first-child{
-  position:relative;
-  min-height:64px;
-  padding:10px 14px;
-  background:
-    linear-gradient(135deg,#101b12,#070d09);
-  box-shadow:inset 0 0 24px rgba(141,255,102,.05);
-}
-body.rework-v2 .landing-profile .profile-block:first-child span{
-  color:#7f9a83;
-  font-size:4px;
-  letter-spacing:1.8px;
-}
-body.rework-v2 .landing-profile .profile-block:first-child strong{
-  margin-top:1px;
-  color:#dfffd6;
-  font-size:clamp(14px,2.2vw,21px);
-  line-height:1;
-  letter-spacing:1px;
-  text-shadow:0 0 16px rgba(141,255,102,.18);
-}
-body.rework-v2 .landing-profile .profile-block:first-child::after{
-  content:"PB";
-  position:absolute;
-  top:9px;
-  right:10px;
-  padding:4px 5px;
-  border:1px solid #34513a;
-  color:#8dff66;
-  font-size:3px;
-  letter-spacing:1px;
-}
 @media(max-width:700px){
-  body.rework-v2 .landing-profile .profile-block:first-child{
-    min-height:50px;
-    padding:8px 10px;
-  }
-  body.rework-v2 .landing-profile .profile-block:first-child strong{
-    font-size:14px;
-  }
 }
 @media(max-width:480px){
-  body.rework-v2 .landing-profile .profile-block:first-child{
-    min-height:48px;
-  }
-  body.rework-v2 .landing-profile .profile-block:first-child strong{
-    font-size:12px;
-  }
 }
 
 
-/* LANDING PROFILE // READABLE FIX */
 body.rework-v2 .landing-profile{
   grid-template-columns:repeat(4,minmax(0,1fr))!important;
   border:1px solid #38523d!important;
@@ -464,11 +417,6 @@ body.rework-v2 .landing-profile .profile-block strong{
   letter-spacing:.6px!important;
   white-space:normal!important;
 }
-body.rework-v2 .landing-profile .profile-block:first-child strong{
-  color:#baff9d!important;
-  font-size:20px!important;
-  line-height:1!important;
-}
 body.rework-v2 .landing-profile .profile-audio strong{
   color:#d9eadc!important;
 }
@@ -492,9 +440,6 @@ body.rework-v2 .landing-promise{
   body.rework-v2 .landing-profile .profile-block strong{
     font-size:8px!important;
   }
-  body.rework-v2 .landing-profile .profile-block:first-child strong{
-    font-size:17px!important;
-  }
 }
 @media(max-width:480px){
   body.rework-v2 .landing-profile .profile-block{
@@ -506,9 +451,6 @@ body.rework-v2 .landing-promise{
   }
   body.rework-v2 .landing-profile .profile-block strong{
     font-size:6.5px!important;
-  }
-  body.rework-v2 .landing-profile .profile-block:first-child strong{
-    font-size:15px!important;
   }
 }
 
@@ -930,17 +872,6 @@ body.rework-v2 .landing-promise{
   #bootOptionsPanel .option-row>div:first-child small{font-size:5.7px!important}
   #bootAchievementPanel .timed-achievement small{font-size:5.8px!important}
 }
-/* READABILITY ONLY // larger HOW text + PB */
-body.rework-v2 .landing-profile .profile-block:first-child strong{
-  font-size:18px!important;
-  line-height:1!important;
-  letter-spacing:1.2px!important;
-  text-shadow:0 0 20px rgba(121,227,91,.38)!important;
-}
-body.rework-v2 .landing-profile .profile-block:first-child span{
-  font-size:5.5px!important;
-  line-height:1.5!important;
-}
 #bootHowPanel .boot-panel-heading b{font-size:13px!important}
 #bootHowPanel .boot-panel-heading small{font-size:7px!important;line-height:1.9!important}
 #bootHowPanel .boot-panel-heading>strong{font-size:8px!important}
@@ -958,7 +889,6 @@ body.rework-v2 .landing-profile .profile-block:first-child span{
   color:#b9d0d6!important;
 }
 @media(max-width:700px){
-  body.rework-v2 .landing-profile .profile-block:first-child strong{font-size:15px!important}
   #bootHowPanel .boot-panel-heading b{font-size:11px!important}
   #bootHowPanel .boot-panel-heading small{font-size:6.2px!important}
   #bootHowPanel .how-intro strong{font-size:7px!important}
@@ -968,7 +898,6 @@ body.rework-v2 .landing-profile .profile-block:first-child span{
   #bootHowPanel .how-row p{font-size:7px!important;line-height:1.8!important}
 }
 @media(max-width:480px){
-  body.rework-v2 .landing-profile .profile-block:first-child strong{font-size:13px!important}
   #bootHowPanel .how-row p{font-size:6.4px!important}
 }
 
@@ -1083,7 +1012,6 @@ body.rework-v2 .landing-profile{
 }
 
 /* landing-readability-v3 */
-/* PERSONAL BEST // stronger hierarchy */
 body.rework-v2 .landing-profile{
   margin-top:10px!important;
   border-color:#294631!important;
@@ -1097,21 +1025,6 @@ body.rework-v2 .landing-profile .profile-block span{
   font-size:4.5px!important;
   line-height:1.5!important;
   letter-spacing:1.1px!important;
-}
-body.rework-v2 .landing-profile .profile-block:first-child{
-  background:
-    radial-gradient(circle at 18% 0%,rgba(121,227,91,.12),transparent 55%),
-    linear-gradient(145deg,#081009,#040806)!important;
-}
-body.rework-v2 .landing-profile .profile-block:first-child span{
-  color:#7fa582!important;
-}
-body.rework-v2 .landing-profile .profile-block:first-child strong{
-  font-size:13px!important;
-  line-height:1.1!important;
-  letter-spacing:1px!important;
-  color:#dfffd5!important;
-  text-shadow:0 0 16px rgba(121,227,91,.3)!important;
 }
 body.rework-v2 .landing-profile .profile-block:nth-child(2) strong,
 body.rework-v2 .landing-profile .profile-block:nth-child(3) strong,
@@ -1258,7 +1171,6 @@ body.rework-v2 .landing-profile .profile-block:nth-child(4) strong{
   50%{box-shadow:inset 0 0 42px rgba(0,0,0,.32),0 0 34px rgba(68,194,255,.17)}
 }
 @media(max-width:700px){
-  body.rework-v2 .landing-profile .profile-block:first-child strong{font-size:11px!important}
   #bootHowPanel.how-console{padding:15px!important}
   #bootHowPanel .boot-panel-heading b{font-size:9px!important}
   #bootHowPanel .boot-panel-heading small{font-size:5.5px!important}
@@ -1267,7 +1179,6 @@ body.rework-v2 .landing-profile .profile-block:nth-child(4) strong{
   #bootHowPanel .how-row p{font-size:5.2px!important}
 }
 @media(max-width:480px){
-  body.rework-v2 .landing-profile .profile-block:first-child strong{font-size:10px!important}
   #bootHowPanel .how-row p{font-size:4.9px!important}
   #bootHowPanel .how-row kbd{font-size:5px!important}
 }
