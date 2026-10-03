@@ -178,10 +178,22 @@
         update.src = "gameplay-update-v2.js?v=update-v7";
         update.onload = () => {
           if (bootFailed) return;
-          window.removeEventListener("error", onRuntimeError);
-          gameLoading = false;
-          gameLoaded = true;
-          startLoadedMode(mode);
+          const polish = document.createElement("script");
+          polish.id = "snakeArcadePolishV1";
+          polish.src = "arcade-polish-v1.js?v=arcade-v1";
+          polish.onload = () => {
+            if (bootFailed) return;
+            window.removeEventListener("error", onRuntimeError);
+            gameLoading = false;
+            gameLoaded = true;
+            window.SnakeArcadePolish?.start?.();
+            startLoadedMode(mode);
+          };
+          polish.onerror = () => {
+            window.removeEventListener("error", onRuntimeError);
+            failLoad("ARCADE POLISH LAYER COULD NOT LOAD");
+          };
+          document.body.appendChild(polish);
         };
         update.onerror = () => {
           window.removeEventListener("error", onRuntimeError);
