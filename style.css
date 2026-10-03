@@ -1558,3 +1558,16 @@ img,svg,canvas{
   .boot-menu,.boot-panel,.progression-panel,.achievement-list,.leaderboard-columns{font-size:6px}
   button{font-size:inherit}
 }
+
+
+/* ANDROID GAME INPUT HARDENING */
+.game-shell,#game{touch-action:none;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent}
+.game-shell>.event-banner,.game-shell>.floaters,.game-shell>.toast,.game-shell>.boss-hud{pointer-events:none}
+@media (max-width:700px) and (pointer:coarse){
+  .game-shell{width:100%;aspect-ratio:16/10;min-height:0}
+  #game{width:100%;height:100%;display:block}
+  .ability-bar{grid-template-columns:repeat(4,minmax(0,1fr));width:100%;gap:7px}
+  .ability{min-width:0!important;padding:10px 4px!important}
+  .ability b{font-size:8px!important}
+  .ability span{font-size:5px!important}
+}
