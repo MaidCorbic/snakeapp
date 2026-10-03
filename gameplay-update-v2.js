@@ -165,13 +165,7 @@
     syncPauseButton();
   };
 
-  statsMarkup = function appendUpdateStats(winResult) {
-    return baseStatsMarkupV2(winResult)
-      + '<div class="update-pack-stats"><span>NEAR MISSES <b>' + nearMissCount
-      + '</b></span><span>ZONE CHECKPOINTS <b>' + checkpointCount
-      + '</b></span><span>ENERGY SURGES <b>' + energySurgeCount
-      + '</b></span><span>UPDATE PACK <b>V4</b></span></div>';
-  };
+  statsMarkup = function appendUpdateStats(winResult) { return baseStatsMarkupV2(winResult); };
 
   reset = function resetWithV2Counters() {
     resetUpdateCounters();
