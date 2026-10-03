@@ -1272,3 +1272,188 @@ img,svg,canvas{
   .controls{display:none!important}
   button{touch-action:manipulation}
 }
+
+
+/* MOBILE FINAL // phone-first layout hardening */
+@media (max-width:700px){
+  html{
+    width:100%;
+    min-height:100%;
+    background:#080b09;
+    overscroll-behavior:none;
+  }
+  body{
+    width:100%;
+    min-height:100dvh;
+    padding:max(4px,env(safe-area-inset-top)) max(4px,env(safe-area-inset-right)) max(4px,env(safe-area-inset-bottom)) max(4px,env(safe-area-inset-left));
+    display:block;
+    overflow-x:hidden;
+    overscroll-behavior-y:none;
+  }
+  #app{width:100%;max-width:100%;overflow:hidden}
+  #app>header{
+    display:grid;
+    grid-template-columns:minmax(0,1fr) auto;
+    align-items:center;
+    gap:6px;
+    padding:7px 6px;
+  }
+  #app>header .eyebrow{font-size:4px;white-space:nowrap}
+  #app>header h1{font-size:10px;line-height:1.2;margin:5px 0 0}
+  #app>header .subhud{font-size:3.5px;gap:5px;margin-top:5px}
+  #app>header .stats{
+    display:grid;
+    grid-template-columns:repeat(2,minmax(48px,1fr));
+    gap:3px;
+    max-width:118px;
+    margin:0;
+  }
+  #app>header .stats span{
+    padding:4px 3px;
+    font-size:3px;
+    text-align:center;
+    border:1px solid #26372d;
+    background:#0a100c;
+  }
+  #app>header .stats strong{font-size:6px;margin-top:3px}
+  .survival-hud{
+    grid-template-columns:74px minmax(0,1fr);
+    gap:5px;
+    margin-bottom:5px;
+    padding:5px;
+  }
+  .life-module{min-width:0;padding:5px;border-right:1px solid #26372d}
+  .life-module strong{font-size:9px;letter-spacing:0;margin-top:5px}
+  .life-module small{font-size:3px}
+  .xp-module{padding:2px}
+  .xp-row{gap:4px}
+  .xp-row span{font-size:3px}
+  .xp-row strong,.xp-row b{font-size:3.5px}
+  .xp-track{height:6px;margin-top:4px}
+  .mutation-module,.condition-module{display:none}
+  .run-intel{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:4px;
+    margin-bottom:5px;
+  }
+  .run-intel::before{font-size:3.5px}
+  .intel-card{min-height:39px;padding:5px}
+  .intel-top{grid-template-columns:1fr auto;gap:3px;font-size:3.5px}
+  .intel-top strong{font-size:4.5px}
+  .intel-top b{grid-column:1/-1;font-size:3px}
+  .intel-track{height:4px;margin-top:4px}
+  .run-mode-bar{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:3px;
+    padding:4px;
+    margin-bottom:5px;
+  }
+  .run-mode-bar>span,.run-mode-bar>strong,.run-mode-bar>b{
+    min-height:25px;
+    padding:5px;
+    font-size:3px;
+  }
+  .run-mode-bar .run-pause-btn{
+    min-height:30px;
+    font-size:4px;
+  }
+  .game-shell{
+    width:100%;
+    aspect-ratio:1/1;
+    border-width:2px;
+    box-shadow:4px 4px 0 #030403;
+    touch-action:none!important;
+    overscroll-behavior:none;
+  }
+  .game-shell canvas{
+    width:100%;
+    height:100%;
+    touch-action:none!important;
+  }
+  .boss-hud{right:5px;top:5px;padding:5px 6px;font-size:4px}
+  .event-banner{top:5%;max-width:92%;padding:7px 8px;font-size:4px;white-space:normal;text-align:center}
+  .toast{top:8%;max-width:88%;padding:6px 7px;font-size:4px;white-space:normal;text-align:center}
+  .ability-bar{
+    grid-template-columns:repeat(4,minmax(0,1fr));
+    gap:4px;
+    margin-top:5px;
+  }
+  .ability{
+    min-height:43px;
+    padding:6px 4px;
+    font-size:4px;
+    text-align:center;
+    box-shadow:2px 2px 0 #355d2e;
+  }
+  .ability span{font-size:3px;margin-top:4px}
+  .ability i{height:3px}
+  footer{
+    display:block;
+    margin-top:5px;
+  }
+  footer .controls{display:none!important}
+  footer .legend{
+    display:flex;
+    justify-content:center;
+    gap:4px;
+    max-width:none;
+    margin-top:5px;
+    font-size:3px;
+    line-height:1.7;
+  }
+  footer .legend span:not(.desktop-commands){display:none}
+  footer .legend:after{
+    content:"SWIPE ARENA  ·  TAP ABILITIES  ·  P / ESC PAUSE";
+    color:var(--muted);
+  }
+  #message.message{padding:6px}
+  #message .message-card{
+    width:98%;
+    padding:10px;
+    box-shadow:4px 4px 0 #020302;
+  }
+  #message .message-card:before{font-size:3.5px;margin-bottom:6px}
+  #message .message-card h2{font-size:10px;padding-bottom:6px}
+  #message .message-card .result-copy{font-size:3.5px;padding:5px 7px;margin:7px auto}
+  #message .message-card .stats-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:3px}
+  #message .message-card .stats-grid span{min-height:31px;padding:4px;font-size:2.8px}
+  #message .message-card .stats-grid strong{font-size:4px;margin-top:3px}
+  #message .message-card .record{font-size:3.5px;margin-top:6px;padding:5px}
+  #message .message-card #start{width:100%;min-width:0;min-height:38px;margin-top:7px;font-size:5px}
+  .save-stats,.missions,.progression-panel,.leaderboard-columns{font-size:3.5px}
+}
+@media (max-width:420px){
+  #app>header h1{font-size:9px}
+  #app>header .stats{max-width:104px}
+  #app>header .stats span{font-size:2.7px}
+  #app>header .stats strong{font-size:5px}
+  .survival-hud{grid-template-columns:66px 1fr}
+  .life-module strong{font-size:8px}
+  .run-intel{gap:3px}
+  .intel-card{min-height:36px;padding:4px}
+  .intel-top{font-size:3px}
+  .intel-top strong{font-size:4px}
+  .run-mode-bar>span,.run-mode-bar>strong,.run-mode-bar>b{min-height:23px;font-size:2.7px}
+  .run-mode-bar .run-pause-btn{font-size:3.5px}
+  .ability{min-height:40px;font-size:3.5px;padding:5px 3px}
+  .ability span{font-size:2.7px}
+}
+@media (orientation:landscape) and (max-height:600px) and (pointer:coarse){
+  body{padding:3px}
+  #app>header{grid-template-columns:1fr auto;padding:4px;margin-bottom:3px}
+  #app>header h1{font-size:8px}
+  .survival-hud{display:none}
+  .run-intel{display:none}
+  .run-mode-bar{margin-bottom:3px}
+  .game-shell{aspect-ratio:16/9;max-height:calc(100dvh - 82px)}
+  .ability-bar{grid-template-columns:repeat(4,1fr);margin-top:3px}
+  .ability{min-height:34px;padding:4px;font-size:3px}
+  .ability span{display:none}
+  footer{display:none}
+}
+@media (pointer:coarse){
+  *{-webkit-tap-highlight-color:transparent}
+  body{overscroll-behavior:none}
+  button{min-height:40px}
+  .game-shell,.game-shell canvas{touch-action:none!important}
+}
