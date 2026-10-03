@@ -33,6 +33,7 @@
   const fullscreenBtn = document.querySelector("#bootFullscreen");
   const resetSettingsBtn = document.querySelector("#bootResetSettings");
   const resetRankBtn = document.querySelector("#bootResetRank");
+  const rankProfile = document.querySelector("#bootRankProfile");
   const settingsState = document.querySelector("#bootSettingsState");
   const versionLabel = document.querySelector("#bootGameVersion");
   const bootClock = document.querySelector("#bootClock");
@@ -113,6 +114,15 @@
     });
     if (volumeSlider) volumeSlider.value = String(settings.volume ?? 65);
     if (volumeValue) volumeValue.textContent = String(settings.volume ?? 65) + "%";
+    if (rankProfile) {
+      try {
+        const best = Number(localStorage.getItem("snake-evolution-best") || 0);
+        const save = JSON.parse(localStorage.getItem("snake-evolution-save") || "{}");
+        rankProfile.textContent = "BEST " + best.toLocaleString() + " · RUNS " + Number(save.runs || 0);
+      } catch {
+        rankProfile.textContent = "BEST 0 · RUNS 0";
+      }
+    }
     if (settingsState) settingsState.textContent = "LOCAL // SAVED";
     applyVisualSettings();
   };
@@ -470,6 +480,7 @@
     try{window.SnakeEvolution?.resetRank?.()}catch{}
     renderLandingProfile();
     if(settingsState)settingsState.textContent="RANK // RESET";
+    if(rankProfile)rankProfile.textContent="BEST 0 · RUNS 0";
     window.setTimeout(()=>{if(settingsState)settingsState.textContent="LOCAL // SAVED"},1200);
   });
 
