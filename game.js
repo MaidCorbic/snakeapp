@@ -189,36 +189,28 @@ const finishTouch=(x,y)=>{
  touchStart=null;
  if(Math.max(Math.abs(dx),Math.abs(dy))<12)return;
  const now=performance.now();
- if(now-lastTouchInputAt<55)return;
+ if(now-lastTouchInputAt<80)return;
  lastTouchInputAt=now;
  if(Math.abs(dx)>Math.abs(dy))setDir(Math.sign(dx),0);else setDir(0,Math.sign(dy));
 };
-canvas.addEventListener("touchstart",e=>{
- if(e.touches.length!==1)return;
- e.preventDefault();
- const t=e.touches[0];
- beginTouch(t.clientX,t.clientY);
-},{passive:false});
-canvas.addEventListener("touchmove",e=>{
- if(alive&&!paused)e.preventDefault();
-},{passive:false});
-canvas.addEventListener("touchend",e=>{
- e.preventDefault();
- const t=e.changedTouches[0];
- if(t)finishTouch(t.clientX,t.clientY);
-},{passive:false});
-canvas.addEventListener("touchcancel",()=>{touchStart=null},{passive:true});
 canvas.addEventListener("pointerdown",e=>{
- if(e.pointerType!=="touch")return;
+ if(e.pointerType==="mouse")return;
  e.preventDefault();
+ try{canvas.setPointerCapture(e.pointerId)}catch{}
  beginTouch(e.clientX,e.clientY);
 },{passive:false});
 canvas.addEventListener("pointerup",e=>{
- if(e.pointerType!=="touch")return;
+ if(e.pointerType==="mouse")return;
  e.preventDefault();
  finishTouch(e.clientX,e.clientY);
+ try{canvas.releasePointerCapture(e.pointerId)}catch{}
 },{passive:false});
-canvas.addEventListener("pointercancel",()=>{touchStart=null},{passive:true});
+canvas.addEventListener("pointercancel",e=>{
+ touchStart=null;
+ try{canvas.releasePointerCapture(e.pointerId)}catch{}
+},{passive:true});
+canvas.addEventListener("touchstart",e=>{if(alive&&!paused)e.preventDefault()},{passive:false});
+canvas.addEventListener("touchmove",e=>{if(alive&&!paused)e.preventDefault()},{passive:false});
 function spawnWave(){const lv=Math.min(5,1+Math.floor((performance.now()-startedAt)/60000));const count=Math.min(1+Math.floor(lv/2)+(runMutation?.[0]==="HUNTER ALERT"?1:0),6);while(hunters.length<count){const elite=lv>=3&&Math.random()<.22;hunters.push({...free(),type:elite?"elite":Math.random()<.35?"interceptor":"hunter",hp:elite?2:1})};if(lv>=2&&hazards.length<4+lv+(runMutation?.[0]==="HAZARD SHIFT"?3:0))hazards.push(free());if(lv>=3&&Math.random()<.65){const roll=Math.random();const type=roll<.08?"medkit":roll<.16?"apex":["overdrive","magnet","repair"][Math.floor(Math.random()*3)];powerups.push({...free(),type})}say("WAVE // LV"+lv)}
 function hunterStep(){
  hunters.forEach(h=>{
