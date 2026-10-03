@@ -88,7 +88,7 @@ for (const src of localScripts) {
   check("HTML script exists: " + clean, fs.existsSync(path.join(root, clean)));
 }
 
-check("menu loads cache-busted gameplay layers", /game\.js\?v=survival-v20/.test(menu) &&
+check("menu loads cache-busted gameplay layers", /game\.js\?v=survival-v21/.test(menu) &&
   /ultimate-gameplay-v1\.js\?v=/.test(menu) &&
   /gameplay-update-v2\.js\?v=/.test(menu));
 
