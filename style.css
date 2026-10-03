@@ -3327,108 +3327,6 @@ img,svg,canvas{
 #progression .evolution-card p{font-size:4.8px!important}
 #progression .evolution-card small{font-size:4.2px!important}
 
-/* Brutal game-over screen. */
-#message.message{
-  padding:18px!important;
-  background:
-    radial-gradient(circle at 50% 38%,rgba(255,91,98,.11),transparent 26%),
-    linear-gradient(180deg,rgba(1,3,2,.94),rgba(3,6,4,.985))!important;
-  backdrop-filter:blur(4px);
-}
-#message .message-card{
-  position:relative;width:min(620px,94%);max-height:min(88vh,720px);overflow:auto;
-  padding:28px 28px 22px!important;
-  border:1px solid #6b353d!important;border-top:4px solid #ff5b62!important;
-  border-radius:10px 3px 10px 3px!important;
-  background:
-    radial-gradient(circle at 50% 0,rgba(255,91,98,.10),transparent 34%),
-    linear-gradient(145deg,#170c0f,#090d0a 70%,#07100a)!important;
-  box-shadow:12px 12px 0 #010201,0 0 70px rgba(255,91,98,.11),inset 0 0 40px rgba(255,91,98,.025)!important;
-}
-#message .message-card::after{
-  content:"";position:absolute;left:0;right:0;top:0;height:1px;
-  background:linear-gradient(90deg,transparent,#ff7b83,transparent);opacity:.7;
-}
-#message .message-card h2{
-  margin:0!important;padding:6px 0 14px!important;color:#fff2f2!important;
-  font-size:clamp(23px,4vw,35px)!important;line-height:1.1!important;letter-spacing:2px;
-  text-shadow:0 0 22px rgba(255,91,98,.28);
-}
-#message .result-copy{
-  margin:13px 0 14px!important;color:#bd9da2!important;font-size:6px!important;
-  line-height:1.8!important;text-align:center;letter-spacing:.5px;
-}
-.gameover-summary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin-top:8px}
-.gameover-summary span{
-  display:grid;gap:6px;min-height:62px;padding:10px;border:1px solid #493238;
-  border-radius:7px 2px 7px 2px;background:linear-gradient(145deg,#1a1013,#0b0d0b);
-  color:#8e7479;font-size:5px;letter-spacing:.65px;
-}
-.gameover-summary strong{color:#fff4f4;font-size:12px;line-height:1;font-variant-numeric:tabular-nums}
-.gameover-details{
-  margin-top:12px;border:1px solid #3a473c;border-radius:7px;
-  background:linear-gradient(145deg,#0d140f,#080c09);overflow:hidden;
-}
-.gameover-details summary{
-  list-style:none;cursor:pointer;min-height:46px;display:flex;align-items:center;justify-content:center;
-  padding:10px 13px;border:0;background:linear-gradient(180deg,#152319,#0c120e);
-  color:#baff9d;font:6px "Press Start 2P",monospace;letter-spacing:.8px;
-  transition:filter .15s ease,background .15s ease;
-}
-.gameover-details summary::-webkit-details-marker{display:none}
-.gameover-details summary::before{content:"+";margin-right:8px;font-size:10px}
-.gameover-details[open] summary{background:linear-gradient(180deg,#1a2b1d,#0e1711)}
-.gameover-details[open] summary::before{content:"−"}
-.gameover-detail-body{padding:10px;border-top:1px solid #26372d}
-.gameover-detail-body .stats-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
-.gameover-detail-body .stats-grid span{
-  min-height:48px;padding:8px;border:1px solid #27382d;border-radius:4px;
-  background:#0b120d;color:#718774;font-size:4px;
-}
-.gameover-detail-body .stats-grid strong{margin-top:6px;color:#e4f6e2;font-size:6px}
-.gameover-detail-body .analysis-grid{margin-top:7px}
-.gameover-detail-body .record{display:block;margin-top:9px;text-align:center;color:#ffd85c!important;font-size:6px!important}
-#message #start{
-  width:100%;min-height:54px!important;margin-top:7px!important;
-  border:1px solid #9aff7d!important;border-radius:6px!important;
-  background:linear-gradient(180deg,#79e35b,#4ea93c)!important;color:#071006!important;
-  font-size:8px!important;letter-spacing:1px;
-  box-shadow:0 5px 0 #315d2b,0 0 22px rgba(121,227,91,.12)!important;
-}
-#message #start:hover{filter:brightness(1.1);transform:translateY(-1px)}
-#message #start:active{transform:translate(2px,3px)!important;box-shadow:0 1px 0 #315d2b!important}
-@media(max-width:700px){
-  #progression .progression-head{min-height:72px!important;padding:13px!important}
-  #progression .progression-head b{font-size:8px!important}
-  #progression .evolution-build{min-height:120px;padding:13px!important}
-  #progression .evolution-build-head{align-items:flex-start;flex-direction:column;gap:7px}
-  #message .message-card{width:96%;padding:23px 16px 17px!important}
-  .gameover-summary span{min-height:56px;padding:8px;font-size:4px}
-  .gameover-summary strong{font-size:10px}
-  .gameover-details summary{font-size:5px}
-  .gameover-detail-body .stats-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
-  #message #start{min-height:49px!important;font-size:7px!important}
-}
-@media(max-width:420px){
-  #progression .progression-head{min-height:66px!important;padding:11px!important}
-  #progression .progression-head b{font-size:7px!important}
-  #progression .progression-head small{font-size:4px!important}
-  #progression .progression-body{padding:3px 11px 13px!important}
-  #progression .evolution-build{min-height:112px}
-  #progression .evolution-build-head strong{font-size:12px!important}
-  #message .message-card::before{font-size:4px}
-  #message .message-card h2{font-size:20px!important}
-  .gameover-summary{gap:5px}
-  .gameover-summary span{min-height:52px;padding:7px}
-  .gameover-summary strong{font-size:9px}
-  .gameover-details summary{min-height:43px;font-size:4.5px}
-  .gameover-detail-body{padding:7px}
-  .gameover-detail-body .stats-grid{gap:5px}
-  .gameover-detail-body .stats-grid span{min-height:43px;padding:6px}
-  .gameover-detail-body .stats-grid strong{font-size:5.5px}
-}
-
-
 /* PROGRESSION + ACHIEVEMENTS V2 // OPEN CARD LAYOUT + LIVE LIVES */
 #progression.progression-panel,
 #achievements.progression-panel{
@@ -3877,55 +3775,6 @@ img,svg,canvas{
   }
 }
 
-/* Remove the extra report label above the Game Over title. */
-/* Make the Game Over panel visually distinct from the green FINAL SCORE action. */
-#message.message{
-  background:
-    radial-gradient(circle at 50% 34%,rgba(166,108,255,.14),transparent 28%),
-    linear-gradient(180deg,rgba(1,2,5,.95),rgba(4,5,10,.985))!important;
-}
-#message .message-card{
-  border:1px solid #58466f!important;
-  border-top:4px solid #a66cff!important;
-  border-radius:10px 3px 10px 3px!important;
-  background:
-    radial-gradient(circle at 50% 0,rgba(166,108,255,.12),transparent 36%),
-    linear-gradient(145deg,#130e1b,#090a10 68%,#080b11)!important;
-  box-shadow:
-    12px 12px 0 #010108,
-    0 0 70px rgba(166,108,255,.12),
-    inset 0 0 40px rgba(166,108,255,.028)!important;
-}
-#message .message-card::after{
-  background:linear-gradient(90deg,transparent,#c39aff,transparent)!important;
-}
-#message .message-card h2{
-  color:#f2eaff!important;
-  text-shadow:0 0 22px rgba(166,108,255,.3)!important;
-}
-#message .result-copy{
-  color:#ad9bbd!important;
-}
-.gameover-summary span{
-  border-color:#453653!important;
-  background:linear-gradient(145deg,#161021,#0b0b11)!important;
-  color:#8e7ca0!important;
-}
-.gameover-summary strong{
-  color:#f4ebff!important;
-}
-.gameover-details{
-  border-color:#3a3047!important;
-  background:linear-gradient(145deg,#0f0b14,#090b10)!important;
-}
-.gameover-details summary{
-  background:linear-gradient(180deg,#181123,#0d0a12)!important;
-  color:#d8bfff!important;
-}
-.gameover-details[open] summary{
-  background:linear-gradient(180deg,#211732,#110d18)!important;
-}
-
 @media(max-width:700px){
   #achievements .achievement-item{
     flex:0 0 192px!important;
@@ -3945,4 +3794,205 @@ img,svg,canvas{
   #achievements .achievement-item b{font-size:6.4px!important}
   #achievements .achievement-item span{font-size:4.7px!important}
   .run-status-v3 .life-module strong#lives{font-size:18px!important;letter-spacing:.25px!important}
+}
+
+
+/* GAME OVER // FINAL SCORE SYSTEM // REPLACEMENT DESIGN */
+#message.message{
+  padding:18px!important;
+  background:
+    radial-gradient(circle at 50% 34%,rgba(121,227,91,.12),transparent 30%),
+    linear-gradient(180deg,rgba(2,5,3,.95),rgba(4,8,5,.985))!important;
+  backdrop-filter:blur(4px);
+}
+#message .message-card{
+  position:relative;
+  width:min(620px,94%);
+  max-height:min(88vh,720px);
+  overflow:auto;
+  padding:26px 26px 20px!important;
+  border:1px solid #416348!important;
+  border-top:4px solid #79e35b!important;
+  border-radius:10px 3px 10px 3px!important;
+  background:
+    radial-gradient(circle at 50% 0,rgba(121,227,91,.10),transparent 36%),
+    linear-gradient(145deg,#0f1a12,#080d0a 68%,#07100a)!important;
+  box-shadow:
+    12px 12px 0 #010201,
+    0 0 70px rgba(121,227,91,.10),
+    inset 0 0 40px rgba(121,227,91,.025)!important;
+}
+#message .message-card::before{content:none!important;display:none!important}
+#message .message-card::after{
+  content:"";
+  position:absolute;
+  left:0;
+  right:0;
+  top:0;
+  height:1px;
+  background:linear-gradient(90deg,transparent,#b4ff9c,transparent);
+  opacity:.72;
+}
+#message .message-card h2{
+  margin:0!important;
+  padding:4px 0 12px!important;
+  color:#e7ffdf!important;
+  font-size:clamp(23px,4vw,34px)!important;
+  line-height:1.1!important;
+  letter-spacing:1.8px;
+  text-shadow:0 0 22px rgba(121,227,91,.24);
+}
+#message .result-copy{
+  margin:11px 0 13px!important;
+  color:#87a48d!important;
+  font-size:6px!important;
+  line-height:1.8!important;
+  text-align:center;
+  letter-spacing:.45px;
+}
+
+/* FINAL SCORE / COMBO / LIVES use one identical card system. */
+.gameover-summary{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:8px;
+  margin-top:8px;
+}
+.gameover-summary span{
+  position:relative;
+  display:grid;
+  align-content:center;
+  justify-items:center;
+  gap:7px;
+  min-height:72px;
+  padding:11px 10px;
+  border:1px solid #416348!important;
+  border-radius:8px!important;
+  background:
+    linear-gradient(145deg,#122017,#080f0a)!important;
+  box-shadow:
+    4px 4px 0 #17231a,
+    inset 0 0 18px rgba(121,227,91,.025)!important;
+  color:#78947d!important;
+  font-size:5px!important;
+  letter-spacing:.75px;
+}
+.gameover-summary span::before{
+  content:"";
+  position:absolute;
+  left:9px;
+  right:9px;
+  top:0;
+  height:2px;
+  background:linear-gradient(90deg,#79e35b,transparent);
+  opacity:.7;
+}
+.gameover-summary span:hover{
+  border-color:#79e35b!important;
+  filter:brightness(1.08);
+  transform:translateY(-2px);
+}
+.gameover-summary strong{
+  color:#caffbd!important;
+  font-size:13px!important;
+  line-height:1!important;
+  font-variant-numeric:tabular-nums;
+  text-shadow:0 0 12px rgba(121,227,91,.10);
+}
+
+/* Details is the only expanded layer; the initial Game Over stays compact. */
+.gameover-details{
+  margin-top:12px;
+  border:1px solid #304c36!important;
+  border-radius:8px!important;
+  background:linear-gradient(145deg,#0d160f,#080d09)!important;
+  box-shadow:3px 3px 0 #162219!important;
+  overflow:hidden;
+}
+.gameover-details summary{
+  list-style:none;
+  cursor:pointer;
+  min-height:47px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:10px 13px;
+  border:0;
+  background:linear-gradient(180deg,#15251a,#0c140f)!important;
+  color:#baff9d!important;
+  font:6px "Press Start 2P",monospace!important;
+  letter-spacing:.85px;
+  transition:filter .15s ease,background .15s ease,transform .15s ease;
+}
+.gameover-details summary::-webkit-details-marker{display:none}
+.gameover-details summary::before{content:"+";margin-right:8px;font-size:10px}
+.gameover-details[open] summary{background:linear-gradient(180deg,#1a2d1e,#0e1711)!important}
+.gameover-details[open] summary::before{content:"−"}
+.gameover-details summary:hover{filter:brightness(1.12)}
+.gameover-detail-body{
+  padding:10px;
+  border-top:1px solid #26372d;
+}
+.gameover-detail-body .stats-grid{
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:7px;
+}
+.gameover-detail-body .stats-grid span{
+  min-height:50px;
+  padding:8px;
+  border:1px solid #273d2d;
+  border-radius:5px;
+  background:#0b120d;
+  color:#718774;
+  font-size:4px;
+}
+.gameover-detail-body .stats-grid strong{
+  margin-top:6px;
+  color:#e4f6e2;
+  font-size:6px;
+}
+.gameover-detail-body .analysis-grid{margin-top:8px}
+.gameover-detail-body .record{
+  display:block;
+  margin-top:9px;
+  text-align:center;
+  color:#ffd85c!important;
+  font-size:6px!important;
+}
+#message #start{
+  width:100%;
+  min-height:54px!important;
+  margin-top:8px!important;
+  border:1px solid #9aff7d!important;
+  border-radius:7px!important;
+  background:linear-gradient(180deg,#79e35b,#4ea93c)!important;
+  color:#071006!important;
+  font-size:8px!important;
+  letter-spacing:1px;
+  box-shadow:0 5px 0 #315d2b,0 0 22px rgba(121,227,91,.12)!important;
+}
+#message #start:hover{filter:brightness(1.1);transform:translateY(-1px)}
+#message #start:active{transform:translate(2px,3px)!important;box-shadow:0 1px 0 #315d2b!important}
+@media(max-width:700px){
+  #message .message-card{width:96%;padding:22px 15px 16px!important}
+  .gameover-summary{grid-template-columns:1fr 1fr;gap:7px}
+  .gameover-summary span{min-height:66px;padding:10px;font-size:4.5px!important}
+  .gameover-summary span:first-child{grid-column:1/-1}
+  .gameover-summary strong{font-size:11px!important}
+  .gameover-details summary{font-size:5px!important}
+  .gameover-detail-body .stats-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  #message #start{min-height:49px!important;font-size:7px!important}
+}
+@media(max-width:420px){
+  #message .message-card{padding:20px 12px 14px!important}
+  #message .message-card h2{font-size:20px!important}
+  #message .result-copy{font-size:5px!important}
+  .gameover-summary{grid-template-columns:1fr 1fr;gap:5px}
+  .gameover-summary span{min-height:60px;padding:8px;font-size:4px!important}
+  .gameover-summary strong{font-size:10px!important}
+  .gameover-details summary{min-height:43px;font-size:4.5px!important}
+  .gameover-detail-body{padding:7px}
+  .gameover-detail-body .stats-grid{gap:5px}
+  .gameover-detail-body .stats-grid span{min-height:44px;padding:6px}
+  .gameover-detail-body .stats-grid strong{font-size:5.5px}
 }
