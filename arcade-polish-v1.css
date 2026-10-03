@@ -1,0 +1,72 @@
+/* SNAKE EVOLUTION // ARCADE POLISH V1
+   Visual layer only: no gameplay state or collision changes. */
+:root{
+  --arcade-bg:#050806;
+  --arcade-panel:rgba(7,13,9,.92);
+  --arcade-line:#29422f;
+  --arcade-glow:rgba(121,227,91,.18);
+}
+body{
+  background:
+    radial-gradient(circle at 50% 15%,rgba(121,227,91,.07),transparent 34rem),
+    radial-gradient(circle at 20% 80%,rgba(166,108,255,.035),transparent 28rem),
+    var(--arcade-bg);
+}
+body:before{
+  content:"";
+  position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:linear-gradient(rgba(255,255,255,.018) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.018) 1px,transparent 1px);
+  background-size:42px 42px;
+  mask-image:linear-gradient(to bottom,rgba(0,0,0,.75),transparent 85%);
+}
+#app{position:relative;z-index:1}
+.game-shell{
+  isolation:isolate;
+  border-color:#47634d!important;
+  box-shadow:0 0 0 1px #0d160f,0 0 35px var(--arcade-glow),10px 10px 0 #020302!important;
+}
+.game-shell:before{
+  content:"";
+  position:absolute;inset:0;pointer-events:none;z-index:2;
+  background:linear-gradient(transparent 49%,rgba(255,255,255,.018) 50%,transparent 51%);
+  background-size:100% 6px;
+  opacity:.32;
+}
+.game-shell.arcade-hit{
+  animation:arcade-hit .16s steps(2,end);
+}
+.game-shell.arcade-combo{
+  box-shadow:0 0 0 1px #5e8a65,0 0 48px rgba(121,227,91,.3),10px 10px 0 #020302!important;
+}
+.ability{
+  position:relative;overflow:hidden;
+  transition:transform .12s ease,filter .12s ease,box-shadow .12s ease!important;
+}
+.ability:hover,.ability:focus-visible{transform:translateY(-2px);filter:brightness(1.12)}
+.ability:active{transform:translateY(2px) scale(.98)!important}
+.ability.ready:after{
+  content:"READY";
+  position:absolute;right:5px;top:4px;
+  font-size:5px;color:#d8ffd0;letter-spacing:.5px;
+  opacity:.8;
+}
+.boot-card{
+  border-color:#415b47!important;
+  box-shadow:0 0 70px rgba(121,227,91,.08),12px 12px 0 #020302!important;
+}
+.boot-action{
+  transition:transform .12s ease,filter .12s ease,box-shadow .12s ease!important;
+}
+.boot-action:hover{transform:translateY(-2px);filter:brightness(1.1)}
+.boot-action:active{transform:translateY(2px)}
+@keyframes arcade-hit{
+  0%,100%{transform:translate(0)}
+  35%{transform:translate(2px,-1px)}
+  70%{transform:translate(-2px,1px)}
+}
+@media(max-width:700px){
+  body:before{background-size:28px 28px}
+  .game-shell{box-shadow:0 0 0 1px #0d160f,0 0 22px var(--arcade-glow),5px 5px 0 #020302!important}
+  .ability.ready:after{font-size:4px;right:4px;top:3px}
+}
