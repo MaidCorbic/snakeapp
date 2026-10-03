@@ -222,8 +222,8 @@
 
   [startBtn,dailyBtn,endlessBtn,funBtn,howBtn,optionsBtn].forEach(button=>button?.addEventListener("click",()=>startMusic(),{once:true}));
   startBtn?.addEventListener("click", () => loadGame("normal"));
-  dailyBtn?.addEventListener("click", () => loadGame("daily"));
-  endlessBtn?.addEventListener("click", () => loadGame("endless"));
+  dailyBtn?.addEventListener("click", () => { try { localStorage.setItem("snake-evolution-mode","standard"); } catch {} loadGame("daily"); });
+  endlessBtn?.addEventListener("click", () => { try { localStorage.setItem("snake-evolution-mode","standard"); } catch {} loadGame("endless"); });
   funBtn?.addEventListener("click", () => { try { localStorage.setItem("snake-evolution-mode","party"); } catch {} loadGame("party"); });
   howBtn?.addEventListener("click", () => {
     optionsPanel?.classList.add("hidden");
