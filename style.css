@@ -1529,3 +1529,32 @@ img,svg,canvas{
   .ability{min-height:54px;font-size:5.5px}
   .ability span{font-size:4px}
 }
+
+
+/* FINAL PHONE TYPE SCALE */
+@media (max-width:700px) and (pointer:coarse){
+  #app>header .eyebrow{font-size:8px!important}
+  #app>header h1{font-size:17px!important}
+  #app>header .subhud{font-size:7px!important}
+  #app>header .stats span{font-size:6px!important}
+  #app>header .stats strong{font-size:10px!important}
+  .run-intel::before{font-size:6px!important}
+  .intel-card{font-size:7px!important}
+  .intel-top{font-size:6px!important}
+  .intel-top strong{font-size:8px!important}
+  .intel-top b{font-size:5px!important}
+  .run-mode-bar>span,.run-mode-bar>strong,.run-mode-bar>b{font-size:6px!important}
+  .run-mode-bar .run-pause-btn{font-size:7px!important}
+  .ability{font-size:7px!important;min-height:58px!important}
+  .ability span{font-size:5px!important}
+  .event-banner,.toast,.boss-hud{font-size:7px!important}
+  footer .legend:after{font-size:6px!important}
+  #message .message-card h2{font-size:18px!important}
+  #message .message-card .result-copy{font-size:6px!important}
+  #message .message-card .stats-grid span{font-size:5px!important}
+  #message .message-card .stats-grid strong{font-size:7px!important}
+  #message .message-card .record{font-size:6px!important}
+  #message .message-card #start{font-size:8px!important;min-height:52px!important}
+  .boot-menu,.boot-panel,.progression-panel,.achievement-list,.leaderboard-columns{font-size:6px}
+  button{font-size:inherit}
+}
