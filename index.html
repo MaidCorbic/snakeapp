@@ -210,6 +210,181 @@ body.high-contrast .boot-panel-heading>strong,body.high-contrast .game-version{c
   .boot-actions{grid-template-columns:1fr!important}
   .boot-actions #bootStart{min-height:44px}
 }
+
+/* LANDING V3 // SAFE REDESIGN // NO CLICK WIRING CHANGES */
+.boot-menu{
+  padding:clamp(12px,2vw,28px)!important;
+  overflow:auto!important;
+  background:
+    radial-gradient(circle at 18% 18%,rgba(121,227,91,.055),transparent 28%),
+    radial-gradient(circle at 84% 82%,rgba(166,108,255,.045),transparent 30%),
+    linear-gradient(180deg,#030604 0%,#07100a 52%,#030604 100%)!important;
+}
+.boot-card{
+  width:min(1080px,96vw)!important;
+  max-width:none!important;
+  max-height:min(900px,calc(100dvh - 24px))!important;
+  padding:clamp(18px,2.5vw,30px)!important;
+  box-sizing:border-box!important;
+  overflow:auto!important;
+  text-align:left!important;
+  border:1px solid #45614b!important;
+  background:linear-gradient(145deg,rgba(10,17,12,.985),rgba(4,8,6,.985))!important;
+  box-shadow:0 0 0 1px #0d170f,14px 14px 0 #010201,0 0 90px rgba(121,227,91,.07)!important;
+}
+.boot-card:before{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  z-index:0;
+  background:linear-gradient(90deg,transparent 0%,rgba(121,227,91,.025) 50%,transparent 100%);
+}
+.boot-topline,.boot-layout,.landing-profile,.landing-promise,.boot-panels{position:relative;z-index:1}
+.boot-topline{
+  padding-bottom:12px!important;
+  border-bottom:1px solid #26382b!important;
+}
+.boot-layout{
+  grid-template-columns:minmax(0,1.15fr) minmax(320px,.85fr)!important;
+  gap:16px!important;
+  align-items:stretch!important;
+  padding:16px 0!important;
+}
+.boot-hero{
+  padding:clamp(20px,2.6vw,30px)!important;
+  min-width:0!important;
+  border:1px solid #2f4634!important;
+  background:
+    radial-gradient(circle at 25% 10%,rgba(141,255,102,.075),transparent 40%),
+    linear-gradient(145deg,#0d1710,#070c09)!important;
+  box-shadow:inset 0 0 36px rgba(0,0,0,.28)!important;
+}
+.boot-emblem{
+  width:64px!important;
+  height:64px!important;
+  margin-bottom:16px!important;
+}
+.boot-title{
+  font-size:clamp(28px,4vw,46px)!important;
+  line-height:1.16!important;
+  letter-spacing:2px!important;
+}
+.boot-tagline{
+  max-width:620px!important;
+  margin:12px 0 16px!important;
+  font-size:7px!important;
+  line-height:2!important;
+}
+.boot-pills{
+  justify-content:flex-start!important;
+  margin-bottom:14px!important;
+}
+.boot-actions{
+  grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  gap:8px!important;
+  margin-top:8px!important;
+  max-width:none!important;
+}
+.boot-actions #bootStart{
+  grid-column:1/-1!important;
+  min-height:56px!important;
+  font-size:9px!important;
+  letter-spacing:1.5px!important;
+}
+.boot-actions #bootFun{
+  grid-column:1/-1!important;
+  min-height:44px!important;
+}
+.boot-actions #bootDaily,
+.boot-actions #bootHow,
+.boot-actions #bootOptions{
+  grid-column:span 1!important;
+}
+.boot-actions #bootEndless{
+  display:none!important;
+}
+.boot-actions .secondary{
+  min-height:42px!important;
+}
+.boot-brief{
+  height:100%!important;
+  box-sizing:border-box!important;
+  padding:16px!important;
+  border:1px solid #2e4433!important;
+  background:linear-gradient(145deg,#0b130d,#070c09)!important;
+  box-shadow:inset 2px 0 0 rgba(121,227,91,.11)!important;
+}
+.brief-heading{margin-bottom:2px!important}
+.brief-item{padding:11px 0!important}
+.brief-controls{
+  margin-top:10px!important;
+  padding-top:10px!important;
+}
+.landing-profile{
+  grid-template-columns:repeat(4,minmax(0,1fr))!important;
+  margin-top:0!important;
+}
+.profile-block{min-width:0!important}
+.landing-promise{
+  justify-content:space-between!important;
+  padding:10px 2px 2px!important;
+  gap:8px!important;
+}
+.landing-promise span{white-space:nowrap}
+.boot-panels{margin-top:2px}
+#bootOptionsPanel,#bootHowPanel{max-height:none!important}
+.boot-action{
+  min-width:0!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+}
+@media(max-width:900px){
+  .boot-card{width:min(760px,96vw)!important}
+  .boot-layout{
+    grid-template-columns:1fr!important;
+    gap:12px!important;
+  }
+  .boot-brief{display:none!important}
+  .landing-profile{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  .landing-promise{justify-content:center!important;flex-wrap:wrap}
+}
+@media(max-width:700px){
+  .boot-menu{padding:8px!important}
+  .boot-card{
+    width:98vw!important;
+    max-height:calc(100dvh - 16px)!important;
+    padding:14px!important;
+  }
+  .boot-topline{gap:8px!important}
+  .boot-hero{padding:16px 12px!important}
+  .boot-emblem{width:52px!important;height:52px!important}
+  .boot-title{font-size:clamp(22px,8vw,34px)!important}
+  .boot-tagline{font-size:5.5px!important}
+  .boot-pills{gap:5px!important}
+  .boot-pills span{padding:6px 7px!important}
+  .boot-actions{grid-template-columns:1fr 1fr!important}
+  .boot-actions #bootStart{min-height:50px!important}
+  .boot-actions #bootFun{min-height:42px!important}
+  .landing-profile{grid-template-columns:1fr 1fr!important}
+  .profile-block{min-height:46px!important;padding:7px 8px!important}
+  .landing-promise{font-size:3.5px!important;gap:6px!important;line-height:1.7!important}
+}
+@media(max-width:480px){
+  .boot-card{padding:10px!important}
+  .boot-topline{align-items:flex-start!important}
+  .boot-top-meta{align-items:flex-end!important}
+  .boot-hero{padding:14px 10px!important}
+  .boot-actions{grid-template-columns:1fr!important}
+  .boot-actions #bootStart,
+  .boot-actions #bootFun,
+  .boot-actions #bootDaily,
+  .boot-actions #bootHow,
+  .boot-actions #bootOptions{grid-column:auto!important}
+  .landing-profile{grid-template-columns:1fr 1fr!important}
+  .landing-promise{justify-content:flex-start!important}
+}
+
 </style></head>
 <body><section id="bootMenu" class="boot-menu" role="dialog" aria-modal="true" aria-label="Snake Evolution main menu">
   <div class="boot-card">
@@ -378,4 +553,4 @@ body.high-contrast .boot-panel-heading>strong,body.high-contrast .game-version{c
 </details>
 <section id="leaderboards" class="progression-panel"><div class="progression-head"><b>LOCAL LEADERBOARDS</b><strong>TOP 10</strong></div><div class="leaderboard-columns"><div><h4>ALL RUNS</h4><div id="leaderboardList" class="leaderboard-list"></div></div><div><h4>DAILY // TODAY</h4><div id="dailyLeaderboardList" class="leaderboard-list"></div></div></div></section>
 <footer><div class="legend"><span class="desktop-commands">KEYBOARD: WASD / ARROWS · SPACE DASH · SHIFT SHIELD · E PULSE · Q FURY · P / ESC PAUSE</span><span>ENERGY +10</span><span>CORE +50</span><span>HUNTER</span><span>HAZARD</span><span>POWER-UP</span><span>SUPPLY DROP</span></div><div class="controls" aria-label="Mobile touch controls"><span class="touch-label">TOUCH</span><button data-dir="up">▲</button><div><button data-dir="left">◀</button><button data-dir="down">▼</button><button data-dir="right">▶</button></div></div></footer>
-</main><script src="menu.js?v=boot-v21"></script></body></html>
+</main><script src="menu.js?v=boot-v22"></script></body></html>
