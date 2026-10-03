@@ -3818,3 +3818,147 @@ img,svg,canvas{
     transform:scaleX(.84)!important;
   }
 }
+
+
+/* FINAL UI CORRECTION // COMPACT ACHIEVEMENTS + NATURAL LIVES + CLEAN GAME OVER */
+/* Keep achievements as one horizontal collection, but stop the cards from feeling oversized. */
+#achievements .progression-body{
+  padding:8px 15px 16px!important;
+}
+#achievements .achievement-list{
+  display:flex!important;
+  flex-wrap:nowrap!important;
+  justify-content:flex-start!important;
+  align-items:stretch!important;
+  gap:10px!important;
+  overflow-x:auto!important;
+  overflow-y:hidden!important;
+  padding:2px 2px 11px!important;
+}
+#achievements .achievement-item{
+  flex:0 0 208px!important;
+  width:208px!important;
+  min-height:126px!important;
+  padding:12px!important;
+  border-radius:8px!important;
+  box-shadow:3px 4px 0 #21162a,inset 0 0 17px rgba(166,108,255,.02)!important;
+}
+#achievements .achievement-item b{
+  padding-right:45px!important;
+  margin-bottom:9px!important;
+  font-size:7.2px!important;
+  line-height:1.5!important;
+}
+#achievements .achievement-item span{
+  font-size:5.25px!important;
+  line-height:1.8!important;
+}
+#achievements .achievement-item::after{
+  left:10px;
+  right:10px;
+  bottom:8px;
+}
+#achievements .achievement-item:hover{
+  transform:translateY(-3px) rotate(-.2deg)!important;
+}
+
+/* Lives: use the heart glyph itself, with no transform-based stretching. */
+.run-status-v3 .life-module strong#lives{
+  display:block;
+  width:max-content;
+  max-width:100%;
+  font-family:"Segoe UI Symbol","Arial Unicode MS",sans-serif!important;
+  font-size:21px!important;
+  font-weight:700!important;
+  letter-spacing:1px!important;
+  line-height:1!important;
+  transform:none!important;
+  transform-origin:left center!important;
+  animation:livesGlow 1.7s ease-in-out infinite!important;
+  will-change:filter,opacity;
+  white-space:nowrap;
+}
+@keyframes livesGlow{
+  0%,100%{
+    filter:drop-shadow(0 0 0 rgba(255,107,139,0));
+    opacity:.94;
+  }
+  50%{
+    filter:drop-shadow(0 0 8px rgba(255,107,139,.28));
+    opacity:1;
+  }
+}
+
+/* Remove the extra report label above the Game Over title. */
+#message .message-card::before{
+  content:none!important;
+  display:none!important;
+}
+/* Make the Game Over panel visually distinct from the green FINAL SCORE action. */
+#message.message{
+  background:
+    radial-gradient(circle at 50% 34%,rgba(166,108,255,.14),transparent 28%),
+    linear-gradient(180deg,rgba(1,2,5,.95),rgba(4,5,10,.985))!important;
+}
+#message .message-card{
+  border:1px solid #58466f!important;
+  border-top:4px solid #a66cff!important;
+  border-radius:10px 3px 10px 3px!important;
+  background:
+    radial-gradient(circle at 50% 0,rgba(166,108,255,.12),transparent 36%),
+    linear-gradient(145deg,#130e1b,#090a10 68%,#080b11)!important;
+  box-shadow:
+    12px 12px 0 #010108,
+    0 0 70px rgba(166,108,255,.12),
+    inset 0 0 40px rgba(166,108,255,.028)!important;
+}
+#message .message-card::after{
+  background:linear-gradient(90deg,transparent,#c39aff,transparent)!important;
+}
+#message .message-card h2{
+  color:#f2eaff!important;
+  text-shadow:0 0 22px rgba(166,108,255,.3)!important;
+}
+#message .result-copy{
+  color:#ad9bbd!important;
+}
+.gameover-summary span{
+  border-color:#453653!important;
+  background:linear-gradient(145deg,#161021,#0b0b11)!important;
+  color:#8e7ca0!important;
+}
+.gameover-summary strong{
+  color:#f4ebff!important;
+}
+.gameover-details{
+  border-color:#3a3047!important;
+  background:linear-gradient(145deg,#0f0b14,#090b10)!important;
+}
+.gameover-details summary{
+  background:linear-gradient(180deg,#181123,#0d0a12)!important;
+  color:#d8bfff!important;
+}
+.gameover-details[open] summary{
+  background:linear-gradient(180deg,#211732,#110d18)!important;
+}
+
+@media(max-width:700px){
+  #achievements .achievement-item{
+    flex:0 0 192px!important;
+    width:192px!important;
+    min-height:118px!important;
+  }
+  #achievements .achievement-item b{font-size:6.8px!important}
+  #achievements .achievement-item span{font-size:5px!important}
+  .run-status-v3 .life-module strong#lives{font-size:19px!important;letter-spacing:.5px!important}
+}
+@media(max-width:420px){
+  #achievements .achievement-item{
+    flex-basis:184px!important;
+    width:184px!important;
+    min-height:110px!important;
+  }
+  #achievements .achievement-item b{font-size:6.4px!important}
+  #achievements .achievement-item span{font-size:4.7px!important}
+  .run-status-v3 .life-module strong#lives{font-size:18px!important;letter-spacing:.25px!important}
+}
