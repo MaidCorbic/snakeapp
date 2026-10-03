@@ -937,14 +937,6 @@ body.boot-open{overflow:hidden}
     linear-gradient(180deg,rgba(15,25,17,.99),rgba(6,11,8,.99));
   box-shadow:10px 10px 0 #020302,0 0 55px rgba(121,227,91,.10);
 }
-#message .message-card:before{
-  content:"FINAL RUN REPORT";
-  display:block;
-  margin:0 0 10px;
-  color:#708a75;
-  font-size:5px;
-  letter-spacing:2px;
-}
 #message .message-card h2{
   margin:0;
   padding:0 0 10px;
@@ -3353,10 +3345,6 @@ img,svg,canvas{
     linear-gradient(145deg,#170c0f,#090d0a 70%,#07100a)!important;
   box-shadow:12px 12px 0 #010201,0 0 70px rgba(255,91,98,.11),inset 0 0 40px rgba(255,91,98,.025)!important;
 }
-#message .message-card::before{
-  content:"RUN TERMINATED";display:block;margin-bottom:9px;color:#9d777c;
-  font-size:5px;letter-spacing:2.1px;
-}
 #message .message-card::after{
   content:"";position:absolute;left:0;right:0;top:0;height:1px;
   background:linear-gradient(90deg,transparent,#ff7b83,transparent);opacity:.7;
@@ -3890,10 +3878,6 @@ img,svg,canvas{
 }
 
 /* Remove the extra report label above the Game Over title. */
-#message .message-card::before{
-  content:none!important;
-  display:none!important;
-}
 /* Make the Game Over panel visually distinct from the green FINAL SCORE action. */
 #message.message{
   background:
