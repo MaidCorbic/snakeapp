@@ -193,6 +193,23 @@ if(destroyed){stats.hunters+=destroyed;gainXp(destroyed*30+stats.elites*15);chai
 function useFury(){if(!alive||paused||fury<100||performance.now()<furyUntil)return;fury=0;furyUntil=performance.now()+8000;stats.furyUses++;haptic(28);hunters=[];hazards=hazards.filter(h=>Math.abs(h.x-snake[0].x)+Math.abs(h.y-snake[0].y)>8);say("FURY // 2X SCORE // THREAT WIPE");hud();draw()}
 function key(e){const k=e.key.toLowerCase();if(["arrowup","arrowdown","arrowleft","arrowright"," ","w","a","s","d","shift","q"].includes(k))e.preventDefault();if(contractOfferOpen&&(k===" "||k==="enter")){acceptContract();return}if(k==="escape"||k==="p"){pause();return}if(k==="arrowup"||k==="w")setDir(0,-1);if(k==="arrowdown"||k==="s")setDir(0,1);if(k==="arrowleft"||k==="a")setDir(-1,0);if(k==="arrowright"||k==="d")setDir(1,0);if(k===" ")useDash();if(k==="shift")useShield();if(k==="e")usePulse();if(k==="q")useFury()}
 addEventListener("keydown",key);
+const runTitle=document.querySelector(".run-identity h1");
+const goHomeFromRun=()=>{
+  clearTimeout(timer);
+  paused=false;
+  alive=false;
+  document.querySelector("#pauseOverlay")?.remove();
+  message.classList.remove("show");
+  message.classList.add("hidden");
+  window.showBootMenu?.();
+};
+runTitle?.setAttribute("role","button");
+runTitle?.setAttribute("tabindex","0");
+runTitle?.setAttribute("aria-label","Return to main menu");
+runTitle?.addEventListener("click",goHomeFromRun);
+runTitle?.addEventListener("keydown",event=>{
+  if(event.key==="Enter"||event.key===" "){event.preventDefault();goHomeFromRun()}
+});
 start.onclick=()=>{message.classList.remove("show");message.classList.add("hidden");reset()};
 showSave();
 document.querySelectorAll("[data-dir]").forEach(b=>b.addEventListener("pointerdown",e=>{
@@ -578,4 +595,4 @@ document.querySelector("#contractDecline")?.addEventListener("click",declineCont
 document.querySelector("#extractCashOut")?.addEventListener("click",cashOut);
 document.querySelector("#extractContinue")?.addEventListener("click",keepRunning);
 renderUpgrades();renderAchievements();showSave();
-window.SnakeEvolution={start:reset,getState:()=>({alive,score,combo,fury,lives,xp,xpLevel,xpNext,danger,level,zone,objective:objective?.[0]||null,objectiveDone,contract:contract?.[0]||null,contractAccepted,contractOfferOpen,contractDone,supplyDrop:supplyDrop?.rarity||null,mutation:mutationName(),salvageChain,zoneEvent:advancedZoneEvent?.type||null,extractionOpen,extractionNextAt})};
+window.SnakeEvolution={start:reset,resetRank:()=>{try{localStorage.removeItem("snake-evolution-best");localStorage.removeItem("snake-evolution-save");localStorage.removeItem("snake-evolution-leaderboard");localStorage.removeItem("snake-evolution-daily-leaderboard");localStorage.removeItem("snake-evolution-ghost");localStorage.removeItem("snake-evolution-ghost-best");localStorage.removeItem("snake-evolution-ghost-meta");localStorage.removeItem("snake-evolution-daily-ghost");localStorage.removeItem("snake-evolution-daily-ghost-best");localStorage.removeItem("snake-evolution-daily-ghost-meta")}catch{}hud();showSave()},getState:()=>({alive,score,combo,fury,lives,xp,xpLevel,xpNext,danger,level,zone,objective:objective?.[0]||null,objectiveDone,contract:contract?.[0]||null,contractAccepted,contractOfferOpen,contractDone,supplyDrop:supplyDrop?.rarity||null,mutation:mutationName(),salvageChain,zoneEvent:advancedZoneEvent?.type||null,extractionOpen,extractionNextAt})};
