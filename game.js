@@ -4,6 +4,7 @@ const COLS=32,ROWS=20,RUN_TIME=300000,FUN_RUN_TIME=180000;const settingsKey="sna
 document.addEventListener("snake-evolution-settings-changed",event=>{if(event.detail&&typeof event.detail==="object")settings={...settings,...event.detail};});
 let funMode=false,activeRunTime=RUN_TIME,funSegment=0;
 let snake=[],dir,next,energy=null,core=null,hazards=[],hunters=[],powerups=[],boss=null,supplyDrop=null,runMutation=null,score=0,combo=1,alive=false,paused=false,startedAt=0,timer,spawnClock=0,eventClock=0,hunterClock=0,bossClock=0,supplyDropClock=0,level=1,zone=0,shieldUntil=0,pulseUntil=0,dashReady=0,shieldReady=0,pulseReady=0,furyUntil=0,fury=0,lives=3,maxLives=4,lastStandAnnounced=false,xp=0,xpLevel=1,xpNext=100,danger=0,threatBonus=0,lastDangerBand=0,lastZone=-1,objective=null,objectiveDone=false,contract=null,contractDone=false,contractRewarded=false,streakRewards=0,chain=0,eventClock2=0,stats={energy:0,cores:0,elites:0,hunters:0,wardens:0,damage:0,runCount:0,powerups:0,pulses:0,furyUses:0,supplyDrops:0,contracts:0};
+const energyHistory=new Set();
 let contractAccepted=false,contractOfferOpen=false,contractDeclined=false,extractionOpen=false,extractionNextAt=0,extractionHeatUntil=0,advancedExitMode="RUNNING",chainUntil=0,chainBest=0,salvageChain=0,salvageUntil=0,advancedZoneEvent=null;
 const missionList=document.querySelector("#missionList");const best=()=>Number(localStorage.getItem("snake-evolution-best")||0);
 /* BRUTAL GAMEPLAY FX // presentation only */
@@ -110,6 +111,26 @@ function checkStreakRewards(){
 function chargeFury(amount){if(performance.now()<furyUntil)return;fury=Math.min(100,fury+amount);updateAbilityUI()}
 function haptic(ms=12){if(settings.vibration&&navigator.vibrate)try{navigator.vibrate(ms)}catch{}}
 function free(){let p,t=0;do{p=rand();t++}while(t<600&&(snake.some(s=>same(s,p))||hazards.some(s=>same(s,p))||hunters.some(s=>same(s,p))||powerups.some(s=>same(s,p))||(energy&&same(energy,p))||(core&&same(core,p))||(boss&&same(boss,p))));return p}
+function spawnEnergy(){
+  const candidates=[];
+  for(let y=0;y<ROWS;y++){
+    for(let x=0;x<COLS;x++){
+      const p={x,y},key=x+","+y;
+      if(energyHistory.has(key))continue;
+      if(snake.some(s=>same(s,p))||hazards.some(s=>same(s,p))||hunters.some(s=>same(s,p))||powerups.some(s=>same(s,p))||(energy&&same(energy,p))||(core&&same(core,p))||(boss&&same(boss,p)))continue;
+      candidates.push(p);
+    }
+  }
+  let p;
+  if(candidates.length){
+    p=candidates[Math.floor(Math.random()*candidates.length)];
+  }else{
+    energyHistory.clear();
+    p=free();
+  }
+  energyHistory.add(p.x+","+p.y);
+  return p;
+}
 function currentZone(){return Math.min(4,Math.floor((performance.now()-startedAt)/(funMode?36000:60000)))}
 function currentLevel(){return Math.min(4,1+Math.floor(score/600))}
 function evolution(){return currentLevel()}
@@ -155,7 +176,7 @@ function hud(){
  if(boss){bossHud.classList.add("show");bossHp.textContent=boss.hp+"/"+boss.maxHp}else bossHud.classList.remove("show")
 }
 function say(t){toast.textContent=t;toast.classList.add("show");clearTimeout(say.t);say.t=setTimeout(()=>toast.classList.remove("show"),1000)}
-function reset(){clearTimeout(timer);paused=false;funMode=localStorage.getItem("snake-evolution-mode")==="party";activeRunTime=funMode?FUN_RUN_TIME:RUN_TIME;funSegment=0;document.querySelector("#pauseOverlay")?.remove();message.style.display="";selectMutation();snake=[{x:10,y:10},{x:9,y:10},{x:8,y:10}];dir=next={x:1,y:0};score=0;combo=1;hazards=[];hunters=[];powerups=[];boss=null;supplyDrop=null;spawnClock=0;eventClock=0;hunterClock=0;bossClock=0;supplyDropClock=0;level=1;zone=0;stats={energy:0,cores:0,elites:0,hunters:0,wardens:0,damage:0,runCount:0,powerups:0,pulses:0,furyUses:0,supplyDrops:0,contracts:0};chain=0;eventClock2=0;fury=0;furyUntil=0;streakRewards=0;lastZone=-1;lastDangerBand=0;lives=funMode?4:3;lastStandAnnounced=false;xp=0;xpLevel=1;xpNext=100;danger=0;threatBonus=0;contract=null;contractDone=false;contractRewarded=false;selectObjective();selectContract();energy=free();core=null;shieldUntil=pulseUntil=0;dashReady=shieldReady=pulseReady=0;alive=true;startedAt=performance.now();message.classList.remove("show");message.classList.add("hidden");statsPanel.classList.remove("show");missionPanel.classList.remove("show");start.textContent="RUN AGAIN";event(funMode?"PARTY RUN // CHAOS ONLINE":"MUTATION // "+mutationName());say(funMode?"PARTY RUN // 03:00 // +25% SCORE":mutationName()+" // "+(runMutation?.[1]||"STANDARD"));hud();draw();move()}
+function reset(){clearTimeout(timer);paused=false;funMode=localStorage.getItem("snake-evolution-mode")==="party";activeRunTime=funMode?FUN_RUN_TIME:RUN_TIME;funSegment=0;document.querySelector("#pauseOverlay")?.remove();message.style.display="";selectMutation();snake=[{x:10,y:10},{x:9,y:10},{x:8,y:10}];dir=next={x:1,y:0};score=0;combo=1;hazards=[];hunters=[];powerups=[];boss=null;supplyDrop=null;spawnClock=0;eventClock=0;hunterClock=0;bossClock=0;supplyDropClock=0;level=1;zone=0;stats={energy:0,cores:0,elites:0,hunters:0,wardens:0,damage:0,runCount:0,powerups:0,pulses:0,furyUses:0,supplyDrops:0,contracts:0};chain=0;eventClock2=0;fury=0;furyUntil=0;streakRewards=0;lastZone=-1;lastDangerBand=0;lives=funMode?4:3;lastStandAnnounced=false;xp=0;xpLevel=1;xpNext=100;danger=0;threatBonus=0;contract=null;contractDone=false;contractRewarded=false;selectObjective();selectContract();energyHistory.clear();energy=spawnEnergy();core=null;shieldUntil=pulseUntil=0;dashReady=shieldReady=pulseReady=0;alive=true;startedAt=performance.now();message.classList.remove("show");message.classList.add("hidden");statsPanel.classList.remove("show");missionPanel.classList.remove("show");start.textContent="RUN AGAIN";event(funMode?"PARTY RUN // CHAOS ONLINE":"MUTATION // "+mutationName());say(funMode?"PARTY RUN // 03:00 // +25% SCORE":mutationName()+" // "+(runMutation?.[1]||"STANDARD"));hud();draw();move()}
 function setDir(x,y){
  if(!alive||paused||(!x&&!y))return;
  if(x===-dir.x&&y===-dir.y)return;
@@ -239,7 +260,7 @@ function hunterStep(){
 function spawnBoss(){if(boss)return;boss={...free(),hp:12,maxHp:12,phase:1};event("WARDEN INCOMING");say("WARDEN // BOSS INBOUND")}
 function destroyBoss(){if(!boss)return;boss=null;stats.wardens++;gainXp(150);chain++;const points=1000+chain*100;gain(points);chargeFury(25);floatText("+"+points);say("WARDEN DESTROYED // +"+points)}
 function bossStep(){if(!boss)return;bossClock++;boss.phase=boss.hp<=6?2:1;if(boss.phase===2&&bossClock%3)return;if(boss.phase===1&&bossClock%5)return;const dx=snake[0].x-boss.x,dy=snake[0].y-boss.y;if(Math.abs(dx)>Math.abs(dy))boss.x+=Math.sign(dx);else boss.y+=Math.sign(dy);boss.x=(boss.x+COLS)%COLS;boss.y=(boss.y+ROWS)%ROWS;if(bossClock%(boss.phase===2?7:15)===0)hazards.push(free());if(boss.phase===2&&bossClock%21===0){event("WARDEN PHASE 2");say("WARDEN // ENRAGED")}}
-function collectPowerup(head){const i=powerups.findIndex(x=>same(x,head));if(i<0)return;const type=powerups[i].type;powerups.splice(i,1);stats.powerups++;chargeFury(6);haptic(10);if(type==="overdrive"){dashReady=performance.now();gain(100);say("OVERDRIVE // DASH READY")}else if(type==="magnet"){energy=free();core=free();gain(75);say("MAGNET // LOOT RELOCATED")}else if(type==="apex"){gain(400);gainXp(80);combo=Math.min(9,combo+2);chain+=2;chargeFury(30);hazards=[];say("APEX CORE // THREAT WIPE")}else if(type==="medkit"){lives=Math.min(maxLives,lives+1);gainXp(40);gain(125);say("MEDKIT // LIFE +1")}else{snake.push({...snake[snake.length-1]});gainXp(25);gain(150);say("REPAIR // +LENGTH")}}
+function collectPowerup(head){const i=powerups.findIndex(x=>same(x,head));if(i<0)return;const type=powerups[i].type;powerups.splice(i,1);stats.powerups++;chargeFury(6);haptic(10);if(type==="overdrive"){dashReady=performance.now();gain(100);say("OVERDRIVE // DASH READY")}else if(type==="magnet"){energy=spawnEnergy();core=free();gain(75);say("MAGNET // LOOT RELOCATED")}else if(type==="apex"){gain(400);gainXp(80);combo=Math.min(9,combo+2);chain+=2;chargeFury(30);hazards=[];say("APEX CORE // THREAT WIPE")}else if(type==="medkit"){lives=Math.min(maxLives,lives+1);gainXp(40);gain(125);say("MEDKIT // LIFE +1")}else{snake.push({...snake[snake.length-1]});gainXp(25);gain(150);say("REPAIR // +LENGTH")}}
 const missionDefs=[["energy25","COLLECTOR","Collect 25 ENERGY",()=>stats.energy,25],["core5","CORE HUNTER","Collect 5 CORES",()=>stats.cores,5],["hunter10","HUNTER","Defeat 10 HUNTERS",()=>stats.hunters,10],["combo9","COMBO MASTER","Reach COMBO x9",()=>combo,9],["fury1","FURY","Activate FURY once",()=>stats.furyUses,1],["warden","WARDEN SLAYER","Destroy 1 WARDEN",()=>stats.wardens,1],["nohit","NO HIT","Finish a run without damage",()=>stats.damage===0&&!alive?1:0,1],["score2500","SCORE BREAKER","Score 2,500 points",()=>score,2500],["powerups3","POWER USER","Collect 3 power-ups",()=>stats.powerups,3],["pulses3","PULSE RUNNER","Use PULSE 3 times",()=>stats.pulses,3],["survive120","LONG RUN","Survive 120 seconds",()=>Math.min(120,Math.floor((performance.now()-startedAt)/1000)),120]];
 function renderMissions(){if(!missionList)return;const m=missions();missionList.innerHTML=missionDefs.map(([id,name,label,get,target])=>{const done=!!m[id];const value=Math.min(target,get());const pct=Math.round(value/target*100);return `<div class="mission-item ${done?"done":""}"><div><b>${name}</b><span>${label}</span></div><strong>${done?"DONE":value+"/"+target}</strong><i><em style="width:${pct}%"></em></i></div>`}).join("")}
 let missionRenderAt=0;
@@ -258,8 +279,8 @@ if(!protectedNow&&(snake.some((s,i)=>i>0&&same(s,head))||hazards.some(h=>same(h,
  return
 }
 snake.unshift(head);let grow=false;
-if(energy&&same(head,energy)){haptic(8);const points=10*combo;gain(points);combo=Math.min(9,combo+1);chain++;stats.energy++;gainXp(12);chargeFury(8);floatText("+"+points);energy=free();grow=true;const coreEvery=runMutation?.[0]==="HAZARD SHIFT"?2:3;if(stats.energy%coreEvery===0){core=free();say("CORE SPAWNED")}}
-if(core&&same(head,core)){haptic(14);const points=50*combo+chain*5;gain(points);combo=Math.min(9,combo+1);stats.cores++;gainXp(45);chargeFury(15);core=null;energy=free();grow=true;say("CORE +"+points)}
+if(energy&&same(head,energy)){haptic(8);const points=10*combo;gain(points);combo=Math.min(9,combo+1);chain++;stats.energy++;gainXp(12);chargeFury(8);floatText("+"+points);energy=spawnEnergy();grow=true;const coreEvery=runMutation?.[0]==="HAZARD SHIFT"?2:3;if(stats.energy%coreEvery===0){core=free();say("CORE SPAWNED")}}
+if(core&&same(head,core)){haptic(14);const points=50*combo+chain*5;gain(points);combo=Math.min(9,combo+1);stats.cores++;gainXp(45);chargeFury(15);core=null;energy=spawnEnergy();grow=true;say("CORE +"+points)}
 collectPowerup(head);collectSupplyDrop(head);if(boss&&same(head,boss)&&protectedNow){boss.hp--;gain(100+chain*10);chargeFury(12);floatText("HIT",boss);if(boss.hp<=0)destroyBoss()}
 if(!grow)snake.pop();spawnClock++;eventClock++;hunterClock++;eventClock2++;if(eventClock2%210===0)startAdvancedZoneEvent();
 supplyDropClock++;if(supplyDrop&&performance.now()>supplyDrop.expires){supplyDrop=null;say("SUPPLY DROP // LOST")}
@@ -269,7 +290,7 @@ if(eventClock%82===0&&hunters.length<Math.min(2+level,6))spawnWave();
 if(eventClock%150===0&&currentZone()>=2)spawnBoss();
 if(hunterClock%3===0&&hunters.length)hunterStep();bossStep();
 if(false&&eventClock%70===0){combo=Math.max(1,combo-1);if(combo===1)chain=0}
-const elapsed=performance.now()-startedAt;if(funMode){const segment=Math.min(5,Math.floor(elapsed/30000));if(segment>funSegment){funSegment=segment;const labels=["WARMUP","SPEED ROUND","HAZARD PARTY","HUNTER RUSH","OVERDRIVE","FINAL FRENZY"];gain(150+segment*75);gainXp(20+segment*8);hazards=hazards.filter(h=>Math.abs(h.x-snake[0].x)+Math.abs(h.y-snake[0].y)>3);energy=free();event("PARTY // "+labels[segment]);say("SEGMENT "+segment+" // BONUS +"+(150+segment*75));window.SnakeReworkV2?.showSegment("SEGMENT "+segment,labels[segment]+" // BONUS SECURED")}}if(elapsed>=activeRunTime)return win();
+const elapsed=performance.now()-startedAt;if(funMode){const segment=Math.min(5,Math.floor(elapsed/30000));if(segment>funSegment){funSegment=segment;const labels=["WARMUP","SPEED ROUND","HAZARD PARTY","HUNTER RUSH","OVERDRIVE","FINAL FRENZY"];gain(150+segment*75);gainXp(20+segment*8);hazards=hazards.filter(h=>Math.abs(h.x-snake[0].x)+Math.abs(h.y-snake[0].y)>3);energy=spawnEnergy();event("PARTY // "+labels[segment]);say("SEGMENT "+segment+" // BONUS +"+(150+segment*75));window.SnakeReworkV2?.showSegment("SEGMENT "+segment,labels[segment]+" // BONUS SECURED")}}if(elapsed>=activeRunTime)return win();
 missionCheck();checkObjective();handleZoneTransition();checkStreakRewards();hud();checkContract();if(danger>=85&&lastDangerBand<85){say("DANGER // CRITICAL HEAT");event("CRITICAL HEAT")}lastDangerBand=danger>=85?85:danger>=60?60:0;updateAbilityUI();draw();timer=setTimeout(move,Math.max(40,118-combo*6-(force?35:0)-(runMutation?.[0]==="OVERCLOCK"?14:0)))}
 function statsMarkup(win){const bestScore=best(),newRecord=score>=bestScore&&score>0;return '<h2>'+(win?"SURVIVAL COMPLETE":"RUN OVER")+'</h2><div class="stats-grid"><span>SCORE<strong>'+score+'</strong></span><span>XP LVL<strong>'+xpLevel+'</strong></span><span>LIVES<strong>'+lives+'/'+maxLives+'</strong></span><span>TIME<strong>'+timeEl.textContent+'</strong></span><span>COMBO<strong>x'+combo+'</strong></span><span>ENERGY<strong>'+stats.energy+'</strong></span><span>CORES<strong>'+stats.cores+'</strong></span><span>HUNTERS<strong>'+stats.hunters+'</strong></span><span>ELITES<strong>'+stats.elites+'</strong></span><span>WARDENS<strong>'+stats.wardens+'</strong></span><span>SUPPLY<strong>'+stats.supplyDrops+'</strong></span><span>CONTRACT<strong>'+(contract?contract[0]:"-")+(contractDone?" // DONE":"") +'</strong></span><span>ZONE<strong>'+zoneNames[zone]+'</strong></span><span>OBJECTIVE<strong>'+(objective?objective[0]:"-")+(objectiveDone?" // DONE":"") +'</strong></span><span>DANGER<strong>'+danger+'%</strong></span></div>'+(newRecord?'<b class="record">NEW RECORD!</b>':'')}
 function persist(win){let s={};try{s=JSON.parse(localStorage.getItem("snake-evolution-save")||"{}")}catch{}s.runs=(s.runs||0)+1;s.wins=(s.wins||0)+(win?1:0);s.combo=Math.max(s.combo||1,combo);s.wardens=(s.wardens||0)+stats.wardens;s.elites=(s.elites||0)+stats.elites;s.supplyDrops=(s.supplyDrops||0)+stats.supplyDrops;s.contracts=(s.contracts||0)+stats.contracts;s.evo=Math.max(s.evo||1,evolution());localStorage.setItem("snake-evolution-save",JSON.stringify(s));showSave()}
