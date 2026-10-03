@@ -45,7 +45,7 @@
     if(document.querySelector("#metaProgressionStyle")) return;
     const style=document.createElement("style");
     style.id="metaProgressionStyle";
-    style.textContent=\x60
+    style.textContent=`
 .meta-panel{
   display:flex;flex-direction:column;gap:12px;
   margin-top:8px;padding:16px;
