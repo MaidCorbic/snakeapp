@@ -54,6 +54,9 @@
   };
 
   const decorateRun = () => {
+    const shell = gameShell();
+    if (!shell || shell.dataset.reworkTicker === "1") return;
+    shell.dataset.reworkTicker = "1";
     syncBadge();
     const score=document.querySelector("#score");
     const combo=document.querySelector("#combo");
