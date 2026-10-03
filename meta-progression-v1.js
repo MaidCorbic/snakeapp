@@ -321,6 +321,8 @@ body.meta-no-combat-fx .event-banner,body.meta-no-combat-fx .toast,body.meta-no-
   }
   function showMetaPanel(id){
     hideMetaPanels();
+    document.querySelector("#bootOptionsPanel")?.classList.add("hidden");
+    document.querySelector("#bootHowPanel")?.classList.add("hidden");
     document.querySelector("#"+id)?.classList.remove("hidden");
     if(id==="bootCardDeckPanel")renderCardDeck();
     if(id==="bootBadgePanel")renderBadges();
@@ -331,8 +333,13 @@ body.meta-no-combat-fx .event-banner,body.meta-no-combat-fx .toast,body.meta-no-
     [["bootCardDeck","bootCardDeckPanel"],["bootBadgeArchive","bootBadgePanel"],["bootAutoAchievements","bootAchievementPanel"]].forEach(([button,panel])=>{
       document.querySelector("#"+button)?.addEventListener("click",()=>showMetaPanel(panel));
     });
+    const backToOptions=()=>{
+      hideMetaPanels();
+      document.querySelector("#bootOptionsPanel")?.classList.remove("hidden");
+      document.querySelector("#bootHowPanel")?.classList.add("hidden");
+    };
     ["bootCardDeckBack","bootBadgeBack","bootAchievementsBack"].forEach(id=>{
-      document.querySelector("#"+id)?.addEventListener("click",hideMetaPanels);
+      document.querySelector("#"+id)?.addEventListener("click",backToOptions);
     });
   }
 
