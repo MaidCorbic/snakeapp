@@ -32,6 +32,7 @@
   const volumeValue = document.querySelector("#bootVolumeValue");
   const fullscreenBtn = document.querySelector("#bootFullscreen");
   const resetSettingsBtn = document.querySelector("#bootResetSettings");
+  const resetRankBtn = document.querySelector("#bootResetRank");
   const settingsState = document.querySelector("#bootSettingsState");
   const versionLabel = document.querySelector("#bootGameVersion");
   const bootClock = document.querySelector("#bootClock");
@@ -384,6 +385,7 @@
     bootAchievementsBack: "menu-tap-back",
     bootFullscreen: "menu-tap-meta",
     bootResetSettings: "menu-tap-meta",
+    bootResetRank: "menu-tap-meta",
     bootGrid: "menu-tap-toggle",
     bootVibration: "menu-tap-toggle",
     bootMotion: "menu-tap-toggle",
@@ -450,6 +452,25 @@
     settings={...defaults};
     saveSettings();
     try { localStorage.removeItem("snake-evolution-sound"); } catch {}
+  });
+  resetRankBtn?.addEventListener("click", () => {
+    const keys=[
+      "snake-evolution-best",
+      "snake-evolution-save",
+      "snake-evolution-leaderboard",
+      "snake-evolution-daily-leaderboard",
+      "snake-evolution-ghost",
+      "snake-evolution-ghost-best",
+      "snake-evolution-ghost-meta",
+      "snake-evolution-daily-ghost",
+      "snake-evolution-daily-ghost-best",
+      "snake-evolution-daily-ghost-meta"
+    ];
+    keys.forEach(key=>{try{localStorage.removeItem(key)}catch{}});
+    try{window.SnakeEvolution?.resetRank?.()}catch{}
+    renderLandingProfile();
+    if(settingsState)settingsState.textContent="RANK // RESET";
+    window.setTimeout(()=>{if(settingsState)settingsState.textContent="LOCAL // SAVED"},1200);
   });
 
   const blockPageCopy = () => {
