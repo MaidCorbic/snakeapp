@@ -178,26 +178,37 @@ dashBtn?.addEventListener("pointerdown",e=>{e.preventDefault();useDash()},{passi
 shieldBtn?.addEventListener("pointerdown",e=>{e.preventDefault();useShield()},{passive:false});
 pulseBtn?.addEventListener("pointerdown",e=>{e.preventDefault();usePulse()},{passive:false});
 furyBtn?.addEventListener("pointerdown",e=>{e.preventDefault();useFury()},{passive:false});
-let touchStart=null,lastTouchInputAt=0;
+let touchStart=null,lastTouchInputAt=0,touchDirectionSent=false;
 const beginTouch=(x,y)=>{
  if(!alive||paused)return;
  touchStart={x,y};
+ touchDirectionSent=false;
+};
+const applySwipe=(x,y)=>{
+ if(!touchStart||!alive||paused||touchDirectionSent)return;
+ const dx=x-touchStart.x,dy=y-touchStart.y;
+ if(Math.max(Math.abs(dx),Math.abs(dy))<10)return;
+ const now=performance.now();
+ if(now-lastTouchInputAt<45)return;
+ lastTouchInputAt=now;
+ touchDirectionSent=true;
+ if(Math.abs(dx)>Math.abs(dy))setDir(Math.sign(dx),0);else setDir(0,Math.sign(dy));
 };
 const finishTouch=(x,y)=>{
- if(!touchStart||!alive||paused){touchStart=null;return}
- const dx=x-touchStart.x,dy=y-touchStart.y;
+ applySwipe(x,y);
  touchStart=null;
- if(Math.max(Math.abs(dx),Math.abs(dy))<12)return;
- const now=performance.now();
- if(now-lastTouchInputAt<80)return;
- lastTouchInputAt=now;
- if(Math.abs(dx)>Math.abs(dy))setDir(Math.sign(dx),0);else setDir(0,Math.sign(dy));
+ touchDirectionSent=false;
 };
 canvas.addEventListener("pointerdown",e=>{
  if(e.pointerType==="mouse")return;
  e.preventDefault();
  try{canvas.setPointerCapture(e.pointerId)}catch{}
  beginTouch(e.clientX,e.clientY);
+},{passive:false});
+canvas.addEventListener("pointermove",e=>{
+ if(e.pointerType==="mouse")return;
+ e.preventDefault();
+ applySwipe(e.clientX,e.clientY);
 },{passive:false});
 canvas.addEventListener("pointerup",e=>{
  if(e.pointerType==="mouse")return;
@@ -207,6 +218,7 @@ canvas.addEventListener("pointerup",e=>{
 },{passive:false});
 canvas.addEventListener("pointercancel",e=>{
  touchStart=null;
+ touchDirectionSent=false;
  try{canvas.releasePointerCapture(e.pointerId)}catch{}
 },{passive:true});
 canvas.addEventListener("touchstart",e=>{if(alive&&!paused)e.preventDefault()},{passive:false});
