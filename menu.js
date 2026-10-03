@@ -21,8 +21,6 @@
   const contrastToggle = document.querySelector("#bootContrast");
   const timerToggle = document.querySelector("#bootTimer");
   const fxToggle = document.querySelector("#bootFx");
-  const briefTime = document.querySelector("#briefTime");
-  const briefTimeNote = document.querySelector("#briefTimeNote");
   const volumeSlider = document.querySelector("#bootVolume");
   const volumeValue = document.querySelector("#bootVolumeValue");
   const fullscreenBtn = document.querySelector("#bootFullscreen");
@@ -76,8 +74,6 @@
       if (landingBest) landingBest.textContent = best.toLocaleString();
       const last = localStorage.getItem("snake-evolution-mode");
       if (landingLastMode) landingLastMode.textContent = last === "party" ? "PARTY RUN" : "STANDARD";
-      if (briefTime) briefTime.textContent = last === "party" ? "03:00" : "05:00";
-      if (briefTimeNote) briefTimeNote.textContent = last === "party" ? "PARTY WINDOW" : "STANDARD WINDOW";
     } catch {}
     if (landingAudioState) landingAudioState.textContent = settings.music && settings.volume > 0 ? "MUSIC ON" : "MUSIC OFF";
   };
