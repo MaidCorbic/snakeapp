@@ -814,16 +814,131 @@ body.rework-v2 .landing-promise{
   .boot-tagline{font-size:5.5px!important}
 }
 
-</style></head>
+<style id="menu-interaction-v2">
+/* CLEAN HERO // remove redundant landing copy */
+.boot-tagline,.boot-pills{display:none!important}
+.boot-title-spacer{height:18px!important}
+.boot-title{margin-bottom:0!important}
+
+/* MODE BUTTONS // Daily / How / Options share the exact same type scale */
+.boot-actions #bootDaily,
+.boot-actions #bootHow,
+.boot-actions #bootOptions{
+  font-size:7px!important;
+  line-height:1.35!important;
+  letter-spacing:.55px!important;
+  min-height:42px!important;
+  position:relative;
+  overflow:hidden;
+}
+.boot-actions #bootDaily{animation:menuIdleDaily 3.4s ease-in-out infinite}
+.boot-actions #bootHow{animation:menuIdleHow 3.7s ease-in-out infinite}
+.boot-actions #bootOptions{animation:menuIdleOptions 4s ease-in-out infinite}
+
+/* GLOBAL CLICK FEEDBACK // every menu button gets a distinct motion */
+#bootMenu button.menu-tap{will-change:transform,box-shadow,filter}
+#bootMenu button.menu-tap-launch{animation:menuClickLaunch .38s steps(3,end)!important}
+#bootMenu button.menu-tap-chaos{animation:menuClickChaos .42s steps(4,end)!important}
+#bootMenu button.menu-tap-daily{animation:menuClickDaily .46s ease-out!important}
+#bootMenu button.menu-tap-endless{animation:menuClickEndless .5s ease-out!important}
+#bootMenu button.menu-tap-panel{animation:menuClickPanel .34s ease-out!important}
+#bootMenu button.menu-tap-console{animation:menuClickConsole .4s ease-out!important}
+#bootMenu button.menu-tap-toggle{animation:menuClickToggle .25s steps(2,end)!important}
+#bootMenu button.menu-tap-back{animation:menuClickBack .3s ease-out!important}
+#bootMenu button.menu-tap-meta{animation:menuClickMeta .42s ease-out!important}
+#bootMenu button.menu-tap-fallback{animation:menuClickFallback .28s ease-out!important}
+
+@keyframes menuIdleDaily{
+  0%,100%{box-shadow:4px 4px 0 #29442e,0 0 0 rgba(121,227,91,0)}
+  50%{box-shadow:4px 4px 0 #29442e,0 0 19px rgba(121,227,91,.22)}
+}
+@keyframes menuIdleHow{
+  0%,100%{box-shadow:4px 4px 0 #29442e,0 0 0 rgba(118,220,255,0)}
+  50%{box-shadow:4px 4px 0 #29442e,0 0 19px rgba(118,220,255,.2)}
+}
+@keyframes menuIdleOptions{
+  0%,100%{box-shadow:4px 4px 0 #29442e,0 0 0 rgba(255,190,76,0)}
+  50%{box-shadow:4px 4px 0 #29442e,0 0 19px rgba(255,190,76,.2)}
+}
+@keyframes menuClickLaunch{
+  0%{transform:scale(1);box-shadow:4px 4px 0 #29442e}
+  45%{transform:scale(.96) translateY(2px);box-shadow:1px 1px 0 #29442e,0 0 26px rgba(121,227,91,.42)}
+  100%{transform:scale(1);box-shadow:4px 4px 0 #29442e}
+}
+@keyframes menuClickChaos{
+  0%{transform:translateX(0) rotate(0)}
+  25%{transform:translateX(-4px) rotate(-1deg)}
+  50%{transform:translateX(4px) rotate(1deg)}
+  75%{transform:translateX(-2px)}
+  100%{transform:translateX(0)}
+}
+@keyframes menuClickDaily{
+  0%{filter:brightness(1);box-shadow:4px 4px 0 #29442e}
+  45%{filter:brightness(1.45);box-shadow:4px 4px 0 #29442e,0 0 30px rgba(121,227,91,.45)}
+  100%{filter:brightness(1);box-shadow:4px 4px 0 #29442e}
+}
+@keyframes menuClickEndless{
+  0%{transform:scale(1);box-shadow:4px 4px 0 #29442e}
+  50%{transform:scale(1.035);box-shadow:4px 4px 0 #29442e,0 0 28px rgba(255,190,76,.35)}
+  100%{transform:scale(1);box-shadow:4px 4px 0 #29442e}
+}
+@keyframes menuClickPanel{
+  0%{clip-path:inset(0 100% 0 0);filter:brightness(1.3)}
+  100%{clip-path:inset(0 0 0 0);filter:brightness(1)}
+}
+@keyframes menuClickConsole{
+  0%{transform:translateY(0);box-shadow:4px 4px 0 #29442e}
+  45%{transform:translateY(-2px);box-shadow:4px 6px 0 #29442e,0 0 26px rgba(255,190,76,.4)}
+  100%{transform:translateY(0);box-shadow:4px 4px 0 #29442e}
+}
+@keyframes menuClickToggle{
+  0%,100%{transform:scale(1)}
+  50%{transform:scale(.92)}
+}
+@keyframes menuClickBack{
+  0%{transform:translateX(0)}
+  50%{transform:translateX(-5px)}
+  100%{transform:translateX(0)}
+}
+@keyframes menuClickMeta{
+  0%{transform:rotate(0) scale(1)}
+  50%{transform:rotate(-1deg) scale(1.025);filter:brightness(1.25)}
+  100%{transform:rotate(0) scale(1)}
+}
+@keyframes menuClickFallback{
+  0%{transform:translateY(0)}
+  50%{transform:translateY(2px)}
+  100%{transform:translateY(0)}
+}
+
+/* OPTIONS + ACHIEVEMENTS readability */
+#bootOptionsPanel .option-row>div:first-child small{font-size:7px!important;line-height:1.75!important;color:#9fb5a1!important}
+#bootOptionsPanel .option-row>div:first-child b{font-size:8.5px!important}
+#bootOptionsPanel .options-grid .option-row{min-height:88px!important;padding:16px 0!important}
+#bootAchievementPanel .timed-achievement strong{font-size:8.5px!important}
+#bootAchievementPanel .timed-achievement small{font-size:7px!important;line-height:1.8!important}
+#achievements .achievement-item b{font-size:8px!important}
+#achievements .achievement-item span{font-size:7px!important;line-height:1.8!important}
+@media(max-width:700px){
+  #bootOptionsPanel .option-row>div:first-child small{font-size:6.2px!important}
+  #bootOptionsPanel .option-row>div:first-child b{font-size:8px!important}
+  #bootOptionsPanel .options-grid .option-row{min-height:84px!important}
+  #bootAchievementPanel .timed-achievement small{font-size:6.2px!important}
+  #achievements .achievement-item span{font-size:6.2px!important}
+}
+@media(max-width:480px){
+  #bootOptionsPanel .option-row>div:first-child small{font-size:5.7px!important}
+  #bootAchievementPanel .timed-achievement small{font-size:5.8px!important}
+}
+</style></style></head>
 <body class="rework-v2"><section id="bootMenu" class="boot-menu" role="dialog" aria-modal="true" aria-label="Snake Evolution main menu">
   <div class="boot-card">
-    <div class="boot-topline"><span class="eyebrow">PIXEL ARCADE</span><div class="boot-top-meta"><span id="bootClock" class="boot-clock" aria-label="Current time">00:00:00</span><span class="boot-status"><i></i> SYSTEM READY</span></div></div>
+    <div class="boot-topline"><span class="eyebrow">PIXEL ARCADE</span><div class="boot-top-meta"><span id="bootVersion" class="game-version" aria-label="Current game version">V2.8.0 // CONTROL DECK UPDATE</span><span id="bootClock" class="boot-clock" aria-label="Current time">00:00:00</span><span class="boot-status"><i></i> SYSTEM READY</span></div></div>
     <div class="boot-layout">
       <section class="boot-hero" aria-labelledby="bootTitle">
         <div class="boot-emblem" aria-hidden="true"><img src="favicon.svg?v=snake1" alt="" width="58" height="58"><i></i></div>
         <h2 id="bootTitle" class="boot-title">SNAKE <b>EVOLUTION</b></h2>
-        <p class="boot-tagline">Collect energy. Adapt to the threat. Survive the lockdown.</p>
-        <div class="boot-pills"><span>05:00 SURVIVAL</span><span>4 ABILITIES</span><span>5 ZONES</span></div>
+        <div class="boot-title-spacer" aria-hidden="true"></div>
         <div class="boot-actions">
           <button type="button" id="bootStart" class="boot-action boot-primary">START RUN <span>▶</span></button><button type="button" id="bootFun" class="boot-action secondary">PARTY RUN // CHAOS</button>
           <button type="button" id="bootDaily" class="boot-action secondary">DAILY RUN</button>
