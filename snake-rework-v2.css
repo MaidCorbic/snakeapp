@@ -467,3 +467,99 @@ body.rework-v2 #message .message-card .stats-grid span:nth-child(n+4){
     grid-template-columns:repeat(2,1fr);
   }
 }
+
+
+/* ---------- LANDING // PLAYER PROFILE + CORE LOOP ---------- */
+body.rework-v2 .landing-profile{
+  position:relative;
+  z-index:2;
+  display:grid;
+  grid-template-columns:1.15fr 1fr 1.2fr 1fr;
+  gap:1px;
+  margin:8px 0 0;
+  border:1px solid #1d3021;
+  background:#1d3021;
+  box-shadow:0 0 30px rgba(128,255,96,.025);
+}
+body.rework-v2 .profile-block{
+  min-height:52px;
+  padding:9px 11px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  gap:5px;
+  background:#050a07;
+}
+body.rework-v2 .profile-block span{
+  color:#536b57;
+  font-size:4px;
+  letter-spacing:1px;
+}
+body.rework-v2 .profile-block strong{
+  color:#d8e9da;
+  font-size:6px;
+  letter-spacing:.5px;
+}
+body.rework-v2 .profile-block:first-child strong{
+  color:var(--brutal-green);
+  font-size:9px;
+}
+body.rework-v2 .profile-audio strong{
+  color:#829987;
+}
+body.rework-v2 .landing-promise{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:12px;
+  padding:9px 0 2px;
+  color:#546b58;
+  font-size:4px;
+  letter-spacing:1px;
+}
+body.rework-v2 .landing-promise b{
+  color:var(--brutal-green);
+  margin-right:4px;
+}
+body.rework-v2 .landing-promise i{
+  width:18px;
+  height:1px;
+  background:#263d2a;
+}
+@media(max-width:760px){
+  body.rework-v2 .landing-profile{
+    grid-template-columns:1fr 1fr;
+  }
+  body.rework-v2 .profile-block{
+    min-height:44px;
+  }
+  body.rework-v2 .landing-promise{
+    gap:7px;
+    font-size:3.2px;
+  }
+  body.rework-v2 .landing-promise i{
+    width:8px;
+  }
+}
+@media(max-width:480px){
+  body.rework-v2 .landing-profile{
+    grid-template-columns:1fr 1fr;
+  }
+  body.rework-v2 .profile-block{
+    padding:7px 8px;
+  }
+  body.rework-v2 .profile-block span{
+    font-size:3.2px;
+  }
+  body.rework-v2 .profile-block strong{
+    font-size:4.5px;
+  }
+  body.rework-v2 .profile-block:first-child strong{
+    font-size:7px;
+  }
+  body.rework-v2 .landing-promise{
+    flex-wrap:wrap;
+    line-height:1.7;
+    padding-bottom:0;
+  }
+}
