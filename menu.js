@@ -333,7 +333,7 @@
         document.body.appendChild(update);
       };
       ultimate.onerror = () => {
-        window.removeEventListener("error", onRuntimeError);
+        cleanupBootListeners();
         failLoad("ULTIMATE GAMEPLAY LAYER COULD NOT LOAD");
       };
       document.body.appendChild(ultimate);
