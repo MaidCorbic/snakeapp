@@ -282,7 +282,7 @@
 
     const script = document.createElement("script");
     script.id = "snakeGameScript";
-    script.src = "game.js?v=survival-v21";
+    script.src = "game.js?v=survival-v22";
     script.onload = () => {
       if (bootFailed) return;
       if (typeof window.SnakeEvolution?.start !== "function") {
@@ -300,7 +300,7 @@
         }
         const update = document.createElement("script");
         update.id = "snakeGameplayUpdateV2";
-        update.src = "gameplay-update-v2.js?v=update-v8";
+        update.src = "gameplay-update-v2.js?v=update-v9";
         update.onload = () => {
           if (bootFailed) return;
           const polish = document.createElement("script");
