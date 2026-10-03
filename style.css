@@ -3797,61 +3797,83 @@ img,svg,canvas{
 }
 
 
-/* GAME OVER // FINAL SCORE SYSTEM // REPLACEMENT DESIGN */
+/* GAME OVER // STATUS BRIEF + FINAL SCORE CARD LANGUAGE // NEW DESIGN */
 #message.message{
-  padding:18px!important;
+  padding:16px!important;
   background:
-    radial-gradient(circle at 50% 34%,rgba(121,227,91,.12),transparent 30%),
-    linear-gradient(180deg,rgba(2,5,3,.95),rgba(4,8,5,.985))!important;
+    radial-gradient(circle at 50% 34%,rgba(255,164,74,.13),transparent 30%),
+    radial-gradient(circle at 50% 100%,rgba(255,91,98,.06),transparent 36%),
+    linear-gradient(180deg,rgba(4,4,3,.96),rgba(9,7,5,.985))!important;
   backdrop-filter:blur(4px);
 }
 #message .message-card{
   position:relative;
+  isolation:isolate;
   width:min(620px,94%);
   max-height:min(88vh,720px);
   overflow:auto;
-  padding:26px 26px 20px!important;
-  border:1px solid #416348!important;
-  border-top:4px solid #79e35b!important;
-  border-radius:10px 3px 10px 3px!important;
+  padding:24px 24px 19px!important;
+  border:1px solid #705136!important;
+  border-top:0!important;
+  border-radius:0 14px 0 14px!important;
   background:
-    radial-gradient(circle at 50% 0,rgba(121,227,91,.10),transparent 36%),
-    linear-gradient(145deg,#0f1a12,#080d0a 68%,#07100a)!important;
+    radial-gradient(circle at 92% 8%,rgba(255,164,74,.11),transparent 24%),
+    linear-gradient(145deg,#17100a,#0b0c09 64%,#100a06)!important;
   box-shadow:
-    12px 12px 0 #010201,
-    0 0 70px rgba(121,227,91,.10),
-    inset 0 0 40px rgba(121,227,91,.025)!important;
+    10px 10px 0 #020201,
+    0 0 65px rgba(255,164,74,.09),
+    inset 0 0 34px rgba(255,164,74,.025)!important;
 }
-#message .message-card::before{content:none!important;display:none!important}
-#message .message-card::after{
+/* Angular frame instead of the old rectangular shell. */
+#message .message-card::before{
   content:"";
   position:absolute;
-  left:0;
-  right:0;
-  top:0;
-  height:1px;
-  background:linear-gradient(90deg,transparent,#b4ff9c,transparent);
-  opacity:.72;
+  inset:0;
+  z-index:-1;
+  pointer-events:none;
+  border:4px solid transparent;
+  border-left-color:#ffad5c;
+  border-bottom-color:#6f4930;
+  clip-path:polygon(0 12px,12px 0,calc(100% - 12px) 0,100% 12px,100% calc(100% - 12px),calc(100% - 12px) 100%,12px 100%,0 calc(100% - 12px));
+  opacity:.9;
+}
+#message .message-card::after{
+  content:"RUN STATUS";
+  position:absolute;
+  left:18px;
+  top:10px;
+  height:14px;
+  padding:2px 7px;
+  border:1px solid #775233;
+  border-radius:999px;
+  background:#120d08;
+  color:#c58e5b;
+  font:4px "Press Start 2P",monospace;
+  letter-spacing:1.2px;
+  line-height:9px;
+  box-shadow:inset 0 0 10px rgba(255,164,74,.04);
 }
 #message .message-card h2{
   margin:0!important;
-  padding:4px 0 12px!important;
-  color:#e7ffdf!important;
+  padding:16px 0 9px!important;
+  color:#fff0dc!important;
   font-size:clamp(23px,4vw,34px)!important;
-  line-height:1.1!important;
+  line-height:1.08!important;
   letter-spacing:1.8px;
-  text-shadow:0 0 22px rgba(121,227,91,.24);
+  text-shadow:0 0 22px rgba(255,164,74,.22);
+  text-align:left;
 }
 #message .result-copy{
-  margin:11px 0 13px!important;
-  color:#87a48d!important;
-  font-size:6px!important;
-  line-height:1.8!important;
-  text-align:center;
-  letter-spacing:.45px;
+  max-width:48ch;
+  margin:3px 0 14px!important;
+  color:#bca184!important;
+  font-size:5.5px!important;
+  line-height:1.75!important;
+  text-align:left;
+  letter-spacing:.35px;
 }
 
-/* FINAL SCORE / COMBO / LIVES use one identical card system. */
+/* Same FINAL SCORE card grammar, recolored for the run status. */
 .gameover-summary{
   display:grid;
   grid-template-columns:repeat(3,minmax(0,1fr));
@@ -3864,16 +3886,15 @@ img,svg,canvas{
   align-content:center;
   justify-items:center;
   gap:7px;
-  min-height:72px;
+  min-height:70px;
   padding:11px 10px;
-  border:1px solid #416348!important;
-  border-radius:8px!important;
-  background:
-    linear-gradient(145deg,#122017,#080f0a)!important;
+  border:1px solid #654a36!important;
+  border-radius:7px 2px 7px 2px!important;
+  background:linear-gradient(145deg,#1a130d,#0b0c09)!important;
   box-shadow:
-    4px 4px 0 #17231a,
-    inset 0 0 18px rgba(121,227,91,.025)!important;
-  color:#78947d!important;
+    4px 4px 0 #25180e,
+    inset 0 0 18px rgba(255,164,74,.022)!important;
+  color:#a38364!important;
   font-size:5px!important;
   letter-spacing:.75px;
 }
@@ -3884,54 +3905,56 @@ img,svg,canvas{
   right:9px;
   top:0;
   height:2px;
-  background:linear-gradient(90deg,#79e35b,transparent);
-  opacity:.7;
+  background:linear-gradient(90deg,#ffad5c,transparent);
+  opacity:.75;
 }
+.gameover-summary span:nth-child(2)::before{background:linear-gradient(90deg,#ff6b76,transparent)}
+.gameover-summary span:nth-child(3)::before{background:linear-gradient(90deg,#ffd36a,transparent)}
 .gameover-summary span:hover{
-  border-color:#79e35b!important;
+  border-color:#ffad5c!important;
   filter:brightness(1.08);
   transform:translateY(-2px);
 }
 .gameover-summary strong{
-  color:#caffbd!important;
+  color:#ffe5c4!important;
   font-size:13px!important;
   line-height:1!important;
   font-variant-numeric:tabular-nums;
-  text-shadow:0 0 12px rgba(121,227,91,.10);
+  text-shadow:0 0 12px rgba(255,164,74,.10);
 }
 
-/* Details is the only expanded layer; the initial Game Over stays compact. */
+/* Detailed stats stay hidden behind one deliberate disclosure. */
 .gameover-details{
   margin-top:12px;
-  border:1px solid #304c36!important;
-  border-radius:8px!important;
-  background:linear-gradient(145deg,#0d160f,#080d09)!important;
-  box-shadow:3px 3px 0 #162219!important;
+  border:1px solid #4d3a2a!important;
+  border-radius:7px 2px 7px 2px!important;
+  background:linear-gradient(145deg,#110e0a,#090b09)!important;
+  box-shadow:3px 3px 0 #1b120b!important;
   overflow:hidden;
 }
 .gameover-details summary{
   list-style:none;
   cursor:pointer;
-  min-height:47px;
+  min-height:46px;
   display:flex;
   align-items:center;
   justify-content:center;
   padding:10px 13px;
   border:0;
-  background:linear-gradient(180deg,#15251a,#0c140f)!important;
-  color:#baff9d!important;
+  background:linear-gradient(180deg,#21170d,#120f0a)!important;
+  color:#ffd09a!important;
   font:6px "Press Start 2P",monospace!important;
   letter-spacing:.85px;
-  transition:filter .15s ease,background .15s ease,transform .15s ease;
+  transition:filter .15s ease,background .15s ease;
 }
 .gameover-details summary::-webkit-details-marker{display:none}
-.gameover-details summary::before{content:"+";margin-right:8px;font-size:10px}
-.gameover-details[open] summary{background:linear-gradient(180deg,#1a2d1e,#0e1711)!important}
+.gameover-details summary::before{content:"+";margin-right:8px;font-size:10px;color:#ffad5c}
+.gameover-details[open] summary{background:linear-gradient(180deg,#2a1b10,#151009)!important}
 .gameover-details[open] summary::before{content:"−"}
 .gameover-details summary:hover{filter:brightness(1.12)}
 .gameover-detail-body{
   padding:10px;
-  border-top:1px solid #26372d;
+  border-top:1px solid #3a2e24;
 }
 .gameover-detail-body .stats-grid{
   grid-template-columns:repeat(4,minmax(0,1fr));
@@ -3940,15 +3963,15 @@ img,svg,canvas{
 .gameover-detail-body .stats-grid span{
   min-height:50px;
   padding:8px;
-  border:1px solid #273d2d;
-  border-radius:5px;
-  background:#0b120d;
-  color:#718774;
+  border:1px solid #3d3025;
+  border-radius:5px 2px 5px 2px;
+  background:#0d0d0b;
+  color:#84715f;
   font-size:4px;
 }
 .gameover-detail-body .stats-grid strong{
   margin-top:6px;
-  color:#e4f6e2;
+  color:#efe1d0;
   font-size:6px;
 }
 .gameover-detail-body .analysis-grid{margin-top:8px}
@@ -3963,20 +3986,25 @@ img,svg,canvas{
   width:100%;
   min-height:54px!important;
   margin-top:8px!important;
-  border:1px solid #9aff7d!important;
-  border-radius:7px!important;
-  background:linear-gradient(180deg,#79e35b,#4ea93c)!important;
-  color:#071006!important;
+  border:1px solid #ffb66b!important;
+  border-radius:7px 2px 7px 2px!important;
+  background:linear-gradient(180deg,#ffad5c,#d97935)!important;
+  color:#170b04!important;
   font-size:8px!important;
   letter-spacing:1px;
-  box-shadow:0 5px 0 #315d2b,0 0 22px rgba(121,227,91,.12)!important;
+  box-shadow:0 5px 0 #6e351c,0 0 22px rgba(255,164,74,.12)!important;
 }
-#message #start:hover{filter:brightness(1.1);transform:translateY(-1px)}
-#message #start:active{transform:translate(2px,3px)!important;box-shadow:0 1px 0 #315d2b!important}
+#message #start:hover{filter:brightness(1.08);transform:translateY(-1px)}
+#message #start:active{transform:translate(2px,3px)!important;box-shadow:0 1px 0 #6e351c!important}
+
 @media(max-width:700px){
+  #message.message{padding:12px!important}
   #message .message-card{width:96%;padding:22px 15px 16px!important}
+  #message .message-card::after{left:13px;top:8px;font-size:3.5px}
+  #message .message-card h2{padding-top:14px!important;font-size:22px!important}
+  #message .result-copy{font-size:5px!important}
   .gameover-summary{grid-template-columns:1fr 1fr;gap:7px}
-  .gameover-summary span{min-height:66px;padding:10px;font-size:4.5px!important}
+  .gameover-summary span{min-height:64px;padding:9px;font-size:4.5px!important}
   .gameover-summary span:first-child{grid-column:1/-1}
   .gameover-summary strong{font-size:11px!important}
   .gameover-details summary{font-size:5px!important}
@@ -3985,10 +4013,10 @@ img,svg,canvas{
 }
 @media(max-width:420px){
   #message .message-card{padding:20px 12px 14px!important}
+  #message .message-card::after{left:11px;top:7px}
   #message .message-card h2{font-size:20px!important}
-  #message .result-copy{font-size:5px!important}
-  .gameover-summary{grid-template-columns:1fr 1fr;gap:5px}
-  .gameover-summary span{min-height:60px;padding:8px;font-size:4px!important}
+  .gameover-summary{gap:5px}
+  .gameover-summary span{min-height:59px;padding:8px;font-size:4px!important}
   .gameover-summary strong{font-size:10px!important}
   .gameover-details summary{min-height:43px;font-size:4.5px!important}
   .gameover-detail-body{padding:7px}
