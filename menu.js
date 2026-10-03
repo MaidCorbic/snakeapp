@@ -137,7 +137,7 @@
   const startLoadedMode = (mode) => {
     if (mode === "daily") window.SnakeEvolution?.startDaily?.();
     else if (mode === "endless") window.SnakeEvolution?.startEndless?.();
-    else window.SnakeEvolution?.start?.();
+    else { if (mode === "party") { try { localStorage.setItem("snake-evolution-mode","party"); } catch {} } else { try { localStorage.setItem("snake-evolution-mode","standard"); } catch {} } window.SnakeEvolution?.start?.(); }
   };
 
   const loadGame = (mode="normal") => {
