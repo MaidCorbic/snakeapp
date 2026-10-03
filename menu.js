@@ -7,6 +7,7 @@
   const optionsBtn = document.querySelector("#bootOptions");
   const dailyBtn = document.querySelector("#bootDaily");
   const endlessBtn = document.querySelector("#bootEndless");
+  const funBtn = document.querySelector("#bootFun");
   const howPanel = document.querySelector("#bootHowPanel");
   const optionsPanel = document.querySelector("#bootOptionsPanel");
   const howBack = document.querySelector("#bootHowBack");
@@ -187,7 +188,12 @@
             gameLoading = false;
             gameLoaded = true;
             window.SnakeArcadePolish?.start?.();
-            startLoadedMode(mode);
+            const rework = document.createElement("script");
+            rework.id = "snakeReworkV2";
+            rework.src = "snake-rework-v2.js?v=rework-v2";
+            rework.onload = () => startLoadedMode(mode);
+            rework.onerror = () => failLoad("REWORK PRESENTATION LAYER COULD NOT LOAD");
+            document.body.appendChild(rework);
           };
           polish.onerror = () => {
             window.removeEventListener("error", onRuntimeError);
@@ -214,10 +220,11 @@
     document.body.appendChild(script);
   };
 
-  [startBtn,dailyBtn,endlessBtn,howBtn,optionsBtn].forEach(button=>button?.addEventListener("click",()=>startMusic(),{once:true}));
+  [startBtn,dailyBtn,endlessBtn,funBtn,howBtn,optionsBtn].forEach(button=>button?.addEventListener("click",()=>startMusic(),{once:true}));
   startBtn?.addEventListener("click", () => loadGame("normal"));
   dailyBtn?.addEventListener("click", () => loadGame("daily"));
   endlessBtn?.addEventListener("click", () => loadGame("endless"));
+  funBtn?.addEventListener("click", () => { try { localStorage.setItem("snake-evolution-mode","party"); } catch {} loadGame("party"); });
   howBtn?.addEventListener("click", () => {
     optionsPanel?.classList.add("hidden");
     howPanel?.classList.remove("hidden");
