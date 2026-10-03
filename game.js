@@ -77,7 +77,7 @@ function collectSupplyDrop(head){
   gain(data.score);gainXp(data.xp);chargeFury(data.fury);haptic(rarity==="legendary"?32:16);
   if(rarity==="common"){dashReady=performance.now();say("SUPPLY // DASH READY // +"+data.score)}
   else if(rarity==="rare"){shieldReady=performance.now();if(!core)core=free();say("RARE SUPPLY // SHIELD + CORE")}
-  else{lives=Math.min(3,lives+1);dashReady=performance.now();shieldReady=performance.now();pulseReady=performance.now();hazards=hazards.filter(h=>Math.abs(h.x-snake[0].x)+Math.abs(h.y-snake[0].y)>6);event("LEGENDARY // EMERGENCY RESUPPLY");say("LEGENDARY SUPPLY // LIFE +1 // ALL SYSTEMS READY")}
+  else{lives=Math.min(maxLives,lives+1);dashReady=performance.now();shieldReady=performance.now();pulseReady=performance.now();hazards=hazards.filter(h=>Math.abs(h.x-snake[0].x)+Math.abs(h.y-snake[0].y)>6);event("LEGENDARY // EMERGENCY RESUPPLY");say("LEGENDARY SUPPLY // LIFE +1 // ALL SYSTEMS READY")}
   floatText(data.label+" +"+data.score);
 }
 function handleZoneTransition(){
@@ -122,7 +122,7 @@ function hud(){
  zone=currentZone();level=currentLevel();
  zoneEl.textContent=zoneNames[zone];evoEl.textContent=evoNames[level-1];
  const lifeEl=document.querySelector("#lives"),streakEl=document.querySelector("#streakMark"),xpEl=document.querySelector("#xp"),xpFillEl=document.querySelector("#xpFill"),xpLevelEl=document.querySelector("#xpLevel"),mutationEl=document.querySelector("#mutation"),mutationLabel=document.querySelector("#mutationLabel");
- if(lifeEl)lifeEl.textContent="♥".repeat(lives)+"♡".repeat(Math.max(0,maxLives-lives));if(streakEl)streakEl.textContent="STREAK x"+chain;
+ if(lifeEl)lifeEl.textContent="♥".repeat(lives)+"♡".repeat(Math.max(0,maxLives-lives));if(pauseBtn){pauseBtn.disabled=!alive;pauseBtn.setAttribute("aria-pressed",String(paused));}if(streakEl)streakEl.textContent="STREAK x"+chain;
  if(xpEl)xpEl.textContent=xp+"/"+xpNext;
  if(xpFillEl)xpFillEl.style.width=Math.min(100,xp/xpNext*100)+"%";
  if(xpLevelEl)xpLevelEl.textContent="LVL "+xpLevel;
@@ -169,6 +169,7 @@ function useFury(){if(!alive||paused||fury<100||performance.now()<furyUntil)retu
 function key(e){const k=e.key.toLowerCase();if(["arrowup","arrowdown","arrowleft","arrowright"," ","w","a","s","d","shift","q"].includes(k))e.preventDefault();if(contractOfferOpen&&(k===" "||k==="enter")){acceptContract();return}if(k==="escape"||k==="p"){pause();return}if(k==="arrowup"||k==="w")setDir(0,-1);if(k==="arrowdown"||k==="s")setDir(0,1);if(k==="arrowleft"||k==="a")setDir(-1,0);if(k==="arrowright"||k==="d")setDir(1,0);if(k===" ")useDash();if(k==="shift")useShield();if(k==="e")usePulse();if(k==="q")useFury()}
 addEventListener("keydown",key);
 start.onclick=()=>{message.classList.remove("show");message.classList.add("hidden");reset()};
+pauseBtn?.addEventListener("click",e=>{e.preventDefault();pause()});
 showSave();
 document.querySelectorAll("[data-dir]").forEach(b=>b.addEventListener("pointerdown",e=>{
  e.preventDefault();
@@ -235,7 +236,7 @@ function hunterStep(){
 function spawnBoss(){if(boss)return;boss={...free(),hp:12,maxHp:12,phase:1};event("WARDEN INCOMING");say("WARDEN // BOSS INBOUND")}
 function destroyBoss(){if(!boss)return;boss=null;stats.wardens++;gainXp(150);chain++;const points=1000+chain*100;gain(points);chargeFury(25);floatText("+"+points);say("WARDEN DESTROYED // +"+points)}
 function bossStep(){if(!boss)return;bossClock++;boss.phase=boss.hp<=6?2:1;if(boss.phase===2&&bossClock%3)return;if(boss.phase===1&&bossClock%5)return;const dx=snake[0].x-boss.x,dy=snake[0].y-boss.y;if(Math.abs(dx)>Math.abs(dy))boss.x+=Math.sign(dx);else boss.y+=Math.sign(dy);boss.x=(boss.x+COLS)%COLS;boss.y=(boss.y+ROWS)%ROWS;if(bossClock%(boss.phase===2?7:15)===0)hazards.push(free());if(boss.phase===2&&bossClock%21===0){event("WARDEN PHASE 2");say("WARDEN // ENRAGED")}}
-function collectPowerup(head){const i=powerups.findIndex(x=>same(x,head));if(i<0)return;const type=powerups[i].type;powerups.splice(i,1);stats.powerups++;chargeFury(6);haptic(10);if(type==="overdrive"){dashReady=performance.now();gain(100);say("OVERDRIVE // DASH READY")}else if(type==="magnet"){energy=free();core=free();gain(75);say("MAGNET // LOOT RELOCATED")}else if(type==="apex"){gain(400);gainXp(80);combo=Math.min(9,combo+2);chain+=2;chargeFury(30);hazards=[];say("APEX CORE // THREAT WIPE")}else if(type==="medkit"){lives=Math.min(3,lives+1);gainXp(40);gain(125);say("MEDKIT // LIFE +1")}else{snake.push({...snake[snake.length-1]});gainXp(25);gain(150);say("REPAIR // +LENGTH")}}
+function collectPowerup(head){const i=powerups.findIndex(x=>same(x,head));if(i<0)return;const type=powerups[i].type;powerups.splice(i,1);stats.powerups++;chargeFury(6);haptic(10);if(type==="overdrive"){dashReady=performance.now();gain(100);say("OVERDRIVE // DASH READY")}else if(type==="magnet"){energy=free();core=free();gain(75);say("MAGNET // LOOT RELOCATED")}else if(type==="apex"){gain(400);gainXp(80);combo=Math.min(9,combo+2);chain+=2;chargeFury(30);hazards=[];say("APEX CORE // THREAT WIPE")}else if(type==="medkit"){lives=Math.min(maxLives,lives+1);gainXp(40);gain(125);say("MEDKIT // LIFE +1")}else{snake.push({...snake[snake.length-1]});gainXp(25);gain(150);say("REPAIR // +LENGTH")}}
 const missionDefs=[["energy25","COLLECTOR","Collect 25 ENERGY",()=>stats.energy,25],["core5","CORE HUNTER","Collect 5 CORES",()=>stats.cores,5],["hunter10","HUNTER","Defeat 10 HUNTERS",()=>stats.hunters,10],["combo9","COMBO MASTER","Reach COMBO x9",()=>combo,9],["fury1","FURY","Activate FURY once",()=>stats.furyUses,1],["warden","WARDEN SLAYER","Destroy 1 WARDEN",()=>stats.wardens,1],["nohit","NO HIT","Finish a run without damage",()=>stats.damage===0&&!alive?1:0,1],["score2500","SCORE BREAKER","Score 2,500 points",()=>score,2500],["powerups3","POWER USER","Collect 3 power-ups",()=>stats.powerups,3],["pulses3","PULSE RUNNER","Use PULSE 3 times",()=>stats.pulses,3],["survive120","LONG RUN","Survive 120 seconds",()=>Math.min(120,Math.floor((performance.now()-startedAt)/1000)),120]];
 function renderMissions(){if(!missionList)return;const m=missions();missionList.innerHTML=missionDefs.map(([id,name,label,get,target])=>{const done=!!m[id];const value=Math.min(target,get());const pct=Math.round(value/target*100);return `<div class="mission-item ${done?"done":""}"><div><b>${name}</b><span>${label}</span></div><strong>${done?"DONE":value+"/"+target}</strong><i><em style="width:${pct}%"></em></i></div>`}).join("")}
 let missionRenderAt=0;
