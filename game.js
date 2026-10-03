@@ -178,7 +178,7 @@ dashBtn?.addEventListener("pointerdown",e=>{e.preventDefault();useDash()},{passi
 shieldBtn?.addEventListener("pointerdown",e=>{e.preventDefault();useShield()},{passive:false});
 pulseBtn?.addEventListener("pointerdown",e=>{e.preventDefault();usePulse()},{passive:false});
 furyBtn?.addEventListener("pointerdown",e=>{e.preventDefault();useFury()},{passive:false});
-let touchStart=null;
+let touchStart=null,lastTouchInputAt=0;
 const beginTouch=(x,y)=>{
  if(!alive||paused)return;
  touchStart={x,y};
@@ -187,11 +187,15 @@ const finishTouch=(x,y)=>{
  if(!touchStart||!alive||paused){touchStart=null;return}
  const dx=x-touchStart.x,dy=y-touchStart.y;
  touchStart=null;
- if(Math.max(Math.abs(dx),Math.abs(dy))<20)return;
+ if(Math.max(Math.abs(dx),Math.abs(dy))<12)return;
+ const now=performance.now();
+ if(now-lastTouchInputAt<55)return;
+ lastTouchInputAt=now;
  if(Math.abs(dx)>Math.abs(dy))setDir(Math.sign(dx),0);else setDir(0,Math.sign(dy));
 };
 canvas.addEventListener("touchstart",e=>{
  if(e.touches.length!==1)return;
+ e.preventDefault();
  const t=e.touches[0];
  beginTouch(t.clientX,t.clientY);
 },{passive:false});
@@ -199,20 +203,19 @@ canvas.addEventListener("touchmove",e=>{
  if(alive&&!paused)e.preventDefault();
 },{passive:false});
 canvas.addEventListener("touchend",e=>{
- if(!e.changedTouches.length)return;
+ e.preventDefault();
  const t=e.changedTouches[0];
- finishTouch(t.clientX,t.clientY);
+ if(t)finishTouch(t.clientX,t.clientY);
 },{passive:false});
 canvas.addEventListener("touchcancel",()=>{touchStart=null},{passive:true});
 canvas.addEventListener("pointerdown",e=>{
  if(e.pointerType!=="touch")return;
+ e.preventDefault();
  beginTouch(e.clientX,e.clientY);
-},{passive:false});
-canvas.addEventListener("pointermove",e=>{
- if(e.pointerType==="touch"&&alive&&!paused)e.preventDefault();
 },{passive:false});
 canvas.addEventListener("pointerup",e=>{
  if(e.pointerType!=="touch")return;
+ e.preventDefault();
  finishTouch(e.clientX,e.clientY);
 },{passive:false});
 canvas.addEventListener("pointercancel",()=>{touchStart=null},{passive:true});
