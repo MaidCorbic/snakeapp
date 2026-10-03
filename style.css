@@ -2049,3 +2049,81 @@ img,svg,canvas{
   .run-intel-v3 .contract-actions{gap:4px;margin-top:5px}
   .run-intel-v3 .contract-actions button{min-height:23px;padding:5px;font-size:3.5px}
 }
+
+
+/* GAMEPLAY HUD V3 // readability boost */
+.run-command-bar .run-eyebrow{font-size:6.5px!important}
+.run-identity h1{font-size:clamp(20px,2.7vw,28px)!important}
+.run-identity .subhud{font-size:6px!important}
+.run-stat-tile>span{font-size:6.5px!important}
+.run-stat-tile>strong{font-size:19px!important}
+.score-tile>strong{font-size:24px!important}
+.time-tile>strong{font-size:26px!important}
+.run-stat-tile>small{font-size:5px!important}
+.run-stat-tile>small b{font-size:6px!important}
+.run-command-bar .run-pause-btn{font-size:7px!important}
+.run-status-v3 .life-module span,
+.run-status-v3 .xp-row span,
+.run-status-v3 .mutation-module span,
+.run-status-v3 .condition-module span{font-size:6px!important}
+.run-status-v3 .life-module strong{font-size:17px!important}
+.run-status-v3 .life-module small{font-size:5px!important}
+.run-status-v3 .xp-row strong{font-size:7px!important}
+.run-status-v3 .xp-row b{font-size:6px!important}
+.run-status-v3 .mutation-module strong,
+.run-status-v3 .condition-module strong{font-size:7px!important}
+.run-status-v3 .mutation-module small,
+.run-status-v3 .condition-module small{font-size:5px!important}
+.run-intel-v3 .intel-top span{font-size:6px!important}
+.run-intel-v3 .intel-top strong{font-size:7.5px!important}
+.run-intel-v3 .intel-top b{font-size:5.5px!important}
+.run-intel-v3 .intel-secondary-card .intel-top strong{font-size:6.5px!important}
+.run-intel-v3 .contract-actions button{font-size:5.5px!important}
+.run-mode-v3 span{font-size:5px!important}
+.run-mode-v3 strong,.run-mode-v3 b{font-size:6.2px!important}
+
+@media(max-width:700px){
+  .run-command-bar .run-eyebrow{font-size:5px!important}
+  .run-identity h1{font-size:19px!important}
+  .run-identity .subhud{font-size:5px!important}
+  .run-stat-tile>span{font-size:5px!important}
+  .run-stat-tile>strong{font-size:15px!important}
+  .score-tile>strong{font-size:19px!important}
+  .time-tile>strong{font-size:20px!important}
+  .run-stat-tile>small{font-size:4px!important}
+  .run-stat-tile>small b{font-size:5px!important}
+  .run-command-bar .run-pause-btn{font-size:6px!important}
+  .run-status-v3 .life-module span,
+  .run-status-v3 .xp-row span,
+  .run-status-v3 .mutation-module span,
+  .run-status-v3 .condition-module span{font-size:5px!important}
+  .run-status-v3 .life-module strong{font-size:14px!important}
+  .run-status-v3 .life-module small{font-size:4.5px!important}
+  .run-status-v3 .xp-row strong{font-size:6px!important}
+  .run-status-v3 .xp-row b{font-size:5px!important}
+  .run-status-v3 .mutation-module strong,
+  .run-status-v3 .condition-module strong{font-size:6.5px!important}
+  .run-status-v3 .mutation-module small,
+  .run-status-v3 .condition-module small{font-size:4px!important}
+  .run-intel-v3 .intel-top span{font-size:5px!important}
+  .run-intel-v3 .intel-top strong{font-size:6.5px!important}
+  .run-intel-v3 .intel-top b{font-size:4.5px!important}
+  .run-intel-v3 .intel-secondary-card .intel-top strong{font-size:5.7px!important}
+  .run-intel-v3 .contract-actions button{font-size:5px!important}
+  .run-mode-v3 span{font-size:4px!important}
+  .run-mode-v3 strong,.run-mode-v3 b{font-size:5.2px!important}
+}
+@media(max-width:420px){
+  .run-identity h1{font-size:17px!important}
+  .score-tile>strong{font-size:17px!important}
+  .time-tile>strong{font-size:18px!important}
+  .run-stat-tile>strong{font-size:13px!important}
+  .run-status-v3 .life-module strong{font-size:12px!important}
+  .run-status-v3 .xp-row strong{font-size:5.5px!important}
+  .run-status-v3 .xp-row b{font-size:4.5px!important}
+  .run-status-v3 .mutation-module strong,
+  .run-status-v3 .condition-module strong{font-size:6px!important}
+  .run-intel-v3 .intel-top span{font-size:4.5px!important}
+  .run-intel-v3 .intel-top strong{font-size:5.8px!important}
+  .run-intel-v3 .intel-top b{font-size:4px!important}
+}
