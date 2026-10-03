@@ -4000,3 +4000,34 @@ img,svg,canvas{
   .gameover-detail-body .stats-grid span{min-height:44px;padding:6px}
   .gameover-detail-body .stats-grid strong{font-size:5.5px}
 }
+
+
+
+/* NAV + RANK RESET // FINAL INTERACTION PASS */
+.run-identity h1{
+  cursor:pointer;
+  -webkit-tap-highlight-color:transparent;
+  transition:filter .15s ease,transform .15s ease,text-shadow .15s ease;
+}
+.run-identity h1:hover{
+  filter:brightness(1.08);
+  transform:translateY(-1px);
+  text-shadow:0 0 18px rgba(121,227,91,.14);
+}
+.run-identity h1:focus-visible{
+  outline:2px solid var(--yellow);
+  outline-offset:5px;
+}
+#bootResetRank{
+  border-color:#75402d!important;
+  background:linear-gradient(180deg,#28160f,#170c08)!important;
+  color:#ffb079!important;
+  box-shadow:3px 3px 0 #2d170e,0 0 14px rgba(255,134,71,.06)!important;
+}
+#bootResetRank:hover{
+  border-color:#ff8a55!important;
+  filter:brightness(1.08);
+}
+@media(max-width:700px){
+  .run-identity h1{cursor:pointer}
+}
