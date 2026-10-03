@@ -118,6 +118,61 @@ html.meta-hide-timer #time,html.meta-hide-timer .stats span:has(#time){visibilit
 body.meta-no-combat-fx .event-banner,body.meta-no-combat-fx .toast,body.meta-no-combat-fx .floaters{display:none!important}
 @media(max-width:700px){.meta-panel{padding:11px}.meta-card-grid,.badge-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.timed-list{grid-template-columns:1fr}.meta-actions{grid-template-columns:1fr}.meta-card{min-height:122px}.badge-emblem{width:58px;height:58px}.badge-emblem .badge-glyph{font-size:17px}}
 @media(max-width:480px){.meta-card-grid,.badge-grid{grid-template-columns:1fr 1fr}.meta-card h4{font-size:5px}.meta-badge{min-height:152px}.badge-emblem{width:52px;height:52px}}
+/* BADGE ARCHIVE // LARGE VISUAL MODE */
+#bootBadgePanel{
+  padding:20px!important;
+  border-color:#765d2c!important;
+  background:radial-gradient(circle at 50% 0%,rgba(255,177,69,.075),transparent 36%),linear-gradient(145deg,#0d120c,#060905)!important;
+  box-shadow:inset 0 0 38px rgba(255,180,70,.045),0 0 0 1px rgba(255,177,69,.05),0 0 46px rgba(255,160,50,.08)!important;
+}
+#bootBadgePanel .meta-panel-head{padding:12px 0 14px!important;border-bottom-color:#4d3b20!important}
+#bootBadgePanel .meta-panel-head b{font-size:10px!important;letter-spacing:1.4px!important;color:#f0ddbc!important}
+#bootBadgePanel .meta-panel-head small{font-size:5px!important;color:#9c8b70!important}
+#bootBadgePanel .meta-panel-head>strong{padding:8px 10px!important;border:1px solid #8b682f!important;border-radius:8px!important;background:#181107!important;color:#ffc46a!important;font-size:8px!important;letter-spacing:1px!important;box-shadow:0 0 18px rgba(255,174,68,.12)!important}
+#bootBadgePanel .meta-summary{gap:8px!important;padding:2px 0 5px!important}
+#bootBadgePanel .meta-summary span{padding:9px 11px!important;border-color:#56462b!important;font-size:5px!important}
+#bootBadgePanel .meta-summary strong{font-size:7px!important;color:#ffdf9a!important}
+#bootBadgePanel .meta-panel-scroll{max-height:min(64vh,680px)!important;padding-right:6px!important}
+#bootBadgePanel .badge-grid{grid-template-columns:repeat(auto-fill,minmax(215px,1fr))!important;gap:12px!important}
+#bootBadgePanel .meta-badge{
+  min-height:230px!important;padding:14px!important;border-width:1px!important;border-radius:14px!important;
+  box-shadow:inset 0 0 28px rgba(0,0,0,.32),0 0 20px hsl(var(--h) 75% 48% / var(--glow))!important;
+}
+#bootBadgePanel .meta-badge-top b{font-size:5px!important}
+#bootBadgePanel .meta-badge-top span{font-size:4px!important}
+#bootBadgePanel .badge-emblem{
+  width:98px!important;height:98px!important;margin:18px auto 15px!important;border-width:3px!important;
+  box-shadow:0 0 0 5px hsl(var(--h) 50% 30% / .16),0 0 34px hsl(var(--h) 90% 58% / .38)!important;
+}
+#bootBadgePanel .badge-emblem::before{inset:12px!important;border-width:2px!important}
+#bootBadgePanel .badge-emblem::after{inset:22px!important}
+#bootBadgePanel .meta-badge .badge-glyph{font-size:30px!important}
+#bootBadgePanel .meta-badge h4{margin-bottom:7px!important;font-size:7px!important;line-height:1.45!important}
+#bootBadgePanel .meta-badge p{font-size:5px!important;line-height:1.85!important}
+#bootBadgePanel .meta-badge small{margin-top:11px!important;font-size:4.5px!important;letter-spacing:.5px!important}
+#bootBadgePanel .meta-badge.unlocked{border-color:hsl(var(--h) 72% 60% / .9)!important;transform:translateY(-1px)}
+#bootBadgePanel .meta-badge.unlocked::after{
+  content:"UNLOCKED";position:absolute;top:11px;right:11px;padding:4px 6px;border:1px solid hsl(var(--h) 70% 58% / .55);
+  border-radius:6px;background:#0b100b;color:hsl(var(--h) 82% 72%);font-size:3.5px;letter-spacing:1px;
+}
+#bootBadgePanel .meta-close{min-height:44px!important;font-size:6px!important}
+@media(max-width:700px){
+  #bootBadgePanel{padding:13px!important}
+  #bootBadgePanel .badge-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:9px!important}
+  #bootBadgePanel .meta-badge{min-height:205px!important;padding:11px!important}
+  #bootBadgePanel .badge-emblem{width:78px!important;height:78px!important;margin:14px auto 11px!important}
+  #bootBadgePanel .meta-badge .badge-glyph{font-size:24px!important}
+  #bootBadgePanel .meta-badge h4{font-size:5.8px!important}
+  #bootBadgePanel .meta-badge p{font-size:4.3px!important}
+}
+@media(max-width:480px){
+  #bootBadgePanel .badge-grid{grid-template-columns:1fr 1fr!important}
+  #bootBadgePanel .meta-badge{min-height:185px!important}
+  #bootBadgePanel .badge-emblem{width:68px!important;height:68px!important}
+  #bootBadgePanel .meta-badge .badge-glyph{font-size:21px!important}
+  #bootBadgePanel .meta-badge h4{font-size:5.1px!important}
+  #bootBadgePanel .meta-badge p{font-size:3.9px!important}
+}
 `;
     document.head.appendChild(style);
   }
