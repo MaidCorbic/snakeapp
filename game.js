@@ -169,7 +169,6 @@ function useFury(){if(!alive||paused||fury<100||performance.now()<furyUntil)retu
 function key(e){const k=e.key.toLowerCase();if(["arrowup","arrowdown","arrowleft","arrowright"," ","w","a","s","d","shift","q"].includes(k))e.preventDefault();if(contractOfferOpen&&(k===" "||k==="enter")){acceptContract();return}if(k==="escape"||k==="p"){pause();return}if(k==="arrowup"||k==="w")setDir(0,-1);if(k==="arrowdown"||k==="s")setDir(0,1);if(k==="arrowleft"||k==="a")setDir(-1,0);if(k==="arrowright"||k==="d")setDir(1,0);if(k===" ")useDash();if(k==="shift")useShield();if(k==="e")usePulse();if(k==="q")useFury()}
 addEventListener("keydown",key);
 start.onclick=()=>{message.classList.remove("show");message.classList.add("hidden");reset()};
-pauseBtn?.addEventListener("click",e=>{e.preventDefault();pause()});
 showSave();
 document.querySelectorAll("[data-dir]").forEach(b=>b.addEventListener("pointerdown",e=>{
  e.preventDefault();
