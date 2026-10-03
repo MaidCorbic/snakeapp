@@ -971,6 +971,117 @@ body.rework-v2 .landing-profile .profile-block:first-child span{
   body.rework-v2 .landing-profile .profile-block:first-child strong{font-size:13px!important}
   #bootHowPanel .how-row p{font-size:6.4px!important}
 }
+
+/* HOW TO PLAY // FINAL READABILITY PASS */
+#bootHowPanel.how-console{
+  padding:26px!important;
+}
+#bootHowPanel .boot-panel-heading{
+  margin-bottom:18px!important;
+  padding-bottom:17px!important;
+}
+#bootHowPanel .boot-panel-heading b{
+  font-size:15px!important;
+  line-height:1.45!important;
+  letter-spacing:1.8px!important;
+}
+#bootHowPanel .boot-panel-heading small{
+  font-size:8px!important;
+  line-height:1.9!important;
+}
+#bootHowPanel .boot-panel-heading>strong{
+  font-size:8px!important;
+  padding:8px 10px!important;
+}
+#bootHowPanel .how-intro{
+  margin-bottom:18px!important;
+  padding:14px 15px!important;
+  min-height:46px!important;
+}
+#bootHowPanel .how-intro strong{
+  font-size:9px!important;
+  letter-spacing:1.4px!important;
+}
+#bootHowPanel .how-intro span{
+  font-size:7.5px!important;
+  line-height:1.9!important;
+}
+#bootHowPanel .how-grid{
+  gap:13px!important;
+}
+#bootHowPanel .how-card{
+  padding:15px!important;
+}
+#bootHowPanel .how-card>header{
+  gap:10px!important;
+  margin-bottom:12px!important;
+  padding-bottom:11px!important;
+}
+#bootHowPanel .how-card>header span{
+  width:34px!important;
+  height:34px!important;
+  font-size:7px!important;
+}
+#bootHowPanel .how-card>header b{
+  font-size:10.5px!important;
+  line-height:1.5!important;
+  letter-spacing:.35px!important;
+}
+#bootHowPanel .how-row{
+  gap:10px!important;
+  padding:10px 0!important;
+}
+#bootHowPanel .how-row kbd{
+  padding:8px 9px!important;
+  font-size:8px!important;
+}
+#bootHowPanel .how-row p{
+  font-size:8.5px!important;
+  line-height:1.95!important;
+  color:#c2d7dc!important;
+}
+#bootHowPanel .how-row p strong{
+  font-size:8.8px!important;
+}
+#bootHowPanel #bootHowBack{
+  margin-top:17px!important;
+  min-height:52px!important;
+  font-size:8px!important;
+}
+body.rework-v2 .landing-profile{
+  grid-template-columns:repeat(3,minmax(0,1fr))!important;
+}
+@media(max-width:900px){
+  body.rework-v2 .landing-profile{
+    grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  }
+}
+@media(max-width:700px){
+  #bootHowPanel.how-console{
+    padding:18px!important;
+  }
+  #bootHowPanel .boot-panel-heading b{font-size:12px!important}
+  #bootHowPanel .boot-panel-heading small{font-size:6.5px!important}
+  #bootHowPanel .how-intro strong{font-size:8px!important}
+  #bootHowPanel .how-intro span{font-size:6.5px!important}
+  #bootHowPanel .how-card{padding:13px!important}
+  #bootHowPanel .how-card>header b{font-size:9px!important}
+  #bootHowPanel .how-row kbd{font-size:7px!important}
+  #bootHowPanel .how-row p{font-size:7.5px!important;line-height:1.9!important}
+  #bootHowPanel .how-row p strong{font-size:7.8px!important}
+}
+@media(max-width:480px){
+  #bootHowPanel.how-console{padding:14px!important}
+  #bootHowPanel .boot-panel-heading b{font-size:10px!important}
+  #bootHowPanel .boot-panel-heading small{font-size:5.8px!important}
+  #bootHowPanel .how-intro strong{font-size:7px!important}
+  #bootHowPanel .how-intro span{font-size:5.8px!important}
+  #bootHowPanel .how-card>header b{font-size:8px!important}
+  #bootHowPanel .how-row kbd{font-size:6.5px!important}
+  #bootHowPanel .how-row p{font-size:7px!important;line-height:1.85!important}
+  #bootHowPanel .how-row p strong{font-size:7.2px!important}
+}
+
 /* landing-readability-v3 */
 /* PERSONAL BEST // stronger hierarchy */
 body.rework-v2 .landing-profile{
@@ -1187,10 +1298,6 @@ body.rework-v2 .landing-profile .profile-block:nth-child(4) strong{
       </aside>
     </div>
     <section class="landing-profile" aria-label="Player profile">
-      <div class="profile-block">
-        <span>RECORD // PB</span>
-        <strong id="landingBest">0</strong>
-      </div>
       <div class="profile-block">
         <span>LAST RUN</span>
         <strong id="landingLastMode">STANDARD</strong>
