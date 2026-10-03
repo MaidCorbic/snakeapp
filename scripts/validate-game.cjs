@@ -63,7 +63,7 @@ const requiredIds = [
 check("arcade polish stylesheet exists", fs.existsSync(path.join(root, "arcade-polish-v1.css")));
 check("rework stylesheet exists", fs.existsSync(path.join(root, "snake-rework-v2.css")));
 check("party run wiring exists", /bootFun/.test(html) && /mode === "party"/.test(menu) && /FUN_RUN_TIME/.test(game));
-check("arcade polish loader is wired", /arcade-polish-v1\.js\?v=arcade-v1/.test(menu) && /snake-rework-v2\.js\?v=rework-v2/.test(menu));
+check("arcade polish loader is wired", /arcade-polish-v1\.js\?v=arcade-v2/.test(menu) && /snake-rework-v2\.js\?v=rework-v3/.test(menu));
 
 check("required project files exist", [
   "index.html",
@@ -88,11 +88,11 @@ for (const src of localScripts) {
   check("HTML script exists: " + clean, fs.existsSync(path.join(root, clean)));
 }
 
-check("menu loads the gameplay layers", /game\.js\?v=/.test(menu) &&
+check("menu loads cache-busted gameplay layers", /game\.js\?v=survival-v15/.test(menu) &&
   /ultimate-gameplay-v1\.js\?v=/.test(menu) &&
   /gameplay-update-v2\.js\?v=/.test(menu));
 
-check("menu prevents duplicate/in-progress game loads",
+check("pause control has one authoritative click handler", !/pauseBtn\?\.addEventListener\("click"/.test(game) && /pauseControl\?\.addEventListener\("click"/.test(update));\n\ncheck("menu prevents duplicate/in-progress game loads",
   /if\s*\(gameLoaded\)/.test(menu) &&
   /if\s*\(gameLoading\)\s*return/.test(menu));
 
