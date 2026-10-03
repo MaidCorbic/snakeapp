@@ -19,6 +19,10 @@
   const musicToggle = document.querySelector("#bootMusic");
   const crtToggle = document.querySelector("#bootCrt");
   const contrastToggle = document.querySelector("#bootContrast");
+  const timerToggle = document.querySelector("#bootTimer");
+  const fxToggle = document.querySelector("#bootFx");
+  const briefTime = document.querySelector("#briefTime");
+  const briefTimeNote = document.querySelector("#briefTimeNote");
   const volumeSlider = document.querySelector("#bootVolume");
   const volumeValue = document.querySelector("#bootVolumeValue");
   const fullscreenBtn = document.querySelector("#bootFullscreen");
@@ -34,7 +38,7 @@
   const errorText = document.querySelector("#bootErrorText");
   const retryBtn = document.querySelector("#bootErrorRetry");
   const settingsKey = "snake-evolution-settings";
-  const defaults = {grid:true,vibration:true,reducedMotion:false,crt:true,highContrast:false,sound:true,music:true,volume:65};
+  const defaults = {grid:true,vibration:true,reducedMotion:false,crt:true,highContrast:false,showTimer:true,combatFx:true,sound:true,music:true,volume:65};
   let settings = {...defaults};
   let gameLoaded = false;
   let gameLoading = false;
@@ -72,12 +76,14 @@
       if (landingBest) landingBest.textContent = best.toLocaleString();
       const last = localStorage.getItem("snake-evolution-mode");
       if (landingLastMode) landingLastMode.textContent = last === "party" ? "PARTY RUN" : "STANDARD";
+      if (briefTime) briefTime.textContent = last === "party" ? "03:00" : "05:00";
+      if (briefTimeNote) briefTimeNote.textContent = last === "party" ? "PARTY WINDOW" : "STANDARD WINDOW";
     } catch {}
     if (landingAudioState) landingAudioState.textContent = settings.music && settings.volume > 0 ? "MUSIC ON" : "MUSIC OFF";
   };
 
   const renderSettings = () => {
-    [[gridToggle,"grid"],[vibrationToggle,"vibration"],[motionToggle,"reducedMotion"],[crtToggle,"crt"],[contrastToggle,"highContrast"],[soundToggle,"sound"],[musicToggle,"music"]].forEach(([button,key]) => {
+    [[gridToggle,"grid"],[vibrationToggle,"vibration"],[motionToggle,"reducedMotion"],[crtToggle,"crt"],[contrastToggle,"highContrast"],[timerToggle,"showTimer"],[fxToggle,"combatFx"],[soundToggle,"sound"],[musicToggle,"music"]].forEach(([button,key]) => {
       if (!button) return;
       button.textContent = settings[key] ? "ON" : "OFF";
       button.setAttribute("aria-pressed", String(!!settings[key]));
@@ -273,6 +279,8 @@
   musicToggle?.addEventListener("click", () => { settings.music=!settings.music; saveSettings(); });
   crtToggle?.addEventListener("click", () => { settings.crt=!settings.crt; saveSettings(); });
   contrastToggle?.addEventListener("click", () => { settings.highContrast=!settings.highContrast; saveSettings(); });
+  timerToggle?.addEventListener("click", () => { settings.showTimer=!settings.showTimer; saveSettings(); });
+  fxToggle?.addEventListener("click", () => { settings.combatFx=!settings.combatFx; saveSettings(); });
   volumeSlider?.addEventListener("input", () => {
     settings.volume=Number(volumeSlider.value)||0;
     if(volumeValue) volumeValue.textContent=settings.volume+"%";
