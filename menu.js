@@ -240,6 +240,10 @@
       return;
     }
     if (gameLoading) return;
+    if (document.getElementById("snakeGameScript")) {
+      window.location.reload();
+      return;
+    }
     gameLoading = true;
     bootFailed = false;
     bootMenu?.classList.add("hidden");
@@ -267,7 +271,7 @@
 
     const script = document.createElement("script");
     script.id = "snakeGameScript";
-    script.src = "game.js?v=survival-v17";
+    script.src = "game.js?v=survival-v18";
     script.onload = () => {
       if (bootFailed) return;
       if (typeof window.SnakeEvolution?.start !== "function") {
