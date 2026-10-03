@@ -25,6 +25,7 @@
   const resetSettingsBtn = document.querySelector("#bootResetSettings");
   const settingsState = document.querySelector("#bootSettingsState");
   const versionLabel = document.querySelector("#bootGameVersion");
+  const bootClock = document.querySelector("#bootClock");
   const GAME_VERSION = "2.0.0";
   const landingBest = document.querySelector("#landingBest");
   const landingLastMode = document.querySelector("#landingLastMode");
@@ -44,6 +45,15 @@
   let musicStep = 0;
 
   try { settings = {...defaults, ...JSON.parse(localStorage.getItem(settingsKey) || "{}")}; } catch {}
+
+  const updateBootClock = () => {
+    if (!bootClock) return;
+    const now = new Date();
+    const pad = value => String(value).padStart(2, "0");
+    bootClock.textContent = pad(now.getHours()) + ":" + pad(now.getMinutes()) + ":" + pad(now.getSeconds());
+  };
+  updateBootClock();
+  window.setInterval(updateBootClock, 1000);
 
   const hidePanels = () => {
     howPanel?.classList.add("hidden");
@@ -250,7 +260,7 @@
   });
   howBack?.addEventListener("click", hidePanels);
   optionsBack?.addEventListener("click", hidePanels);
-  retryBtn?.addEventListener("click", loadGame);
+  retryBtn?.addEventListener("click", () => window.location.reload());
 
   gridToggle?.addEventListener("click", () => { settings.grid=!settings.grid; saveSettings(); });
   vibrationToggle?.addEventListener("click", () => { settings.vibration=!settings.vibration; saveSettings(); });
