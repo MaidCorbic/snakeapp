@@ -156,6 +156,181 @@ body.meta-no-combat-fx .event-banner,body.meta-no-combat-fx .toast,body.meta-no-
   border-radius:6px;background:#0b100b;color:hsl(var(--h) 82% 72%);font-size:3.5px;letter-spacing:1px;
 }
 #bootBadgePanel .meta-close{min-height:44px!important;font-size:6px!important}
+/* OPTIONS + ACHIEVEMENTS // READABLE UI PASS */
+#bootOptionsPanel{
+  padding:22px!important;
+  border-color:#3f5d47!important;
+  background:radial-gradient(circle at 12% 0%,rgba(141,255,102,.07),transparent 35%),linear-gradient(145deg,#0d1710,#060b08)!important;
+  box-shadow:inset 0 0 36px rgba(0,0,0,.32),0 0 36px rgba(121,227,91,.08)!important;
+}
+#bootOptionsPanel .boot-panel-heading{padding-bottom:15px!important;margin-bottom:6px!important}
+#bootOptionsPanel .boot-panel-heading b{font-size:11px!important;line-height:1.35!important;color:#e5f3e7!important;letter-spacing:1.5px!important}
+#bootOptionsPanel .boot-panel-heading small{font-size:6px!important;line-height:1.9!important;color:#8ca58f!important}
+#bootOptionsPanel .boot-panel-heading>strong{font-size:7px!important;padding:6px 8px!important;border:1px solid #405d46;border-radius:7px;background:#0a120d;color:#aaff8d!important}
+#bootOptionsPanel .options-grid{gap:0 24px!important}
+#bootOptionsPanel .options-grid .option-row{
+  min-height:82px!important;
+  padding:15px 0!important;
+  align-items:center!important;
+  border-bottom:1px solid #24372a!important;
+}
+#bootOptionsPanel .option-row>div:first-child{gap:7px!important}
+#bootOptionsPanel .option-row>div:first-child b{
+  font-size:8px!important;
+  line-height:1.35!important;
+  letter-spacing:.9px!important;
+  color:#e8f4e9!important;
+}
+#bootOptionsPanel .option-row>div:first-child small{
+  font-size:6px!important;
+  line-height:1.85!important;
+  color:#91a995!important;
+  max-width:330px!important;
+}
+#bootOptionsPanel .option-toggle{
+  min-width:94px!important;
+  min-height:44px!important;
+  padding:9px 12px!important;
+  border:1px solid #46664e!important;
+  border-radius:8px!important;
+  font-size:7px!important;
+  font-weight:700!important;
+  letter-spacing:1px!important;
+  cursor:pointer!important;
+  box-shadow:3px 3px 0 #101a12!important;
+}
+#bootOptionsPanel .option-toggle[aria-pressed="true"]{
+  border-color:#79e35b!important;
+  background:linear-gradient(180deg,#18301c,#0d1d12)!important;
+  color:#dfffd6!important;
+  box-shadow:0 0 18px rgba(121,227,91,.12),3px 3px 0 #27442c!important;
+}
+#bootOptionsPanel .option-toggle[aria-pressed="false"]{
+  background:linear-gradient(180deg,#151c17,#0a100c)!important;
+  color:#839987!important;
+}
+#bootOptionsPanel .range-control{min-width:190px!important;gap:11px!important}
+#bootOptionsPanel .range-control input{height:7px!important}
+#bootOptionsPanel .range-control output{
+  min-width:48px!important;
+  font-size:6px!important;
+  font-weight:700!important;
+  color:#baff9d!important;
+}
+#bootOptionsPanel .option-actions{
+  grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  gap:9px!important;
+  margin-top:15px!important;
+}
+#bootOptionsPanel .option-actions .boot-action{
+  min-height:46px!important;
+  font-size:6.5px!important;
+  border-radius:8px!important;
+  cursor:pointer!important;
+}
+#bootOptionsPanel #bootOptionsBack{
+  min-height:46px!important;
+  margin-top:10px!important;
+  font-size:7px!important;
+  border-radius:8px!important;
+}
+#bootAchievementPanel{
+  padding:22px!important;
+  border-color:#735728!important;
+  background:radial-gradient(circle at 50% 0%,rgba(255,177,69,.08),transparent 38%),linear-gradient(145deg,#11110a,#070906)!important;
+}
+#bootAchievementPanel .meta-panel-head{padding:13px 0 16px!important}
+#bootAchievementPanel .meta-panel-head b{font-size:11px!important;line-height:1.35!important;color:#f0e2c7!important;letter-spacing:1.3px!important}
+#bootAchievementPanel .meta-panel-head small{font-size:6px!important;line-height:1.9!important;color:#a29379!important}
+#bootAchievementPanel .meta-panel-head>strong{font-size:7px!important;padding:8px 10px!important}
+#bootAchievementPanel .meta-summary{gap:9px!important;padding:3px 0 9px!important}
+#bootAchievementPanel .meta-summary span{
+  padding:9px 11px!important;
+  font-size:6px!important;
+  border-radius:8px!important;
+  border-color:#57472d!important;
+}
+#bootAchievementPanel .meta-summary strong{font-size:7px!important;color:#ffe0a0!important}
+#bootAchievementPanel .meta-panel-scroll{max-height:min(66vh,700px)!important}
+#bootAchievementPanel .timed-list{
+  grid-template-columns:repeat(auto-fill,minmax(250px,1fr))!important;
+  gap:10px!important;
+}
+#bootAchievementPanel .timed-achievement{
+  min-height:178px!important;
+  padding:13px!important;
+  border-radius:11px!important;
+  border-color:#384632!important;
+  background:linear-gradient(155deg,#11170f,#080c08)!important;
+}
+#bootAchievementPanel .timed-achievement.unlocked{
+  border-color:#926c31!important;
+  box-shadow:inset 0 0 24px rgba(255,187,77,.05),0 0 15px rgba(255,170,60,.08)!important;
+}
+#bootAchievementPanel .timed-top b{font-size:6px!important;color:#ffbc61!important}
+#bootAchievementPanel .timed-top span{font-size:6px!important;color:#9cae9c!important}
+#bootAchievementPanel .timed-achievement strong{
+  margin:11px 0 7px!important;
+  font-size:8px!important;
+  line-height:1.45!important;
+  color:#f0f6ef!important;
+  letter-spacing:.5px!important;
+}
+#bootAchievementPanel .timed-achievement small{
+  font-size:6px!important;
+  line-height:1.85!important;
+  color:#91a492!important;
+}
+#bootAchievementPanel .timed-progress{
+  height:8px!important;
+  margin-top:13px!important;
+}
+#bootAchievementPanel .meta-close{
+  min-height:48px!important;
+  font-size:7px!important;
+  border-radius:8px!important;
+}
+#achievements .progression-head b{font-size:8px!important}
+#achievements .progression-head small{font-size:6px!important;line-height:1.7!important}
+#achievements .progression-head>strong{font-size:6px!important}
+#achievements .achievement-list{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))!important;gap:10px!important}
+#achievements .achievement-item{
+  min-height:86px!important;
+  padding:12px!important;
+  border-radius:9px!important;
+}
+#achievements .achievement-item b{font-size:7px!important;line-height:1.45!important;margin-bottom:8px!important;color:#b1c5b4!important}
+#achievements .achievement-item span{font-size:6px!important;line-height:1.85!important;color:#849985!important}
+#achievements .achievement-item.unlocked b{color:#baff9d!important}
+#achievements .achievement-item.unlocked span{color:#d5e6d6!important}
+@media(max-width:900px){
+  #bootOptionsPanel .option-actions{grid-template-columns:1fr 1fr!important}
+  #bootOptionsPanel .options-grid{grid-template-columns:1fr!important}
+}
+@media(max-width:700px){
+  #bootOptionsPanel{padding:14px!important}
+  #bootOptionsPanel .options-grid .option-row{min-height:74px!important;padding:12px 0!important}
+  #bootOptionsPanel .option-row>div:first-child b{font-size:7px!important}
+  #bootOptionsPanel .option-row>div:first-child small{font-size:5.5px!important}
+  #bootOptionsPanel .option-toggle{min-width:84px!important;min-height:40px!important;font-size:6.5px!important}
+  #bootOptionsPanel .range-control{min-width:150px!important}
+  #bootOptionsPanel .option-actions{grid-template-columns:1fr 1fr!important}
+  #bootAchievementPanel{padding:14px!important}
+  #bootAchievementPanel .timed-list{grid-template-columns:1fr!important}
+  #bootAchievementPanel .timed-achievement{min-height:165px!important}
+  #bootAchievementPanel .timed-achievement strong{font-size:7px!important}
+  #bootAchievementPanel .timed-achievement small{font-size:5.5px!important}
+  #achievements .achievement-list{grid-template-columns:1fr 1fr!important}
+}
+@media(max-width:480px){
+  #bootOptionsPanel .option-row>div:first-child small{font-size:5px!important}
+  #bootOptionsPanel .range-control{min-width:125px!important}
+  #bootOptionsPanel .option-actions{grid-template-columns:1fr!important}
+  #bootAchievementPanel .timed-achievement{min-height:150px!important}
+  #bootAchievementPanel .timed-achievement strong{font-size:6.5px!important}
+  #bootAchievementPanel .timed-achievement small{font-size:5px!important}
+  #achievements .achievement-list{grid-template-columns:1fr!important}
+}
 @media(max-width:700px){
   #bootBadgePanel{padding:13px!important}
   #bootBadgePanel .badge-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:9px!important}
