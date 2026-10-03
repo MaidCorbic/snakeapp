@@ -4031,3 +4031,22 @@ img,svg,canvas{
 @media(max-width:700px){
   .run-identity h1{cursor:pointer}
 }
+
+
+
+/* CONTROL DECK // RANK PROFILE */
+#bootOptionsPanel .control-deck-profile-row{align-items:center!important;gap:10px!important}
+#bootOptionsPanel .control-deck-profile-row>div:first-child{min-width:0}
+#bootOptionsPanel .rank-profile-readout{flex:0 0 auto;min-width:126px;padding:8px 9px;border:1px solid #365c46;border-radius:5px 2px 5px 2px;background:linear-gradient(145deg,#0d1b12,#080e0a);color:#a6e7b0;font:5px "Press Start 2P",monospace;letter-spacing:.45px;text-align:center;box-shadow:2px 2px 0 #17231a,inset 0 0 12px rgba(121,227,91,.025);white-space:nowrap}
+
+/* RUN DETAILS // FINAL SCORE / COMBO / LIVES CARD LANGUAGE */
+.gameover-detail-body .gameover-summary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:0 0 11px!important}
+.gameover-detail-body .gameover-summary span{min-height:70px;padding:11px 10px;border:1px solid #654a36!important;border-radius:7px 2px 7px 2px!important;background:linear-gradient(145deg,#1a130d,#0b0c09)!important;box-shadow:4px 4px 0 #25180e,inset 0 0 18px rgba(255,164,74,.022)!important)}
+.gameover-detail-body .gameover-summary span::before{content:"";position:absolute;left:9px;right:9px;top:0;height:2px;background:linear-gradient(90deg,#ffad5c,transparent);opacity:.75}
+.gameover-detail-body .gameover-summary span:nth-child(2)::before{background:linear-gradient(90deg,#ff6b76,transparent)}
+.gameover-detail-body .gameover-summary span:nth-child(3)::before{background:linear-gradient(90deg,#ffd36a,transparent)}
+.gameover-detail-body .gameover-summary span:hover{transform:translateY(-2px);filter:brightness(1.08)}
+.gameover-detail-body .gameover-summary strong{color:#ffe5c4!important;font-size:13px!important;text-shadow:0 0 12px rgba(255,164,74,.10)}
+#message .message-card{clip-path:none!important}
+@media(max-width:700px){#bootOptionsPanel .rank-profile-readout{min-width:108px;font-size:4.2px;padding:7px 6px}.gameover-detail-body .gameover-summary{grid-template-columns:1fr 1fr!important;gap:7px}.gameover-detail-body .gameover-summary span:first-child{grid-column:1/-1}.gameover-detail-body .gameover-summary strong{font-size:11px!important}}
+@media(max-width:420px){#bootOptionsPanel .rank-profile-readout{min-width:96px;font-size:3.7px}.gameover-detail-body .gameover-summary{gap:5px}.gameover-detail-body .gameover-summary span{min-height:59px;padding:8px}.gameover-detail-body .gameover-summary strong{font-size:10px!important}}
