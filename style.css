@@ -1221,3 +1221,54 @@ img,svg,canvas{
   -webkit-user-drag:none!important;
   user-drag:none!important;
 }
+
+/* MOBILE UPDATE // touch-first gameplay + compact phone layout */
+@media (max-width:700px){
+  html,body{width:100%;min-height:100%;overflow-x:hidden}
+  body{padding:5px;display:block}
+  #app{width:100%;max-width:100%;margin:0 auto}
+  #app>header{position:relative;padding:8px;margin-bottom:6px;gap:6px}
+  #app>header h1{font-size:12px;line-height:1.35}
+  #app>header .stats{max-width:175px;gap:4px}
+  #app>header .stats span{padding:5px;font-size:3.5px}
+  #app>header .stats strong{font-size:7px;margin-top:4px}
+  .survival-hud{grid-template-columns:1fr 1.35fr;gap:5px;padding:5px}
+  .life-module,.xp-module,.mutation-module,.condition-module{min-height:46px;padding:6px}
+  .run-intel{gap:5px;margin-bottom:6px}
+  .intel-card{min-height:45px;padding:6px}
+  .run-mode-bar{margin-bottom:6px;padding:5px;gap:5px}
+  .ability-bar{gap:5px;margin-top:6px}
+  .ability{min-height:48px;padding:7px 6px;font-size:5px;touch-action:manipulation}
+  .ability span{font-size:3.5px;margin-top:4px}
+  .game-shell{
+    width:100%;
+    aspect-ratio:1/1;
+    touch-action:none;
+    -webkit-user-select:none;
+    user-select:none;
+  }
+  .game-shell canvas{touch-action:none}
+  footer .controls{display:none!important}
+  footer .legend .desktop-commands{display:none}
+  footer .legend{margin-top:7px;font-size:4px;gap:5px;line-height:1.8}
+  .message{padding:8px}
+  #message .message-card{width:100%;max-width:100%;padding:12px}
+  #message .message-card #start{width:100%;min-height:44px;margin-top:12px}
+}
+@media (max-width:420px){
+  body{padding:3px}
+  #app>header{padding:6px}
+  #app>header h1{font-size:10px}
+  #app>header .stats{max-width:145px}
+  #app>header .stats span{font-size:3px;padding:4px}
+  #app>header .stats strong{font-size:6px}
+  .survival-hud{grid-template-columns:82px 1fr}
+  .run-intel{grid-template-columns:1fr 1fr}
+  .game-shell{border-width:2px}
+  .ability{min-height:45px}
+}
+@media (pointer:coarse){
+  .game-shell{touch-action:none}
+  .controls{display:none!important}
+  button{touch-action:manipulation}
+}
