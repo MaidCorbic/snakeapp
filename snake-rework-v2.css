@@ -1,0 +1,68 @@
+/* SNAKE EVOLUTION // REWORK V2
+   Focus: readable arcade hierarchy, less clutter, stronger run identity. */
+:root{
+  --rework-bg:#050706;
+  --rework-panel:#0a100c;
+  --rework-panel-2:#0e1711;
+  --rework-line:#29402f;
+  --rework-green:#8dff66;
+  --rework-yellow:#ffe36b;
+  --rework-red:#ff5574;
+  --rework-cyan:#66e7ff;
+}
+body.rework-v2{background:
+  radial-gradient(circle at 50% 20%,rgba(141,255,102,.06),transparent 34%),
+  linear-gradient(180deg,#030504,#080d09 48%,#030504);
+}
+body.rework-v2 .game-shell{border-color:#45644b;box-shadow:0 0 0 1px #132016,8px 8px 0 #020302,0 0 55px rgba(141,255,102,.08)}
+body.rework-v2 #app>header{border-color:var(--rework-line);background:linear-gradient(180deg,#0b120d,#070c09)}
+body.rework-v2 .survival-hud,
+body.rework-v2 .run-intel,
+body.rework-v2 .run-mode-bar,
+body.rework-v2 .ability-bar{filter:saturate(.9)}
+body.rework-v2 .run-intel .intel-card{background:#090f0b;border-color:#243a29}
+body.rework-v2 .run-intel .intel-card:first-child{border-left:2px solid var(--rework-yellow)}
+body.rework-v2 .run-intel .intel-card:last-child{border-left:2px solid var(--rework-red)}
+body.rework-v2 .ability{transition:transform .12s ease,box-shadow .12s ease,border-color .12s ease}
+body.rework-v2 .ability.ready{border-color:var(--rework-green);box-shadow:0 0 18px rgba(141,255,102,.12),3px 3px 0 #355d2e}
+body.rework-v2 .ability:active{transform:translateY(2px)}
+body.rework-v2 .boot-card{max-width:1080px}
+body.rework-v2 .boot-hero{border-color:#3a5740;background:
+  radial-gradient(circle at 50% 15%,rgba(141,255,102,.08),transparent 45%),
+  linear-gradient(145deg,#0d1710,#070c09)}
+body.rework-v2 .boot-title{font-size:clamp(24px,4vw,42px)!important}
+body.rework-v2 .boot-tagline{max-width:620px}
+body.rework-v2 .boot-actions{grid-template-columns:1.5fr 1fr 1fr!important}
+body.rework-v2 .boot-actions #bootFun{grid-column:1 / -1;min-height:42px;border-color:#ffe36b!important;color:#ffe36b!important;background:linear-gradient(180deg,#201d0c,#111108)!important}
+body.rework-v2 .rework-chip{display:inline-flex;align-items:center;gap:6px;padding:6px 8px;border:1px solid #36533c;background:#09110c;color:#9bb59d;font-size:5px;letter-spacing:.5px}
+body.rework-v2 .rework-chip b{color:var(--rework-green)}
+#reworkSegment{
+  position:absolute;left:50%;top:14px;transform:translate(-50%,-8px);
+  z-index:12;pointer-events:none;opacity:0;
+  padding:8px 12px;border:1px solid #45674a;background:#08100aee;
+  box-shadow:0 0 28px rgba(141,255,102,.10),4px 4px 0 #020302;
+  color:#d9f5da;text-align:center;transition:opacity .16s ease,transform .16s ease;
+}
+#reworkSegment.show{opacity:1;transform:translate(-50%,0)}
+#reworkSegment strong{display:block;color:var(--rework-green);font-size:7px;letter-spacing:1px}
+#reworkSegment span{display:block;margin-top:4px;color:#8ca28f;font-size:4px}
+body.rework-party #reworkSegment{border-color:#806f2d;box-shadow:0 0 30px rgba(255,227,107,.14),4px 4px 0 #020302}
+body.rework-party #reworkSegment strong{color:var(--rework-yellow)}
+#reworkModeBadge{
+  position:absolute;right:10px;top:10px;z-index:13;pointer-events:none;
+  padding:5px 7px;border:1px solid #36533c;background:#07100ae8;color:#9db99f;
+  font-size:4px;letter-spacing:.7px;opacity:.9
+}
+#reworkModeBadge.party{border-color:#806f2d;color:#ffe36b}
+@media(max-width:700px){
+  body.rework-v2 .boot-actions{grid-template-columns:1fr 1fr!important}
+  body.rework-v2 .boot-actions #bootFun{grid-column:1/-1}
+  #reworkSegment{top:8px;padding:7px 9px}
+  #reworkSegment strong{font-size:6px}
+  #reworkSegment span{font-size:4px}
+  #reworkModeBadge{right:6px;top:6px;font-size:4px}
+}
+@media(max-width:420px){
+  body.rework-v2 .boot-actions{grid-template-columns:1fr!important}
+  body.rework-v2 .boot-actions #bootFun{grid-column:auto}
+}
