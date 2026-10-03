@@ -94,6 +94,8 @@ check("menu loads cache-busted gameplay layers", /game\.js\?v=survival-v17/.test
 
 check("pause control has one authoritative click handler", !/pauseBtn\?\.addEventListener\("click"/.test(game) && /pauseControl\?\.addEventListener\("click"/.test(update));
 
+check("menu reloads stale partial game script before reinjecting", /document\.getElementById\("snakeGameScript"\)/.test(menu) && /window\.location\.reload\(\)/.test(menu));
+
 check("menu prevents duplicate/in-progress game loads",
   /if\s*\(gameLoaded\)/.test(menu) &&
   /if\s*\(gameLoading\)\s*return/.test(menu));
