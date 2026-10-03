@@ -138,7 +138,8 @@
   const saveSettings = () => {
     try { localStorage.setItem(settingsKey, JSON.stringify(settings)); } catch {}
     renderSettings();
-    if (settings.music) startMusic(); else stopMusic();
+    document.dispatchEvent(new CustomEvent("snake-evolution-settings-changed",{detail:{...settings}}));
+    if (settings.music && settings.volume > 0) startMusic(); else stopMusic();
   };
 
   const showBootMenu = () => {
