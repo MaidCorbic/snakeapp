@@ -385,6 +385,58 @@ body.high-contrast .boot-panel-heading>strong,body.high-contrast .game-version{c
   .landing-promise{justify-content:flex-start!important}
 }
 
+
+/* LANDING RECORD // COMPACT HERO STAT */
+body.rework-v2 .landing-profile .profile-block:first-child{
+  position:relative;
+  min-height:64px;
+  padding:10px 14px;
+  background:
+    linear-gradient(135deg,#101b12,#070d09);
+  box-shadow:inset 0 0 24px rgba(141,255,102,.05);
+}
+body.rework-v2 .landing-profile .profile-block:first-child span{
+  color:#7f9a83;
+  font-size:4px;
+  letter-spacing:1.8px;
+}
+body.rework-v2 .landing-profile .profile-block:first-child strong{
+  margin-top:1px;
+  color:#dfffd6;
+  font-size:clamp(14px,2.2vw,21px);
+  line-height:1;
+  letter-spacing:1px;
+  text-shadow:0 0 16px rgba(141,255,102,.18);
+}
+body.rework-v2 .landing-profile .profile-block:first-child::after{
+  content:"PB";
+  position:absolute;
+  top:9px;
+  right:10px;
+  padding:4px 5px;
+  border:1px solid #34513a;
+  color:#8dff66;
+  font-size:3px;
+  letter-spacing:1px;
+}
+@media(max-width:700px){
+  body.rework-v2 .landing-profile .profile-block:first-child{
+    min-height:50px;
+    padding:8px 10px;
+  }
+  body.rework-v2 .landing-profile .profile-block:first-child strong{
+    font-size:14px;
+  }
+}
+@media(max-width:480px){
+  body.rework-v2 .landing-profile .profile-block:first-child{
+    min-height:48px;
+  }
+  body.rework-v2 .landing-profile .profile-block:first-child strong{
+    font-size:12px;
+  }
+}
+
 </style></head>
 <body><section id="bootMenu" class="boot-menu" role="dialog" aria-modal="true" aria-label="Snake Evolution main menu">
   <div class="boot-card">
@@ -414,7 +466,7 @@ body.high-contrast .boot-panel-heading>strong,body.high-contrast .game-version{c
     </div>
     <section class="landing-profile" aria-label="Player profile">
       <div class="profile-block">
-        <span>PERSONAL BEST</span>
+        <span>RECORD</span>
         <strong id="landingBest">0</strong>
       </div>
       <div class="profile-block">
@@ -553,4 +605,4 @@ body.high-contrast .boot-panel-heading>strong,body.high-contrast .game-version{c
 </details>
 <section id="leaderboards" class="progression-panel"><div class="progression-head"><b>LOCAL LEADERBOARDS</b><strong>TOP 10</strong></div><div class="leaderboard-columns"><div><h4>ALL RUNS</h4><div id="leaderboardList" class="leaderboard-list"></div></div><div><h4>DAILY // TODAY</h4><div id="dailyLeaderboardList" class="leaderboard-list"></div></div></div></section>
 <footer><div class="legend"><span class="desktop-commands">KEYBOARD: WASD / ARROWS · SPACE DASH · SHIFT SHIELD · E PULSE · Q FURY · P / ESC PAUSE</span><span>ENERGY +10</span><span>CORE +50</span><span>HUNTER</span><span>HAZARD</span><span>POWER-UP</span><span>SUPPLY DROP</span></div><div class="controls" aria-label="Mobile touch controls"><span class="touch-label">TOUCH</span><button data-dir="up">▲</button><div><button data-dir="left">◀</button><button data-dir="down">▼</button><button data-dir="right">▶</button></div></div></footer>
-</main><script src="menu.js?v=boot-v22"></script></body></html>
+</main><script src="menu.js?v=boot-v23"></script></body></html>
