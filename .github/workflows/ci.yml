@@ -39,6 +39,7 @@ jobs:
           node --check ultimate-gameplay-v1.js
           node --check gameplay-update-v2.js
           node --check arcade-polish-v1.js
+          node --check snake-rework-v2.js
           node --check scripts/validate-game.cjs
 
       - name: Run deterministic regression validation
