@@ -175,18 +175,28 @@ body.meta-no-combat-fx .event-banner,body.meta-no-combat-fx .toast,body.meta-no-
       cards:cardStore()
     };
   }
+  function readClock(text){
+    const parts=String(text||"").replace(/^∞\\s*/,"").split(":").map(Number);
+    if(parts.length!==2 || parts.some(Number.isNaN))return null;
+    return Math.max(0,parts[0]*60+parts[1]);
+  }
   function parseTimeRemaining(){
     const text=String(document.querySelector("#time")?.textContent||"").trim();
-    if(!text || text.startsWith("∞")) return null;
-    const parts=text.split(":").map(Number);
-    if(parts.length!==2 || parts.some(Number.isNaN)) return null;
-    return Math.max(0,parts[0]*60+parts[1]);
+    if(!text || text.startsWith("∞"))return null;
+    return readClock(text);
+  }
+  function parseEndlessElapsed(){
+    const text=String(document.querySelector("#time")?.textContent||"").trim();
+    if(!text.startsWith("∞"))return null;
+    return readClock(text.slice(1).trim());
   }
   let runStartedAt=0;
   let runWasAlive=false;
 
   function elapsedSeconds(state){
     if(!state?.alive)return 0;
+    const endlessElapsed=parseEndlessElapsed();
+    if(endlessElapsed!==null)return endlessElapsed;
     const remaining=parseTimeRemaining();
     if(remaining!==null){
       const modeText=String(document.querySelector("#runMode")?.textContent||"").trim();
