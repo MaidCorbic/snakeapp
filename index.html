@@ -643,6 +643,85 @@ body.rework-v2 .landing-promise{
   .boot-top-meta{gap:5px!important}
 }
 
+
+/* MISSION BRIEF // BIGGER READABLE PANEL */
+.boot-layout{
+  grid-template-columns:minmax(0,1fr) minmax(400px,.95fr)!important;
+  gap:22px!important;
+}
+.boot-brief{
+  min-width:0!important;
+  min-height:100%!important;
+  padding:22px!important;
+  border:1px solid #4a654f!important;
+  border-radius:14px!important;
+  background:
+    radial-gradient(circle at 50% 0%,rgba(141,255,102,.07),transparent 45%),
+    linear-gradient(160deg,#0d1710,#050b07)!important;
+  box-shadow:
+    inset 0 0 34px rgba(141,255,102,.045),
+    0 0 34px rgba(141,255,102,.08)!important;
+}
+.boot-brief .brief-heading{
+  padding-bottom:15px!important;
+  margin-bottom:3px!important;
+  font-size:9px!important;
+  color:#c7dbc9!important;
+  letter-spacing:1.5px!important;
+}
+.boot-brief .brief-heading b{
+  font-size:6px!important;
+  color:#9ab39d!important;
+}
+.boot-brief .brief-item{
+  grid-template-columns:34px 1fr!important;
+  gap:12px!important;
+  padding:16px 0!important;
+}
+.boot-brief .brief-item strong{
+  width:32px!important;
+  height:32px!important;
+  border-radius:8px!important;
+  border-color:#5b7a60!important;
+  background:#0d1a10!important;
+  color:#baff9d!important;
+  font-size:6px!important;
+  box-shadow:0 0 14px rgba(141,255,102,.07);
+}
+.boot-brief .brief-item div b{
+  margin:1px 0 7px!important;
+  color:#f0faf1!important;
+  font-size:7px!important;
+  letter-spacing:.3px!important;
+}
+.boot-brief .brief-item div small{
+  color:#a1b6a3!important;
+  font-size:5.5px!important;
+  line-height:1.95!important;
+}
+.boot-brief .brief-controls{
+  margin-top:12px!important;
+  padding-top:13px!important;
+  color:#a1b4a3!important;
+  font-size:5.5px!important;
+}
+.boot-brief .brief-controls kbd{
+  border-radius:6px!important;
+  padding:6px 7px!important;
+  color:#e1efe2!important;
+  border-color:#425845!important;
+}
+@media(max-width:1100px){
+  .boot-layout{
+    grid-template-columns:minmax(0,1fr) minmax(360px,.9fr)!important;
+    gap:16px!important;
+  }
+}
+@media(max-width:900px){
+  .boot-layout{grid-template-columns:1fr!important}
+  .boot-brief{display:none!important}
+}
+
 </style></head>
 <body class="rework-v2"><section id="bootMenu" class="boot-menu" role="dialog" aria-modal="true" aria-label="Snake Evolution main menu">
   <div class="boot-card">
