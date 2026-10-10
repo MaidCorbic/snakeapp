@@ -39,6 +39,7 @@ const game = read("game.js");
 const menu = read("menu.js");
 const ultimate = read("ultimate-gameplay-v1.js");
 const releasePolish = read("release-polish-v1.css");
+const metaProgression = read("meta-progression-v1.js");
 const reworkCss = read("snake-rework-v2.css");
 const update = read("gameplay-update-v2.js");
 
@@ -71,6 +72,8 @@ check("arcade polish loader is wired", /arcade-polish-v1\.js\?v=arcade-v2/.test(
 
 check("run finalization is one-shot and best-score storage is guarded", game.includes("function finalizeRun(won,summary)") && game.includes("function saveBestScoreSafely()") && game.includes("runFinalized=false"));
 check("Endless cycle respects the shared hazard cap", ultimate.includes("addHazards(3)") && !ultimate.includes("hazards.push(free())"));
+check("advanced audio tolerates blocked local storage", ultimate.includes('try{if(localStorage.getItem("snake-evolution-sound")==="off")return}catch{}'));
+check("timed achievement mode lookup tolerates blocked storage", metaProgression.includes('let storedMode="standard";try{storedMode=localStorage.getItem("snake-evolution-mode")||"standard"}catch{}'));
 check("Party Run has an explicit isolated start API", ultimate.includes('function startParty(){prepareRun("party")}') && ultimate.includes("startParty,resetRank") && menu.includes('else if (mode === "party") window.SnakeEvolution?.startParty?.();'));
 check("Party Run excludes the contradictory One Chance condition", ultimate.includes('conditionDefs.filter(condition=>condition[0]!=="ONE CHANCE")'));
 check("Party Run preserves extra lives under One Chance", ultimate.includes('if(runCondition?.[0]==="ONE CHANCE"&&!funMode)lives=1;'));
@@ -99,8 +102,9 @@ for (const src of localScripts) {
 }
 
 check("menu loads cache-busted gameplay layers", menu.includes("game.js?v=survival-v24") &&
-  menu.includes("ultimate-gameplay-v1.js?v=ultimate-v10") &&
-  menu.includes("gameplay-update-v2.js?v=update-v10"));
+  menu.includes("ultimate-gameplay-v1.js?v=ultimate-v11") &&
+  menu.includes("gameplay-update-v2.js?v=update-v10") &&
+  html.includes("meta-progression-v1.js?v=meta-v4"));
 
 check("pause control has one authoritative click handler", !/pauseBtn\?\.addEventListener\("click"/.test(game) && /pauseControl\?\.addEventListener\("click"/.test(update));
 
@@ -191,7 +195,7 @@ check("setting visibility and combat-effect styles are defined",
   /\.setting-disabled\s*\{\s*display:none!important\s*\}/.test(css) &&
   /\.no-combat-fx\s+\.event-banner/.test(css));
 
-check("browser regression covers modes and storage resilience", read("tests/e2e/game.spec.cjs").includes("Daily and Endless launch buttons are visible") && read("tests/e2e/game.spec.cjs").includes("blocked browser storage"));
+check("browser regression covers modes and storage resilience", read("tests/e2e/game.spec.cjs").includes("Daily and Endless launch buttons are visible") && read("tests/e2e/game.spec.cjs").includes("blocked browser storage") && read("tests/e2e/game.spec.cjs").includes("narrow viewport keeps the game"));
 check("browser regression covers live gameplay settings",
   /gameplay display and combat-effect settings affect the live game/.test(read("tests/e2e/game.spec.cjs")));
 
