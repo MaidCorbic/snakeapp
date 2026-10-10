@@ -38,6 +38,7 @@ const css = read("style.css");
 const game = read("game.js");
 const menu = read("menu.js");
 const ultimate = read("ultimate-gameplay-v1.js");
+const releasePolish = read("release-polish-v1.css");
 const update = read("gameplay-update-v2.js");
 
 const ids = [...html.matchAll(/\bid\s*=\s*["']([^"']+)["']/g)].map(m => m[1]);
@@ -61,12 +62,18 @@ const requiredIds = [
 ];
 
 check("arcade polish stylesheet exists", fs.existsSync(path.join(root, "arcade-polish-v1.css")));
+check("release polish stylesheet is linked", html.includes('release-polish-v1.css?v=release-v1') && releasePolish.includes(":focus-visible"));
+check("Endless is available from the landing menu", html.includes('id="bootEndless"') && !html.includes(".boot-actions #bootEndless{\n  display:none!important;"));
 check("rework stylesheet exists", fs.existsSync(path.join(root, "snake-rework-v2.css")));
 check("party run wiring exists", /bootFun/.test(html) && /mode === "party"/.test(menu) && /FUN_RUN_TIME/.test(game));
 check("arcade polish loader is wired", /arcade-polish-v1\.js\?v=arcade-v2/.test(menu) && /snake-rework-v2\.js\?v=rework-v4/.test(menu));
 
+check("run finalization is one-shot and best-score storage is guarded", game.includes("function finalizeRun(won,summary)") && game.includes("function saveBestScoreSafely()") && game.includes("runFinalized=false"));
+check("Endless cycle respects the shared hazard cap", ultimate.includes("addHazards(3)") && !ultimate.includes("hazards.push(free())"));
+check("Party Run preserves extra lives under One Chance", ultimate.includes('if(runCondition?.[0]==="ONE CHANCE"&&!funMode)lives=1;'));
 check("required project files exist", [
   "index.html",
+  "release-polish-v1.css",
   "style.css",
   "game.js",
   "menu.js",
@@ -88,7 +95,7 @@ for (const src of localScripts) {
   check("HTML script exists: " + clean, fs.existsSync(path.join(root, clean)));
 }
 
-check("menu loads cache-busted gameplay layers", /game\.js\?v=survival-v23/.test(menu) &&
+check("menu loads cache-busted gameplay layers", menu.includes("game.js?v=survival-v24") &&
   /ultimate-gameplay-v1\.js\?v=/.test(menu) &&
   /gameplay-update-v2\.js\?v=/.test(menu));
 
@@ -181,6 +188,7 @@ check("setting visibility and combat-effect styles are defined",
   /\.setting-disabled\s*\{\s*display:none!important\s*\}/.test(css) &&
   /\.no-combat-fx\s+\.event-banner/.test(css));
 
+check("browser regression covers modes and storage resilience", read("tests/e2e/game.spec.cjs").includes("Daily and Endless launch buttons are visible") && read("tests/e2e/game.spec.cjs").includes("blocked browser storage"));
 check("browser regression covers live gameplay settings",
   /gameplay display and combat-effect settings affect the live game/.test(read("tests/e2e/game.spec.cjs")));
 
