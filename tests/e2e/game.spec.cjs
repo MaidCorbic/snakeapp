@@ -75,7 +75,7 @@ test("gameplay display and combat-effect settings affect the live game", async (
 
 test("gameplay balance profile is exposed and bounded", async ({ page }) => {
   await startGame(page);
-  const balance = await page.evaluate(() => window.SnakeEvolution.getState().balance);
+  const balance = await page.evaluate(() => window.__snakeBalanceProfile);
   expect(balance).toEqual({
     hazardSpawnEvery: 40,
     hazardCap: 8,
