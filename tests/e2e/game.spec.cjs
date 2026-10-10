@@ -267,6 +267,21 @@ test("shield cannot suppress self-collision", async ({ page }) => {
   await expect.poll(() => page.evaluate(() => window.SnakeEvolution.getState().deathCause)).toBe("SELF HIT");
 });
 
+test("moving into the departing tail cell is legal when not growing", async ({ page }) => {
+  await startGame(page);
+  const before = await page.evaluate(() => window.SnakeEvolution.getState().lives);
+  await page.evaluate(() => {
+    snake = [{x:10,y:10},{x:10,y:11},{x:9,y:11},{x:9,y:10}];
+    dir = next = {x:-1,y:0};
+    energy = {x:24,y:15};
+    core = null;
+    shieldUntil = pulseUntil = 0;
+    move();
+  });
+  await expect.poll(() => page.evaluate(() => window.SnakeEvolution.getState().lives)).toBe(before);
+  await expect.poll(() => page.evaluate(() => window.SnakeEvolution.getState().snakeHead)).toEqual({x:9,y:10});
+});
+
 test("all random free-cell spawns avoid occupied gameplay cells", async ({ page }) => {
   await startGame(page);
   const result = await page.evaluate(() => {
