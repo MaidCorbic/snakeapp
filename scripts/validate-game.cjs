@@ -158,11 +158,11 @@ check("game-over results use the centered message flow",
   /showRunResult\(true/.test(game));
 
 check("gameplay balance tuning limits arena pressure",
-  /const BALANCE=\\{hazardSpawnEvery:40,hazardCap:8,hunterWaveEvery:96,hunterCap:5,bossSpawnEvery:180,zoneEventEvery:240,hazardStormBase:2,hunterSwarmCap:5\\}/.test(game) &&
-  /spawnClock%BALANCE\\.hazardSpawnEvery/.test(game) &&
-  /eventClock%BALANCE\\.hunterWaveEvery/.test(game) &&
-  /eventClock%BALANCE\\.bossSpawnEvery/.test(game) &&
-  /eventClock2%BALANCE\\.zoneEventEvery/.test(game));
+  /const BALANCE=\{hazardSpawnEvery:40,hazardCap:8,hunterWaveEvery:96,hunterCap:5,bossSpawnEvery:180,zoneEventEvery:240,hazardStormBase:2,hunterSwarmCap:5\}/.test(game) &&
+  /spawnClock%BALANCE\.hazardSpawnEvery/.test(game) &&
+  /eventClock%BALANCE\.hunterWaveEvery/.test(game) &&
+  /eventClock%BALANCE\.bossSpawnEvery/.test(game) &&
+  /eventClock2%BALANCE\.zoneEventEvery/.test(game));
 
 check("gameplay visibility settings are applied to live UI",
   /function\s+applyGameplaySettings\s*\(/.test(game) &&
