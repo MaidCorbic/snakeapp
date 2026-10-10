@@ -73,6 +73,21 @@ test("gameplay display and combat-effect settings affect the live game", async (
   await expect(page.locator("body")).toHaveClass(/no-combat-fx/);
 });
 
+test("gameplay balance profile is exposed and bounded", async ({ page }) => {
+  await startGame(page);
+  const balance = await page.evaluate(() => window.SnakeEvolution.getState().balance);
+  expect(balance).toEqual({
+    hazardSpawnEvery: 40,
+    hazardCap: 8,
+    hunterWaveEvery: 96,
+    hunterCap: 5,
+    bossSpawnEvery: 180,
+    zoneEventEvery: 240,
+    hazardStormBase: 2,
+    hunterSwarmCap: 5
+  });
+});
+
 test("game boot loads all gameplay layers and starts a run", async ({ page }) => {
   const pageErrors = [];
   page.on("pageerror", error => pageErrors.push(error.message));
