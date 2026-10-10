@@ -417,7 +417,12 @@ function draw(){
     ctx.fillStyle="#080308";ctx.fillRect(boss.x+.2,boss.y+.42,.6,.16);
     ctx.fillStyle="#fff";ctx.fillRect(boss.x+.2,boss.y+.42,.6*(boss.hp/boss.maxHp),.16);ctx.restore();
   }
-  if(energy)pixel(energy,"#79e35b");
+  if(energy){
+    const pulse=.5+.5*Math.sin(performance.now()*.006);
+    ctx.save();ctx.strokeStyle="#a4ff79";ctx.globalAlpha=.24+pulse*.24;ctx.lineWidth=.07;
+    ctx.beginPath();ctx.arc(energy.x+.5,energy.y+.5,.48+pulse*.12,0,Math.PI*2);ctx.stroke();ctx.restore();
+    ctx.save();ctx.shadowColor="#79e35b";ctx.shadowBlur=.45+pulse*.65;pixel(energy,"#a4ff79");ctx.restore();
+  }
   if(core){pixel(core,"#ffd85c");ctx.save();ctx.globalAlpha=.35;ctx.fillStyle="#ffd85c";ctx.fillRect(core.x+.28,Math.max(0,core.y-1.15),.44,.44);ctx.restore()}
 
   /* Snake: luminous armored segments, taper + directional head */
