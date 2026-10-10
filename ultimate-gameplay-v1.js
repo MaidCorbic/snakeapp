@@ -78,7 +78,8 @@
       ||(supplyDrop&&same(supplyDrop,p))
       ||(riskShrine&&same(riskShrine,p))
       ||(secretPortal&&same(secretPortal,p))
-      ||encounters.some(e=>same(e,p));
+      ||encounters.some(e=>same(e,p))
+      ||evolutionCards.some(card=>same(card,p));
   }
   free=function safeFreeCellU(){
     const pool=[];
