@@ -232,6 +232,21 @@ test("narrow viewport keeps the game and result actions within the screen", asyn
   expect(pageErrors).toEqual([]);
 });
 
+
+test("ultimate UI uses grouped options and a dedicated accessible result dialog", async ({ page }) => {
+  await page.goto("/index.html");
+  await page.locator("#bootOptions").click();
+  await expect(page.locator("#bootOptionsPanel .option-group")).toHaveCount(4);
+  await expect(page.locator("#bootOptionsPanel .option-group-title").first()).toContainText("PRESENTATION");
+  await page.locator("#bootOptionsBack").click();
+  await startGame(page);
+  await page.evaluate(() => window.__snakeE2E.endRun());
+  await expect(page.locator("#message")).toHaveAttribute("role", "dialog");
+  await expect(page.locator("#message h2")).toHaveAttribute("id", "resultTitle");
+  await expect(page.locator("#message .ultimate-result-card")).toBeVisible();
+  await expect(page.locator("#resultMainMenu")).toBeVisible();
+});
+
 test("wall collision ends a run and displays the loss result", async ({ page }) => {
   await startGame(page);
 
