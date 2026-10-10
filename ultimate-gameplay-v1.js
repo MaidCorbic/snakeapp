@@ -8,7 +8,7 @@
   let perfectStart=0,perfectBroken=false,deathCause="NONE",maxThreat=0,bountyTarget=null,bountyClaimed=false;
   let enemyId=0,ghostPath=[],ghostIndex=0,runPath=[],nextRiskAt=0,nextSecretAt=0,bossTelegraphUntil=0,layerZone=-1,layerEventClock=0,audioCtx=null;
   const originalRandom=Math.random;
-  const baseGainU=gain,baseHudU=hud,baseDrawU=draw,baseMoveU=move,baseResetU=reset,baseTakeDamageU=takeDamage,baseUseDashU=useDash,baseUsePulseU=usePulse,baseUseFuryU=useFury,baseCollectPowerupU=collectPowerup,baseSpawnWaveU=spawnWave,baseHunterStepU=hunterStep,baseBossStepU=bossStep,basePersistU=persist,baseStatsMarkupU=statsMarkup,baseRenderAchievementsU=renderAchievements,baseGainXpU=gainXp,baseFreeU=free;
+  const baseGainU=gain,baseHudU=hud,baseDrawU=draw,baseMoveU=move,baseResetU=reset,baseTakeDamageU=takeDamage,baseChargeFuryU=chargeFury,baseUseDashU=useDash,baseUsePulseU=usePulse,baseUseFuryU=useFury,baseCollectPowerupU=collectPowerup,baseSpawnWaveU=spawnWave,baseHunterStepU=hunterStep,baseBossStepU=bossStep,basePersistU=persist,baseStatsMarkupU=statsMarkup,baseRenderAchievementsU=renderAchievements,baseGainXpU=gainXp,baseFreeU=free;
 
   function hashSeed(input){let h=2166136261;for(let i=0;i<input.length;i++){h^=input.charCodeAt(i);h=Math.imul(h,16777619)}return h>>>0}
   function dailyDateKey(){const d=new Date();return d.getUTCFullYear()+"-"+String(d.getUTCMonth()+1).padStart(2,"0")+"-"+String(d.getUTCDate()).padStart(2,"0")}
