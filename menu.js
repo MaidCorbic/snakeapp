@@ -317,7 +317,7 @@
             }
             const rework = document.createElement("script");
             rework.id = "snakeReworkV2";
-            rework.src = "snake-rework-v2.js?v=rework-v4";
+            rework.src = "snake-rework-v2.js?v=rework-v5";
             rework.onload = () => {
               if (bootFailed) return;
               try {
