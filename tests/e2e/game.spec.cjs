@@ -125,6 +125,113 @@ test("pause, resume, and restart keep the run interactive", async ({ page }) => 
   await expect(page.locator("#score")).toHaveText("0");
 });
 
+test("Daily and Endless launch buttons are visible and initialize isolated modes", async ({ page }) => {
+  await page.goto("/index.html");
+  await expect(page.locator("#bootEndless")).toBeVisible();
+
+  await page.locator("#bootDaily").click();
+  await expect.poll(() => page.evaluate(() => window.SnakeEvolution?.getState?.().daily)).toBe(true);
+  await expect.poll(() => page.evaluate(() => window.SnakeEvolution?.getState?.().endless)).toBe(false);
+
+  await page.goto("/index.html");
+  await expect(page.locator("#bootEndless")).toBeVisible();
+  await page.locator("#bootEndless").click();
+  await expect.poll(() => page.evaluate(() => window.SnakeEvolution?.getState?.().endless)).toBe(true);
+  await expect.poll(() => page.evaluate(() => window.SnakeEvolution?.getState?.().daily)).toBe(false);
+});
+
+test("Party Run keeps its four lives and isolated mode state", async ({ page }) => {
+  await page.goto("/index.html");
+  await page.locator("#bootFun").click();
+  await expect.poll(() => page.evaluate(() => window.SnakeEvolution?.getState?.().alive)).toBe(true);
+  const state = await page.evaluate(() => window.SnakeEvolution.getState());
+  expect(state.lives).toBe(4);
+  expect(state.mode).toBe("party");
+  expect(state.party).toBe(true);
+  expect(state.condition).not.toBe("ONE CHANCE");
+  expect(state.daily).toBe(false);
+  expect(state.endless).toBe(false);
+});
+
+test("run result can return to the menu without double-finalizing", async ({ page }) => {
+  await startGame(page);
+  await page.evaluate(() => {
+    window.__snakeE2E.endRun();
+    window.__snakeE2E.winRun();
+  });
+
+  await expect(page.locator("#message h2")).toHaveText("RUN OVER");
+  await expect(page.locator("#resultMainMenu")).toBeVisible();
+  await expect.poll(() => page.evaluate(() => JSON.parse(localStorage.getItem("snake-evolution-save") || "{}").runs)).toBe(1);
+  await expect.poll(() => page.evaluate(() => JSON.parse(localStorage.getItem("snake-evolution-save") || "{}").wins || 0)).toBe(0);
+
+  await page.locator("#resultMainMenu").click();
+  await expect(page.locator("#bootMenu")).toBeVisible();
+  await page.locator("#bootEndless").click();
+  await expect.poll(() => page.evaluate(() => window.SnakeEvolution?.getState?.().endless)).toBe(true);
+});
+
+test("run startup and result rendering survive blocked browser storage", async ({ page }) => {
+  const pageErrors = [];
+  page.on("pageerror", error => pageErrors.push(error.message));
+  await page.addInitScript(() => {
+    Storage.prototype.getItem = function () { throw new Error("storage unavailable"); };
+    Storage.prototype.setItem = function () { throw new Error("storage unavailable"); };
+    Storage.prototype.removeItem = function () { throw new Error("storage unavailable"); };
+  });
+  await page.goto("/index.html");
+  await page.locator("#bootStart").click();
+  await expect.poll(() => page.evaluate(() => typeof window.SnakeEvolution?.getState)).toBe("function");
+  await expect.poll(() => page.evaluate(() => {
+    const alive = !!window.SnakeEvolution?.getState?.().alive;
+    const errorVisible = !document.querySelector("#bootError")?.classList.contains("hidden");
+    return alive || errorVisible;
+  }), { timeout: 10_000 }).toBe(true);
+  const startup = await page.evaluate(() => ({
+    alive: !!window.SnakeEvolution?.getState?.().alive,
+    menuVisible: !document.querySelector("#bootMenu")?.classList.contains("hidden"),
+    errorVisible: !document.querySelector("#bootError")?.classList.contains("hidden"),
+    errorText: document.querySelector("#bootErrorText")?.textContent || ""
+  }));
+  expect(startup.alive && !startup.errorVisible && !startup.menuVisible,
+    "Blocked-storage startup diagnostic: " + JSON.stringify(startup) + "; page errors: " + pageErrors.join(" | ")).toBe(true);
+  await expect(page.locator("#bootMenu")).toHaveClass(/hidden/);
+  await page.evaluate(() => window.__snakeE2E.endRun());
+  await expect(page.locator("#message h2")).toHaveText("RUN OVER");
+  await expect(page.locator("#resultMainMenu")).toBeVisible();
+  expect(pageErrors).toEqual([]);
+});
+
+test("narrow viewport keeps the game and result actions within the screen", async ({ page }) => {
+  const pageErrors = [];
+  page.on("pageerror", error => pageErrors.push(error.message));
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/index.html");
+  await expect(page.locator("#bootMenu")).toBeVisible();
+  await expect(page.locator("#bootEndless")).toBeVisible();
+
+  await page.locator("#bootStart").click();
+  await expect.poll(() => page.evaluate(() => typeof window.SnakeEvolution?.getState)).toBe("function");
+  await expect.poll(() => page.evaluate(() => window.SnakeEvolution.getState().alive)).toBe(true);
+  const layout = await page.evaluate(() => ({
+    viewportWidth: window.innerWidth,
+    documentWidth: document.documentElement.scrollWidth,
+    gameWidth: document.querySelector("#game").getBoundingClientRect().width,
+    abilityBarDisplay: getComputedStyle(document.querySelector(".ability-bar")).display
+  }));
+  expect(layout.documentWidth).toBeLessThanOrEqual(layout.viewportWidth);
+  expect(layout.gameWidth).toBeGreaterThan(0);
+  expect(layout.abilityBarDisplay).not.toBe("none");
+  await page.evaluate(() => window.__snakeE2E.endRun());
+  await expect(page.locator("#resultMainMenu")).toBeVisible();
+  const resultWidth = await page.evaluate(() => ({
+    viewportWidth: window.innerWidth,
+    cardRight: document.querySelector("#message .message-card").getBoundingClientRect().right
+  }));
+  expect(resultWidth.cardRight).toBeLessThanOrEqual(resultWidth.viewportWidth + 1);
+  expect(pageErrors).toEqual([]);
+});
+
 test("wall collision ends a run and displays the loss result", async ({ page }) => {
   await startGame(page);
 

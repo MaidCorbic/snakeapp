@@ -166,9 +166,7 @@ body.rework-v2 .boot-actions #bootDaily{
   grid-column:auto;
 }
 
-body.rework-v2 .boot-actions #bootEndless{
-  display:none!important;
-}
+/* Endless mode remains accessible from the landing menu. */
 
 body.rework-v2 .boot-actions #bootHow,
 body.rework-v2 .boot-actions #bootOptions{

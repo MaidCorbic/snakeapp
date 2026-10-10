@@ -3,7 +3,7 @@
 Pixel-art arcade survival Snake built as a lightweight static web game.
 
 ## Current build
-- Five-minute survival run with a clear end condition
+- Four launch modes: five-minute Survival, seeded Daily, Endless cycles, and three-minute Party Run
 - Energy and high-value Core pickups
 - Combo multiplier and score progression
 - Progressive hazards
@@ -11,8 +11,9 @@ Pixel-art arcade survival Snake built as a lightweight static web game.
 - Three abilities: Dash, Shield and Pulse
 - Mobile touch controls
 - Desktop keyboard controls
-- Local best score
-- Responsive pixel-art presentation
+- Storage-safe run finalization and local best score
+- Result screen with run details and a direct return to the main menu
+- Responsive pixel-art presentation with visible keyboard focus and mobile-friendly controls
 - No framework or build step required
 
 ## Controls

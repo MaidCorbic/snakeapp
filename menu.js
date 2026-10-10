@@ -238,7 +238,8 @@
   const startLoadedMode = (mode) => {
     if (mode === "daily") window.SnakeEvolution?.startDaily?.();
     else if (mode === "endless") window.SnakeEvolution?.startEndless?.();
-    else { if (mode === "party") { try { localStorage.setItem("snake-evolution-mode","party"); } catch {} } else { try { localStorage.setItem("snake-evolution-mode","standard"); } catch {} } window.SnakeEvolution?.start?.(); }
+    else if (mode === "party") window.SnakeEvolution?.startParty?.();
+    else { try { localStorage.setItem("snake-evolution-mode","standard"); } catch {} window.SnakeEvolution?.start?.(); }
   };
 
   const loadGame = (mode="normal") => {
@@ -282,7 +283,7 @@
 
     const script = document.createElement("script");
     script.id = "snakeGameScript";
-    script.src = "game.js?v=survival-v23";
+    script.src = "game.js?v=survival-v24";
     script.onload = () => {
       if (bootFailed) return;
       if (typeof window.SnakeEvolution?.start !== "function") {
@@ -291,7 +292,7 @@
       }
       const ultimate = document.createElement("script");
       ultimate.id = "snakeUltimateScript";
-      ultimate.src = "ultimate-gameplay-v1.js?v=ultimate-v9";
+      ultimate.src = "ultimate-gameplay-v1.js?v=ultimate-v11";
       ultimate.onload = () => {
         if (bootFailed) return;
         if (typeof window.SnakeEvolution?.start !== "function") {
@@ -300,7 +301,7 @@
         }
         const update = document.createElement("script");
         update.id = "snakeGameplayUpdateV2";
-        update.src = "gameplay-update-v2.js?v=update-v9";
+        update.src = "gameplay-update-v2.js?v=update-v10";
         update.onload = () => {
           if (bootFailed) return;
           const polish = document.createElement("script");
@@ -316,7 +317,7 @@
             }
             const rework = document.createElement("script");
             rework.id = "snakeReworkV2";
-            rework.src = "snake-rework-v2.js?v=rework-v4";
+            rework.src = "snake-rework-v2.js?v=rework-v5";
             rework.onload = () => {
               if (bootFailed) return;
               try {

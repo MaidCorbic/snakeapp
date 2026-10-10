@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no"><meta name="theme-color" content="#080b09"><title>Snake Evolution — Survival Run</title><link rel="icon" href="favicon.svg?v=snake1" type="image/svg+xml"><link rel="stylesheet" href="style.css?v=survival-v39"><link rel="stylesheet" href="arcade-polish-v1.css?v=arcade-v1"><link rel="stylesheet" href="snake-rework-v2.css?v=rework-v3"><style id="landing-enhancements">
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#080b09"><title>Snake Evolution — Survival Run</title><link rel="icon" href="favicon.svg?v=snake1" type="image/svg+xml"><link rel="stylesheet" href="style.css?v=survival-v39"><link rel="stylesheet" href="arcade-polish-v1.css?v=arcade-v1"><link rel="stylesheet" href="snake-rework-v2.css?v=rework-v4"><style id="landing-enhancements">
 /* Landing page / Options / How-to-Play enhancement pass */
 .boot-top-meta{display:flex;align-items:center;gap:14px}
 .game-version{padding:6px 8px;border:1px solid #38533c;background:#0a120d;color:var(--green);font-size:6px;letter-spacing:.5px;box-shadow:inset 0 0 12px #79e35b08}
@@ -301,9 +301,7 @@ body.high-contrast .boot-panel-heading>strong,body.high-contrast .game-version{c
 .boot-actions #bootOptions{
   grid-column:span 1!important;
 }
-.boot-actions #bootEndless{
-  display:none!important;
-}
+/* Endless is supported and stays discoverable in the launch menu. */
 .boot-actions .secondary{
   min-height:42px!important;
 }
@@ -1182,7 +1180,8 @@ body.rework-v2 .landing-profile .profile-block:nth-child(4) strong{
   #bootHowPanel .how-row p{font-size:4.9px!important}
   #bootHowPanel .how-row kbd{font-size:5px!important}
 }
-</style></head>
+</style><link rel="stylesheet" href="release-polish-v1.css?v=release-v1">
+</head>
 <body class="rework-v2"><section id="bootMenu" class="boot-menu" role="dialog" aria-modal="true" aria-label="Snake Evolution main menu">
   <div class="boot-card">
     <div class="boot-topline"><span class="eyebrow">PIXEL ARCADE</span><div class="boot-top-meta"><span id="bootVersion" class="game-version" aria-label="Current game version">V2.8.2 // LANDING UI UPDATE</span><span id="bootClock" class="boot-clock" aria-label="Current time">00:00:00</span><span class="boot-status"><i></i> SYSTEM READY</span></div></div>
@@ -1463,4 +1462,4 @@ body.rework-v2 .landing-profile .profile-block:nth-child(4) strong{
 </details>
 <section id="leaderboards" class="progression-panel"><div class="progression-head"><b>LOCAL LEADERBOARDS</b><strong>TOP 10</strong></div><div class="leaderboard-columns"><div><h4>ALL RUNS</h4><div id="leaderboardList" class="leaderboard-list"></div></div><div><h4>DAILY // TODAY</h4><div id="dailyLeaderboardList" class="leaderboard-list"></div></div></div></section>
 <footer><div class="legend"><span class="desktop-commands">KEYBOARD: WASD / ARROWS · SPACE DASH · SHIFT SHIELD · E PULSE · Q FURY · P / ESC PAUSE</span><span>ENERGY +10</span><span>CORE +50</span><span>HUNTER</span><span>HAZARD</span><span>POWER-UP</span><span>SUPPLY DROP</span></div><div class="controls" aria-label="Mobile touch controls"><span class="touch-label">TOUCH</span><button data-dir="up">▲</button><div><button data-dir="left">◀</button><button data-dir="down">▼</button><button data-dir="right">▶</button></div></div></footer>
-</main><script src="menu.js?v=boot-v30"></script><script src="meta-progression-v1.js?v=meta-v3"></script></body></html>
+</main><script src="menu.js?v=boot-v31"></script><script src="meta-progression-v1.js?v=meta-v4"></script></body></html>

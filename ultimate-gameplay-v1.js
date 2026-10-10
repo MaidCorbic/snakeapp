@@ -21,7 +21,7 @@
     ["LOW VISIBILITY","BLACKOUTS"],
     ["DOUBLE DOWN","THREAT +10 // SCORE +25%"]
   ];
-  function chooseCondition(){runCondition=conditionDefs[Math.floor(Math.random()*conditionDefs.length)]}
+  function chooseCondition(partyMode=false){const pool=partyMode?conditionDefs.filter(condition=>condition[0]!=="ONE CHANCE"):conditionDefs;runCondition=pool[Math.floor(Math.random()*pool.length)]}
   function conditionName(){return runCondition?.[0]||"STANDARD"}
   function conditionScoreMult(){return runCondition?.[0]==="ONE CHANCE"?1.4:runCondition?.[0]==="DOUBLE DOWN"?1.25:1}
 
@@ -54,7 +54,7 @@
   function audioInit(){try{if(localStorage.getItem("snake-evolution-sound")==="off")return;const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return;if(!audioCtx)audioCtx=new AC();if(audioCtx.state==="suspended")audioCtx.resume().catch(()=>{})}catch{}}
   function audioSettingsU(){try{return JSON.parse(localStorage.getItem("snake-evolution-settings")||"{}")}catch{return {}}}
   function audioCue(kind="ui"){
-    if(localStorage.getItem("snake-evolution-sound")==="off")return;
+    try{if(localStorage.getItem("snake-evolution-sound")==="off")return}catch{}
     audioInit();if(!audioCtx)return;
     const settings=audioSettingsU(),master=Math.max(0,Math.min(1,Number(settings.volume??65)/100)),f={ui:320,pickup:540,ability:280,warning:130,boss:70,success:700,kill:180}[kind]||320,now=audioCtx.currentTime,o=audioCtx.createOscillator(),v=audioCtx.createGain();
     o.frequency.setValueAtTime(f,now);o.frequency.exponentialRampToValueAtTime(Math.max(55,f*.72),now+.07);v.gain.setValueAtTime(.0001,now);v.gain.exponentialRampToValueAtTime(.04*master,now+.01);v.gain.exponentialRampToValueAtTime(.0001,now+.08);o.connect(v);v.connect(audioCtx.destination);o.start(now);o.stop(now+.09)
@@ -352,20 +352,24 @@
 
   reset=function(){prepareRun(activeMode)};
   function prepareRun(mode){
-    activeMode=mode;dailyMode=mode==="daily";endlessMode=mode==="endless";endlessCycle=0;endlessTotalStart=performance.now();
+    const partyMode=mode==="party";
+    activeMode=mode;dailyMode=mode==="daily";endlessMode=mode==="endless";
+    try{localStorage.setItem("snake-evolution-mode",partyMode?"party":"standard")}catch{}
+    endlessCycle=0;endlessTotalStart=performance.now();
     if(dailyMode)enableDailyRng();else restoreRng();
-    chooseCondition();deathCause="NONE";perfectBroken=false;lastPerfectMilestone=0;ghostSaved=false;maxThreat=0;threatBonus=runCondition?.[0]==="DOUBLE DOWN"?10:0;bountyTarget=null;bountyClaimed=false;enemyId=0;arenaBlocks=[];telegraphs=[];riskShrine=null;secretPortal=null;secretUntil=0;layerZone=-1;layerEventClock=0;nextRiskAt=performance.now()+60000;nextSecretAt=performance.now()+90000;
-    loadGhost();contractOfferOpen=true;extractionOpen=false;evolutionCards=[];energyRespawnSerial=0;recentEnergyCells=[];encounters=[];encounterClock=0;encounterSerial=0;encounterBoostUntil=0;baseResetU();score=0;combo=1;if(energy){const initial={x:energy.x,y:energy.y};energy=safeEnergyRespawnU(initial)}if(runCondition?.[0]==="ONE CHANCE")lives=1;
+    chooseCondition(partyMode);deathCause="NONE";perfectBroken=false;lastPerfectMilestone=0;ghostSaved=false;maxThreat=0;threatBonus=runCondition?.[0]==="DOUBLE DOWN"?10:0;bountyTarget=null;bountyClaimed=false;enemyId=0;arenaBlocks=[];telegraphs=[];riskShrine=null;secretPortal=null;secretUntil=0;layerZone=-1;layerEventClock=0;nextRiskAt=performance.now()+60000;nextSecretAt=performance.now()+90000;
+    loadGhost();contractOfferOpen=true;extractionOpen=false;evolutionCards=[];energyRespawnSerial=0;recentEnergyCells=[];encounters=[];encounterClock=0;encounterSerial=0;encounterBoostUntil=0;baseResetU();funMode=partyMode;activeRunTime=partyMode?FUN_RUN_TIME:RUN_TIME;if(partyMode)lives=4;score=0;combo=1;if(energy){const initial={x:energy.x,y:energy.y};energy=safeEnergyRespawnU(initial)}if(runCondition?.[0]==="ONE CHANCE"&&!funMode)lives=1;
     perfectStart=performance.now();generateArena();hud();draw();renderLeaderboard();baseRenderAchievementsU();renderUltimateAchievements();renderEvolutionCardsU()
   }
   function startDaily(){prepareRun("daily")}
-  function startEndless(){prepareRun("endless")};
+  function startEndless(){prepareRun("endless")}
+  function startParty(){prepareRun("party")}
 
   const baseWinU=win;
   win=function(){
     if(endlessMode){
       endlessCycle++;const s=ultimateStats();s.endlessCycles=Math.max(s.endlessCycles,endlessCycle);s.perfectSeconds=Math.max(s.perfectSeconds,Math.floor((performance.now()-perfectStart)/1000));saveUltimateStats(s);
-      startedAt=performance.now();extractionOpen=false;extractionNextAt=60000;extractionHeatUntil=performance.now()+20000;threatBonus=Math.min(50,threatBonus+8);for(let i=0;i<3;i++)hazards.push(free());event("ENDLESS CYCLE "+endlessCycle);say("ENDLESS // CYCLE "+endlessCycle+" // THREAT +8");hud();draw();move();return
+      startedAt=performance.now();extractionOpen=false;extractionNextAt=60000;extractionHeatUntil=performance.now()+20000;threatBonus=Math.min(50,threatBonus+8);addHazards(3);event("ENDLESS CYCLE "+endlessCycle);say("ENDLESS // CYCLE "+endlessCycle+" // THREAT +8");hud();draw();move();return
     }
     baseWinU()
   };
@@ -424,5 +428,5 @@
 
   baseRenderAchievementsU();renderUltimateAchievements();renderLeaderboard();
   if(!window.startDailyRun)window.startDailyRun=startDaily;if(!window.startEndlessRun)window.startEndlessRun=startEndless;
-  function resetRank(){["snake-evolution-best","snake-evolution-save","snake-evolution-leaderboard","snake-evolution-daily-leaderboard","snake-evolution-ghost","snake-evolution-ghost-best","snake-evolution-ghost-meta","snake-evolution-daily-ghost","snake-evolution-daily-ghost-best","snake-evolution-daily-ghost-meta"].forEach(key=>{try{localStorage.removeItem(key)}catch{}});ghostBestScore=0;ghostPath=[];ghostIndex=0;renderLeaderboard();baseHudU();showSave()} window.SnakeEvolution={start:()=>prepareRun("standard"),startDaily,startEndless,resetRank,getState:()=>({alive,score,combo,fury,lives,xp,xpLevel,xpNext,danger,level,zone,objective:objective?.[0]||null,objectiveDone,contract:contract?.[0]||null,contractAccepted,contractOfferOpen,contractDone,supplyDrop:supplyDrop?.rarity||null,mutation:mutationName(),condition:conditionName(),daily:dailyMode,endless:endlessMode,endlessCycle,salvageChain,zoneEvent:advancedZoneEvent?.type||null,secretZone:secretUntil>performance.now(),riskShrine:!!riskShrine,perfectBroken,maxThreat,deathCause,bountyClaimed,ghostLength:ghostPath.length,evolutionCardDrops:evolutionCards.length,evolutionCardCollection:cardStore(),buildLevel:xpLevel,extraLifeCapacity:maxLives,encounterCount:encounters.length,encounterBoost:encounterBoostUntil>performance.now(),ghostBestScore:ghostBestScore})};
+  function resetRank(){["snake-evolution-best","snake-evolution-save","snake-evolution-leaderboard","snake-evolution-daily-leaderboard","snake-evolution-ghost","snake-evolution-ghost-best","snake-evolution-ghost-meta","snake-evolution-daily-ghost","snake-evolution-daily-ghost-best","snake-evolution-daily-ghost-meta"].forEach(key=>{try{localStorage.removeItem(key)}catch{}});ghostBestScore=0;ghostPath=[];ghostIndex=0;renderLeaderboard();baseHudU();showSave()} window.SnakeEvolution={start:()=>prepareRun("standard"),startDaily,startEndless,startParty,resetRank,getState:()=>({alive,score,combo,fury,lives,xp,xpLevel,xpNext,danger,level,zone,objective:objective?.[0]||null,objectiveDone,contract:contract?.[0]||null,contractAccepted,contractOfferOpen,contractDone,supplyDrop:supplyDrop?.rarity||null,mutation:mutationName(),condition:conditionName(),mode:activeMode,party:funMode,daily:dailyMode,endless:endlessMode,endlessCycle,salvageChain,zoneEvent:advancedZoneEvent?.type||null,secretZone:secretUntil>performance.now(),riskShrine:!!riskShrine,perfectBroken,maxThreat,deathCause,bountyClaimed,ghostLength:ghostPath.length,evolutionCardDrops:evolutionCards.length,evolutionCardCollection:cardStore(),buildLevel:xpLevel,extraLifeCapacity:maxLives,encounterCount:encounters.length,encounterBoost:encounterBoostUntil>performance.now(),ghostBestScore:ghostBestScore})};
 })();
