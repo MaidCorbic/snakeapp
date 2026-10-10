@@ -232,15 +232,17 @@ test("narrow viewport keeps the game and result actions within the screen", asyn
   expect(pageErrors).toEqual([]);
 });
 
-test("movement input is ignored while contract or extraction overlays block gameplay", async ({ page }) => {
+test("direction input is ignored while the run is paused", async ({ page }) => {
   await startGame(page);
+  await page.locator("#pauseBtn").click();
   const before = await page.evaluate(() => window.SnakeEvolution.getState());
   await page.keyboard.press("ArrowDown");
-  await expect.poll(() => page.evaluate(() => window.SnakeEvolution.getState().alive)).toBe(true);
-  await page.evaluate(() => {
-    const state = window.SnakeEvolution.getState();
-    if (!state.alive) throw new Error("run unexpectedly ended");
-  });
+  await page.waitForTimeout(180);
+  const after = await page.evaluate(() => window.SnakeEvolution.getState());
+  expect(after.paused).toBe(true);
+  expect(after.score).toBe(before.score);
+  await page.locator("#resume").click();
+  await expect.poll(() => page.evaluate(() => window.SnakeEvolution.getState().paused)).toBe(false);
 });
 
 test("pause and run finalization expose consistent clock state", async ({ page }) => {
