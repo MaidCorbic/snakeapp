@@ -7,7 +7,7 @@
   document.body.classList.add("rework-v2");
 
   const PARTY_KEY = "snake-evolution-mode";
-  const getMode = () => localStorage.getItem(PARTY_KEY) === "party" ? "party" : "standard";
+  const getMode = () => { try { return localStorage.getItem(PARTY_KEY) === "party" ? "party" : "standard"; } catch { return "standard"; } };
   const setMode = mode => {
     try { localStorage.setItem(PARTY_KEY, mode); } catch {}
     document.body.classList.toggle("rework-party", mode === "party");
