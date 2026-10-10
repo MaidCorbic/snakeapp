@@ -172,6 +172,8 @@ test("run result can return to the menu without double-finalizing", async ({ pag
 });
 
 test("run startup and result rendering survive blocked browser storage", async ({ page }) => {
+  const pageErrors = [];
+  page.on("pageerror", error => pageErrors.push(error.message));
   await page.addInitScript(() => {
     Storage.prototype.getItem = function () { throw new Error("storage unavailable"); };
     Storage.prototype.setItem = function () { throw new Error("storage unavailable"); };
@@ -185,6 +187,7 @@ test("run startup and result rendering survive blocked browser storage", async (
   await page.evaluate(() => window.__snakeE2E.endRun());
   await expect(page.locator("#message h2")).toHaveText("RUN OVER");
   await expect(page.locator("#resultMainMenu")).toBeVisible();
+  expect(pageErrors).toEqual([]);
 });
 
 test("narrow viewport keeps the game and result actions within the screen", async ({ page }) => {
