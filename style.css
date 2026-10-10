@@ -4091,3 +4091,132 @@ img,svg,canvas{
 /* Gameplay settings: visibility controls must override component display rules. */
 .setting-disabled{display:none!important}
 .no-combat-fx .event-banner,.no-combat-fx .floaters{display:none!important}
+
+
+/* ABILITY COMMAND DECK — distinct roles, stronger state clarity, clean responsive feedback */
+.ability-bar{
+  isolation:isolate;
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:10px!important;
+  margin-top:12px!important;
+  padding:10px!important;
+  border:1px solid #294333;
+  border-radius:10px;
+  background:linear-gradient(145deg,#0b140e,#060a07 72%);
+  box-shadow:inset 0 1px 0 #ffffff08,0 12px 28px #0005;
+}
+.ability-bar:before{border-radius:10px}
+.ability{
+  --ability-accent:#9cff79;
+  --ability-glow:#9cff7920;
+  position:relative;
+  display:flex!important;
+  flex-direction:column;
+  justify-content:center;
+  min-width:0;
+  min-height:76px!important;
+  padding:12px 12px 13px!important;
+  overflow:hidden;
+  isolation:isolate;
+  text-align:left!important;
+  border:1px solid color-mix(in srgb,var(--ability-accent) 48%,#203329)!important;
+  border-radius:8px!important;
+  background:
+    radial-gradient(circle at 100% 0%,var(--ability-glow),transparent 54%),
+    linear-gradient(145deg,#132017,#0a100c 78%)!important;
+  color:#edf8ed!important;
+  box-shadow:inset 0 1px 0 #ffffff0b,0 4px 0 #020503,0 9px 18px #0003!important;
+  transition:transform .16s ease,border-color .16s ease,box-shadow .16s ease,filter .16s ease,opacity .16s ease;
+}
+#dash{--ability-accent:#a4ff79;--ability-glow:#a4ff7924}
+#shield{--ability-accent:#70cfff;--ability-glow:#70cfff24}
+#pulse{--ability-accent:#c59aff;--ability-glow:#c59aff24}
+#fury{--ability-accent:#ff9b68;--ability-glow:#ff9b6824}
+.ability:before{
+  content:"";position:absolute;inset:0 0 auto;height:2px;
+  background:linear-gradient(90deg,transparent,var(--ability-accent),transparent);
+  opacity:.8;pointer-events:none
+}
+.ability:after{
+  content:"";position:absolute;right:-15px;top:-23px;width:68px;height:68px;
+  border:1px solid color-mix(in srgb,var(--ability-accent) 20%,transparent);
+  border-radius:50%;box-shadow:0 0 0 8px color-mix(in srgb,var(--ability-accent) 4%,transparent);
+  pointer-events:none;transition:transform .2s ease,opacity .2s ease;opacity:.6
+}
+.ability b{
+  display:flex;align-items:center;gap:8px;
+  font-size:clamp(8px,.8vw,10px)!important;line-height:1.35;
+  letter-spacing:1.1px;color:var(--ability-accent)!important;
+  text-shadow:0 0 16px var(--ability-glow)
+}
+.ability b:before{
+  display:grid;place-items:center;flex:0 0 23px;height:23px;
+  border:1px solid color-mix(in srgb,var(--ability-accent) 48%,transparent);
+  border-radius:6px;background:var(--ability-glow);font:700 12px/1 system-ui,sans-serif;
+}
+#dash b:before{content:"↯"}
+#shield b:before{content:"⬡"}
+#pulse b:before{content:"◎"}
+#fury b:before{content:"✦"}
+.ability span{
+  margin-top:7px!important;color:#8ea594!important;
+  font:600 8px/1.4 system-ui,sans-serif!important;letter-spacing:.6px
+}
+.ability i{
+  left:0!important;right:auto;bottom:0!important;height:3px!important;width:0;
+  border-radius:0 4px 0 0;background:var(--ability-accent)!important;
+  box-shadow:0 0 12px var(--ability-glow);transition:width .12s linear!important
+}
+.ability.ready{
+  opacity:1!important;filter:none!important;
+  border-color:color-mix(in srgb,var(--ability-accent) 72%,#294333)!important;
+  background:
+    radial-gradient(circle at 100% 0%,var(--ability-glow),transparent 60%),
+    linear-gradient(145deg,#17271b,#0b130e 78%)!important;
+}
+.ability.ready:hover:not(:disabled){
+  transform:translateY(-2px);
+  box-shadow:inset 0 1px 0 #ffffff12,0 5px 0 #020503,0 0 0 1px var(--ability-glow),0 12px 24px #0005!important;
+}
+.ability.ready:hover:not(:disabled):after{transform:scale(1.14);opacity:1}
+.ability.cooldown{opacity:.67!important;filter:saturate(.55)!important}
+.ability.cooldown b{color:#8b9b8f!important;text-shadow:none}
+.ability.active{
+  opacity:1!important;border-color:var(--ability-accent)!important;
+  background:radial-gradient(circle at 50% 0%,var(--ability-glow),transparent 70%),linear-gradient(145deg,#282018,#100e0b)!important;
+  box-shadow:inset 0 0 22px var(--ability-glow),0 0 0 1px var(--ability-glow),0 4px 0 #020503!important;
+  animation:abilityActiveGlow 1.2s ease-in-out infinite alternate;
+}
+.ability:focus-visible{outline:2px solid #fff1b7!important;outline-offset:3px}
+.ability:disabled{cursor:not-allowed}
+#fury.ready{animation:furyReadyGlow 1.4s ease-in-out infinite alternate}
+#dash.ready b:before{animation:dashReadyMark 1.8s ease-in-out infinite}
+@keyframes abilityActiveGlow{from{filter:brightness(1)}to{filter:brightness(1.2)}}
+@keyframes furyReadyGlow{from{box-shadow:inset 0 1px 0 #ffffff0b,0 4px 0 #020503,0 0 0 0 var(--ability-glow)}to{box-shadow:inset 0 1px 0 #ffffff12,0 4px 0 #020503,0 0 18px var(--ability-glow)}}
+@keyframes dashReadyMark{50%{transform:scale(1.08);box-shadow:0 0 12px var(--ability-glow)}}
+#game{image-rendering:auto}
+@media(max-width:700px){
+ .ability-bar{gap:7px!important;padding:7px!important;margin-top:8px!important}
+ .ability{min-height:66px!important;padding:9px 8px 10px!important}
+ .ability b{font-size:8px!important;letter-spacing:.7px}
+ .ability b:before{flex-basis:21px;height:21px}
+ .ability span{font-size:7px!important;margin-top:5px!important}
+}
+@media(max-width:420px){
+ .ability-bar{gap:6px!important;padding:6px!important}
+ .ability{min-height:59px!important;padding:7px 6px 8px!important}
+ .ability b{font-size:7px!important;gap:5px}
+ .ability b:before{flex-basis:18px;height:18px;font-size:10px}
+ .ability span{font-size:6px!important}
+}
+@media(orientation:landscape) and (max-height:600px) and (pointer:coarse){
+ .ability-bar{gap:5px!important;padding:5px!important}
+ .ability{min-height:45px!important;padding:5px!important}
+ .ability b:before{display:none}
+ .ability span{display:block!important;font-size:6px!important}
+}
+@media(prefers-reduced-motion:reduce){
+ .ability,.ability:after{transition:none!important}
+ #fury.ready,#dash.ready b:before,.ability.active{animation:none!important}
+}
