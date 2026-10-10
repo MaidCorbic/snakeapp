@@ -92,6 +92,8 @@ check("required project files exist", [
   "ultimate-gameplay-v1.js",
   "gameplay-update-v2.js",
   "scripts/validate-game.cjs",
+  "ultimate-ui-v1.js",
+  "ultimate-ui-v1.css",
   ".github/workflows/ci.yml"
 ].every(file => fs.existsSync(path.join(root, file))));
 
