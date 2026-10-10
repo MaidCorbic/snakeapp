@@ -355,7 +355,7 @@
     activeMode=mode;dailyMode=mode==="daily";endlessMode=mode==="endless";endlessCycle=0;endlessTotalStart=performance.now();
     if(dailyMode)enableDailyRng();else restoreRng();
     chooseCondition();deathCause="NONE";perfectBroken=false;lastPerfectMilestone=0;ghostSaved=false;maxThreat=0;threatBonus=runCondition?.[0]==="DOUBLE DOWN"?10:0;bountyTarget=null;bountyClaimed=false;enemyId=0;arenaBlocks=[];telegraphs=[];riskShrine=null;secretPortal=null;secretUntil=0;layerZone=-1;layerEventClock=0;nextRiskAt=performance.now()+60000;nextSecretAt=performance.now()+90000;
-    loadGhost();contractOfferOpen=true;extractionOpen=false;evolutionCards=[];energyRespawnSerial=0;recentEnergyCells=[];encounters=[];encounterClock=0;encounterSerial=0;encounterBoostUntil=0;baseResetU();score=0;combo=1;if(energy){const initial={x:energy.x,y:energy.y};energy=safeEnergyRespawnU(initial)}if(runCondition?.[0]==="ONE CHANCE")lives=1;
+    loadGhost();contractOfferOpen=true;extractionOpen=false;evolutionCards=[];energyRespawnSerial=0;recentEnergyCells=[];encounters=[];encounterClock=0;encounterSerial=0;encounterBoostUntil=0;baseResetU();score=0;combo=1;if(energy){const initial={x:energy.x,y:energy.y};energy=safeEnergyRespawnU(initial)}if(runCondition?.[0]==="ONE CHANCE"&&!funMode)lives=1;
     perfectStart=performance.now();generateArena();hud();draw();renderLeaderboard();baseRenderAchievementsU();renderUltimateAchievements();renderEvolutionCardsU()
   }
   function startDaily(){prepareRun("daily")}
@@ -365,7 +365,7 @@
   win=function(){
     if(endlessMode){
       endlessCycle++;const s=ultimateStats();s.endlessCycles=Math.max(s.endlessCycles,endlessCycle);s.perfectSeconds=Math.max(s.perfectSeconds,Math.floor((performance.now()-perfectStart)/1000));saveUltimateStats(s);
-      startedAt=performance.now();extractionOpen=false;extractionNextAt=60000;extractionHeatUntil=performance.now()+20000;threatBonus=Math.min(50,threatBonus+8);for(let i=0;i<3;i++)hazards.push(free());event("ENDLESS CYCLE "+endlessCycle);say("ENDLESS // CYCLE "+endlessCycle+" // THREAT +8");hud();draw();move();return
+      startedAt=performance.now();extractionOpen=false;extractionNextAt=60000;extractionHeatUntil=performance.now()+20000;threatBonus=Math.min(50,threatBonus+8);addHazards(3);event("ENDLESS CYCLE "+endlessCycle);say("ENDLESS // CYCLE "+endlessCycle+" // THREAT +8");hud();draw();move();return
     }
     baseWinU()
   };
