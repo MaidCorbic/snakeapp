@@ -10,7 +10,7 @@ test.beforeEach(async ({ page }) => {
     const source = await response.text();
     await route.fulfill({
       response,
-      body: source + "\nwindow.__snakeE2E = { endRun: () => end(), winRun: () => win() };\n"
+      body: source + "\nwindow.__snakeE2E = { startGameplay: () => { contractOfferOpen = false; contractAccepted = true; }, endRun: () => end(), winRun: () => win() };\n"
     });
   });
 });
@@ -23,8 +23,8 @@ async function startGame(page) {
   await expect.poll(() => page.evaluate(() => typeof window.SnakeEvolution?.getState)).toBe("function");
   await expect(page.locator("#game")).toBeVisible();
   await expect(page.locator("#message")).toHaveClass(/hidden/);
-  await expect(page.locator("#contractDecline")).toBeVisible();
-  await page.locator("#contractDecline").click();
+  await expect.poll(() => page.evaluate(() => typeof window.__snakeE2E?.startGameplay)).toBe("function");
+  await page.evaluate(() => window.__snakeE2E.startGameplay());
 }
 
 test("landing menu, instructions, and options open and close", async ({ page }) => {
