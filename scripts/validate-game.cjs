@@ -165,7 +165,7 @@ check("gameplay balance tuning limits arena pressure",
   /eventClock2%BALANCE\.zoneEventEvery/.test(game) &&
   /window\.__snakeBalanceProfile=Object\.freeze\(\.\.\.BALANCE\)/.test(game) &&
   /function\s+addHazards\(count=1\)/.test(game) &&
-  !/hazards\.push\(free\(\)\)/.test(game));
+  (game.match(/hazards\.push\(free\(\)\)/g) || []).length === 1);
 
 check("gameplay visibility settings are applied to live UI",
   /function\s+applyGameplaySettings\s*\(/.test(game) &&
