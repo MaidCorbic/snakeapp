@@ -164,8 +164,8 @@ check("HUD and game-over presentation hooks exist",
 
 check("game-over results use the centered message flow",
   /function\s+showRunResult\s*\(/.test(game) &&
-  /showRunResult\(false/.test(game) &&
-  /showRunResult\(true/.test(game));
+  /finalizeRun\(false/.test(game) &&
+  /finalizeRun\(true/.test(game));
 
 check("gameplay balance tuning limits arena pressure",
   /const BALANCE=\{hazardSpawnEvery:40,hazardCap:8,hunterWaveEvery:96,hunterCap:5,bossSpawnEvery:180,zoneEventEvery:240,hazardStormBase:2,hunterSwarmCap:5\}/.test(game) &&
