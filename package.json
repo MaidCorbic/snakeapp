@@ -1,0 +1,12 @@
+{
+  "name": "snake-evolution",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Browser regression tests for Snake Evolution",
+  "scripts": {
+    "test:e2e": "playwright test"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.55.0"
+  }
+}
