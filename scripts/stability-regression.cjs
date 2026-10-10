@@ -84,21 +84,21 @@ assert.equal(result.showSaveCalls, 1);
 assert.equal(result.warnings.length, 1);
 pass("storage quota/write failure does not stop result rendering");
 
-assert.match(game, /function\\s+move\\s*\\(/);
-assert.match(game, /function\\s+reset\\s*\\(/);
-assert.match(game, /function\\s+end\\s*\\(/);
-assert.match(game, /function\\s+win\\s*\\(/);
-assert.match(game, /function\\s+draw\\s*\\(/);
-assert.match(game, /function\\s+takeDamage\\s*\\(/);
+assert.match(game, /function\s+move\s*\(/);
+assert.match(game, /function\s+reset\s*\(/);
+assert.match(game, /function\s+end\s*\(/);
+assert.match(game, /function\s+win\s*\(/);
+assert.match(game, /function\s+draw\s*\(/);
+assert.match(game, /function\s+takeDamage\s*\(/);
 pass("core movement, reset, collision damage, win and loss entry points exist");
 
 for (const file of ["ultimate-gameplay-v1.js", "gameplay-update-v2.js", "arcade-polish-v1.js", "snake-rework-v2.js"]) {
   assert.ok(fs.existsSync(path.join(root, file)), "Missing gameplay layer: " + file);
-  assert.match(menu, new RegExp(file.replace(/[.*+?^${}()|[\\]\\\\]/g, "\\\\$&")));
+  assert.ok(menu.includes(file), "Loader does not reference " + file);
 }
-assert.match(menu, /if\\s*\\(gameLoading\\)\\s*return/);
-assert.match(menu, /if\\s*\\(bootFailed\\)\\s*return/);
-assert.match(html, /meta-progression-v1\\.js/);
+assert.match(menu, /if\s*\(gameLoading\)\s*return/);
+assert.match(menu, /if\s*\(bootFailed\)\s*return/);
+assert.match(html, /meta-progression-v1\.js/);
 pass("loader includes required gameplay layers and guards duplicate/failed boot");
 
-process.stdout.write("\\nStability regression checks passed.\\n");
+process.stdout.write("\nStability regression checks passed.\n");
