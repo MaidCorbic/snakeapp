@@ -177,7 +177,10 @@ check("game-over results use the centered message flow",
 check("safe spawn scans finite arena cells and avoids occupied-cell fallback",
   game.includes("function isOccupied(p") &&
   game.includes("function free(options={})") &&
-  game.includes("if(!available.length)"));
+  game.includes("if(!available.length)") &&
+  game.includes("function addHazards(count=1){for(let i=0;i<count&&hazards.length<BALANCE.hazardCap;i++){const p=free();if(!p||p.blocked)break;hazards.push(p)}}") &&
+  game.includes("if(!pos||pos.blocked){say(\"SUPPLY DROP // NO SAFE LANDING\");return}") &&
+  game.includes("function spawnBoss(){if(boss)return;const p=free();if(!p||p.blocked)"));
 check("base gameplay tick clears stale timer state and respects blocking overlays",
   game.includes("function move(force=false){if(!alive||paused||contractOfferOpen||extractionOpen)return;clearTimeout(timer);timer=null;") &&
   game.includes("if(extractionOpen)return"));
