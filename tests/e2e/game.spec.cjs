@@ -182,13 +182,19 @@ test("run startup and result rendering survive blocked browser storage", async (
   await page.goto("/index.html");
   await page.locator("#bootStart").click();
   await expect.poll(() => page.evaluate(() => typeof window.SnakeEvolution?.getState)).toBe("function");
+  await expect.poll(() => page.evaluate(() => {
+    const alive = !!window.SnakeEvolution?.getState?.().alive;
+    const errorVisible = !document.querySelector("#bootError")?.classList.contains("hidden");
+    return alive || errorVisible;
+  }), { timeout: 10_000 }).toBe(true);
   const startup = await page.evaluate(() => ({
     alive: !!window.SnakeEvolution?.getState?.().alive,
     menuVisible: !document.querySelector("#bootMenu")?.classList.contains("hidden"),
     errorVisible: !document.querySelector("#bootError")?.classList.contains("hidden"),
     errorText: document.querySelector("#bootErrorText")?.textContent || ""
   }));
-  expect(startup.alive, "Blocked-storage startup diagnostic: " + JSON.stringify(startup) + "; page errors: " + pageErrors.join(" | ")).toBe(true);
+  expect(startup.alive && !startup.errorVisible && !startup.menuVisible,
+    "Blocked-storage startup diagnostic: " + JSON.stringify(startup) + "; page errors: " + pageErrors.join(" | ")).toBe(true);
   await expect(page.locator("#bootMenu")).toHaveClass(/hidden/);
   await page.evaluate(() => window.__snakeE2E.endRun());
   await expect(page.locator("#message h2")).toHaveText("RUN OVER");
