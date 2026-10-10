@@ -1,0 +1,95 @@
+/* Snake Evolution — release polish layer.
+   Focused overrides only: accessibility, responsive safety, and result actions. */
+:root {
+  color-scheme: dark;
+  -webkit-text-size-adjust: 100%;
+}
+html, body {
+  max-width: 100%;
+  overflow-x: clip;
+}
+button, input, summary, [role="button"] {
+  -webkit-tap-highlight-color: transparent;
+}
+button {
+  touch-action: manipulation;
+}
+button:focus-visible,
+input:focus-visible,
+summary:focus-visible,
+[role="button"]:focus-visible {
+  outline: 2px solid var(--green, #79e35b) !important;
+  outline-offset: 3px !important;
+}
+button:disabled {
+  cursor: not-allowed;
+  filter: saturate(.55);
+  opacity: .72;
+}
+#app, .game-shell, .run-hud-v3, .run-command-bar, .run-status-v3, .run-intel {
+  min-width: 0;
+  max-width: 100%;
+}
+#game, .game-shell canvas {
+  touch-action: none;
+}
+.controls button, button[data-dir], .ability {
+  min-width: 42px;
+  min-height: 42px;
+  user-select: none;
+  -webkit-user-select: none;
+}
+#message {
+  overscroll-behavior: contain;
+}
+#message .message-card .result-menu {
+  display: inline-block;
+  min-height: 44px;
+  min-width: 132px;
+  margin: 18px 0 0 10px;
+  padding: 10px 14px;
+  border: 1px solid #59745e;
+  border-radius: 4px;
+  background: linear-gradient(180deg, #15271a, #0a120d);
+  color: #d7ead9;
+  font: inherit;
+  font-size: 7px;
+  letter-spacing: .8px;
+  cursor: pointer;
+}
+#message .message-card .result-menu:hover {
+  border-color: var(--green, #79e35b);
+  color: #fff;
+  filter: brightness(1.1);
+}
+@media (hover: hover) {
+  .boot-actions button:hover,
+  .ability:hover,
+  .controls button:hover {
+    filter: brightness(1.08);
+  }
+}
+@media (max-width: 700px) {
+  .controls button, button[data-dir], .ability {
+    min-width: 44px;
+    min-height: 44px;
+  }
+  #message .message-card #start,
+  #message .message-card .result-menu {
+    display: block;
+    width: min(100%, 280px);
+    min-height: 44px;
+    margin: 12px auto 0 !important;
+    box-sizing: border-box;
+  }
+}
+@media (max-width: 380px) {
+  #message .message-card {
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+  .controls button, button[data-dir] {
+    min-width: 40px;
+    min-height: 40px;
+  }
+}
