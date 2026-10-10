@@ -185,6 +185,35 @@ test("run startup and result rendering survive blocked browser storage", async (
   await expect(page.locator("#resultMainMenu")).toBeVisible();
 });
 
+test("narrow viewport keeps the game and result actions within the screen", async ({ page }) => {
+  const pageErrors = [];
+  page.on("pageerror", error => pageErrors.push(error.message));
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/index.html");
+  await expect(page.locator("#bootMenu")).toBeVisible();
+  await expect(page.locator("#bootEndless")).toBeVisible();
+
+  await page.locator("#bootStart").click();
+  await expect.poll(() => page.evaluate(() => typeof window.SnakeEvolution?.getState)).toBe("function");
+  const layout = await page.evaluate(() => ({
+    viewportWidth: window.innerWidth,
+    documentWidth: document.documentElement.scrollWidth,
+    gameWidth: document.querySelector("#game").getBoundingClientRect().width,
+    controlsDisplay: getComputedStyle(document.querySelector("footer .controls")).display
+  }));
+  expect(layout.documentWidth).toBeLessThanOrEqual(layout.viewportWidth);
+  expect(layout.gameWidth).toBeGreaterThan(0);
+  expect(layout.controlsDisplay).not.toBe("none");
+  await page.evaluate(() => window.__snakeE2E.endRun());
+  await expect(page.locator("#resultMainMenu")).toBeVisible();
+  const resultWidth = await page.evaluate(() => ({
+    viewportWidth: window.innerWidth,
+    cardRight: document.querySelector("#message .message-card").getBoundingClientRect().right
+  }));
+  expect(resultWidth.cardRight).toBeLessThanOrEqual(resultWidth.viewportWidth + 1);
+  expect(pageErrors).toEqual([]);
+});
+
 test("wall collision ends a run and displays the loss result", async ({ page }) => {
   await startGame(page);
 
