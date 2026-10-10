@@ -4086,3 +4086,8 @@ img,svg,canvas{
 #bootOptionsPanel .control-deck-profile-row{align-items:center!important;gap:10px!important}
 #bootOptionsPanel .control-deck-profile-row>div:first-child{min-width:0}
 #bootOptionsPanel .rank-profile-readout{flex:0 0 auto;min-width:126px;padding:8px 9px;border:1px solid #365c46;border-radius:5px 2px 5px 2px;background:linear-gradient(145deg,#0d1b12,#080e0a);color:#a6e7b0;font:5px "Press Start 2P",monospace;letter-spacing:.45px;text-align:center;box-shadow:2px 2px 0 #17231a,inset 0 0 12px rgba(121,227,91,.025);white-space:nowrap}
+
+
+/* Gameplay settings: visibility controls must override component display rules. */
+.setting-disabled{display:none!important}
+.no-combat-fx .event-banner,.no-combat-fx .floaters{display:none!important}
