@@ -465,7 +465,8 @@ body.meta-no-combat-fx .event-banner,body.meta-no-combat-fx .toast,body.meta-no-
     const remaining=parseTimeRemaining();
     if(remaining!==null){
       const modeText=String(document.querySelector("#runMode")?.textContent||"").trim();
-      const duration=state.daily || modeText==="DAILY" ? 300 : (localStorage.getItem("snake-evolution-mode")==="party" ? 180 : 300);
+      let storedMode="standard";try{storedMode=localStorage.getItem("snake-evolution-mode")||"standard"}catch{}
+      const duration=state.daily || modeText==="DAILY" ? 300 : (storedMode==="party" ? 180 : 300);
       return Math.max(0,duration-remaining);
     }
     if(!runStartedAt)runStartedAt=performance.now();
