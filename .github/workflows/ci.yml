@@ -46,6 +46,7 @@ jobs:
           node --check gameplay-update-v2.js
           node --check arcade-polish-v1.js
           node --check snake-rework-v2.js
+          node --check ultimate-ui-v1.js
           node --check scripts/validate-game.cjs
           node --check scripts/stability-regression.cjs
           node --check playwright.config.cjs
