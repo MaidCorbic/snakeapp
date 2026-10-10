@@ -181,7 +181,7 @@ test("run startup and result rendering survive blocked browser storage", async (
   await page.locator("#bootStart").click();
   await expect.poll(() => page.evaluate(() => typeof window.SnakeEvolution?.getState)).toBe("function");
   await page.evaluate(() => window.__snakeE2E.endRun());
-  await expect(page.locator("#message h2")).toHaveText("RUN OVER");
+  await expect(page.locator("#message h2")).toHaveText("RUN ENDED");
   await expect(page.locator("#resultMainMenu")).toBeVisible();
 });
 
