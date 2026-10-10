@@ -312,7 +312,8 @@ function missionCheck(){
 }
 function takeDamage(reason="COLLISION"){stats.damage++;lives=Math.max(0,lives-1);haptic(30);if(lives<=0){say("NO LIVES // RUN OVER");return end()}snake=[{x:10,y:10},{x:9,y:10},{x:8,y:10}];dir=next={x:1,y:0};shieldUntil=performance.now()+1800;hazards=hazards.filter(h=>Math.abs(h.x-10)+Math.abs(h.y-10)>4);hunters=hunters.filter(h=>Math.abs(h.x-10)+Math.abs(h.y-10)>5);say(reason+" // LIFE LOST // "+lives+" LEFT");if(lives===1&&!lastStandAnnounced){lastStandAnnounced=true;say("LAST STAND // SCORE +25%");event("LAST STAND // BONUS ACTIVE")}hud();draw()}
 function move(force=false){if(!alive)return;dir=next;const head={x:snake[0].x+dir.x,y:snake[0].y+dir.y};if(head.x<0||head.x>=COLS||head.y<0||head.y>=ROWS)return end();const protectedNow=performance.now()<shieldUntil||performance.now()<pulseUntil;
-const selfCollision=snake.some((s,i)=>i>0&&same(s,head));
+const willGrow=!!((energy&&same(head,energy))||(core&&same(head,core)));
+const selfCollision=snake.some((s,i)=>i>0&&(willGrow||i<snake.length-1)&&same(s,head));
 const worldCollision=hazards.some(h=>same(h,head))||hunters.some(h=>same(h,head))||(boss&&same(boss,head));
 if(selfCollision||(!protectedNow&&worldCollision)){
  takeDamage(selfCollision?"SELF HIT":hunters.some(h=>same(h,head))?"HUNTER HIT":hazards.some(h=>same(h,head))?"HAZARD HIT":"COLLISION");
