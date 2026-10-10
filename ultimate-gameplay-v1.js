@@ -309,7 +309,7 @@
   collectPowerup=function(head){const hit=powerups.find(p=>same(p,head)),oldLives=lives;baseCollectPowerupU(head);if(runCondition?.[0]==="NO MEDKITS"&&hit?.type==="medkit"){lives=oldLives;gain(250);gainXp(50);say("NO MEDKITS // +250 SCORE")}};
   useFury=function(){audioCue("ability");baseUseFuryU();if(alive&&evolution()>=4)gainXp(8)};
   gain=function(points){const perfect=!perfectBroken&&alive&&(performance.now()-perfectStart)>=30000;baseGainU(points*conditionScoreMult()*(perfect?1.25:1))};
-  chargeFury=function(amount){const before=fury;baseChargeFuryU(amount);if(performance.now()<furyUntil||fury>=100)return;const u=getUpgrades(),extra=1+(u.fury||0)*.08;fury=Math.min(100,fury+amount*extra*.08)};
+  chargeFury=function(amount){const before=fury;if(typeof baseChargeFuryU==="function")baseChargeFuryU(amount);else{if(performance.now()<furyUntil)return;fury=Math.min(100,fury+amount);updateAbilityUI()}if(performance.now()<furyUntil||fury>=100)return;const u=getUpgrades(),extra=1+(u.fury||0)*.08;fury=Math.min(100,fury+amount*extra*.08)};
   takeDamage=function(reason="COLLISION"){deathCause=reason;perfectBroken=true;if(reason!=="SELF HIT"&&evolution()>=3&&performance.now()>phantomWardUntil){phantomWardUntil=performance.now()+22000;shieldUntil=performance.now()+2500;say("PHANTOM // PHASED HIT");return}baseTakeDamageU(reason)};
   let phantomWardUntil=0;
 
