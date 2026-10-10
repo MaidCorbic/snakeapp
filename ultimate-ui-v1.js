@@ -86,6 +86,8 @@
     observer.observe(card, { childList: true, subtree: true });
     const initialHeading = $("h2", card);
     if (initialHeading) initialHeading.id = "resultTitle";
+    const titleObserver = new MutationObserver(() => { const current = $("h2", card); if (current && current.id !== "resultTitle") current.id = "resultTitle"; });
+    titleObserver.observe(card, { childList: true, subtree: true });
     // Keep the existing result-generation and run-again handlers intact.
     card.classList.add("ultimate-result-card");
   }
@@ -100,6 +102,7 @@
     let previousCombo = combo.textContent;
     let previousLives = lives.textContent;
     const pulse = (element, cls) => {
+      if (document.documentElement.classList.contains("reduced-motion")) return;
       element.classList.remove(cls);
       void element.offsetWidth;
       element.classList.add(cls);
