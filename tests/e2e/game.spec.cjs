@@ -146,6 +146,9 @@ test("Party Run keeps its four lives and isolated mode state", async ({ page }) 
   await expect.poll(() => page.evaluate(() => window.SnakeEvolution?.getState?.().alive)).toBe(true);
   const state = await page.evaluate(() => window.SnakeEvolution.getState());
   expect(state.lives).toBe(4);
+  expect(state.mode).toBe("party");
+  expect(state.party).toBe(true);
+  expect(state.condition).not.toBe("ONE CHANCE");
   expect(state.daily).toBe(false);
   expect(state.endless).toBe(false);
 });
