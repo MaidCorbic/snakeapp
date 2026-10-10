@@ -99,8 +99,8 @@ for (const src of localScripts) {
 }
 
 check("menu loads cache-busted gameplay layers", menu.includes("game.js?v=survival-v24") &&
-  /ultimate-gameplay-v1\.js\?v=/.test(menu) &&
-  /gameplay-update-v2\.js\?v=/.test(menu));
+  menu.includes("ultimate-gameplay-v1.js?v=ultimate-v10") &&
+  menu.includes("gameplay-update-v2.js?v=update-v10"));
 
 check("pause control has one authoritative click handler", !/pauseBtn\?\.addEventListener\("click"/.test(game) && /pauseControl\?\.addEventListener\("click"/.test(update));
 
