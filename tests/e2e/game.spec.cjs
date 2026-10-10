@@ -125,6 +125,63 @@ test("pause, resume, and restart keep the run interactive", async ({ page }) => 
   await expect(page.locator("#score")).toHaveText("0");
 });
 
+test("Daily and Endless launch buttons are visible and initialize isolated modes", async ({ page }) => {
+  await page.goto("/index.html");
+  await expect(page.locator("#bootEndless")).toBeVisible();
+
+  await page.locator("#bootDaily").click();
+  await expect.poll(() => page.evaluate(() => window.SnakeEvolution?.getState?.().daily)).toBe(true);
+  await expect.poll(() => page.evaluate(() => window.SnakeEvolution?.getState?.().endless)).toBe(false);
+
+  await page.goto("/index.html");
+  await expect(page.locator("#bootEndless")).toBeVisible();
+  await page.locator("#bootEndless").click();
+  await expect.poll(() => page.evaluate(() => window.SnakeEvolution?.getState?.().endless)).toBe(true);
+  await expect.poll(() => page.evaluate(() => window.SnakeEvolution?.getState?.().daily)).toBe(false);
+});
+
+test("Party Run keeps its four lives and isolated mode state", async ({ page }) => {
+  await page.goto("/index.html");
+  await page.locator("#bootFun").click();
+  await expect.poll(() => page.evaluate(() => window.SnakeEvolution?.getState?.().alive)).toBe(true);
+  const state = await page.evaluate(() => window.SnakeEvolution.getState());
+  expect(state.lives).toBe(4);
+  expect(state.daily).toBe(false);
+  expect(state.endless).toBe(false);
+});
+
+test("run result can return to the menu without double-finalizing", async ({ page }) => {
+  await startGame(page);
+  await page.evaluate(() => {
+    window.__snakeE2E.endRun();
+    window.__snakeE2E.winRun();
+  });
+
+  await expect(page.locator("#message h2")).toHaveText("RUN OVER");
+  await expect(page.locator("#resultMainMenu")).toBeVisible();
+  await expect.poll(() => page.evaluate(() => JSON.parse(localStorage.getItem("snake-evolution-save") || "{}").runs)).toBe(1);
+  await expect.poll(() => page.evaluate(() => JSON.parse(localStorage.getItem("snake-evolution-save") || "{}").wins || 0)).toBe(0);
+
+  await page.locator("#resultMainMenu").click();
+  await expect(page.locator("#bootMenu")).toBeVisible();
+  await page.locator("#bootEndless").click();
+  await expect.poll(() => page.evaluate(() => window.SnakeEvolution?.getState?.().endless)).toBe(true);
+});
+
+test("run startup and result rendering survive blocked browser storage", async ({ page }) => {
+  await page.addInitScript(() => {
+    Storage.prototype.getItem = function () { throw new Error("storage unavailable"); };
+    Storage.prototype.setItem = function () { throw new Error("storage unavailable"); };
+    Storage.prototype.removeItem = function () { throw new Error("storage unavailable"); };
+  });
+  await page.goto("/index.html");
+  await page.locator("#bootStart").click();
+  await expect.poll(() => page.evaluate(() => typeof window.SnakeEvolution?.getState)).toBe("function");
+  await page.evaluate(() => window.__snakeE2E.endRun());
+  await expect(page.locator("#message h2")).toHaveText("RUN OVER");
+  await expect(page.locator("#resultMainMenu")).toBeVisible();
+});
+
 test("wall collision ends a run and displays the loss result", async ({ page }) => {
   await startGame(page);
 
