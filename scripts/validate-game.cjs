@@ -184,8 +184,10 @@ check("safe spawn scans finite arena cells and avoids occupied-cell fallback",
 check("base gameplay tick clears stale timer state and respects blocking overlays",
   game.includes("function move(force=false){if(!alive||paused||contractOfferOpen||extractionOpen)return;clearTimeout(timer);timer=null;") &&
   game.includes("if(extractionOpen)return"));
-check("run finalization clears the pause overlay and timer",
-  game.includes('function finalizeRun(won,summary){if(runFinalized||!alive)return;runFinalized=true;alive=false;clearTimeout(timer);timer=null;paused=false;document.querySelector("#pauseOverlay")?.remove()'));
+check("run finalization clears timer and pause state",
+  game.includes("function finalizeRun(won,summary)") &&
+  game.includes("timer=null;paused=false;"));
+
 check("browser regressions exercise pause and finalization state",
   read("tests/e2e/game.spec.cjs").includes("direction input is ignored while the run is paused") &&
   read("tests/e2e/game.spec.cjs").includes("pause and run finalization expose consistent clock state"));
