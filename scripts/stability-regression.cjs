@@ -7,6 +7,7 @@ const vm = require("node:vm");
 
 const root = path.resolve(__dirname, "..");
 const game = fs.readFileSync(path.join(root, "game.js"), "utf8");
+const ultimate = fs.readFileSync(path.join(root, "ultimate-gameplay-v1.js"), "utf8");
 const menu = fs.readFileSync(path.join(root, "menu.js"), "utf8");
 const html = fs.readFileSync(path.join(root, "index.html"), "utf8");
 
@@ -84,6 +85,11 @@ assert.equal(result.showSaveCalls, 1);
 assert.equal(result.warnings.length, 1);
 pass("storage quota/write failure does not stop result rendering");
 
+assert.match(game, /function\s+saveBestScoreSafely\s*\(/);
+assert.match(game, /function\s+finalizeRun\s*\(/);
+assert.match(game, /runFinalized\s*=\s*false/);
+assert.match(ultimate, /addHazards\(3\)/);
+assert.doesNotMatch(ultimate, /hazards\.push\(free\(\)\)/);
 assert.match(game, /function\s+move\s*\(/);
 assert.match(game, /function\s+reset\s*\(/);
 assert.match(game, /function\s+end\s*\(/);
