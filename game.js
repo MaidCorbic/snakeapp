@@ -206,13 +206,13 @@ function setDir(x,y){
 }
 
 function useDash(){if(!alive||paused||contractOfferOpen||extractionOpen||performance.now()<dashReady)return;clearTimeout(timer);timer=null;const baseCd=evolution()>=3?5500:7000,cd=runMutation?.[0]==="OVERCLOCK"?Math.round(baseCd*.8):baseCd;dashReady=performance.now()+cd;say("DASH // OVERRIDE");move(true)}
-function useShield(){if(!alive||paused||performance.now()<shieldReady)return;shieldReady=performance.now()+12000;shieldUntil=performance.now()+2500;say("SHIELD // ACTIVE");hud();updateAbilityUI();draw()}
-function usePulse(){if(!alive||paused||performance.now()<pulseReady)return;stats.pulses++;chargeFury(20);haptic(18);const cd=evolution()>=3?10500:15000;pulseReady=performance.now()+cd;pulseUntil=performance.now()+350;const nearby=hunters.filter(h=>Math.abs(h.x-snake[0].x)+Math.abs(h.y-snake[0].y)<=8);
+function useShield(){if(!alive||paused||contractOfferOpen||extractionOpen||performance.now()<shieldReady)return;shieldReady=performance.now()+12000;shieldUntil=performance.now()+2500;say("SHIELD // ACTIVE");hud();updateAbilityUI();draw()}
+function usePulse(){if(!alive||paused||contractOfferOpen||extractionOpen||performance.now()<pulseReady)return;stats.pulses++;chargeFury(20);haptic(18);const cd=evolution()>=3?10500:15000;pulseReady=performance.now()+cd;pulseUntil=performance.now()+350;const nearby=hunters.filter(h=>Math.abs(h.x-snake[0].x)+Math.abs(h.y-snake[0].y)<=8);
 let destroyed=0;
 nearby.forEach(h=>{if(h.type==="elite"){h.hp--;if(h.hp<=0){destroyed++;stats.elites++}}else destroyed++});
 if(nearby.length)hunters=hunters.filter(h=>!nearby.includes(h)||h.type==="elite"&&h.hp>0);
 if(destroyed){stats.hunters+=destroyed;gainXp(destroyed*30+stats.elites*15);chain+=destroyed;gain(destroyed*(runMutation?.[0]==="HUNTER ALERT"?140:100));chargeFury(destroyed*10);floatText("CHAIN x"+chain);checkStreakRewards()}hazards=hazards.filter(h=>Math.abs(h.x-snake[0].x)+Math.abs(h.y-snake[0].y)>5);if(boss){boss.hp=Math.max(0,boss.hp-2);if(boss.hp===0)destroyBoss()}gain(25);say("PULSE // CLEAR");hud();updateAbilityUI()}
-function useFury(){if(!alive||paused||fury<100||performance.now()<furyUntil)return;fury=0;furyUntil=performance.now()+8000;stats.furyUses++;haptic(28);hunters=[];hazards=hazards.filter(h=>Math.abs(h.x-snake[0].x)+Math.abs(h.y-snake[0].y)>8);say("FURY // 2X SCORE // THREAT WIPE");hud();draw()}
+function useFury(){if(!alive||paused||contractOfferOpen||extractionOpen||fury<100||performance.now()<furyUntil)return;fury=0;furyUntil=performance.now()+8000;stats.furyUses++;haptic(28);hunters=[];hazards=hazards.filter(h=>Math.abs(h.x-snake[0].x)+Math.abs(h.y-snake[0].y)>8);say("FURY // 2X SCORE // THREAT WIPE");hud();draw()}
 function key(e){const k=e.key.toLowerCase();if(["arrowup","arrowdown","arrowleft","arrowright"," ","w","a","s","d","shift","q"].includes(k))e.preventDefault();if(contractOfferOpen&&(k===" "||k==="enter")){acceptContract();return}if(extractionOpen)return;if(k==="escape"||k==="p"){pause();return}if(k==="arrowup"||k==="w")setDir(0,-1);if(k==="arrowdown"||k==="s")setDir(0,1);if(k==="arrowleft"||k==="a")setDir(-1,0);if(k==="arrowright"||k==="d")setDir(1,0);if(k===" ")useDash();if(k==="shift")useShield();if(k==="e")usePulse();if(k==="q")useFury()}
 addEventListener("keydown",key);
 const runTitle=document.querySelector(".run-identity h1");
@@ -312,7 +312,7 @@ function missionCheck(){
 }
 function takeDamage(reason="COLLISION"){stats.damage++;lives=Math.max(0,lives-1);haptic(30);if(lives<=0){say("NO LIVES // RUN OVER");return end()}snake=[{x:10,y:10},{x:9,y:10},{x:8,y:10}];dir=next={x:1,y:0};shieldUntil=performance.now()+1800;hazards=hazards.filter(h=>Math.abs(h.x-10)+Math.abs(h.y-10)>4);hunters=hunters.filter(h=>Math.abs(h.x-10)+Math.abs(h.y-10)>5);say(reason+" // LIFE LOST // "+lives+" LEFT");if(lives===1&&!lastStandAnnounced){lastStandAnnounced=true;say("LAST STAND // SCORE +25%");event("LAST STAND // BONUS ACTIVE")}hud();draw()}
 function move(force=false){if(!alive||paused||contractOfferOpen||extractionOpen)return;clearTimeout(timer);timer=null;dir=next;const head={x:snake[0].x+dir.x,y:snake[0].y+dir.y};if(head.x<0||head.x>=COLS||head.y<0||head.y>=ROWS)return end();const protectedNow=performance.now()<shieldUntil||performance.now()<pulseUntil;
-if(!protectedNow&&(snake.some((s,i)=>i>0&&same(s,head)&&!(i===snake.length-1&&!energy?.blocked))||hazards.some(h=>same(h,head))||hunters.some(h=>same(h,head))||(boss&&same(boss,head)))){
+if(!protectedNow&&(snake.some((s,i)=>i>0&&same(s,head)&&!(i===snake.length-1&&!energy&&!(core&&same(core,head))))||hazards.some(h=>same(h,head))||hunters.some(h=>same(h,head))||(boss&&same(boss,head)))){
  takeDamage(hunters.some(h=>same(h,head))?"HUNTER HIT":hazards.some(h=>same(h,head))?"HAZARD HIT":"SELF HIT");
  if(alive&&!paused)timer=setTimeout(move,Math.max(60,118-combo*6-(force?35:0)-(runMutation?.[0]==="OVERCLOCK"?14:0)));
  return
