@@ -175,17 +175,17 @@ check("game-over results use the centered message flow",
   /finalizeRun\(true/.test(game));
 
 check("safe spawn scans finite arena cells and avoids occupied-cell fallback",
-  /function isOccupied\\(p/.test(game) &&
-  /function free\\(options=\\{\\}\\)/.test(game) &&
-  /if\\(!available.length\\)/.test(game));
+  game.includes("function isOccupied(p") &&
+  game.includes("function free(options={})") &&
+  game.includes("if(!available.length)"));
 check("base gameplay tick clears stale timer state and respects blocking overlays",
-  /function move\\(force=false\\)\\{if\\(!alive\\|\\|paused\\|\\|contractOfferOpen\\|\\|extractionOpen\\)return;clearTimeout\\(timer\\);timer=null;/.test(game) &&
-  /if\\(extractionOpen\\)return/.test(game));
+  game.includes("function move(force=false){if(!alive||paused||contractOfferOpen||extractionOpen)return;clearTimeout(timer);timer=null;") &&
+  game.includes("if(extractionOpen)return"));
 check("run finalization clears the pause overlay and timer",
-  /function finalizeRun\\(won,summary\\)\\{if\\(runFinalized\\|\\|!alive\\)return;runFinalized=true;alive=false;clearTimeout\\(timer\\);timer=null;paused=false;document.querySelector\\("#pauseOverlay"\\)\\?\\.remove\\(\\)/.test(game));
+  game.includes('function finalizeRun(won,summary){if(runFinalized||!alive)return;runFinalized=true;alive=false;clearTimeout(timer);timer=null;paused=false;document.querySelector("#pauseOverlay")?.remove()'));
 check("browser regressions exercise pause and finalization state",
-  /direction input is ignored while the run is paused/.test(read("tests/e2e/game.spec.cjs")) &&
-  /pause and run finalization expose consistent clock state/.test(read("tests/e2e/game.spec.cjs")));
+  read("tests/e2e/game.spec.cjs").includes("direction input is ignored while the run is paused") &&
+  read("tests/e2e/game.spec.cjs").includes("pause and run finalization expose consistent clock state"));
 
 check("gameplay balance tuning limits arena pressure",
   /const BALANCE=\{hazardSpawnEvery:40,hazardCap:8,hunterWaveEvery:96,hunterCap:5,bossSpawnEvery:180,zoneEventEvery:240,hazardStormBase:2,hunterSwarmCap:5\}/.test(game) &&
