@@ -184,7 +184,7 @@ check("base gameplay tick clears stale timer state and respects blocking overlay
 check("run finalization clears the pause overlay and timer",
   /function finalizeRun\\(won,summary\\)\\{if\\(runFinalized\\|\\|!alive\\)return;runFinalized=true;alive=false;clearTimeout\\(timer\\);timer=null;paused=false;document.querySelector\\("#pauseOverlay"\\)\\?\\.remove\\(\\)/.test(game));
 check("browser regressions exercise pause and finalization state",
-  /movement input is ignored while contract or extraction overlays block gameplay/.test(read("tests/e2e/game.spec.cjs")) &&
+  /direction input is ignored while the run is paused/.test(read("tests/e2e/game.spec.cjs")) &&
   /pause and run finalization expose consistent clock state/.test(read("tests/e2e/game.spec.cjs")));
 
 check("gameplay balance tuning limits arena pressure",
