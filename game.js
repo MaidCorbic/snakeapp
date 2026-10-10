@@ -1,6 +1,9 @@
 const canvas=document.querySelector("#game"),ctx=canvas.getContext("2d"),message=document.querySelector("#message"),scoreEl=document.querySelector("#score"),comboEl=document.querySelector("#combo"),timeEl=document.querySelector("#time"),bestEl=document.querySelector("#best"),start=document.querySelector("#start"),toast=document.querySelector("#toast"),zoneEl=document.querySelector("#zone"),evoEl=document.querySelector("#evo"),bossHud=document.querySelector("#bossHud"),bossHp=document.querySelector("#bossHp"),statsPanel=document.querySelector("#runStats"),missionPanel=document.querySelector("#missions"),pauseBtn=document.querySelector("#pauseBtn"),eventBanner=document.querySelector("#eventBanner"),floaters=document.querySelector("#floaters"),saveStats=document.querySelector("#saveStats");
 const dashBtn=document.querySelector("#dash"),shieldBtn=document.querySelector("#shield"),pulseBtn=document.querySelector("#pulse"),furyBtn=document.querySelector("#fury"),dashFill=document.querySelector("#dashFill"),shieldFill=document.querySelector("#shieldFill"),pulseFill=document.querySelector("#pulseFill"),furyFill=document.querySelector("#furyFill");
-const COLS=32,ROWS=20,RUN_TIME=300000,FUN_RUN_TIME=180000;const settingsKey="snake-evolution-settings";const defaultSettings={grid:true,vibration:true,reducedMotion:false};let settings={...defaultSettings};try{settings={...defaultSettings,...JSON.parse(localStorage.getItem(settingsKey)||"{}")}}catch{}
+const COLS=32,ROWS=20,RUN_TIME=300000,FUN_RUN_TIME=180000;
+const BALANCE={hazardSpawnEvery:40,hazardCap:8,hunterWaveEvery:96,hunterCap:5,bossSpawnEvery:180,zoneEventEvery:240,hazardStormBase:2,hunterSwarmCap:5};
+window.__snakeBalanceProfile=Object.freeze({...BALANCE});
+function addHazards(count=1){for(let i=0;i<count&&hazards.length<BALANCE.hazardCap;i++)hazards.push(free())}const settingsKey="snake-evolution-settings";const defaultSettings={grid:true,vibration:true,reducedMotion:false};let settings={...defaultSettings};try{settings={...defaultSettings,...JSON.parse(localStorage.getItem(settingsKey)||"{}")}}catch{}
 const gameplaySettingTargets=[
   ["showTimer",".time-tile"],
   ["showXp",".xp-module"],
@@ -88,7 +91,7 @@ function spawnSupplyDrop(){
   const pos=free();
   supplyDrop={x:pos.x,y:pos.y,rarity,expires:performance.now()+14000};
   const hazardCount=rarity==="legendary"?5:rarity==="rare"?4:3;
-  for(let i=0;i<hazardCount;i++)hazards.push(free());
+  addHazards(hazardCount);
   event("SUPPLY DROP // "+rarityData[rarity].label);
   say("SUPPLY DROP // "+rarityData[rarity].label+" // 14s");
 }
@@ -284,7 +287,7 @@ canvas.addEventListener("pointercancel",e=>{
 },{passive:true});
 canvas.addEventListener("touchstart",e=>{if(alive&&!paused)e.preventDefault()},{passive:false});
 canvas.addEventListener("touchmove",e=>{if(alive&&!paused)e.preventDefault()},{passive:false});
-function spawnWave(){const lv=Math.min(5,1+Math.floor((performance.now()-startedAt)/60000));const count=Math.min(1+Math.floor(lv/2)+(runMutation?.[0]==="HUNTER ALERT"?1:0),6);while(hunters.length<count){const elite=lv>=3&&Math.random()<.22;hunters.push({...free(),type:elite?"elite":Math.random()<.35?"interceptor":"hunter",hp:elite?2:1})};if(lv>=2&&hazards.length<4+lv+(runMutation?.[0]==="HAZARD SHIFT"?3:0))hazards.push(free());if(lv>=3&&Math.random()<.65){const roll=Math.random();const type=roll<.08?"medkit":roll<.16?"apex":["overdrive","magnet","repair"][Math.floor(Math.random()*3)];powerups.push({...free(),type})}say("WAVE // LV"+lv)}
+function spawnWave(){const lv=Math.min(5,1+Math.floor((performance.now()-startedAt)/60000));const count=Math.min(1+Math.floor(lv/2)+(runMutation?.[0]==="HUNTER ALERT"?1:0),BALANCE.hunterCap);while(hunters.length<count){const elite=lv>=3&&Math.random()<.22;hunters.push({...free(),type:elite?"elite":Math.random()<.35?"interceptor":"hunter",hp:elite?2:1})};if(lv>=2&&hazards.length<Math.min(BALANCE.hazardCap,2+lv+(runMutation?.[0]==="HAZARD SHIFT"?2:0)))addHazards(1);if(lv>=3&&Math.random()<.65){const roll=Math.random();const type=roll<.08?"medkit":roll<.16?"apex":["overdrive","magnet","repair"][Math.floor(Math.random()*3)];powerups.push({...free(),type})}say("WAVE // LV"+lv)}
 function hunterStep(){
  hunters.forEach(h=>{
    const step=()=>{const dx=snake[0].x-h.x,dy=snake[0].y;if(h.type==="interceptor"&&Math.abs(dx)+Math.abs(dy)<10){h.x+=Math.sign(dx);h.y+=Math.sign(dy)}else if(Math.abs(dx)>Math.abs(dy))h.x+=Math.sign(dx);else h.y+=Math.sign(dy);h.x=(h.x+COLS)%COLS;h.y=(h.y+ROWS)%ROWS};
@@ -294,7 +297,7 @@ function hunterStep(){
 }
 function spawnBoss(){if(boss)return;boss={...free(),hp:12,maxHp:12,phase:1};event("WARDEN INCOMING");say("WARDEN // BOSS INBOUND")}
 function destroyBoss(){if(!boss)return;boss=null;stats.wardens++;gainXp(150);chain++;const points=1000+chain*100;gain(points);chargeFury(25);floatText("+"+points);say("WARDEN DESTROYED // +"+points)}
-function bossStep(){if(!boss)return;bossClock++;boss.phase=boss.hp<=6?2:1;if(boss.phase===2&&bossClock%3)return;if(boss.phase===1&&bossClock%5)return;const dx=snake[0].x-boss.x,dy=snake[0].y-boss.y;if(Math.abs(dx)>Math.abs(dy))boss.x+=Math.sign(dx);else boss.y+=Math.sign(dy);boss.x=(boss.x+COLS)%COLS;boss.y=(boss.y+ROWS)%ROWS;if(bossClock%(boss.phase===2?7:15)===0)hazards.push(free());if(boss.phase===2&&bossClock%21===0){event("WARDEN PHASE 2");say("WARDEN // ENRAGED")}}
+function bossStep(){if(!boss)return;bossClock++;boss.phase=boss.hp<=6?2:1;if(boss.phase===2&&bossClock%3)return;if(boss.phase===1&&bossClock%5)return;const dx=snake[0].x-boss.x,dy=snake[0].y-boss.y;if(Math.abs(dx)>Math.abs(dy))boss.x+=Math.sign(dx);else boss.y+=Math.sign(dy);boss.x=(boss.x+COLS)%COLS;boss.y=(boss.y+ROWS)%ROWS;if(bossClock%(boss.phase===2?7:15)===0)addHazards(1);if(boss.phase===2&&bossClock%21===0){event("WARDEN PHASE 2");say("WARDEN // ENRAGED")}}
 function collectPowerup(head){const i=powerups.findIndex(x=>same(x,head));if(i<0)return;const type=powerups[i].type;powerups.splice(i,1);stats.powerups++;chargeFury(6);haptic(10);if(type==="overdrive"){dashReady=performance.now();gain(100);say("OVERDRIVE // DASH READY")}else if(type==="magnet"){energy=spawnEnergy();core=free();gain(75);say("MAGNET // LOOT RELOCATED")}else if(type==="apex"){gain(400);gainXp(80);combo=Math.min(9,combo+2);chain+=2;chargeFury(30);hazards=[];say("APEX CORE // THREAT WIPE")}else if(type==="medkit"){lives=Math.min(maxLives,lives+1);gainXp(40);gain(125);say("MEDKIT // LIFE +1")}else{snake.push({...snake[snake.length-1]});gainXp(25);gain(150);say("REPAIR // +LENGTH")}}
 const missionDefs=[["energy25","COLLECTOR","Collect 25 ENERGY",()=>stats.energy,25],["core5","CORE HUNTER","Collect 5 CORES",()=>stats.cores,5],["hunter10","HUNTER","Defeat 10 HUNTERS",()=>stats.hunters,10],["combo9","COMBO MASTER","Reach COMBO x9",()=>combo,9],["fury1","FURY","Activate FURY once",()=>stats.furyUses,1],["warden","WARDEN SLAYER","Destroy 1 WARDEN",()=>stats.wardens,1],["nohit","NO HIT","Finish a run without damage",()=>stats.damage===0&&!alive?1:0,1],["score2500","SCORE BREAKER","Score 2,500 points",()=>score,2500],["powerups3","POWER USER","Collect 3 power-ups",()=>stats.powerups,3],["pulses3","PULSE RUNNER","Use PULSE 3 times",()=>stats.pulses,3],["survive120","LONG RUN","Survive 120 seconds",()=>Math.min(120,Math.floor((performance.now()-startedAt)/1000)),120]];
 function renderMissions(){if(!missionList)return;const m=missions();missionList.innerHTML=missionDefs.map(([id,name,label,get,target])=>{const done=!!m[id];const value=Math.min(target,get());const pct=Math.round(value/target*100);return `<div class="mission-item ${done?"done":""}"><div><b>${name}</b><span>${label}</span></div><strong>${done?"DONE":value+"/"+target}</strong><i><em style="width:${pct}%"></em></i></div>`}).join("")}
@@ -317,12 +320,12 @@ snake.unshift(head);let grow=false;
 if(energy&&same(head,energy)){haptic(8);const points=10*combo;gain(points);combo=Math.min(9,combo+1);chain++;stats.energy++;gainXp(12);chargeFury(8);floatText("+"+points);energy=spawnEnergy();grow=true;const coreEvery=runMutation?.[0]==="HAZARD SHIFT"?2:3;if(stats.energy%coreEvery===0){core=free();say("CORE SPAWNED")}}
 if(core&&same(head,core)){haptic(14);const points=50*combo+chain*5;gain(points);combo=Math.min(9,combo+1);stats.cores++;gainXp(45);chargeFury(15);core=null;energy=spawnEnergy();grow=true;say("CORE +"+points)}
 collectPowerup(head);collectSupplyDrop(head);if(boss&&same(head,boss)&&protectedNow){boss.hp--;gain(100+chain*10);chargeFury(12);floatText("HIT",boss);if(boss.hp<=0)destroyBoss()}
-if(!grow)snake.pop();spawnClock++;eventClock++;hunterClock++;eventClock2++;if(eventClock2%210===0)startAdvancedZoneEvent();
+if(!grow)snake.pop();spawnClock++;eventClock++;hunterClock++;eventClock2++;if(eventClock2%BALANCE.zoneEventEvery===0)startAdvancedZoneEvent();
 supplyDropClock++;if(supplyDrop&&performance.now()>supplyDrop.expires){supplyDrop=null;say("SUPPLY DROP // LOST")}
 if(!supplyDrop&&zone>=1&&supplyDropClock%(runMutation?.[0]==="SUPPLY RUSH"?190:260)===0)spawnSupplyDrop();
-if(spawnClock%32===0&&hazards.length<Math.min(3+level+zone+(runMutation?.[0]==="HAZARD SHIFT"?3:0),11))hazards.push(free());
-if(eventClock%82===0&&hunters.length<Math.min(2+level,6))spawnWave();
-if(eventClock%150===0&&currentZone()>=2)spawnBoss();
+if(spawnClock%BALANCE.hazardSpawnEvery===0&&hazards.length<Math.min(2+level+zone+(runMutation?.[0]==="HAZARD SHIFT"?2:0),BALANCE.hazardCap))addHazards(1);
+if(eventClock%BALANCE.hunterWaveEvery===0&&hunters.length<Math.min(1+level,BALANCE.hunterCap))spawnWave();
+if(eventClock%BALANCE.bossSpawnEvery===0&&currentZone()>=2)spawnBoss();
 if(hunterClock%3===0&&hunters.length)hunterStep();bossStep();
 if(false&&eventClock%70===0){combo=Math.max(1,combo-1);if(combo===1)chain=0}
 const elapsed=performance.now()-startedAt;if(funMode){const segment=Math.min(5,Math.floor(elapsed/30000));if(segment>funSegment){funSegment=segment;const labels=["WARMUP","SPEED ROUND","HAZARD PARTY","HUNTER RUSH","OVERDRIVE","FINAL FRENZY"];gain(150+segment*75);gainXp(20+segment*8);hazards=hazards.filter(h=>Math.abs(h.x-snake[0].x)+Math.abs(h.y-snake[0].y)>3);energy=spawnEnergy();event("PARTY // "+labels[segment]);say("SEGMENT "+segment+" // BONUS +"+(150+segment*75));window.SnakeReworkV2?.showSegment("SEGMENT "+segment,labels[segment]+" // BONUS SECURED")}}if(elapsed>=activeRunTime)return win();
@@ -501,8 +504,8 @@ function startAdvancedZoneEvent(){
   const types=["HAZARD_STORM","HUNTER_SWARM","POWER_SURGE","BLACKOUT","DOUBLE_CORE","HUNTER_LOCK"],type=types[Math.floor(Math.random()*types.length)];
   const durations={HAZARD_STORM:9000,HUNTER_SWARM:9000,POWER_SURGE:10000,BLACKOUT:8000,DOUBLE_CORE:10000,HUNTER_LOCK:9000};
   advancedZoneEvent={type,until:performance.now()+durations[type]};event(type+" // "+Math.ceil(durations[type]/1000)+"s");say(type+" // ACTIVE");
-  if(type==="HAZARD_STORM")for(let i=0;i<4+zone;i++)hazards.push(free());
-  if(type==="HUNTER_SWARM")while(hunters.length<Math.min(7,4+level))hunters.push({...free(),type:"hunter",variant:null,hp:1});
+  if(type==="HAZARD_STORM")addHazards(BALANCE.hazardStormBase+zone);
+  if(type==="HUNTER_SWARM")while(hunters.length<Math.min(BALANCE.hunterSwarmCap,2+level))hunters.push({...free(),type:"hunter",variant:null,hp:1});
 }
 function tickAdvancedEvent(){if(advancedZoneEvent&&performance.now()>advancedZoneEvent.until){say(advancedZoneEvent.type+" // ENDED");advancedZoneEvent=null}}
 function openAdvancedExtraction(){if(!alive||extractionOpen)return;extractionOpen=true;paused=true;clearTimeout(timer);document.querySelector("#extractionPanel")?.classList.remove("hidden");event("EXTRACTION // DECISION")}
@@ -574,10 +577,10 @@ useDash=function(){const before=dashReady;baseUseDash();if(!alive)return;const u
 takeDamage=function(reason){baseTakeDamage(reason);if(alive){const u=getUpgrades();shieldUntil=Math.max(shieldUntil,performance.now()+1800+(u.armor||0)*500)}};
 selectContract=function(){baseSelectContract();contractAccepted=false;contractOfferOpen=true;contractDeclined=false;threatBonus=0};
 checkContract=function(){if(contractAccepted&&!contractDeclined)baseCheckContract()};
-spawnWave=function(){const before=hunters.length;baseSpawnWave();hunters.forEach(h=>{if(h.type==="elite"&&!h.variant)h.variant=Math.random()<.5?"charger":"watcher"});if(advancedEventActive("HUNTER_SWARM"))while(hunters.length<Math.min(7,4+level))hunters.push({...free(),type:"hunter",variant:null,hp:1})};
+spawnWave=function(){const before=hunters.length;baseSpawnWave();hunters.forEach(h=>{if(h.type==="elite"&&!h.variant)h.variant=Math.random()<.5?"charger":"watcher"});if(advancedEventActive("HUNTER_SWARM"))while(hunters.length<Math.min(BALANCE.hunterSwarmCap,2+level))hunters.push({...free(),type:"hunter",variant:null,hp:1})};
 hunterStep=function(){baseHunterStep();hunters.forEach(h=>{if(h.type==="elite"&&h.variant==="charger"&&Math.random()<.25){h.x=(h.x+Math.sign(snake[0].x-h.x)*2+COLS)%COLS;h.y=(h.y+Math.sign(snake[0].y-h.y)*2+ROWS)%ROWS}else if(h.type==="elite"&&h.variant==="watcher"&&Math.abs(snake[0].x-h.x)+Math.abs(snake[0].y-h.y)<7){h.x=(h.x-Math.sign(snake[0].x-h.x)+COLS)%COLS;h.y=(h.y-Math.sign(snake[0].y-h.y)+ROWS)%ROWS}if(advancedEventActive("HUNTER_LOCK")){h.x=(h.x+Math.sign(snake[0].x-h.x)+COLS)%COLS;h.y=(h.y+Math.sign(snake[0].y-h.y)+ROWS)%ROWS}})};
 spawnBoss=function(){baseSpawnBoss();if(boss){boss.maxHp=18;boss.hp=18;boss.phase=1}};
-bossStep=function(){if(!boss)return;const prior=boss.phase;boss.phase=boss.hp<=6?3:boss.hp<=12?2:1;baseBossStep();if(!boss)return;if(boss.phase!==prior){event("WARDEN PHASE "+boss.phase);say("WARDEN // PHASE "+boss.phase+(boss.phase===3?" // LOCKDOWN":""))}if(boss.phase===3){boss.phase=3;if(bossClock%2===0)hazards.push(free());if(bossClock%9===0){const p=free();boss.x=p.x;boss.y=p.y;event("WARDEN TELEPORT")}}};
+bossStep=function(){if(!boss)return;const prior=boss.phase;boss.phase=boss.hp<=6?3:boss.hp<=12?2:1;baseBossStep();if(!boss)return;if(boss.phase!==prior){event("WARDEN PHASE "+boss.phase);say("WARDEN // PHASE "+boss.phase+(boss.phase===3?" // LOCKDOWN":""))}if(boss.phase===3){boss.phase=3;if(bossClock%2===0)addHazards(1);if(bossClock%9===0){const p=free();boss.x=p.x;boss.y=p.y;event("WARDEN TELEPORT")}}};
 draw=function(){baseDraw();if(boss&&boss.phase===3){ctx.strokeStyle="#ffffff";ctx.lineWidth=.22;ctx.strokeRect(boss.x+.03,boss.y+.03,.94,.94)}if(advancedEventActive("BLACKOUT")){ctx.fillStyle="#010102cc";ctx.fillRect(0,0,COLS,ROWS);ctx.globalCompositeOperation="destination-out";ctx.beginPath();ctx.arc(snake[0].x+.5,snake[0].y+.5,4.2,0,Math.PI*2);ctx.fill();ctx.globalCompositeOperation="source-over"}brutalDraw();};
 hud=function(){
   baseHud();
@@ -613,4 +616,4 @@ document.querySelector("#contractDecline")?.addEventListener("click",declineCont
 document.querySelector("#extractCashOut")?.addEventListener("click",cashOut);
 document.querySelector("#extractContinue")?.addEventListener("click",keepRunning);
 renderUpgrades();renderAchievements();showSave();
-window.SnakeEvolution={start:reset,resetRank:()=>{try{localStorage.removeItem("snake-evolution-best");localStorage.removeItem("snake-evolution-save");localStorage.removeItem("snake-evolution-leaderboard");localStorage.removeItem("snake-evolution-daily-leaderboard");localStorage.removeItem("snake-evolution-ghost");localStorage.removeItem("snake-evolution-ghost-best");localStorage.removeItem("snake-evolution-ghost-meta");localStorage.removeItem("snake-evolution-daily-ghost");localStorage.removeItem("snake-evolution-daily-ghost-best");localStorage.removeItem("snake-evolution-daily-ghost-meta")}catch{}hud();showSave()},getState:()=>({alive,score,combo,fury,lives,xp,xpLevel,xpNext,danger,level,zone,objective:objective?.[0]||null,objectiveDone,contract:contract?.[0]||null,contractAccepted,contractOfferOpen,contractDone,supplyDrop:supplyDrop?.rarity||null,mutation:mutationName(),salvageChain,zoneEvent:advancedZoneEvent?.type||null,extractionOpen,extractionNextAt})};
+window.SnakeEvolution={start:reset,resetRank:()=>{try{localStorage.removeItem("snake-evolution-best");localStorage.removeItem("snake-evolution-save");localStorage.removeItem("snake-evolution-leaderboard");localStorage.removeItem("snake-evolution-daily-leaderboard");localStorage.removeItem("snake-evolution-ghost");localStorage.removeItem("snake-evolution-ghost-best");localStorage.removeItem("snake-evolution-ghost-meta");localStorage.removeItem("snake-evolution-daily-ghost");localStorage.removeItem("snake-evolution-daily-ghost-best");localStorage.removeItem("snake-evolution-daily-ghost-meta")}catch{}hud();showSave()},getState:()=>({balance:{...BALANCE},alive,score,combo,fury,lives,xp,xpLevel,xpNext,danger,level,zone,objective:objective?.[0]||null,objectiveDone,contract:contract?.[0]||null,contractAccepted,contractOfferOpen,contractDone,supplyDrop:supplyDrop?.rarity||null,mutation:mutationName(),salvageChain,zoneEvent:advancedZoneEvent?.type||null,extractionOpen,extractionNextAt})};

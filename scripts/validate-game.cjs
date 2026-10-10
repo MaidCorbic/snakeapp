@@ -88,7 +88,7 @@ for (const src of localScripts) {
   check("HTML script exists: " + clean, fs.existsSync(path.join(root, clean)));
 }
 
-check("menu loads cache-busted gameplay layers", /game\.js\?v=survival-v22/.test(menu) &&
+check("menu loads cache-busted gameplay layers", /game\.js\?v=survival-v23/.test(menu) &&
   /ultimate-gameplay-v1\.js\?v=/.test(menu) &&
   /gameplay-update-v2\.js\?v=/.test(menu));
 
@@ -156,6 +156,16 @@ check("game-over results use the centered message flow",
   /function\s+showRunResult\s*\(/.test(game) &&
   /showRunResult\(false/.test(game) &&
   /showRunResult\(true/.test(game));
+
+check("gameplay balance tuning limits arena pressure",
+  /const BALANCE=\{hazardSpawnEvery:40,hazardCap:8,hunterWaveEvery:96,hunterCap:5,bossSpawnEvery:180,zoneEventEvery:240,hazardStormBase:2,hunterSwarmCap:5\}/.test(game) &&
+  /spawnClock%BALANCE\.hazardSpawnEvery/.test(game) &&
+  /eventClock%BALANCE\.hunterWaveEvery/.test(game) &&
+  /eventClock%BALANCE\.bossSpawnEvery/.test(game) &&
+  /eventClock2%BALANCE\.zoneEventEvery/.test(game) &&
+  /window\.__snakeBalanceProfile=Object\.freeze\(\{\.\.\.BALANCE\}\)/.test(game) &&
+  /function\s+addHazards\(count=1\)/.test(game) &&
+  (game.match(/hazards\.push\(free\(\)\)/g) || []).length === 1);
 
 check("gameplay visibility settings are applied to live UI",
   /function\s+applyGameplaySettings\s*\(/.test(game) &&
