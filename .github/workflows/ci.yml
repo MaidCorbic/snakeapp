@@ -41,6 +41,9 @@ jobs:
           node --check arcade-polish-v1.js
           node --check snake-rework-v2.js
           node --check scripts/validate-game.cjs
+          node --check scripts/stability-regression.cjs
 
       - name: Run deterministic regression validation
-        run: node scripts/validate-game.cjs
+        run: |
+          node scripts/validate-game.cjs
+          node scripts/stability-regression.cjs
