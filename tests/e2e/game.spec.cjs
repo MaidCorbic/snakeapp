@@ -180,8 +180,10 @@ test("run startup and result rendering survive blocked browser storage", async (
   await page.goto("/index.html");
   await page.locator("#bootStart").click();
   await expect.poll(() => page.evaluate(() => typeof window.SnakeEvolution?.getState)).toBe("function");
+  await expect.poll(() => page.evaluate(() => window.SnakeEvolution.getState().alive)).toBe(true);
+  await expect(page.locator("#bootMenu")).toHaveClass(/hidden/);
   await page.evaluate(() => window.__snakeE2E.endRun());
-  await expect(page.locator("#message h2")).toHaveText("RUN ENDED");
+  await expect(page.locator("#message h2")).toHaveText("RUN OVER");
   await expect(page.locator("#resultMainMenu")).toBeVisible();
 });
 
@@ -199,11 +201,11 @@ test("narrow viewport keeps the game and result actions within the screen", asyn
     viewportWidth: window.innerWidth,
     documentWidth: document.documentElement.scrollWidth,
     gameWidth: document.querySelector("#game").getBoundingClientRect().width,
-    controlsDisplay: getComputedStyle(document.querySelector("footer .controls")).display
+    abilityBarDisplay: getComputedStyle(document.querySelector(".ability-bar")).display
   }));
   expect(layout.documentWidth).toBeLessThanOrEqual(layout.viewportWidth);
   expect(layout.gameWidth).toBeGreaterThan(0);
-  expect(layout.controlsDisplay).not.toBe("none");
+  expect(layout.abilityBarDisplay).not.toBe("none");
   await page.evaluate(() => window.__snakeE2E.endRun());
   await expect(page.locator("#resultMainMenu")).toBeVisible();
   const resultWidth = await page.evaluate(() => ({
