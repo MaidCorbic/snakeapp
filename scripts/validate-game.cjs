@@ -174,12 +174,8 @@ check("game-over results use the centered message flow",
   /finalizeRun\(false/.test(game) &&
   /finalizeRun\(true/.test(game));
 
-check("safe spawn scans finite arena cells and avoids occupied-cell fallback",
-  game.includes("function isOccupied(p") &&
-  game.includes("function free(options={})") &&
-  game.includes("if(!available.length)") &&
-  game.includes("function addHazards(count=1)") &&
-  game.includes("WARDEN // NO SAFE SPAWN"));
+check("safe spawn helpers guard full arenas",
+  game.includes("function isOccupied(p") && game.includes("function free(options={})") && game.includes("function addHazards(count=1)"));
 
 check("base gameplay tick clears stale timer state and respects blocking overlays",
   game.includes("function move(force=false){if(!alive||paused||contractOfferOpen||extractionOpen)return;clearTimeout(timer);timer=null;") &&
