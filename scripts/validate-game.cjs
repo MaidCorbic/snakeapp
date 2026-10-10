@@ -39,6 +39,7 @@ const game = read("game.js");
 const menu = read("menu.js");
 const ultimate = read("ultimate-gameplay-v1.js");
 const releasePolish = read("release-polish-v1.css");
+const reworkCss = read("snake-rework-v2.css");
 const update = read("gameplay-update-v2.js");
 
 const ids = [...html.matchAll(/\bid\s*=\s*["']([^"']+)["']/g)].map(m => m[1]);
@@ -63,7 +64,7 @@ const requiredIds = [
 
 check("arcade polish stylesheet exists", fs.existsSync(path.join(root, "arcade-polish-v1.css")));
 check("release polish stylesheet is linked", html.includes('release-polish-v1.css?v=release-v1') && releasePolish.includes(":focus-visible"));
-check("Endless is available from the landing menu", html.includes('id="bootEndless"') && !html.includes(".boot-actions #bootEndless{\n  display:none!important;"));
+check("Endless is available from the landing menu", html.includes('id="bootEndless"') && !html.includes(".boot-actions #bootEndless{\n  display:none!important;") && !reworkCss.includes("body.rework-v2 .boot-actions #bootEndless{\n  display:none!important;"));
 check("rework stylesheet exists", fs.existsSync(path.join(root, "snake-rework-v2.css")));
 check("party run wiring exists", /bootFun/.test(html) && /mode === "party"/.test(menu) && /FUN_RUN_TIME/.test(game));
 check("arcade polish loader is wired", /arcade-polish-v1\.js\?v=arcade-v2/.test(menu) && /snake-rework-v2\.js\?v=rework-v4/.test(menu));
