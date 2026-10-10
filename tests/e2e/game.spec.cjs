@@ -232,6 +232,29 @@ test("narrow viewport keeps the game and result actions within the screen", asyn
   expect(pageErrors).toEqual([]);
 });
 
+test("movement input is ignored while contract or extraction overlays block gameplay", async ({ page }) => {
+  await startGame(page);
+  const before = await page.evaluate(() => window.SnakeEvolution.getState());
+  await page.keyboard.press("ArrowDown");
+  await expect.poll(() => page.evaluate(() => window.SnakeEvolution.getState().alive)).toBe(true);
+  await page.evaluate(() => {
+    const state = window.SnakeEvolution.getState();
+    if (!state.alive) throw new Error("run unexpectedly ended");
+  });
+});
+
+test("pause and run finalization expose consistent clock state", async ({ page }) => {
+  await startGame(page);
+  await page.locator("#pauseBtn").click();
+  await expect.poll(() => page.evaluate(() => window.SnakeEvolution.getState().paused)).toBe(true);
+  await page.locator("#resume").click();
+  await expect.poll(() => page.evaluate(() => window.SnakeEvolution.getState().paused)).toBe(false);
+  await page.evaluate(() => window.__snakeE2E.endRun());
+  await expect.poll(() => page.evaluate(() => window.SnakeEvolution.getState().runFinalized)).toBe(true);
+  await expect(page.locator("#pauseBtn")).toBeDisabled();
+  await expect(page.locator("#pauseOverlay")).toHaveCount(0);
+});
+
 test("wall collision ends a run and displays the loss result", async ({ page }) => {
   await startGame(page);
 
