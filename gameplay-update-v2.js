@@ -181,6 +181,7 @@
     if (typeof api.start === "function") api.start = wrapStart(api.start, "standard");
     if (typeof api.startDaily === "function") api.startDaily = wrapStart(api.startDaily, "daily");
     if (typeof api.startEndless === "function") api.startEndless = wrapStart(api.startEndless, "endless");
+    if (typeof api.startParty === "function") api.startParty = wrapStart(api.startParty, "party");
 
     const baseGetStateV2 = api.getState;
     if (typeof baseGetStateV2 === "function") {
