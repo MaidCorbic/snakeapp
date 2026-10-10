@@ -157,6 +157,23 @@ check("game-over results use the centered message flow",
   /showRunResult\(false/.test(game) &&
   /showRunResult\(true/.test(game));
 
+check("gameplay visibility settings are applied to live UI",
+  /function\s+applyGameplaySettings\s*\(/.test(game) &&
+  /showTimer/.test(game) &&
+  /showXp/.test(game) &&
+  /showIntel/.test(game) &&
+  /showMissions/.test(game) &&
+  /showAbilities/.test(game) &&
+  /touchControls/.test(game) &&
+  /combatFx/.test(game));
+
+check("setting visibility and combat-effect styles are defined",
+  /\.setting-disabled\s*\{\s*display:none!important\s*\}/.test(css) &&
+  /\.no-combat-fx\s+\.event-banner/.test(css));
+
+check("browser regression covers live gameplay settings",
+  /gameplay display and combat-effect settings affect the live game/.test(read("tests/e2e/game.spec.cjs")));
+
 check("CI workflow invokes the same validator",
   /node\s+scripts\/validate-game\.cjs/.test(read(".github/workflows/ci.yml")));
 
