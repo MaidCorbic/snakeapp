@@ -10,7 +10,7 @@ test.beforeEach(async ({ page }) => {
     const source = await response.text();
     await route.fulfill({
       response,
-      body: source + "\nwindow.__snakeE2E = { startGameplay: () => { contractOfferOpen = false; contractAccepted = true; move(); }, endRun: () => end(), winRun: () => win(), freeCell: () => free(), forceSelfCollisionWithShield: () => { snake = [{x:10,y:10},{x:11,y:10},{x:11,y:9}]; dir = next = {x:1,y:0}; shieldUntil = performance.now() + 5000; pulseUntil = 0; lives = 3; stats.damage = 0; alive = true; paused = false; move(); } };\n"
+      body: source + "\nwindow.__snakeE2E = { startGameplay: () => { contractOfferOpen = false; contractAccepted = true; move(); }, endRun: () => end(), winRun: () => win(), freeCell: () => free(), forceSelfCollisionWithShield: () => { snake = [{x:10,y:10},{x:11,y:10},{x:11,y:9}]; dir = next = {x:1,y:0}; shieldUntil = performance.now() + 5000; pulseUntil = 0; lives = 3; stats.damage = 0; alive = true; paused = false; move(); }, setEdgeWarningScenario: (x,y,dx,dy) => { clearTimeout(timer); timer = null; snake = [{x,y},{x:x-dx,y:y-dy},{x:x-2*dx,y:y-2*dy}]; dir = next = {x:dx,y:dy}; alive = true; paused = false; draw(); } };\n"
     });
   });
 });
@@ -301,6 +301,35 @@ test("all random free-cell spawns avoid occupied gameplay cells", async ({ page 
   });
   expect(result.point).toEqual(expect.objectContaining({ x: expect.any(Number), y: expect.any(Number) }));
   expect(result.overlaps).toBe(false);
+});
+
+test("edge warning alerts before an imminent wall collision and clears when safe", async ({ page }) => {
+  await startGame(page);
+  const warning = page.locator("#edgeWarning");
+  await page.evaluate(() => window.__snakeE2E.setEdgeWarningScenario(2, 10, -1, 0));
+  await expect(warning).toBeVisible();
+  await expect(warning).toContainText("EDGE AHEAD // LEFT");
+  await expect(warning).not.toHaveClass(/critical/);
+
+  await page.evaluate(() => window.__snakeE2E.setEdgeWarningScenario(1, 10, -1, 0));
+  await expect(warning).toContainText("EDGE // LEFT // TURN NOW");
+  await expect(warning).toHaveClass(/critical/);
+
+  await page.evaluate(() => window.__snakeE2E.setEdgeWarningScenario(10, 10, 1, 0));
+  await expect(warning).toBeHidden();
+});
+
+test("edge warning respects reduced-motion styling and does not block game input", async ({ page }) => {
+  await startGame(page);
+  const styles = await page.locator("#edgeWarning").evaluate(el => ({
+    pointerEvents: getComputedStyle(el).pointerEvents,
+    reducedMotionRule: [...document.styleSheets].some(sheet => {
+      try { return [...sheet.cssRules].some(rule => rule.cssText.includes("prefers-reduced-motion") && rule.cssText.includes("edge-warning")); }
+      catch { return false; }
+    })
+  }));
+  expect(styles.pointerEvents).toBe("none");
+  expect(styles.reducedMotionRule).toBe(true);
 });
 
 test("ability deck exposes clear names and responsive visual states", async ({ page }) => {
