@@ -69,7 +69,7 @@ check("release polish stylesheet is linked", html.includes('release-polish-v1.cs
 check("Endless is available from the landing menu", html.includes('id="bootEndless"') && !html.includes(".boot-actions #bootEndless{\n  display:none!important;") && !reworkCss.includes("body.rework-v2 .boot-actions #bootEndless{\n  display:none!important;"));
 check("rework stylesheet exists", fs.existsSync(path.join(root, "snake-rework-v2.css")));
 check("party run wiring exists", /bootFun/.test(html) && /mode === "party"/.test(menu) && /FUN_RUN_TIME/.test(game));
-check("arcade polish loader is wired", /arcade-polish-v1\.js\?v=arcade-v2/.test(menu) && /snake-rework-v2\.js\?v=rework-v4/.test(menu));
+check("arcade polish loader is wired", /arcade-polish-v1\.js\?v=arcade-v2/.test(menu) && /snake-rework-v2\.js\?v=rework-v5/.test(menu));
 
 check("run finalization is one-shot and best-score storage is guarded", game.includes("function finalizeRun(won,summary)") && game.includes("function saveBestScoreSafely()") && game.includes("runFinalized=false"));
 check("Endless cycle respects the shared hazard cap", ultimate.includes("addHazards(3)") && !ultimate.includes("hazards.push(free())"));
