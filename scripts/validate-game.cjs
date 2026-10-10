@@ -24,7 +24,8 @@ const files = [
   "ultimate-gameplay-v1.js",
   "gameplay-update-v2.js",
   "arcade-polish-v1.js",
-  "snake-rework-v2.js"
+  "snake-rework-v2.js",
+  "ultimate-ui-v1.js"
 ];
 
 for (const file of files) {
@@ -42,6 +43,8 @@ const releasePolish = read("release-polish-v1.css");
 const metaProgression = read("meta-progression-v1.js");
 const rework = read("snake-rework-v2.js");
 const reworkCss = read("snake-rework-v2.css");
+const ultimateUiCss = read("ultimate-ui-v1.css");
+const ultimateUiJs = read("ultimate-ui-v1.js");
 const update = read("gameplay-update-v2.js");
 
 const ids = [...html.matchAll(/\bid\s*=\s*["']([^"']+)["']/g)].map(m => m[1]);
@@ -65,6 +68,7 @@ const requiredIds = [
 ];
 
 check("arcade polish stylesheet exists", fs.existsSync(path.join(root, "arcade-polish-v1.css")));
+check("ultimate UI assets are linked and grouped options are present", html.includes("ultimate-ui-v1.css?v=ultimate-ui-v1") && html.includes("ultimate-ui-v1.js?v=ultimate-ui-v1") && ultimateUiCss.includes(".option-group") && ultimateUiCss.includes(".ultimate-result-card") && ultimateUiJs.includes("role",));
 check("release polish stylesheet is linked", html.includes('release-polish-v1.css?v=release-v1') && releasePolish.includes(":focus-visible"));
 check("Endless is available from the landing menu", html.includes('id="bootEndless"') && !html.includes(".boot-actions #bootEndless{\n  display:none!important;") && !reworkCss.includes("body.rework-v2 .boot-actions #bootEndless{\n  display:none!important;"));
 check("rework stylesheet exists", fs.existsSync(path.join(root, "snake-rework-v2.css")));
