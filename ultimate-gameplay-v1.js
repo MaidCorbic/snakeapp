@@ -90,22 +90,25 @@
     return dx+dy;
   }
   function safeEnergyRespawnU(previous){
-    const cells=COLS*ROWS,start=(Math.floor(Math.random()*cells)+energyRespawnSerial++*137+17)%cells,minDistance=Math.min(10,Math.max(7,Math.floor(COLS/4)));
+    const cells=COLS*ROWS;
+    const minDistance=Math.min(10,Math.max(7,Math.floor(COLS/4)));
     const avoidRecent=p=>recentEnergyCells.some(r=>same(r,p));
-    for(let offset=0;offset<cells;offset++){
-      const index=(start+offset)%cells,p={x:index%COLS,y:Math.floor(index/COLS)};
-      const farEnough=!previous||toroidalDistance(p,previous)>=minDistance;
-      if(!cellBlockedU(p,previous)&&!avoidRecent(p)&&farEnough){rememberEnergyPointU(p);return p}
+    const candidates=[];
+    const fallback=[];
+    // Build the free-cell pool first: choosing from it avoids the old scan-order bias
+    // where a blocked random start often pushed food toward predictable nearby cells.
+    for(let index=0;index<cells;index++){
+      const p={x:index%COLS,y:Math.floor(index/COLS)};
+      if(cellBlockedU(p,previous))continue;
+      fallback.push(p);
+      if(!avoidRecent(p)&&(!previous||toroidalDistance(p,previous)>=minDistance))candidates.push(p);
     }
-    for(let offset=0;offset<cells;offset++){
-      const index=(start+offset)%cells,p={x:index%COLS,y:Math.floor(index/COLS)};
-      if(!cellBlockedU(p,previous)&&!avoidRecent(p)){rememberEnergyPointU(p);return p}
-    }
-    for(let offset=0;offset<cells;offset++){
-      const index=(start+offset)%cells,p={x:index%COLS,y:Math.floor(index/COLS)};
-      if(!cellBlockedU(p,previous)&&(!previous||!same(p,previous))){rememberEnergyPointU(p);return p}
-    }
-    return previous?{x:(previous.x+minDistance)%COLS,y:previous.y}:null;
+    const pool=candidates.length?candidates:fallback;
+    if(!pool.length)return null;
+    const p=pool[Math.floor(Math.random()*pool.length)];
+    energyRespawnSerial++;
+    rememberEnergyPointU(p);
+    return {x:p.x,y:p.y};
   }
   function safePointU(){
     let p,t=0;
@@ -428,5 +431,5 @@
 
   baseRenderAchievementsU();renderUltimateAchievements();renderLeaderboard();
   if(!window.startDailyRun)window.startDailyRun=startDaily;if(!window.startEndlessRun)window.startEndlessRun=startEndless;
-  function resetRank(){["snake-evolution-best","snake-evolution-save","snake-evolution-leaderboard","snake-evolution-daily-leaderboard","snake-evolution-ghost","snake-evolution-ghost-best","snake-evolution-ghost-meta","snake-evolution-daily-ghost","snake-evolution-daily-ghost-best","snake-evolution-daily-ghost-meta"].forEach(key=>{try{localStorage.removeItem(key)}catch{}});ghostBestScore=0;ghostPath=[];ghostIndex=0;renderLeaderboard();baseHudU();showSave()} window.SnakeEvolution={start:()=>prepareRun("standard"),startDaily,startEndless,startParty,resetRank,getState:()=>({alive,score,combo,fury,lives,xp,xpLevel,xpNext,danger,level,zone,objective:objective?.[0]||null,objectiveDone,contract:contract?.[0]||null,contractAccepted,contractOfferOpen,contractDone,supplyDrop:supplyDrop?.rarity||null,mutation:mutationName(),condition:conditionName(),mode:activeMode,party:funMode,daily:dailyMode,endless:endlessMode,endlessCycle,salvageChain,zoneEvent:advancedZoneEvent?.type||null,secretZone:secretUntil>performance.now(),riskShrine:!!riskShrine,perfectBroken,maxThreat,deathCause,bountyClaimed,ghostLength:ghostPath.length,evolutionCardDrops:evolutionCards.length,evolutionCardCollection:cardStore(),buildLevel:xpLevel,extraLifeCapacity:maxLives,encounterCount:encounters.length,encounterBoost:encounterBoostUntil>performance.now(),ghostBestScore:ghostBestScore})};
+  function resetRank(){["snake-evolution-best","snake-evolution-save","snake-evolution-leaderboard","snake-evolution-daily-leaderboard","snake-evolution-ghost","snake-evolution-ghost-best","snake-evolution-ghost-meta","snake-evolution-daily-ghost","snake-evolution-daily-ghost-best","snake-evolution-daily-ghost-meta"].forEach(key=>{try{localStorage.removeItem(key)}catch{}});ghostBestScore=0;ghostPath=[];ghostIndex=0;renderLeaderboard();baseHudU();showSave()} window.SnakeEvolution={start:()=>prepareRun("standard"),startDaily,startEndless,startParty,resetRank,getState:()=>({alive,score,combo,fury,lives,xp,xpLevel,xpNext,danger,energyPosition:energy?{x:energy.x,y:energy.y}:null,snakeHead:snake[0]?{x:snake[0].x,y:snake[0].y}:null,level,zone,objective:objective?.[0]||null,objectiveDone,contract:contract?.[0]||null,contractAccepted,contractOfferOpen,contractDone,supplyDrop:supplyDrop?.rarity||null,mutation:mutationName(),condition:conditionName(),mode:activeMode,party:funMode,daily:dailyMode,endless:endlessMode,endlessCycle,salvageChain,zoneEvent:advancedZoneEvent?.type||null,secretZone:secretUntil>performance.now(),riskShrine:!!riskShrine,perfectBroken,maxThreat,deathCause,bountyClaimed,ghostLength:ghostPath.length,evolutionCardDrops:evolutionCards.length,evolutionCardCollection:cardStore(),buildLevel:xpLevel,extraLifeCapacity:maxLives,encounterCount:encounters.length,encounterBoost:encounterBoostUntil>performance.now(),ghostBestScore:ghostBestScore})};
 })();

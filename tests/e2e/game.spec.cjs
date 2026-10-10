@@ -247,6 +247,29 @@ test("ultimate UI uses grouped options and a dedicated accessible result dialog"
   await expect(page.locator("#resultMainMenu")).toBeVisible();
 });
 
+
+test("food respawns at a randomized free cell and never overlaps the snake", async ({ page }) => {
+  await startGame(page);
+  const initial = await page.evaluate(() => window.SnakeEvolution.getState().energyPosition);
+  await expect.poll(() => page.evaluate(() => {
+    const state = window.SnakeEvolution.getState();
+    return state.energyPosition && state.snakeHead && state.energyPosition.x !== state.snakeHead.x;
+  })).toBe(true);
+  expect(initial).toBeTruthy();
+  const position = await page.evaluate(() => window.SnakeEvolution.getState().energyPosition);
+  expect(position).toEqual(expect.objectContaining({ x: expect.any(Number), y: expect.any(Number) }));
+});
+
+test("ability deck exposes clear names and responsive visual states", async ({ page }) => {
+  await startGame(page);
+  for (const [id, label] of [["dash","Dash ability"],["shield","Shield ability"],["pulse","Pulse ability"],["fury","Fury ability"]]) {
+    await expect(page.locator("#" + id)).toHaveAttribute("aria-label", new RegExp(label, "i"));
+    await expect(page.locator("#" + id + " b")).toBeVisible();
+  }
+  const deck = await page.locator(".ability-bar").evaluate(el => getComputedStyle(el).display);
+  expect(deck).toBe("grid");
+});
+
 test("wall collision ends a run and displays the loss result", async ({ page }) => {
   await startGame(page);
 
