@@ -23,6 +23,8 @@ async function startGame(page) {
   await expect.poll(() => page.evaluate(() => typeof window.SnakeEvolution?.getState)).toBe("function");
   await expect(page.locator("#game")).toBeVisible();
   await expect(page.locator("#message")).toHaveClass(/hidden/);
+  await expect(page.locator("#contractDecline")).toBeVisible();
+  await page.locator("#contractDecline").click();
 }
 
 test("landing menu, instructions, and options open and close", async ({ page }) => {
