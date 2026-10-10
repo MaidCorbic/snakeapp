@@ -260,6 +260,34 @@ test("food respawns at a randomized free cell and never overlaps the snake", asy
   expect(position).toEqual(expect.objectContaining({ x: expect.any(Number), y: expect.any(Number) }));
 });
 
+test("shield cannot suppress self-collision", async ({ page }) => {
+  await startGame(page);
+  await page.evaluate(() => window.__snakeE2E.forceSelfCollisionWithShield());
+  await expect.poll(() => page.evaluate(() => window.SnakeEvolution.getState().lives)).toBe(2);
+  await expect.poll(() => page.evaluate(() => window.SnakeEvolution.getState().deathCause)).toBe("SELF HIT");
+});
+
+test("all random free-cell spawns avoid occupied gameplay cells", async ({ page }) => {
+  await startGame(page);
+  const result = await page.evaluate(() => {
+    const state = window.SnakeEvolution.getState();
+    const point = window.__snakeE2E.freeCell();
+    const occupied = [
+      ...(state.snakeSegments || []),
+      ...(state.arenaBlockPositions || []),
+      ...(state.hazardPositions || []),
+      ...(state.hunterPositions || []),
+      ...(state.powerupPositions || []),
+      ...(state.encounterPositions || []),
+      ...[state.energyPosition, state.corePosition, state.bossPosition,
+        state.supplyDropPosition, state.riskShrinePosition, state.secretPortalPosition].filter(Boolean)
+    ];
+    return { point, overlaps: occupied.some(item => item.x === point.x && item.y === point.y) };
+  });
+  expect(result.point).toEqual(expect.objectContaining({ x: expect.any(Number), y: expect.any(Number) }));
+  expect(result.overlaps).toBe(false);
+});
+
 test("ability deck exposes clear names and responsive visual states", async ({ page }) => {
   await startGame(page);
   for (const [id, label] of [["dash","Dash ability"],["shield","Shield ability"],["pulse","Pulse ability"],["fury","Fury ability"]]) {
