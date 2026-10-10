@@ -371,6 +371,25 @@ function updateAbilityUI(){
  }
 }
 function pixel(p,c){ctx.fillStyle=c;ctx.fillRect(p.x+.12,p.y+.12,.76,.76);ctx.fillStyle="#0005";ctx.fillRect(p.x+.12,p.y+.72,.76,.14)}
+const edgeWarningEl=document.querySelector("#edgeWarning");
+let lastEdgeWarningText="";
+function updateEdgeWarning(){
+ if(!edgeWarningEl)return;
+ let side="",distance=Infinity;
+ const head=snake?.[0];
+ if(alive&&!paused&&head){
+  if(dir.x<0){side="LEFT";distance=head.x}
+  else if(dir.x>0){side="RIGHT";distance=COLS-1-head.x}
+  else if(dir.y<0){side="TOP";distance=head.y}
+  else if(dir.y>0){side="BOTTOM";distance=ROWS-1-head.y}
+ }
+ const active=distance<=2;
+ const text=active?(distance<=1?"EDGE // "+side+" // TURN NOW":"EDGE AHEAD // "+side):"";
+ edgeWarningEl.hidden=!active;
+ edgeWarningEl.classList.toggle("show",active);
+ edgeWarningEl.classList.toggle("critical",active&&distance<=1);
+ if(text!==lastEdgeWarningText){edgeWarningEl.textContent=text;lastEdgeWarningText=text}
+}
 function draw(){
   const z=currentZone(), bg=["#020504","#060503","#030507","#070309","#090304"][z];
   const grid=["#0c1710","#1b1008","#0e111c","#1a0b1d","#210b10"][z];
@@ -456,6 +475,7 @@ function draw(){
   if(danger>=70){
     ctx.save();ctx.globalAlpha=Math.min(.28,(danger-70)/100);ctx.strokeStyle="#ff315c";ctx.lineWidth=.55;ctx.strokeRect(.08,.08,COLS-.16,ROWS-.16);ctx.restore();
   }
+  updateEdgeWarning();
 }
 
 message.classList.add("hidden");message.classList.remove("show");draw();updateAbilityUI();showSave();renderMissions();
