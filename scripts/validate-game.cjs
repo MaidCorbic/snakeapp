@@ -163,7 +163,7 @@ check("gameplay balance tuning limits arena pressure",
   /eventClock%BALANCE\.hunterWaveEvery/.test(game) &&
   /eventClock%BALANCE\.bossSpawnEvery/.test(game) &&
   /eventClock2%BALANCE\.zoneEventEvery/.test(game) &&
-  /window\.__snakeBalanceProfile=Object\.freeze\(\.\.\.BALANCE\)/.test(game) &&
+  /window\.__snakeBalanceProfile=Object\.freeze\(\{\.\.\.BALANCE\}\)/.test(game) &&
   /function\s+addHazards\(count=1\)/.test(game) &&
   (game.match(/hazards\.push\(free\(\)\)/g) || []).length === 1);
 
