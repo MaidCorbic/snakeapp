@@ -71,6 +71,8 @@ check("arcade polish loader is wired", /arcade-polish-v1\.js\?v=arcade-v2/.test(
 
 check("run finalization is one-shot and best-score storage is guarded", game.includes("function finalizeRun(won,summary)") && game.includes("function saveBestScoreSafely()") && game.includes("runFinalized=false"));
 check("Endless cycle respects the shared hazard cap", ultimate.includes("addHazards(3)") && !ultimate.includes("hazards.push(free())"));
+check("Party Run has an explicit isolated start API", ultimate.includes('function startParty(){prepareRun("party")}') && ultimate.includes("startParty,resetRank") && menu.includes('else if (mode === "party") window.SnakeEvolution?.startParty?.();'));
+check("Party Run excludes the contradictory One Chance condition", ultimate.includes('conditionDefs.filter(condition=>condition[0]!=="ONE CHANCE")'));
 check("Party Run preserves extra lives under One Chance", ultimate.includes('if(runCondition?.[0]==="ONE CHANCE"&&!funMode)lives=1;'));
 check("required project files exist", [
   "index.html",
