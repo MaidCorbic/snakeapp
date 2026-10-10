@@ -52,6 +52,27 @@ test("landing menu, instructions, and options open and close", async ({ page }) 
   expect(pageErrors).toEqual([]);
 });
 
+test("gameplay display and combat-effect settings affect the live game", async ({ page }) => {
+  await page.goto("/index.html");
+  await page.locator("#bootOptions").click();
+  await expect(page.locator("#bootOptionsPanel")).toBeVisible();
+
+  for (const id of ["#bootTimer", "#bootXp", "#bootIntel", "#bootMissions", "#bootAbilities", "#bootTouch", "#bootFx"]) {
+    await expect(page.locator(id)).toHaveAttribute("aria-pressed", "true");
+    await page.locator(id).click();
+    await expect(page.locator(id)).toHaveAttribute("aria-pressed", "false");
+  }
+
+  await page.locator("#bootOptionsBack").click();
+  await page.locator("#bootStart").click();
+  await expect.poll(() => page.evaluate(() => typeof window.SnakeEvolution?.getState)).toBe("function");
+
+  for (const selector of [".time-tile", ".xp-module", ".run-intel", "#missions", ".ability-bar", ".controls"]) {
+    await expect(page.locator(selector)).toHaveClass(/setting-disabled/);
+  }
+  await expect(page.locator("body")).toHaveClass(/no-combat-fx/);
+});
+
 test("game boot loads all gameplay layers and starts a run", async ({ page }) => {
   const pageErrors = [];
   page.on("pageerror", error => pageErrors.push(error.message));
