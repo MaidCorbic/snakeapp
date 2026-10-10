@@ -174,6 +174,20 @@ check("game-over results use the centered message flow",
   /finalizeRun\(false/.test(game) &&
   /finalizeRun\(true/.test(game));
 
+check("safe spawn helpers guard full arenas",
+  game.includes("function isOccupied(p") && game.includes("function free(options={})") && game.includes("function addHazards(count=1)"));
+
+check("base gameplay tick clears stale timer state and respects blocking overlays",
+  game.includes("function move(force=false){if(!alive||paused||contractOfferOpen||extractionOpen)return;clearTimeout(timer);timer=null;") &&
+  game.includes("if(extractionOpen)return"));
+check("run finalization clears timer and pause state",
+  game.includes("function finalizeRun(won,summary)") &&
+  game.includes("timer=null;paused=false;"));
+
+check("browser regressions exercise pause and finalization state",
+  read("tests/e2e/game.spec.cjs").includes("direction input is ignored while the run is paused") &&
+  read("tests/e2e/game.spec.cjs").includes("pause and run finalization expose consistent clock state"));
+
 check("gameplay balance tuning limits arena pressure",
   /const BALANCE=\{hazardSpawnEvery:40,hazardCap:8,hunterWaveEvery:96,hunterCap:5,bossSpawnEvery:180,zoneEventEvery:240,hazardStormBase:2,hunterSwarmCap:5\}/.test(game) &&
   /spawnClock%BALANCE\.hazardSpawnEvery/.test(game) &&

@@ -232,6 +232,31 @@ test("narrow viewport keeps the game and result actions within the screen", asyn
   expect(pageErrors).toEqual([]);
 });
 
+test("direction input is ignored while the run is paused", async ({ page }) => {
+  await startGame(page);
+  await page.locator("#pauseBtn").click();
+  const before = await page.evaluate(() => window.SnakeEvolution.getState());
+  await page.keyboard.press("ArrowDown");
+  await page.waitForTimeout(180);
+  const after = await page.evaluate(() => window.SnakeEvolution.getState());
+  expect(after.paused).toBe(true);
+  expect(after.score).toBe(before.score);
+  await page.locator("#resume").click();
+  await expect.poll(() => page.evaluate(() => window.SnakeEvolution.getState().paused)).toBe(false);
+});
+
+test("pause and run finalization expose consistent clock state", async ({ page }) => {
+  await startGame(page);
+  await page.locator("#pauseBtn").click();
+  await expect.poll(() => page.evaluate(() => window.SnakeEvolution.getState().paused)).toBe(true);
+  await page.locator("#resume").click();
+  await expect.poll(() => page.evaluate(() => window.SnakeEvolution.getState().paused)).toBe(false);
+  await page.evaluate(() => window.__snakeE2E.endRun());
+  await expect.poll(() => page.evaluate(() => window.SnakeEvolution.getState().runFinalized)).toBe(true);
+  await expect(page.locator("#pauseBtn")).toBeDisabled();
+  await expect(page.locator("#pauseOverlay")).toHaveCount(0);
+});
+
 test("wall collision ends a run and displays the loss result", async ({ page }) => {
   await startGame(page);
 
