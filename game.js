@@ -34,6 +34,7 @@ const brutalFx={particles:[],flash:0,shake:0,lastScore:0,lastLives:0,lastCombo:1
 const missions=()=>{try{return JSON.parse(localStorage.getItem("snake-evolution-missions")||"{}")}catch{return {}}};
 const saveMissions=m=>{try{localStorage.setItem("snake-evolution-missions",JSON.stringify(m))}catch{}};
 const same=(a,b)=>a.x===b.x&&a.y===b.y,rand=()=>({x:Math.floor(Math.random()*COLS),y:Math.floor(Math.random()*ROWS)});
+function toroidalDistanceGrid(a,b){if(!a||!b)return Infinity;const dx=Math.abs(a.x-b.x),dy=Math.abs(a.y-b.y);return Math.min(dx,COLS-dx)+Math.min(dy,ROWS-dy)}
 const zoneNames=["NEON GRID","HAZARD SECTOR","DARK SECTOR","Warden Territory","FINAL LOCKDOWN"];
 const evoNames=["RUNNER","CHARGER","PHANTOM","OVERLORD"];const evoColors=["#79e35b","#ffd85c","#a66cff","#ff3f8f"];
 function resize(){const r=canvas.getBoundingClientRect(),d=Math.min(devicePixelRatio||1,2);if(r.width<2||r.height<2)return;canvas.width=Math.max(1,Math.round(r.width*d));canvas.height=Math.max(1,Math.round(r.height*d));ctx.setTransform(canvas.width/COLS,0,0,canvas.height/ROWS,0,0)}addEventListener("resize",resize,{passive:true});addEventListener("orientationchange",()=>setTimeout(resize,80),{passive:true});if(window.visualViewport)visualViewport.addEventListener("resize",resize,{passive:true});resize();
@@ -103,7 +104,7 @@ function collectSupplyDrop(head){
   gain(data.score);gainXp(data.xp);chargeFury(data.fury);haptic(rarity==="legendary"?32:16);
   if(rarity==="common"){dashReady=performance.now();say("SUPPLY // DASH READY // +"+data.score)}
   else if(rarity==="rare"){shieldReady=performance.now();if(!core)core=free();say("RARE SUPPLY // SHIELD + CORE")}
-  else{lives=Math.min(maxLives,lives+1);dashReady=performance.now();shieldReady=performance.now();pulseReady=performance.now();hazards=hazards.filter(h=>Math.abs(h.x-snake[0].x)+Math.abs(h.y-snake[0].y)>6);event("LEGENDARY // EMERGENCY RESUPPLY");say("LEGENDARY SUPPLY // LIFE +1 // ALL SYSTEMS READY")}
+  else{lives=Math.min(maxLives,lives+1);dashReady=performance.now();shieldReady=performance.now();pulseReady=performance.now();hazards=hazards.filter(h=>toroidalDistanceGrid(h,snake[0])>6);event("LEGENDARY // EMERGENCY RESUPPLY");say("LEGENDARY SUPPLY // LIFE +1 // ALL SYSTEMS READY")}
   floatText(data.label+" +"+data.score);
 }
 function handleZoneTransition(){
@@ -206,12 +207,12 @@ function setDir(x,y){
 
 function useDash(){if(!alive||paused||performance.now()<dashReady)return;clearTimeout(timer);const baseCd=evolution()>=3?5500:7000,cd=runMutation?.[0]==="OVERCLOCK"?Math.round(baseCd*.8):baseCd;dashReady=performance.now()+cd;say("DASH // OVERRIDE");move(true)}
 function useShield(){if(!alive||paused||performance.now()<shieldReady)return;shieldReady=performance.now()+12000;shieldUntil=performance.now()+2500;say("SHIELD // ACTIVE");hud();updateAbilityUI();draw()}
-function usePulse(){if(!alive||paused||performance.now()<pulseReady)return;stats.pulses++;chargeFury(20);haptic(18);const cd=evolution()>=3?10500:15000;pulseReady=performance.now()+cd;pulseUntil=performance.now()+350;const nearby=hunters.filter(h=>Math.abs(h.x-snake[0].x)+Math.abs(h.y-snake[0].y)<=8);
+function usePulse(){if(!alive||paused||performance.now()<pulseReady)return;stats.pulses++;chargeFury(20);haptic(18);const cd=evolution()>=3?10500:15000;pulseReady=performance.now()+cd;pulseUntil=performance.now()+350;const nearby=hunters.filter(h=>toroidalDistanceGrid(h,snake[0])<=8);
 let destroyed=0;
 nearby.forEach(h=>{if(h.type==="elite"){h.hp--;if(h.hp<=0){destroyed++;stats.elites++}}else destroyed++});
 if(nearby.length)hunters=hunters.filter(h=>!nearby.includes(h)||h.type==="elite"&&h.hp>0);
-if(destroyed){stats.hunters+=destroyed;gainXp(destroyed*30+stats.elites*15);chain+=destroyed;gain(destroyed*(runMutation?.[0]==="HUNTER ALERT"?140:100));chargeFury(destroyed*10);floatText("CHAIN x"+chain);checkStreakRewards()}hazards=hazards.filter(h=>Math.abs(h.x-snake[0].x)+Math.abs(h.y-snake[0].y)>5);if(boss){boss.hp=Math.max(0,boss.hp-2);if(boss.hp===0)destroyBoss()}gain(25);say("PULSE // CLEAR");hud();updateAbilityUI()}
-function useFury(){if(!alive||paused||fury<100||performance.now()<furyUntil)return;fury=0;furyUntil=performance.now()+8000;stats.furyUses++;haptic(28);hunters=[];hazards=hazards.filter(h=>Math.abs(h.x-snake[0].x)+Math.abs(h.y-snake[0].y)>8);say("FURY // 2X SCORE // THREAT WIPE");hud();draw()}
+if(destroyed){stats.hunters+=destroyed;gainXp(destroyed*30+stats.elites*15);chain+=destroyed;gain(destroyed*(runMutation?.[0]==="HUNTER ALERT"?140:100));chargeFury(destroyed*10);floatText("CHAIN x"+chain);checkStreakRewards()}hazards=hazards.filter(h=>toroidalDistanceGrid(h,snake[0])>5);if(boss){boss.hp=Math.max(0,boss.hp-2);if(boss.hp===0)destroyBoss()}gain(25);say("PULSE // CLEAR");hud();updateAbilityUI()}
+function useFury(){if(!alive||paused||fury<100||performance.now()<furyUntil)return;fury=0;furyUntil=performance.now()+8000;stats.furyUses++;haptic(28);hunters=[];hazards=hazards.filter(h=>toroidalDistanceGrid(h,snake[0])>8);say("FURY // 2X SCORE // THREAT WIPE");hud();draw()}
 function key(e){const k=e.key.toLowerCase();if(["arrowup","arrowdown","arrowleft","arrowright"," ","w","a","s","d","shift","q"].includes(k))e.preventDefault();if(contractOfferOpen&&(k===" "||k==="enter")){acceptContract();return}if(k==="escape"||k==="p"){pause();return}if(k==="arrowup"||k==="w")setDir(0,-1);if(k==="arrowdown"||k==="s")setDir(0,1);if(k==="arrowleft"||k==="a")setDir(-1,0);if(k==="arrowright"||k==="d")setDir(1,0);if(k===" ")useDash();if(k==="shift")useShield();if(k==="e")usePulse();if(k==="q")useFury()}
 addEventListener("keydown",key);
 const runTitle=document.querySelector(".run-identity h1");
@@ -311,8 +312,11 @@ function missionCheck(){
 }
 function takeDamage(reason="COLLISION"){stats.damage++;lives=Math.max(0,lives-1);haptic(30);if(lives<=0){say("NO LIVES // RUN OVER");return end()}snake=[{x:10,y:10},{x:9,y:10},{x:8,y:10}];dir=next={x:1,y:0};shieldUntil=performance.now()+1800;hazards=hazards.filter(h=>Math.abs(h.x-10)+Math.abs(h.y-10)>4);hunters=hunters.filter(h=>Math.abs(h.x-10)+Math.abs(h.y-10)>5);say(reason+" // LIFE LOST // "+lives+" LEFT");if(lives===1&&!lastStandAnnounced){lastStandAnnounced=true;say("LAST STAND // SCORE +25%");event("LAST STAND // BONUS ACTIVE")}hud();draw()}
 function move(force=false){if(!alive)return;dir=next;const head={x:snake[0].x+dir.x,y:snake[0].y+dir.y};if(head.x<0||head.x>=COLS||head.y<0||head.y>=ROWS)return end();const protectedNow=performance.now()<shieldUntil||performance.now()<pulseUntil;
-if(!protectedNow&&(snake.some((s,i)=>i>0&&same(s,head))||hazards.some(h=>same(h,head))||hunters.some(h=>same(h,head))||(boss&&same(boss,head)))){
- takeDamage(hunters.some(h=>same(h,head))?"HUNTER HIT":hazards.some(h=>same(h,head))?"HAZARD HIT":"SELF HIT");
+const willGrow=!!((energy&&same(head,energy))||(core&&same(head,core)));
+const selfCollision=snake.some((s,i)=>i>0&&(willGrow||i<snake.length-1)&&same(s,head));
+const worldCollision=hazards.some(h=>same(h,head))||hunters.some(h=>same(h,head))||(boss&&same(boss,head));
+if(selfCollision||(!protectedNow&&worldCollision)){
+ takeDamage(selfCollision?"SELF HIT":hunters.some(h=>same(h,head))?"HUNTER HIT":hazards.some(h=>same(h,head))?"HAZARD HIT":"COLLISION");
  if(alive&&!paused)timer=setTimeout(move,Math.max(60,118-combo*6-(force?35:0)-(runMutation?.[0]==="OVERCLOCK"?14:0)));
  return
 }

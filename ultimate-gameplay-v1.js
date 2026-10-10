@@ -8,7 +8,7 @@
   let perfectStart=0,perfectBroken=false,deathCause="NONE",maxThreat=0,bountyTarget=null,bountyClaimed=false;
   let enemyId=0,ghostPath=[],ghostIndex=0,runPath=[],nextRiskAt=0,nextSecretAt=0,bossTelegraphUntil=0,layerZone=-1,layerEventClock=0,audioCtx=null;
   const originalRandom=Math.random;
-  const baseGainU=gain,baseHudU=hud,baseDrawU=draw,baseMoveU=move,baseResetU=reset,baseTakeDamageU=takeDamage,baseUseDashU=useDash,baseUsePulseU=usePulse,baseUseFuryU=useFury,baseCollectPowerupU=collectPowerup,baseSpawnWaveU=spawnWave,baseHunterStepU=hunterStep,baseBossStepU=bossStep,basePersistU=persist,baseStatsMarkupU=statsMarkup,baseRenderAchievementsU=renderAchievements,baseGainXpU=gainXp;
+  const baseGainU=gain,baseHudU=hud,baseDrawU=draw,baseMoveU=move,baseResetU=reset,baseTakeDamageU=takeDamage,baseUseDashU=useDash,baseUsePulseU=usePulse,baseUseFuryU=useFury,baseCollectPowerupU=collectPowerup,baseSpawnWaveU=spawnWave,baseHunterStepU=hunterStep,baseBossStepU=bossStep,basePersistU=persist,baseStatsMarkupU=statsMarkup,baseRenderAchievementsU=renderAchievements,baseGainXpU=gainXp,baseFreeU=free;
 
   function hashSeed(input){let h=2166136261;for(let i=0;i<input.length;i++){h^=input.charCodeAt(i);h=Math.imul(h,16777619)}return h>>>0}
   function dailyDateKey(){const d=new Date();return d.getUTCFullYear()+"-"+String(d.getUTCMonth()+1).padStart(2,"0")+"-"+String(d.getUTCDate()).padStart(2,"0")}
@@ -78,8 +78,14 @@
       ||(supplyDrop&&same(supplyDrop,p))
       ||(riskShrine&&same(riskShrine,p))
       ||(secretPortal&&same(secretPortal,p))
-      ||encounters.some(e=>same(e,p));
+      ||encounters.some(e=>same(e,p))
+      ||evolutionCards.some(card=>same(card,p));
   }
+  free=function safeFreeCellU(){
+    const pool=[];
+    for(let index=0;index<COLS*ROWS;index++){const p={x:index%COLS,y:Math.floor(index/COLS)};if(!cellBlockedU(p,null))pool.push(p)}
+    return pool.length?pool[Math.floor(Math.random()*pool.length)]:baseFreeU();
+  };
   function rememberEnergyPointU(point){
     if(!point)return;
     recentEnergyCells=[point,...recentEnergyCells.filter(p=>!same(p,point))].slice(0,8);
@@ -111,9 +117,12 @@
     return {x:p.x,y:p.y};
   }
   function safePointU(){
-    let p,t=0;
-    do{p=rand();t++}while(t<800&&(arenaBlocks.some(b=>same(b,p))||snake.some(s=>same(s,p))||hunters.some(h=>same(h,p))||(riskShrine&&same(riskShrine,p))||(secretPortal&&same(secretPortal,p))));
-    return p
+    const pool=[];
+    for(let index=0;index<COLS*ROWS;index++){
+      const p={x:index%COLS,y:Math.floor(index/COLS)};
+      if(!cellBlockedU(p,null)&&(!snake[0]||toroidalDistance(p,snake[0])>=5))pool.push(p);
+    }
+    return pool.length?pool[Math.floor(Math.random()*pool.length)]:null;
   }
 
   const encounterDefsU=[
@@ -237,7 +246,18 @@
     }).join("");
   }
 
-  function generateArena(){arenaBlocks=[];if(secretUntil>performance.now())return;const density=2+Math.min(5,currentZone());for(let i=0;i<density;i++){const p=safePointU();if(Math.abs(p.x-snake[0].x)<5&&Math.abs(p.y-snake[0].y)<4)continue;arenaBlocks.push(p);if(i%2===1&&p.x+1<COLS-1)arenaBlocks.push({x:p.x+1,y:p.y})}}
+  function generateArena(){
+    arenaBlocks=[];if(secretUntil>performance.now()||!snake[0])return;
+    const density=2+Math.min(5,currentZone());let placed=0,attempts=0;
+    while(placed<density&&attempts<COLS*ROWS){
+      attempts++;const p=safePointU();if(!p)break;
+      arenaBlocks.push(p);placed++;
+      if(placed<density&&Math.random()<.5){
+        const adjacent={x:p.x+1,y:p.y};
+        if(adjacent.x<COLS-1&&!cellBlockedU(adjacent,null)&&toroidalDistance(adjacent,snake[0])>=5){arenaBlocks.push(adjacent);placed++}
+      }
+    }
+  }
   function addTelegraph(x,y,type,color="#ff5b62",ttl=500,extra={}){telegraphs.push({x,y,type,color,until:performance.now()+ttl,...extra})}
   function cleanTelegraphs(){telegraphs=telegraphs.filter(t=>performance.now()<t.until)}
 
@@ -272,16 +292,16 @@
     render(document.querySelector("#leaderboardList"),"snake-evolution-leaderboard");render(document.querySelector("#dailyLeaderboardList"),"snake-evolution-daily-leaderboard")
   }
 
-  function spawnRiskShrine(){if(riskShrine||currentZone()<2)return;riskShrine=safePointU();riskShrine.expires=performance.now()+18000;addTelegraph(riskShrine.x,riskShrine.y,"RISK SHRINE","#ffd85c",900);event("RISK SHRINE // ACCEPT THE HEAT");say("RISK SHRINE // +15 THREAT // +400")}
+  function spawnRiskShrine(){if(riskShrine||currentZone()<2)return;const point=safePointU();if(!point)return;riskShrine={...point,expires:performance.now()+18000};addTelegraph(riskShrine.x,riskShrine.y,"RISK SHRINE","#ffd85c",900);event("RISK SHRINE // ACCEPT THE HEAT");say("RISK SHRINE // +15 THREAT // +400")}
   function collectRiskShrine(head){if(!riskShrine||!same(riskShrine,head))return;riskShrine=null;riskHeatUntil=performance.now()+25000;threatBonus+=15;gain(400);gainXp(100);chargeFury(25);const s=ultimateStats();s.shrines++;saveUltimateStats(s);say("RISK SHRINE // HEAT +15 // 25s");event("RISK SHRINE ACTIVE")}
-  function spawnSecretPortal(){if(secretPortal||currentZone()<2||secretUntil>performance.now())return;secretPortal=safePointU();addTelegraph(secretPortal.x,secretPortal.y,"SECRET","#a66cff",1200);event("ANOMALY // SECRET VAULT")}
-  function enterSecret(head){if(!secretPortal||!same(secretPortal,head))return;secretPortal=null;secretUntil=performance.now()+22000;arenaBlocks=[];gain(300);gainXp(100);chargeFury(20);const s=ultimateStats();s.secretZones++;saveUltimateStats(s);for(let i=0;i<2;i++)powerups.push({...safePointU(),type:Math.random()<.5?"apex":"overdrive"});event("SECRET VAULT // 22s");say("SECRET ZONE // LOOT SURGE")}
+  function spawnSecretPortal(){if(secretPortal||currentZone()<2||secretUntil>performance.now())return;const point=safePointU();if(!point)return;secretPortal=point;addTelegraph(secretPortal.x,secretPortal.y,"SECRET","#a66cff",1200);event("ANOMALY // SECRET VAULT")}
+  function enterSecret(head){if(!secretPortal||!same(secretPortal,head))return;secretPortal=null;secretUntil=performance.now()+22000;arenaBlocks=[];gain(300);gainXp(100);chargeFury(20);const s=ultimateStats();s.secretZones++;saveUltimateStats(s);for(let i=0;i<2;i++){const point=safePointU();if(point)powerups.push({...point,type:Math.random()<.5?"apex":"overdrive"})}event("SECRET VAULT // 22s");say("SECRET ZONE // LOOT SURGE")}
 
   function startEmergencyEvent(){
     const types=["CORE_FLOOD","HUNTER_BREACH","WARDEN_SIGNAL","SYSTEM_FAILURE","BLACKOUT","DOUBLE_CORE","HUNTER_LOCK"],type=types[Math.floor(Math.random()*types.length)],duration={CORE_FLOOD:7000,HUNTER_BREACH:7000,WARDEN_SIGNAL:7000,SYSTEM_FAILURE:6500,BLACKOUT:8000,DOUBLE_CORE:10000,HUNTER_LOCK:9000}[type];
     advancedZoneEvent={type,until:performance.now()+duration};event(type+" // "+Math.ceil(duration/1000)+"s");say(type+" // ACTIVE");
     if(type==="CORE_FLOOD"){core=core||safePointU();energy=energy||safePointU()}
-    if(type==="HUNTER_BREACH")for(let i=0;i<3;i++)hunters.push({...safePointU(),type:"hunter",variant:null,hp:1,id:++enemyId});
+    if(type==="HUNTER_BREACH")for(let i=0;i<3;i++){const point=safePointU();if(point)hunters.push({...point,type:"hunter",variant:null,hp:1,id:++enemyId})}
     if(type==="WARDEN_SIGNAL"&&currentZone()>=2&&!boss)spawnBoss()
   }
 
@@ -290,7 +310,7 @@
   useFury=function(){audioCue("ability");baseUseFuryU();if(alive&&evolution()>=4)gainXp(8)};
   gain=function(points){const perfect=!perfectBroken&&alive&&(performance.now()-perfectStart)>=30000;baseGainU(points*conditionScoreMult()*(perfect?1.25:1))};
   chargeFury=function(amount){const before=fury;baseChargeFuryU(amount);if(performance.now()<furyUntil||fury>=100)return;const u=getUpgrades(),extra=1+(u.fury||0)*.08;fury=Math.min(100,fury+amount*extra*.08)};
-  takeDamage=function(reason="COLLISION"){deathCause=reason;perfectBroken=true;if(evolution()>=3&&performance.now()>phantomWardUntil){phantomWardUntil=performance.now()+22000;shieldUntil=performance.now()+2500;say("PHANTOM // PHASED HIT");return}baseTakeDamageU(reason)};
+  takeDamage=function(reason="COLLISION"){deathCause=reason;perfectBroken=true;if(reason!=="SELF HIT"&&evolution()>=3&&performance.now()>phantomWardUntil){phantomWardUntil=performance.now()+22000;shieldUntil=performance.now()+2500;say("PHANTOM // PHASED HIT");return}baseTakeDamageU(reason)};
   let phantomWardUntil=0;
 
   usePulse=function(){const finisher=alive&&chain>=10,bountyBefore=bountyTarget;audioCue("ability");baseUsePulseU();if(finisher&&alive){gain(750);gainXp(100);hazards=[];chargeFury(25);const s=ultimateStats();s.finishers++;saveUltimateStats(s);say("CHAIN FINISHER // +750");event("CHAIN x10 // FINISHER")}if(evolution()>=4&&boss){boss.hp=Math.max(0,boss.hp-1);if(boss.hp===0)destroyBoss()}if(bountyBefore&&!hunters.includes(bountyBefore)&&!bountyClaimed){bountyClaimed=true;gain(450);gainXp(90);const s=ultimateStats();s.bounties++;saveUltimateStats(s);say("BOUNTY TARGET DOWN // +450");event("BOUNTY COMPLETE")}};
@@ -431,5 +451,5 @@
 
   baseRenderAchievementsU();renderUltimateAchievements();renderLeaderboard();
   if(!window.startDailyRun)window.startDailyRun=startDaily;if(!window.startEndlessRun)window.startEndlessRun=startEndless;
-  function resetRank(){["snake-evolution-best","snake-evolution-save","snake-evolution-leaderboard","snake-evolution-daily-leaderboard","snake-evolution-ghost","snake-evolution-ghost-best","snake-evolution-ghost-meta","snake-evolution-daily-ghost","snake-evolution-daily-ghost-best","snake-evolution-daily-ghost-meta"].forEach(key=>{try{localStorage.removeItem(key)}catch{}});ghostBestScore=0;ghostPath=[];ghostIndex=0;renderLeaderboard();baseHudU();showSave()} window.SnakeEvolution={start:()=>prepareRun("standard"),startDaily,startEndless,startParty,resetRank,getState:()=>({alive,score,combo,fury,lives,xp,xpLevel,xpNext,danger,energyPosition:energy?{x:energy.x,y:energy.y}:null,snakeHead:snake[0]?{x:snake[0].x,y:snake[0].y}:null,level,zone,objective:objective?.[0]||null,objectiveDone,contract:contract?.[0]||null,contractAccepted,contractOfferOpen,contractDone,supplyDrop:supplyDrop?.rarity||null,mutation:mutationName(),condition:conditionName(),mode:activeMode,party:funMode,daily:dailyMode,endless:endlessMode,endlessCycle,salvageChain,zoneEvent:advancedZoneEvent?.type||null,secretZone:secretUntil>performance.now(),riskShrine:!!riskShrine,perfectBroken,maxThreat,deathCause,bountyClaimed,ghostLength:ghostPath.length,evolutionCardDrops:evolutionCards.length,evolutionCardCollection:cardStore(),buildLevel:xpLevel,extraLifeCapacity:maxLives,encounterCount:encounters.length,encounterBoost:encounterBoostUntil>performance.now(),ghostBestScore:ghostBestScore})};
+  function resetRank(){["snake-evolution-best","snake-evolution-save","snake-evolution-leaderboard","snake-evolution-daily-leaderboard","snake-evolution-ghost","snake-evolution-ghost-best","snake-evolution-ghost-meta","snake-evolution-daily-ghost","snake-evolution-daily-ghost-best","snake-evolution-daily-ghost-meta"].forEach(key=>{try{localStorage.removeItem(key)}catch{}});ghostBestScore=0;ghostPath=[];ghostIndex=0;renderLeaderboard();baseHudU();showSave()} window.SnakeEvolution={start:()=>prepareRun("standard"),startDaily,startEndless,startParty,resetRank,getState:()=>({alive,score,combo,fury,lives,xp,xpLevel,xpNext,danger,energyPosition:energy?{x:energy.x,y:energy.y}:null,snakeHead:snake[0]?{x:snake[0].x,y:snake[0].y}:null,snakeSegments:snake.map(p=>({x:p.x,y:p.y})),corePosition:core?{x:core.x,y:core.y}:null,bossPosition:boss?{x:boss.x,y:boss.y}:null,supplyDropPosition:supplyDrop?{x:supplyDrop.x,y:supplyDrop.y}:null,riskShrinePosition:riskShrine?{x:riskShrine.x,y:riskShrine.y}:null,secretPortalPosition:secretPortal?{x:secretPortal.x,y:secretPortal.y}:null,arenaBlockPositions:arenaBlocks.map(p=>({x:p.x,y:p.y})),hazardPositions:hazards.map(p=>({x:p.x,y:p.y})),hunterPositions:hunters.map(p=>({x:p.x,y:p.y})),powerupPositions:powerups.map(p=>({x:p.x,y:p.y})),encounterPositions:encounters.map(p=>({x:p.x,y:p.y})),level,zone,objective:objective?.[0]||null,objectiveDone,contract:contract?.[0]||null,contractAccepted,contractOfferOpen,contractDone,supplyDrop:supplyDrop?.rarity||null,mutation:mutationName(),condition:conditionName(),mode:activeMode,party:funMode,daily:dailyMode,endless:endlessMode,endlessCycle,salvageChain,zoneEvent:advancedZoneEvent?.type||null,secretZone:secretUntil>performance.now(),riskShrine:!!riskShrine,perfectBroken,maxThreat,deathCause,bountyClaimed,ghostLength:ghostPath.length,evolutionCardDrops:evolutionCards.length,evolutionCardCollection:cardStore(),buildLevel:xpLevel,extraLifeCapacity:maxLives,encounterCount:encounters.length,encounterBoost:encounterBoostUntil>performance.now(),ghostBestScore:ghostBestScore})};
 })();

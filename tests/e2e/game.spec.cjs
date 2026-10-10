@@ -10,7 +10,7 @@ test.beforeEach(async ({ page }) => {
     const source = await response.text();
     await route.fulfill({
       response,
-      body: source + "\nwindow.__snakeE2E = { startGameplay: () => { contractOfferOpen = false; contractAccepted = true; move(); }, endRun: () => end(), winRun: () => win() };\n"
+      body: source + "\nwindow.__snakeE2E = { startGameplay: () => { contractOfferOpen = false; contractAccepted = true; move(); }, endRun: () => end(), winRun: () => win(), freeCell: () => free(), forceSelfCollisionWithShield: () => { snake = [{x:10,y:10},{x:11,y:10},{x:11,y:9}]; dir = next = {x:1,y:0}; shieldUntil = performance.now() + 5000; pulseUntil = 0; lives = 3; stats.damage = 0; alive = true; paused = false; move(); } };\n"
     });
   });
 });
@@ -258,6 +258,49 @@ test("food respawns at a randomized free cell and never overlaps the snake", asy
   expect(initial).toBeTruthy();
   const position = await page.evaluate(() => window.SnakeEvolution.getState().energyPosition);
   expect(position).toEqual(expect.objectContaining({ x: expect.any(Number), y: expect.any(Number) }));
+});
+
+test("shield cannot suppress self-collision", async ({ page }) => {
+  await startGame(page);
+  await page.evaluate(() => window.__snakeE2E.forceSelfCollisionWithShield());
+  await expect.poll(() => page.evaluate(() => window.SnakeEvolution.getState().lives)).toBe(2);
+  await expect.poll(() => page.evaluate(() => window.SnakeEvolution.getState().deathCause)).toBe("SELF HIT");
+});
+
+test("moving into the departing tail cell is legal when not growing", async ({ page }) => {
+  await startGame(page);
+  const before = await page.evaluate(() => window.SnakeEvolution.getState().lives);
+  await page.evaluate(() => {
+    snake = [{x:10,y:10},{x:10,y:11},{x:9,y:11},{x:9,y:10}];
+    dir = next = {x:-1,y:0};
+    energy = {x:24,y:15};
+    core = null;
+    shieldUntil = pulseUntil = 0;
+    move();
+  });
+  await expect.poll(() => page.evaluate(() => window.SnakeEvolution.getState().lives)).toBe(before);
+  await expect.poll(() => page.evaluate(() => window.SnakeEvolution.getState().snakeHead)).toEqual({x:9,y:10});
+});
+
+test("all random free-cell spawns avoid occupied gameplay cells", async ({ page }) => {
+  await startGame(page);
+  const result = await page.evaluate(() => {
+    const state = window.SnakeEvolution.getState();
+    const point = window.__snakeE2E.freeCell();
+    const occupied = [
+      ...(state.snakeSegments || []),
+      ...(state.arenaBlockPositions || []),
+      ...(state.hazardPositions || []),
+      ...(state.hunterPositions || []),
+      ...(state.powerupPositions || []),
+      ...(state.encounterPositions || []),
+      ...[state.energyPosition, state.corePosition, state.bossPosition,
+        state.supplyDropPosition, state.riskShrinePosition, state.secretPortalPosition].filter(Boolean)
+    ];
+    return { point, overlaps: occupied.some(item => item.x === point.x && item.y === point.y) };
+  });
+  expect(result.point).toEqual(expect.objectContaining({ x: expect.any(Number), y: expect.any(Number) }));
+  expect(result.overlaps).toBe(false);
 });
 
 test("ability deck exposes clear names and responsive visual states", async ({ page }) => {
