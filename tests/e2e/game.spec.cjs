@@ -303,6 +303,35 @@ test("all random free-cell spawns avoid occupied gameplay cells", async ({ page 
   expect(result.overlaps).toBe(false);
 });
 
+test("edge warning alerts before an imminent wall collision and clears when safe", async ({ page }) => {
+  await startGame(page);
+  const warning = page.locator("#edgeWarning");
+  await page.evaluate(() => window.__snakeE2E.setEdgeWarningScenario(2, 10, -1, 0));
+  await expect(warning).toBeVisible();
+  await expect(warning).toContainText("EDGE AHEAD // LEFT");
+  await expect(warning).not.toHaveClass(/critical/);
+
+  await page.evaluate(() => window.__snakeE2E.setEdgeWarningScenario(1, 10, -1, 0));
+  await expect(warning).toContainText("EDGE // LEFT // TURN NOW");
+  await expect(warning).toHaveClass(/critical/);
+
+  await page.evaluate(() => window.__snakeE2E.setEdgeWarningScenario(10, 10, 1, 0));
+  await expect(warning).toBeHidden();
+});
+
+test("edge warning respects reduced-motion styling and does not block game input", async ({ page }) => {
+  await startGame(page);
+  const styles = await page.locator("#edgeWarning").evaluate(el => ({
+    pointerEvents: getComputedStyle(el).pointerEvents,
+    reducedMotionRule: [...document.styleSheets].some(sheet => {
+      try { return [...sheet.cssRules].some(rule => rule.cssText.includes("prefers-reduced-motion") && rule.cssText.includes("edge-warning")); }
+      catch { return false; }
+    })
+  }));
+  expect(styles.pointerEvents).toBe("none");
+  expect(styles.reducedMotionRule).toBe(true);
+});
+
 test("ability deck exposes clear names and responsive visual states", async ({ page }) => {
   await startGame(page);
   for (const [id, label] of [["dash","Dash ability"],["shield","Shield ability"],["pulse","Pulse ability"],["fury","Fury ability"]]) {
