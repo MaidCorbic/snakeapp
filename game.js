@@ -1,7 +1,25 @@
 const canvas=document.querySelector("#game"),ctx=canvas.getContext("2d"),message=document.querySelector("#message"),scoreEl=document.querySelector("#score"),comboEl=document.querySelector("#combo"),timeEl=document.querySelector("#time"),bestEl=document.querySelector("#best"),start=document.querySelector("#start"),toast=document.querySelector("#toast"),zoneEl=document.querySelector("#zone"),evoEl=document.querySelector("#evo"),bossHud=document.querySelector("#bossHud"),bossHp=document.querySelector("#bossHp"),statsPanel=document.querySelector("#runStats"),missionPanel=document.querySelector("#missions"),pauseBtn=document.querySelector("#pauseBtn"),eventBanner=document.querySelector("#eventBanner"),floaters=document.querySelector("#floaters"),saveStats=document.querySelector("#saveStats");
 const dashBtn=document.querySelector("#dash"),shieldBtn=document.querySelector("#shield"),pulseBtn=document.querySelector("#pulse"),furyBtn=document.querySelector("#fury"),dashFill=document.querySelector("#dashFill"),shieldFill=document.querySelector("#shieldFill"),pulseFill=document.querySelector("#pulseFill"),furyFill=document.querySelector("#furyFill");
 const COLS=32,ROWS=20,RUN_TIME=300000,FUN_RUN_TIME=180000;const settingsKey="snake-evolution-settings";const defaultSettings={grid:true,vibration:true,reducedMotion:false};let settings={...defaultSettings};try{settings={...defaultSettings,...JSON.parse(localStorage.getItem(settingsKey)||"{}")}}catch{}
-document.addEventListener("snake-evolution-settings-changed",event=>{if(event.detail&&typeof event.detail==="object")settings={...settings,...event.detail};});
+const gameplaySettingTargets=[
+  ["showTimer",".time-tile"],
+  ["showXp",".xp-module"],
+  ["showIntel",".run-intel"],
+  ["showMissions","#missions"],
+  ["showAbilities",".ability-bar"],
+  ["touchControls",".controls"]
+];
+function applyGameplaySettings(source=settings){
+  gameplaySettingTargets.forEach(([key,selector])=>{
+    document.querySelectorAll(selector).forEach(element=>element.classList.toggle("setting-disabled",source[key]===false));
+  });
+  document.body.classList.toggle("no-combat-fx",source.combatFx===false);
+}
+document.addEventListener("snake-evolution-settings-changed",event=>{
+  if(event.detail&&typeof event.detail==="object")settings={...settings,...event.detail};
+  applyGameplaySettings(settings);
+});
+applyGameplaySettings(settings);
 let funMode=false,activeRunTime=RUN_TIME,funSegment=0;
 let snake=[],dir,next,energy=null,core=null,hazards=[],hunters=[],powerups=[],boss=null,supplyDrop=null,runMutation=null,score=0,combo=1,alive=false,paused=false,startedAt=0,timer,spawnClock=0,eventClock=0,hunterClock=0,bossClock=0,supplyDropClock=0,level=1,zone=0,shieldUntil=0,pulseUntil=0,dashReady=0,shieldReady=0,pulseReady=0,furyUntil=0,fury=0,lives=3,maxLives=4,lastStandAnnounced=false,xp=0,xpLevel=1,xpNext=100,danger=0,threatBonus=0,lastDangerBand=0,lastZone=-1,objective=null,objectiveDone=false,contract=null,contractDone=false,contractRewarded=false,streakRewards=0,chain=0,eventClock2=0,stats={energy:0,cores:0,elites:0,hunters:0,wardens:0,damage:0,runCount:0,powerups:0,pulses:0,furyUses:0,supplyDrops:0,contracts:0};
 const energyHistory=new Set();
