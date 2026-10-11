@@ -46,6 +46,7 @@ const rework = read("snake-rework-v2.js");
 const reworkCss = read("snake-rework-v2.css");
 const ultimateUiCss = read("ultimate-ui-v1.css");
 const ultimateUiJs = read("ultimate-ui-v1.js");
+const qualityPassJs = read("quality-pass-v1.js");
 const update = read("gameplay-update-v2.js");
 
 const ids = [...html.matchAll(/\bid\s*=\s*["']([^"']+)["']/g)].map(m => m[1]);
@@ -193,20 +194,20 @@ check("gameplay balance tuning limits arena pressure",
 
 check("one authoritative HEX editor supports validation, live preview, and explicit save",
   html.includes('id="snakeHexInput"') && html.includes('id="snakeColorSave"') &&
-  ultimateUiJs.includes('function ensureColorControls()') &&
-  ultimateUiJs.includes('function setupSnakeColorControls(controls)') &&
-  ultimateUiJs.includes('snake-evolution-color-preview') &&
-  ultimateUiJs.includes('SAVE blocked') &&
-  !ultimateUiJs.includes('function applySnakeColor') &&
-  read("tests/e2e/game.spec.cjs").includes("only save color on explicit SAVE"));
-check("color control keeps a single editor and removes the legacy auto-save picker",
+  qualityPassJs.includes('function ensureColorControls()') &&
+  qualityPassJs.includes('function setupSnakeColorControls(controls)') &&
+  qualityPassJs.includes('snake-evolution-color-preview') &&
+  qualityPassJs.includes('SAVE blocked') &&
+  !qualityPassJs.includes('function applySnakeColor') &&
+  read("tests/e2e/game.spec.cjs").includes("Options use one HEX editor and only save color on explicit SAVE"));
+check("color control keeps one editor and normalizes the original duplicate markup",
   (html.match(/id="snakeHexInput"/g) || []).length === 1 &&
   (html.match(/id="snakeColorSave"/g) || []).length === 1 &&
-  ultimateUiJs.includes('panel.querySelectorAll(".snake-custom-color, #seCustomSnakeColor")') &&
-  ultimateUiJs.includes('localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings))'));
-
+  qualityPassJs.includes('panel.querySelectorAll(".snake-custom-color, #seCustomSnakeColor")') &&
+  qualityPassJs.includes('legacyGroup.replaceWith(group)') &&
+  qualityPassJs.includes('localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings))'));
 check("Options readability rules remove tiny helper paragraphs and scale labels", ultimateUiCss.includes('option-row > div:first-child small') && ultimateUiCss.includes('font-size:clamp(12px,1vw,14px)'));
-check("browser regression covers custom HEX preview and persistence", read("tests/e2e/game.spec.cjs").includes("custom HEX snake color previews live") && read("tests/e2e/game.spec.cjs").includes("saved snake color is restored"));
+check("browser regression covers single HEX editor preview, explicit persistence, and invalid input", read("tests/e2e/game.spec.cjs").includes("Options use one HEX editor and only save color on explicit SAVE") && read("tests/e2e/game.spec.cjs").includes("PREVIEW ONLY:") && read("tests/e2e/game.spec.cjs").includes("SAVE blocked"));
 check("gameplay visibility settings are applied to live UI",
   /function\s+applyGameplaySettings\s*\(/.test(game) &&
   /showTimer/.test(game) &&
