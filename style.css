@@ -4238,3 +4238,11 @@ img,svg,canvas{
 @media(max-width:700px){.legend{gap:7px 10px}.legend span:before{flex-basis:6px;width:6px;height:6px}}
 .game-shell #game{isolation:isolate}
 body.no-combat-fx .legend span:before{box-shadow:none}
+
+/* Keep decorative arena scanlines beneath interactive in-game overlays. */
+.game-shell:after{z-index:1}
+.game-shell:before{z-index:1}
+.pause-overlay{z-index:20!important;pointer-events:auto!important}
+.pause-overlay>div,.pause-overlay button{pointer-events:auto!important}
+#message.message{z-index:30!important;pointer-events:auto!important}
+#message .message-card,#message .message-card button{pointer-events:auto!important}
