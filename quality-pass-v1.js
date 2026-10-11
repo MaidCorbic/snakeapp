@@ -22,8 +22,9 @@
     const grid = panel?.querySelector(".options-grid");
     if (!grid || grid.querySelector(".snake-color-group")) return;
     panel.querySelector(".control-deck-profile-row")?.remove();
-    panel.querySelectorAll(".option-group[aria-label='PROFILE & UTILITIES']").forEach(group => {
-      if (!group.querySelector(".option-row")) group.remove();
+    panel.querySelectorAll(".option-group").forEach(group => {
+      const headingText = group.querySelector(".option-group-title")?.textContent || "";
+      if (/PROFILE & UTILITIES|GAME CUSTOMIZATION/.test(headingText) && !group.querySelector(".option-row")) group.remove();
     });
     const group = document.createElement("section");
     group.className = "option-group snake-color-group";
