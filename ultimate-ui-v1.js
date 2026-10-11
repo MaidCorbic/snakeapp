@@ -127,6 +127,7 @@
       settings.snakeColor = candidate;
       if (!safeWrite("snake-evolution-settings", JSON.stringify(settings))) { setStatus("SAVE failed: browser storage is unavailable.", true); return; }
       document.documentElement.style.setProperty("--snake-color", candidate);
+      document.documentElement.style.setProperty("--snake-color", candidate);
       document.dispatchEvent(new CustomEvent("snake-evolution-settings-changed", { detail: settings }));
       document.dispatchEvent(new CustomEvent("snake-evolution-color-preview", { detail: { snakeColor: candidate } }));
       setActiveSwatch(candidate);
