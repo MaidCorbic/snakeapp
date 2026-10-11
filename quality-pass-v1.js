@@ -206,7 +206,7 @@
   }
   function versionLabel() {
     const version = document.querySelector("#bootVersion");
-    if (version) version.textContent = "V2.8.2";
+    if (version) version.textContent = "V2.9.0";
   }
   function start() {
     runtimeStyle();
