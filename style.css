@@ -93,7 +93,8 @@ canvas{touch-action:none}
 .ability:disabled{cursor:not-allowed}
 .ability.ready:hover{filter:brightness(1.08)}
 @media(max-width:700px){.ability-bar{grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}.ability{min-height:50px}.ability span{font-size:4px}}
-@media(max-width:420px){.ability-bar{grid-template-columns:repeat(2,minmax(0,1fr));margin-top:7px}.ability{min-height:46px;padding:7px 8px;font-size:5px}.ability span{font-size:4px}}{visibility:hidden;pointer-events:none}
+@media(max-width:420px){.ability-bar{grid-template-columns:repeat(2,minmax(0,1fr));margin-top:7px}.ability{min-height:46px;padding:7px 8px;font-size:5px}.ability span{font-size:4px}}
+#app.preboot{visibility:hidden;pointer-events:none}
 .boot-menu{visibility:visible}
 
 /* Live run intel: threat + objective */
@@ -123,7 +124,7 @@ canvas{touch-action:none}
 .contract-card .intel-top b{color:var(--yellow)}
 .contract-card.complete{border-color:var(--green);box-shadow:4px 4px 0 #1d4020}
 .run-intel{grid-template-columns:repeat(3,minmax(0,1fr))}
-@media(max-width:700px){.run-intel{grid-template-columns:1fr}.contract-card .intel-top{grid-template-columns:auto 1fr}.contract-card .intel-top b{grid-column:1 / -1;justify-self:start}}{grid-template-columns:auto 1fr auto}
+@media(max-width:700px){.run-intel{grid-template-columns:1fr}.contract-card .intel-top{grid-template-columns:auto 1fr}.contract-card .intel-top b{grid-column:1 / -1;justify-self:start}}
 .mutation-module{min-width:150px;padding:6px 9px;border-left:1px solid #26372d;text-align:right}
 .mutation-module span,.mutation-module small{display:block;font-size:4px;color:var(--muted)}
 .mutation-module strong{display:block;margin-top:6px;font-size:7px;color:var(--yellow);white-space:nowrap}
@@ -182,7 +183,7 @@ body{background:radial-gradient(ellipse at 50% -18%,#142219 0,transparent 52%),v
 #app>header .subhud{gap:10px;margin-top:8px}
 #app>header .stats{display:grid;grid-template-columns:repeat(4,minmax(54px,1fr));gap:6px;text-align:left}
 #app>header .stats span{min-width:0;padding:8px 9px;border:1px solid #243328;background:#0a100c;font-size:5px;letter-spacing:.5px}
-#app>header .stats strong{font-size:10px;color:var(--green-soft);margin-top:5px;font-variant-numeric:tabular-nums}{grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;padding:8px;margin-bottom:9px;border:1px solid var(--line);background:#080e0a;box-shadow:none}
+#app>header .stats strong{font-size:10px;color:var(--green-soft);margin-top:5px;font-variant-numeric:tabular-nums}
 .life-module,.xp-module,.mutation-module,.condition-module{min-width:0;min-height:54px;padding:8px 10px;border:1px solid #213126;background:linear-gradient(145deg,#101911,#0a100c);border-radius:2px}
 .life-module{border-right:1px solid #213126}
 .life-module span,.xp-row span,.mutation-module span,.condition-module span{font-size:5px;letter-spacing:.4px}
@@ -258,7 +259,7 @@ body{background:radial-gradient(ellipse at 50% -18%,#142219 0,transparent 52%),v
 .boot-error{border-color:var(--red)}
 @keyframes bootPulse{50%{opacity:.45;box-shadow:0 0 2px #79e35b}}
 @media(max-width:900px){
-  #app>header{padding:10px}{grid-template-columns:repeat(2,minmax(0,1fr))}
+  #app>header{padding:10px}
   .run-intel{grid-template-columns:repeat(2,minmax(0,1fr))}
   .condition-module,.mutation-module{grid-column:auto}
   .run-mode-bar{grid-template-columns:auto minmax(0,1fr) auto minmax(0,1fr);row-gap:7px}
@@ -270,7 +271,7 @@ body{background:radial-gradient(ellipse at 50% -18%,#142219 0,transparent 52%),v
   #app>header>div:first-child{min-width:0;flex:1}
   #app>header .stats{grid-template-columns:repeat(2,minmax(47px,1fr));align-content:start;max-width:190px}
   #app>header .stats span{padding:6px;font-size:4px}
-  #app>header .stats strong{font-size:8px}{gap:6px;padding:6px}
+  #app>header .stats strong{font-size:8px}
   .life-module,.xp-module,.mutation-module,.condition-module{min-height:50px;padding:7px}
   .life-module strong{font-size:11px}
   .life-module small{font-size:4px}
@@ -307,7 +308,7 @@ body{background:radial-gradient(ellipse at 50% -18%,#142219 0,transparent 52%),v
   #app>header .subhud{font-size:3px;gap:5px}
   #app>header .stats{max-width:148px;gap:4px}
   #app>header .stats span{font-size:3px;padding:5px}
-  #app>header .stats strong{font-size:7px}{grid-template-columns:88px minmax(0,1fr);gap:5px}
+  #app>header .stats strong{font-size:7px}
   .mutation-module,.condition-module{grid-column:span 1}
   .run-intel{grid-template-columns:repeat(2,minmax(0,1fr))}
   .intel-top span{font-size:3px}
@@ -412,7 +413,7 @@ body{background:radial-gradient(ellipse at 50% -18%,#142219 0,transparent 52%),v
 }
 #app>header{border-color:#304533;background:linear-gradient(115deg,#101911,#090e0b 65%,#0d1710);box-shadow:0 8px 28px #0008,0 0 28px #79e35b0b}
 #app>header .stats span{border-color:#2c3e30;box-shadow:inset 0 1px 0 #ffffff05}
-#app>header .stats strong{font-size:11px;text-shadow:0 0 10px #79e35b22}{border-color:#304533;background:linear-gradient(90deg,#090f0b,#0b120d,#090f0b);box-shadow:0 5px 18px #0005}
+#app>header .stats strong{font-size:11px;text-shadow:0 0 10px #79e35b22}
 .life-module,.xp-module,.mutation-module,.condition-module{
   border-color:#2a3d30;background:linear-gradient(145deg,#111b14,#0a110d);
   box-shadow:inset 0 1px 0 #ffffff05,0 3px 10px #0005
@@ -519,7 +520,7 @@ body.boot-open{overflow:hidden}
 .boot-panel-heading b{font-size:9px}
 .boot-panel-heading small{font-size:5px}
 #app>header .eyebrow,.subhud,.stats span{font-size:7px}
-#app>header .stats strong{font-size:12px}{gap:11px}
+#app>header .stats strong{font-size:12px}
 .life-module span,.xp-row span{font-size:6px}
 .life-module strong{font-size:17px}
 .life-module small{font-size:5px}
@@ -1203,7 +1204,7 @@ img,svg,canvas{
   #app>header h1{font-size:12px;line-height:1.35}
   #app>header .stats{max-width:175px;gap:4px}
   #app>header .stats span{padding:5px;font-size:3.5px}
-  #app>header .stats strong{font-size:7px;margin-top:4px}{grid-template-columns:1fr 1.35fr;gap:5px;padding:5px}
+  #app>header .stats strong{font-size:7px;margin-top:4px}
   .life-module,.xp-module,.mutation-module,.condition-module{min-height:46px;padding:6px}
   .run-intel{gap:5px;margin-bottom:6px}
   .intel-card{min-height:45px;padding:6px}
@@ -1232,7 +1233,7 @@ img,svg,canvas{
   #app>header h1{font-size:10px}
   #app>header .stats{max-width:145px}
   #app>header .stats span{font-size:3px;padding:4px}
-  #app>header .stats strong{font-size:6px}{grid-template-columns:82px 1fr}
+  #app>header .stats strong{font-size:6px}
   .run-intel{grid-template-columns:1fr 1fr}
   .game-shell{border-width:2px}
   .ability{min-height:45px}
@@ -1285,12 +1286,7 @@ img,svg,canvas{
     border:1px solid #26372d;
     background:#0a100c;
   }
-  #app>header .stats strong{font-size:6px;margin-top:3px}{
-    grid-template-columns:74px minmax(0,1fr);
-    gap:5px;
-    margin-bottom:5px;
-    padding:5px;
-  }
+  #app>header .stats strong{font-size:6px;margin-top:3px}
   .life-module{min-width:0;padding:5px;border-right:1px solid #26372d}
   .life-module strong{font-size:9px;letter-spacing:0;margin-top:5px}
   .life-module small{font-size:3px}
@@ -1395,7 +1391,7 @@ img,svg,canvas{
   #app>header h1{font-size:9px}
   #app>header .stats{max-width:104px}
   #app>header .stats span{font-size:2.7px}
-  #app>header .stats strong{font-size:5px}{grid-template-columns:66px 1fr}
+  #app>header .stats strong{font-size:5px}
   .life-module strong{font-size:8px}
   .run-intel{gap:3px}
   .intel-card{min-height:36px;padding:4px}
@@ -1409,7 +1405,7 @@ img,svg,canvas{
 @media (orientation:landscape) and (max-height:600px) and (pointer:coarse){
   body{padding:3px}
   #app>header{grid-template-columns:1fr auto;padding:4px;margin-bottom:3px}
-  #app>header h1{font-size:8px}{display:none}
+  #app>header h1{font-size:8px}
   .run-intel{display:none}
   .run-mode-bar{margin-bottom:3px}
   .game-shell{aspect-ratio:16/9;max-height:calc(100dvh - 82px)}
@@ -1434,7 +1430,7 @@ img,svg,canvas{
   #app>header .subhud{font-size:6px;line-height:1.6}
   #app>header .stats{max-width:170px;gap:5px}
   #app>header .stats span{font-size:5px;padding:6px 4px;line-height:1.5}
-  #app>header .stats strong{font-size:9px}{grid-template-columns:92px 1fr;gap:7px;padding:7px}
+  #app>header .stats strong{font-size:9px}
   .life-module{padding:7px}
   .life-module strong{font-size:11px}
   .life-module small{font-size:5px}
@@ -1484,7 +1480,7 @@ img,svg,canvas{
   #app>header h1{font-size:14px}
   #app>header .stats{max-width:145px}
   #app>header .stats span{font-size:4px}
-  #app>header .stats strong{font-size:8px}{grid-template-columns:82px 1fr}
+  #app>header .stats strong{font-size:8px}
   .life-module strong{font-size:10px}
   .run-intel::before{font-size:4.5px}
   .intel-card{min-height:44px}
