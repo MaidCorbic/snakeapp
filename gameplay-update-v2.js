@@ -30,33 +30,8 @@
     clearTimeout(timer);
     timer = null;
 
-    // This is the final gameplay tick wrapper loaded after the other gameplay
-    // layers. Enforce fatal arena collisions here so later move() overrides
-    // cannot bypass the RUN OVER result or leave a stale timer running.
-    const head = snake?.[0];
-    if (head && next) {
-      const nextHead = { x: head.x + next.x, y: head.y + next.y };
-      const wallCollision =
-        nextHead.x < 0 || nextHead.x >= COLS ||
-        nextHead.y < 0 || nextHead.y >= ROWS;
-      const blocks = typeof arenaBlocks !== "undefined" && Array.isArray(arenaBlocks)
-        ? arenaBlocks
-        : [];
-      const blockCollision = blocks.some(
-        block => block.x === nextHead.x && block.y === nextHead.y
-      );
-
-      if (wallCollision || blockCollision) {
-        deathCause = wallCollision ? "ARENA WALL" : "ARENA OBSTACLE";
-        if (stats && typeof stats.damage === "number") stats.damage += 1;
-        say(deathCause + " // RUN OVER");
-        end();
-        clearTimeout(timer);
-        timer = null;
-        return;
-      }
-    }
-
+    // Let the canonical gameplay layer own arena collision state and result finalization.
+    // Its private arenaBlocks/deathCause state is intentionally not accessed here.
     const beforeEnergy = stats?.energy || 0;
     try {
       const result = baseMoveV2(force);
