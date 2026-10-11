@@ -466,20 +466,22 @@ test("ability deck exposes clear names and responsive visual states", async ({ p
   expect(deck).toBe("grid");
 });
 
-test("wall and obstacle collisions recover without freezing gameplay", async ({ page }) => {
+test("wall and solid obstacle collisions show RUN OVER and finalize the run", async ({ page }) => {
   await startGame(page);
 
-  for (const scenario of ["setWallCollisionScenario", "setObstacleCollisionScenario"]) {
-    await page.evaluate(name => window.__snakeE2E[name](), scenario);
-    await expect.poll(() => page.evaluate(() => window.SnakeEvolution.getState().lives)).toBe(2);
-    await expect.poll(() => page.evaluate(() => {
-      const state = window.__snakeE2E.getCollisionRecoveryState();
-      return state.alive && state.timerPending && state.shielded && state.damage === 1;
-    })).toBe(true);
+  for (const [index, scenario] of ["setWallCollisionScenario", "setObstacleCollisionScenario"].entries()) {
+    if (index > 0) {
+      await page.evaluate(() => window.SnakeEvolution.start());
+      await expect.poll(() => page.evaluate(() => window.SnakeEvolution.getState().alive)).toBe(true);
+    }
 
-    const respawnHead = await page.evaluate(() => window.SnakeEvolution.getState().snakeHead);
-    await expect.poll(() => page.evaluate(() => window.SnakeEvolution.getState().snakeHead), { timeout: 2_000 }).not.toEqual(respawnHead);
-    await expect.poll(() => page.evaluate(() => window.SnakeEvolution.getState().alive)).toBe(true);
+    await page.evaluate(name => window.__snakeE2E[name](), scenario);
+    await expect(page.locator("#message h2")).toHaveText("RUN OVER");
+    await expect(page.locator("#message .result-copy")).toContainText("RUN ENDED");
+    await expect(page.locator("#message .gameover-details")).toBeVisible();
+    await expect(page.locator("#start")).toBeVisible();
+    await expect.poll(() => page.evaluate(() => window.SnakeEvolution.getState().alive)).toBe(false);
+    await expect.poll(() => page.evaluate(() => JSON.parse(localStorage.getItem("snake-evolution-save") || "{}").runs)).toBe(index + 1);
   }
 });
 
