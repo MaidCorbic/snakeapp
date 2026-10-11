@@ -402,6 +402,11 @@
 
   hud=function(){
     baseHudU();maxThreat=Math.max(maxThreat,danger);
+    const contractAcceptButton=document.querySelector("#contractAccept"),contractDeclineButton=document.querySelector("#contractDecline"),contractNameEl=document.querySelector("#contract"),contractLabelEl=document.querySelector("#contractLabel");
+    if(contractAcceptButton)contractAcceptButton.classList.toggle("hidden",!contractOfferOpen);
+    if(contractDeclineButton)contractDeclineButton.classList.toggle("hidden",!contractOfferOpen);
+    if(contractNameEl)contractNameEl.textContent=contractOfferOpen?"OFFER":contractDeclined?"DECLINED":contract?.[0]||"NONE";
+    if(contractLabelEl)contractLabelEl.textContent=contractOfferOpen?"ACCEPT OR DECLINE":contractDone?"COMPLETE":contract?contractValue()+"/"+contract[3]:"NONE";
     const cond=document.querySelector("#condition"),condLabel=document.querySelector("#conditionLabel"),mode=document.querySelector("#runMode"),bounty=document.querySelector("#bounty"),bountyLabel=document.querySelector("#bountyLabel"),perfect=document.querySelector("#perfectLabel"),maxD=document.querySelector("#maxThreat"),perk=document.querySelector("#evoPerk");
     if(cond)cond.textContent=conditionName();if(condLabel)condLabel.textContent=runCondition?.[1]||"STANDARD";if(mode)mode.textContent=endlessMode?"ENDLESS C"+endlessCycle:dailyMode?"DAILY":"STANDARD";
     if(bounty)bounty.textContent=bountyClaimed?"CLEARED":bountyTarget?"TARGET":"SEARCHING";if(bountyLabel)bountyLabel.textContent=bountyTarget&&!bountyClaimed?(bountyTarget.variant||bountyTarget.type||"TARGET").toUpperCase():"READY";
