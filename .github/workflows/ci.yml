@@ -40,6 +40,7 @@ jobs:
 
       - name: Check JavaScript syntax
         run: |
+          node --check arcade-menu-v2.js
           node --check game.js
           node --check menu.js
           node --check ultimate-gameplay-v1.js
@@ -54,6 +55,11 @@ jobs:
           node --check scripts/stability-regression.cjs
           node --check playwright.config.cjs
           node --check tests/e2e/game.spec.cjs
+          node --check arcade-menu-v2.js
+
+      - name: Verify all tracked JavaScript syntax
+        run: |
+          find . -path "./node_modules" -prune -o -name "*.js" -type f -print0 | xargs -0 -n1 node --check
 
       - name: Run deterministic regression validation
         run: |
