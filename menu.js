@@ -323,7 +323,7 @@
 
     const script = document.createElement("script");
     script.id = "snakeGameScript";
-    script.src = "game.js?v=survival-v25";
+    script.src = "game.js?v=arcade-v26";
     script.onload = () => {
       if (bootFailed) return;
       if (typeof window.SnakeEvolution?.start !== "function") {
