@@ -426,17 +426,34 @@ test("normal launch shows a first-run tutorial and can resume gameplay", async (
 });
 
 
-test("Options hide helper copy, simplify local status, and present hex picker cleanly", async ({ page }) => {
+test("Options use one HEX editor and only save color on explicit SAVE", async ({ page }) => {
+  const errors = [];
+  page.on("pageerror", error => errors.push(error.message));
   await page.goto("/index.html");
   await page.locator("#bootOptions").click();
   await expect(page.locator("#bootOptionsPanel")).toBeVisible();
   await expect(page.locator("#bootOptionsPanel .boot-panel-heading small")).toBeHidden();
   await expect(page.locator("#bootSettingsState")).toBeHidden();
   await expect(page.locator("#bootOptionsPanel .option-group")).toHaveCount(4);
-  await expect(page.locator("#bootOptionsPanel .snake-custom-color")).toBeVisible();
-  await expect(page.locator("#seCustomSnakeColor")).toHaveAttribute("aria-label", /Custom snake colour hex picker|Custom snake color/);
-  await page.locator("#seCustomSnakeColor").fill("#1a2b3c");
+  await expect(page.locator("#snakeHexInput")).toBeVisible();
+  await expect(page.locator("#snakeColorPicker")).toBeVisible();
+  await expect(page.locator("#snakeColorSave")).toBeVisible();
+  await expect(page.locator("#seCustomSnakeColor")).toHaveCount(0);
+  await expect(page.locator(".snake-color-editor #snakeHexInput")).toHaveCount(1);
+
+  const before = await page.evaluate(() => JSON.parse(localStorage.getItem("snake-evolution-settings") || "{}").snakeColor);
+  await page.locator("#snakeHexInput").fill("#1a2b3c");
+  await expect.poll(() => page.evaluate(() => document.documentElement.style.getPropertyValue("--snake-color"))).toBe("#1a2b3c");
+  await expect.poll(() => page.evaluate(() => JSON.parse(localStorage.getItem("snake-evolution-settings") || "{}").snakeColor)).toBe(before);
+  await page.locator("#snakeColorSave").click();
   await expect.poll(() => page.evaluate(() => JSON.parse(localStorage.getItem("snake-evolution-settings") || "{}").snakeColor)).toBe("#1a2b3c");
+  await expect(page.locator("#snakeColorStatus")).toContainText("SAVED: #1A2B3C");
+
+  await page.locator("#snakeHexInput").fill("not-a-hex");
+  await expect(page.locator("#snakeColorSave")).toBeDisabled();
+  await expect(page.locator("#snakeColorStatus")).toContainText("exactly #RRGGBB");
+  await expect(page.locator("#snakeColorStatus")).toHaveAttribute("data-state", "error");
+  expect(errors).toEqual([]);
 });
 
 test("START RUN enters the standard run and PARTY RUN enters Party Run", async ({ page }) => {
