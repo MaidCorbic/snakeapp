@@ -183,7 +183,7 @@ function pause(){
    const overlay=document.createElement("div");
    overlay.className="pause-overlay";overlay.id="pauseOverlay";overlay.setAttribute("role","dialog");overlay.setAttribute("aria-modal","true");overlay.setAttribute("aria-label","Paused game");
    overlay.innerHTML="<div><h2>PAUSED</h2><button id=\"resume\" type=\"button\">RESUME</button><button id=\"restartPause\" type=\"button\">RESTART</button><button id=\"menuPause\" type=\"button\">MAIN MENU</button></div>";
-   document.querySelector(".game-shell").appendChild(overlay);
+   document.body.appendChild(overlay);
    overlay.querySelector("#resume").onclick=()=>{overlay.remove();paused=false;move();hud()};
    overlay.querySelector("#restartPause").onclick=()=>{overlay.remove();paused=false;clearTimeout(timer);timer=null;reset()};
    overlay.querySelector("#menuPause").onclick=()=>{overlay.remove();clearTimeout(timer);timer=null;alive=false;message.style.display="none";window.showBootMenu?.()};
