@@ -281,3 +281,470 @@
 @media(prefers-reduced-motion:reduce){
   .run-intel-v3 .intel-card,.run-intel-v3 .contract-actions button{transition:none!important}
 }
+
+
+/* MAIN GAME VISUAL PASS 2 — alignment, arcade typography, stable ability deck,
+   premium collectible achievement cards. CSS only; gameplay logic untouched. */
+
+/* Center the three headline run stats: label, value and combo share one axis. */
+body .run-stats{
+  align-items:stretch;
+}
+body .run-stats .run-stat-tile{
+  align-items:center!important;
+  justify-content:center!important;
+  text-align:center!important;
+  padding:12px 10px!important;
+  border-radius:10px!important;
+}
+body .run-stats .run-stat-tile>span{
+  width:100%;
+  text-align:center!important;
+  color:#a6c4ac!important;
+  font:800 10px/1.4 "Press Start 2P",monospace!important;
+  letter-spacing:1px!important;
+}
+body .run-stats .run-stat-tile>strong{
+  width:100%;
+  margin-top:9px!important;
+  text-align:center!important;
+  font-size:clamp(20px,2.1vw,30px)!important;
+  line-height:1.15!important;
+  letter-spacing:1px!important;
+  font-variant-numeric:tabular-nums;
+}
+body .run-stats .run-stat-tile>small{
+  width:100%;
+  text-align:center!important;
+  margin-top:7px!important;
+}
+body .run-stats .run-stat-tile>small b{
+  display:inline-block;
+  padding:3px 7px;
+  border:1px solid #4a6335;
+  border-radius:5px;
+  background:#111d0d;
+  color:#d4ff8c!important;
+  font:800 10px/1.2 "Press Start 2P",monospace!important;
+}
+body .run-stats .score-tile>span{color:#a5ff7d!important}
+body .run-stats .time-tile>span{color:#ffd985!important}
+body .run-stats .best-tile>span{color:#91e4ff!important}
+body .run-stats .score-tile>strong{color:#c3ff9d!important;text-shadow:0 0 18px #a5ff7d30!important}
+body .run-stats .time-tile>strong{color:#ffe4a0!important;text-shadow:0 0 18px #ffd66b20!important}
+body .run-stats .best-tile>strong{color:#b4edff!important;text-shadow:0 0 18px #72d7ff20!important}
+
+/* Modern life counter with readable arcade status. */
+body .run-status-v3 .life-module{
+  position:relative;
+  display:flex!important;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  gap:7px;
+  min-height:76px!important;
+  padding:10px 12px!important;
+  border:1px solid #4d343e!important;
+  border-radius:10px!important;
+  background:radial-gradient(ellipse at 50% 0%,#ff667b18,transparent 65%),linear-gradient(145deg,#1a1014,#0a0e0b)!important;
+  box-shadow:inset 0 1px #ffffff0b,0 6px 16px #0003!important;
+  text-align:center!important;
+}
+body .run-status-v3 .life-module>span{
+  color:#dca0aa!important;
+  font:800 9px/1.4 "Press Start 2P",monospace!important;
+  letter-spacing:1.2px!important;
+}
+body .run-status-v3 .life-module>strong{
+  display:block;
+  color:#ff7385!important;
+  font:900 clamp(20px,2vw,27px)/1 system-ui,sans-serif!important;
+  letter-spacing:5px!important;
+  text-shadow:0 0 12px #ff526b42!important;
+  font-variant-numeric:tabular-nums;
+}
+body .run-status-v3 .life-module>small{
+  display:inline-block;
+  margin:0!important;
+  padding:4px 7px;
+  border:1px solid #543944;
+  border-radius:5px;
+  background:#160e12;
+  color:#f5c56e!important;
+  font:800 8px/1.25 "Press Start 2P",monospace!important;
+  letter-spacing:.4px!important;
+}
+
+/* XP becomes a proper level-up meter: crisp label, gradient fill, subtle moving sheen. */
+body .run-status-v3 .xp-module{
+  position:relative;
+  display:flex!important;
+  flex-direction:column;
+  justify-content:center;
+  gap:11px;
+  min-height:76px!important;
+  padding:12px 14px!important;
+  border:1px solid #3a5b45!important;
+  border-radius:10px!important;
+  background:radial-gradient(ellipse at 0% 0%,#9dff7d12,transparent 60%),linear-gradient(145deg,#0f1c13,#080d0a)!important;
+  box-shadow:inset 0 1px #ffffff0b,0 6px 16px #0003!important;
+}
+body .run-status-v3 .xp-row{
+  display:grid!important;
+  grid-template-columns:auto 1fr auto;
+  align-items:center;
+  gap:9px!important;
+}
+body .run-status-v3 .xp-row>span{
+  color:#a5ff7d!important;
+  font:800 10px/1.3 "Press Start 2P",monospace!important;
+  letter-spacing:1px!important;
+}
+body .run-status-v3 .xp-row>strong{
+  justify-self:center;
+  color:#e9ffe0!important;
+  font:800 11px/1.3 "Press Start 2P",monospace!important;
+  letter-spacing:.4px!important;
+}
+body .run-status-v3 .xp-row>b{
+  color:#c3d9c5!important;
+  font:700 10px/1.3 ui-monospace,SFMono-Regular,Consolas,monospace!important;
+  font-variant-numeric:tabular-nums;
+}
+body .run-status-v3 .xp-track{
+  position:relative;
+  height:11px!important;
+  overflow:hidden;
+  border:1px solid #36533a!important;
+  border-radius:999px!important;
+  background:#050a06!important;
+  box-shadow:inset 0 2px 4px #000b,0 1px #ffffff08!important;
+}
+body .run-status-v3 .xp-track>i{
+  position:relative;
+  display:block;
+  height:100%;
+  min-width:0;
+  border-radius:inherit!important;
+  background:linear-gradient(90deg,#3d9c52 0%,#83ed66 58%,#d9ff8b 100%)!important;
+  box-shadow:0 0 13px #8cff6844!important;
+  transition:width .3s ease!important;
+}
+body .run-status-v3 .xp-track>i:after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(110deg,transparent 20%,#ffffff40 48%,transparent 72%);
+  transform:translateX(-110%);
+  animation:mainXpSheen 3.2s ease-in-out infinite;
+  pointer-events:none;
+}
+@keyframes mainXpSheen{0%,48%{transform:translateX(-110%)}78%,100%{transform:translateX(110%)}}
+
+/* DASH / SHIELD / PULSE / FURY: fixed geometry prevents the row from tilting or jumping. */
+body .ability-bar{
+  display:grid!important;
+  grid-template-columns:repeat(4,minmax(0,1fr))!important;
+  align-items:stretch!important;
+  gap:10px!important;
+  width:100%;
+  transform:none!important;
+  perspective:none!important;
+}
+body .ability-bar .ability{
+  box-sizing:border-box;
+  position:relative;
+  top:auto!important;
+  left:auto!important;
+  flex:none!important;
+  width:100%!important;
+  min-width:0;
+  min-height:76px!important;
+  margin:0!important;
+  padding:12px!important;
+  border:1px solid #2e4834!important;
+  border-radius:9px!important;
+  background:linear-gradient(145deg,#101a13,#080d0a)!important;
+  text-align:left!important;
+  transform:none!important;
+  rotate:none!important;
+  scale:none!important;
+  translate:none!important;
+  animation:none!important;
+  box-shadow:inset 0 1px #ffffff08,0 4px 0 #020503,0 7px 14px #0003!important;
+  transition:border-color .16s ease,background .16s ease,filter .16s ease!important;
+}
+body .ability-bar .ability:hover,
+body .ability-bar .ability:active,
+body .ability-bar .ability:focus{
+  transform:none!important;
+  rotate:none!important;
+  scale:none!important;
+  translate:none!important;
+}
+body .ability-bar .ability:hover:not(:disabled){
+  border-color:#75a76d!important;
+  filter:brightness(1.12);
+}
+body .ability-bar .ability:active:not(:disabled){
+  box-shadow:inset 0 1px #ffffff08,0 2px 0 #020503!important;
+  filter:brightness(.98);
+}
+body .ability-bar .ability:focus-visible{
+  outline:2px solid #a5ff7d!important;
+  outline-offset:3px;
+}
+body .ability-bar .ability>b{
+  display:block;
+  color:#dff8df!important;
+  font:800 11px/1.4 "Press Start 2P",monospace!important;
+  letter-spacing:.5px!important;
+  transform:none!important;
+}
+body .ability-bar .ability>span{
+  display:block;
+  margin-top:8px!important;
+  color:#8eaa94!important;
+  font:700 9px/1.45 "Press Start 2P",monospace!important;
+  letter-spacing:.15px!important;
+  overflow-wrap:anywhere;
+  transform:none!important;
+}
+body .ability-bar .ability>i{
+  left:0!important;right:auto!important;bottom:0!important;top:auto!important;
+  height:4px!important;
+  border-radius:0 999px 999px 0!important;
+  background:linear-gradient(90deg,#5cae58,#b6ff83)!important;
+  transform:none!important;
+  animation:none!important;
+}
+body .ability-bar #dash{border-top:2px solid #9cff76!important}
+body .ability-bar #shield{border-top:2px solid #72d7ff!important}
+body .ability-bar #pulse{border-top:2px solid #c6a2ff!important}
+body .ability-bar #fury{border-top:2px solid #ffd66b!important}
+body .ability-bar #shield>i{background:linear-gradient(90deg,#398ec0,#8ce7ff)!important}
+body .ability-bar #pulse>i{background:linear-gradient(90deg,#8260cb,#d1b5ff)!important}
+body .ability-bar #fury>i{background:linear-gradient(90deg,#c58b2e,#ffe18b)!important}
+
+/* All threat-scan copy uses readable pixel/arcade typography and distinct stat colors. */
+body #seThreatStatus{
+  border-color:#3a5a42!important;
+  border-radius:11px!important;
+  background:radial-gradient(ellipse at 0% 0%,#82e2ff0c,transparent 45%),linear-gradient(110deg,#0e1912,#070c09 65%,#0c1510)!important;
+  box-shadow:inset 0 1px #ffffff0a,0 8px 20px #0003!important;
+}
+body #seThreatStatus .se-threat-heading,
+body #seThreatStatus .se-threat-title,
+body #seThreatStatus .se-threat-brand small,
+body #seThreatStatus .se-threat-stat>span,
+body #seThreatStatus .se-threat-stat>small{
+  font-family:"Press Start 2P",monospace!important;
+  font-weight:400!important;
+  letter-spacing:.35px!important;
+  line-height:1.8!important;
+}
+body #seThreatStatus .se-threat-heading{
+  color:#a5ff7d!important;
+  font-size:8px!important;
+  text-shadow:0 0 10px #a5ff7d25;
+}
+body #seThreatStatus .se-threat-brand{
+  border-color:#35533d!important;
+  background:linear-gradient(145deg,#102016,#09110c)!important;
+}
+body #seThreatStatus .se-threat-brand small{
+  color:#88b994!important;
+  font-size:6px!important;
+}
+body #seThreatStatus .se-threat-stat{
+  border-color:#2b4532!important;
+  border-radius:7px!important;
+  background:linear-gradient(145deg,#101b13,#09100b)!important;
+}
+body #seThreatStatus .se-threat-stat>span{font-size:6px!important;color:#a5bda9!important}
+body #seThreatStatus .se-threat-stat>strong{
+  font-family:"Press Start 2P",monospace!important;
+  font-size:13px!important;
+  text-shadow:0 0 12px currentColor;
+}
+body #seThreatStatus .se-threat-stat>small{font-size:5px!important;color:#809985!important}
+body #seThreatStatus .se-threat-hunters{border-left-color:#72d7ff!important}
+body #seThreatStatus .se-threat-hunters>strong{color:#72d7ff!important}
+body #seThreatStatus .se-threat-hazards{border-left-color:#ff7186!important}
+body #seThreatStatus .se-threat-hazards>strong{color:#ff8494!important}
+body #seThreatStatus .se-threat-boss{border-left-color:#ffd66b!important}
+body #seThreatStatus .se-threat-boss>strong{color:#ffd66b!important}
+body #seThreatStatus .se-threat-radar{
+  border-color:#4d8056!important;
+  box-shadow:0 0 0 3px #a5ff7d0a,0 0 18px #a5ff7d12!important;
+}
+
+/* Threat / Objective / Contract headings and explanations are arcade-readable. */
+body .run-intel-v3 .intel-top>span{
+  font-family:"Press Start 2P",monospace!important;
+  font-size:8px!important;
+  font-weight:400!important;
+  letter-spacing:.45px!important;
+  line-height:1.8!important;
+  text-shadow:0 1px #000,0 0 10px #ffffff0c;
+}
+body .run-intel-v3 .intel-top>strong{
+  font-family:"Press Start 2P",monospace!important;
+  font-size:clamp(9px,.75vw,12px)!important;
+  line-height:1.6!important;
+}
+body .run-intel-v3 .intel-top>b{
+  font-family:"Press Start 2P",monospace!important;
+  font-size:7px!important;
+  line-height:1.7!important;
+}
+body .run-intel-v3 .intel-explainer{
+  font-family:"Press Start 2P",monospace!important;
+  font-size:6px!important;
+  line-height:1.9!important;
+  letter-spacing:.1px!important;
+  color:#a1b8a5!important;
+}
+body .run-intel-v3 .danger-card .intel-top>span{color:#ffb18c!important}
+body .run-intel-v3 .objective-card .intel-top>span{color:#8de7ff!important}
+body .run-intel-v3 .contract-card .intel-top>span{color:#ffe18b!important}
+
+/* Remove the unnecessary plus glyphs while preserving native section expand/collapse. */
+body #progression>.progression-head .collapse-chevron,
+body #achievements>.progression-head .collapse-chevron{
+  display:none!important;
+}
+body #progression>.progression-head,
+body #achievements>.progression-head{
+  grid-template-columns:minmax(0,1fr) auto!important;
+  cursor:pointer;
+}
+body #progression>.progression-head>span,
+body #achievements>.progression-head>span{min-width:0}
+body #progression>.progression-head>strong,
+body #achievements>.progression-head>strong{justify-self:end}
+
+/* Premium holographic collectible cards, inspired by classic monster/trading-card frames. */
+body #achievements .achievement-deck-card{
+  min-height:224px!important;
+  height:224px!important;
+  filter:drop-shadow(0 8px 10px #0006);
+  transition:filter .2s ease;
+}
+body #achievements .achievement-deck-card:hover{
+  filter:drop-shadow(0 12px 15px #0009) drop-shadow(0 0 7px #d7b66b1a);
+}
+body #achievements .achievement-face{
+  padding:12px!important;
+  border:2px solid #8e7545!important;
+  border-radius:9px!important;
+  background:
+    linear-gradient(120deg,#ffffff05 0 20%,transparent 32% 66%,#ffffff06 78%,transparent 90%),
+    radial-gradient(ellipse at 50% 35%,#d7b66b18,transparent 52%),
+    linear-gradient(145deg,#2b2115 0%,#15130e 34%,#0b100c 100%)!important;
+  box-shadow:inset 0 0 0 3px #090b08,inset 0 0 0 4px #b99a5a55,inset 0 1px #fff3,0 8px 18px #0007!important;
+}
+body #achievements .achievement-front:before{
+  inset:6px!important;
+  border:1px solid #d7bd7750!important;
+  border-radius:4px!important;
+}
+body #achievements .achievement-card-top{
+  color:#e5cf91!important;
+  font-family:"Press Start 2P",monospace!important;
+  font-size:7px!important;
+  letter-spacing:.3px!important;
+}
+body #achievements .achievement-card-id{
+  color:#d2b66d!important;
+  font-family:"Press Start 2P",monospace!important;
+  font-size:7px!important;
+}
+body #achievements .achievement-card-glyph{
+  width:68px!important;height:68px!important;flex-basis:68px!important;
+  margin:12px auto!important;
+  border:2px solid #c4a85d!important;
+  border-radius:50%!important;
+  background:radial-gradient(circle at 35% 25%,#fff7d66b,transparent 24%),radial-gradient(circle,#574626 0%,#17170e 62%,#080b08 100%)!important;
+  color:#ffe6a0!important;
+  text-shadow:0 0 14px #ffdc7a7d,0 2px #000!important;
+  box-shadow:0 0 0 3px #17130b,0 0 0 4px #8c713a,0 0 22px #ffd66b20,inset 0 1px #fff4!important;
+}
+body #achievements .achievement-card-title{
+  color:#fff0bf!important;
+  font-family:"Press Start 2P",monospace!important;
+  font-size:9px!important;
+  line-height:1.8!important;
+  letter-spacing:0!important;
+  text-shadow:0 1px #000,0 0 10px #ffd66b20!important;
+}
+body #achievements .achievement-card-status{
+  margin-top:auto!important;
+  padding:6px 8px!important;
+  border:1px solid #96783d!important;
+  border-radius:4px!important;
+  background:linear-gradient(180deg,#302615,#15120b)!important;
+  color:#f4d987!important;
+  font-family:"Press Start 2P",monospace!important;
+  font-size:7px!important;
+  letter-spacing:.2px!important;
+}
+body #achievements .achievement-back{
+  border-color:#6b5a8d!important;
+  background:linear-gradient(140deg,#20182e,#100e19 56%,#080b0d)!important;
+  box-shadow:inset 0 0 0 3px #09080e,inset 0 0 0 4px #a998d566,inset 0 1px #fff3,0 8px 18px #0007!important;
+}
+body #achievements .achievement-back .achievement-card-title,
+body #achievements .achievement-back .achievement-card-glyph{
+  color:#d9c6ff!important;
+}
+body #achievements .achievement-deck-card[data-deck-state="unlocked"] .achievement-face{
+  border-color:#d3b45f!important;
+  background:linear-gradient(120deg,#ffffff08 0 18%,transparent 30% 68%,#ffffff07 82%,transparent 92%),radial-gradient(ellipse at 50% 30%,#ffe8a020,transparent 56%),linear-gradient(145deg,#302617,#15140d 42%,#0b100c)!important;
+}
+body #achievements .achievement-deck-card[data-deck-state="unlocked"] .achievement-card-status{
+  border-color:#c5a44f!important;
+  background:linear-gradient(180deg,#493819,#201707)!important;
+  color:#ffedac!important;
+}
+body #achievements .achievement-deck-card[data-deck-state="locked"] .achievement-face{
+  border-color:#48504a!important;
+  filter:saturate(.65);
+}
+body #achievements .achievement-deck-card[data-deck-state="locked"] .achievement-card-glyph{
+  border-color:#626b61!important;color:#9eafa0!important;text-shadow:none!important;box-shadow:0 0 0 3px #111!important;
+}
+body #achievements .achievement-deck-card.is-flipped .achievement-card-inner{
+  transform:rotateY(180deg)!important;
+}
+
+/* Responsive behavior without skewing ability buttons or clipping card titles. */
+@media(max-width:800px){
+  body .ability-bar{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  body .ability-bar .ability{min-height:70px!important}
+  body #achievements .achievement-deck-card{height:210px!important;min-height:210px!important}
+  body #achievements .achievement-card-title{font-size:8px!important}
+}
+@media(max-width:480px){
+  body .run-stats .run-stat-tile{padding:9px 5px!important}
+  body .run-stats .run-stat-tile>span{font-size:7px!important;letter-spacing:.3px!important}
+  body .run-stats .run-stat-tile>strong{font-size:19px!important}
+  body .run-status-v3 .xp-module{padding:10px!important}
+  body .run-status-v3 .xp-row{grid-template-columns:auto 1fr;gap:7px!important}
+  body .run-status-v3 .xp-row>strong{justify-self:end}
+  body .run-status-v3 .xp-row>b{grid-column:1/-1;text-align:right}
+  body #seThreatStatus{grid-template-columns:1fr 1fr!important}
+  body #seThreatStatus .se-threat-brand{grid-column:1/-1}
+  body #seThreatStatus .se-threat-heading{font-size:7px!important}
+  body #seThreatStatus .se-threat-stat>span{font-size:5px!important}
+  body #seThreatStatus .se-threat-stat>strong{font-size:11px!important}
+  body .run-intel-v3 .intel-explainer{font-size:5px!important}
+  body #achievements .achievement-deck-card{height:198px!important;min-height:198px!important}
+  body #achievements .achievement-face{padding:9px!important}
+  body #achievements .achievement-card-title{font-size:7px!important}
+  body #achievements .achievement-card-glyph{width:56px!important;height:56px!important;flex-basis:56px!important}
+}
+@media(prefers-reduced-motion:reduce){
+  body .run-status-v3 .xp-track>i:after{animation:none!important}
+  body .run-status-v3 .xp-track>i{transition:none!important}
+}
