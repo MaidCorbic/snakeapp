@@ -341,6 +341,10 @@
       addTelegraph(Math.max(0,Math.min(COLS-1,nh.x)),Math.max(0,Math.min(ROWS-1,nh.y)),"WALL","#ff5b62",260);
       takeDamage(wallCollision?"ARENA WALL":"ARENA OBSTACLE");
       hud();draw();
+      // If damage did not end the run, queue one tick through the V2 scheduler.
+      if(alive&&!paused&&!contractOfferOpen&&!extractionOpen&&!timer){
+        timer=setTimeout(move,Math.max(60,118-combo*6-(force?35:0)-(runMutation?.[0]==="OVERCLOCK"?14:0)));
+      }
       return;
     }
     const before={energy:stats.energy,cores:stats.cores,powerups:stats.powerups,supplyDrops:stats.supplyDrops,elites:stats.elites};
