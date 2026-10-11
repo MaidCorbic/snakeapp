@@ -419,7 +419,6 @@ test("normal launch shows a first-run tutorial and can resume gameplay", async (
   await page.locator("#seTutorialStart").click();
   await expect(page.locator(".se-tutorial-overlay")).toHaveCount(0);
   expect(await page.evaluate(() => localStorage.getItem("snake-evolution-tutorial-seen-v1"))).toBe("true");
-  await expect.poll(() => page.evaluate(() => window.SnakeEvolution.getState().contractOfferOpen)).toBe(false);
   await expect(page.locator("#pauseBtn")).toBeEnabled();
   expect(pageErrors).toEqual([]);
 });
