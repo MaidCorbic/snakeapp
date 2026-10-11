@@ -1,0 +1,68 @@
+/* VISUAL POLISH V1 — consolidated final layer */
+:root{
+  --vp-bg:#080d0b;--vp-panel:#0d1711;--vp-line:#294432;--vp-green:#9cff78;
+  --vp-cyan:#79dcff;--vp-amber:#ffc16e;--vp-red:#ff6478;--vp-radius:12px;
+}
+html{scroll-behavior:smooth}
+body{background-color:var(--vp-bg)}
+button,.boot-action,.primary-btn,.ability{transition:transform .16s ease,border-color .18s ease,box-shadow .18s ease,filter .18s ease}
+button:focus-visible,[role="button"]:focus-visible,summary:focus-visible{outline:2px solid var(--vp-cyan)!important;outline-offset:3px}
+button:not(:disabled):hover,.ability:not(:disabled):hover{filter:brightness(1.12);transform:translateY(-1px)}
+button:not(:disabled):active,.ability:not(:disabled):active{transform:translateY(1px) scale(.99)}
+/* One consistent visual language for the layered UI */
+.progression-panel,.missions,.run-stats,.save-stats,.run-intel,.ability-bar,.game-shell,.game-panel,.hud-card,.stat-card{
+  border-color:color-mix(in srgb,var(--vp-line) 82%,transparent);
+}
+.progression-panel,.missions,.run-stats,.save-stats,.run-intel{
+  border-radius:var(--vp-radius);box-shadow:0 10px 28px #0003,inset 0 1px #ffffff06;
+}
+.game-shell,.game-panel{position:relative;isolation:isolate}
+.game-shell:focus-within,.game-shell:has(#game:focus){outline:1px solid #9cff7833;outline-offset:3px}
+#game{display:block;border-radius:8px;box-shadow:0 0 0 1px #9cff7810,0 0 32px #79e35b0a;transition:filter .2s ease,box-shadow .2s ease}
+body.run-active #game{box-shadow:0 0 0 1px #9cff7820,0 0 32px #79e35b12}
+body.run-danger #game{box-shadow:0 0 0 1px #ff64784a,0 0 30px #ff647814}
+body.run-boss #game{box-shadow:0 0 0 1px #ff647855,0 0 38px #ff64781b}
+#bossHud{border-color:#ff6478!important;box-shadow:0 0 24px #ff64781c,inset 0 0 18px #ff64780b}
+#bossHud #bossHp{font-variant-numeric:tabular-nums}
+#bossHud::after{content:"THREAT ACTIVE";display:block;color:#ff9ba7;font:700 9px/1.4 system-ui,sans-serif;letter-spacing:1.2px}
+#eventBanner{backdrop-filter:blur(8px);border-radius:8px}
+#toast{backdrop-filter:blur(8px);border-radius:8px}
+#floaters{pointer-events:none}
+#floaters>*{will-change:transform,opacity}
+body.vp-pickup #game{animation:vpPickupPulse .28s ease-out}
+body.vp-hit #game{animation:vpHit .22s ease-out}
+body.vp-boss-hit #game{animation:vpBossHit .3s ease-out}
+body.vp-game-over .game-shell{border-color:#ff64785c}
+body.vp-game-over #message .message-card{border:1px solid #ff647866;box-shadow:0 0 50px #ff64781c,0 20px 70px #0008}
+#message .message-card{backdrop-filter:blur(14px)}
+#message .message-card h2{letter-spacing:.06em;text-shadow:0 0 24px #ff64782c}
+#runStats{scroll-margin-top:18px}
+#runStats .stats-grid{gap:10px}
+#runStats .stats-grid>div{border-radius:9px;transition:border-color .18s ease,transform .18s ease}
+#runStats .stats-grid>div:hover{border-color:#9cff7860;transform:translateY(-2px)}
+/* Legible mobile HUD: wrap instead of shrinking information into tiny labels */
+@media(max-width:760px){
+  .ability-bar{gap:8px}
+  .ability{min-width:0!important;min-height:58px;padding:10px 8px!important}
+  .ability b{font-size:clamp(10px,2.7vw,13px)!important}
+  .ability span{font-size:clamp(8px,2vw,10px)!important;line-height:1.45!important}
+  .progression-head{gap:10px}
+  .run-intel,.missions,.progression-panel{margin-top:12px}
+  .controls button{min-width:42px;min-height:42px;touch-action:manipulation}
+  #bossHud{max-width:calc(100% - 16px)}
+}
+@media(max-width:420px){
+  .ability-bar{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  .ability{min-height:54px!important}
+  .ability span{white-space:normal!important}
+  .controls button{min-width:46px;min-height:46px}
+  #runStats .stats-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  .progression-head small{line-height:1.6}
+}
+@keyframes vpPickupPulse{0%{filter:brightness(1)}40%{filter:brightness(1.18)}100%{filter:brightness(1)}}
+@keyframes vpHit{0%,100%{transform:translateX(0)}25%{transform:translateX(-2px)}75%{transform:translateX(2px)}}
+@keyframes vpBossHit{0%,100%{filter:brightness(1)}35%{filter:brightness(1.25) saturate(1.25)}}
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.001ms!important}
+}
