@@ -90,7 +90,7 @@
       if (status) { status.textContent = message; status.style.color = isError ? "#ff8b8b" : "#b8ff83"; }
     };
     const setActiveSwatch = color => {
-      $(".snake-swatch", panel).forEach(swatch => {
+      $$(".snake-swatch", panel).forEach(swatch => {
         swatch.setAttribute("aria-pressed", String(swatch.dataset.snakeColor?.toLowerCase() === color.toLowerCase()));
       });
     };
@@ -108,7 +108,7 @@
     };
     const current = readSettings().snakeColor || "#79e35b";
     setDraft(hexPattern.test(current) ? current : "#79e35b", { preview: false });
-    $(".snake-swatch", panel).forEach(swatch => swatch.addEventListener("click", () => setDraft(swatch.dataset.snakeColor || "", { preview: true })));
+    $$(".snake-swatch", panel).forEach(swatch => swatch.addEventListener("click", () => setDraft(swatch.dataset.snakeColor || "", { preview: true })));
     picker.addEventListener("input", () => setDraft(picker.value, { preview: true }));
     input.addEventListener("input", () => {
       const candidate = normalize(input.value);
