@@ -7,7 +7,6 @@
   const ROOT = "#achievementList";
   const GLYPHS = ["✦", "◈", "⬡", "✧", "⌘", "✪", "◎", "⬢", "✹", "◇", "△", "❖"];
   let filterMode = "all";
-  let cardIndex = 0;
 
   function cleanTitle(value) {
     return String(value || "").replace(/^\s*(?:UNLOCKED|LOCKED)\s*\/\/\s*/i, "").trim() || "FIELD ACHIEVEMENT";
@@ -35,7 +34,7 @@
     const description = (detail?.textContent || "Complete the listed gameplay milestone to add this achievement to your record.").trim();
     const unlocked = card.classList.contains("unlocked") || card.classList.contains("is-complete") || /^\s*UNLOCKED\b/i.test(rawHeading);
     const state = unlocked ? "unlocked" : "locked";
-    const index = cardIndex++;
+    const index = [...title].reduce((sum, character) => (sum + character.charCodeAt(0)) % 97, 0);
     card.classList.add("achievement-deck-card");
     card.dataset.deckReady = "true";
     card.dataset.deckState = state;
@@ -63,7 +62,7 @@
     const back = createFace("achievement-face achievement-back", [
       makeNode("span", "achievement-face-label", unlocked ? "ARCHIVE // VERIFIED" : "FIELD NOTES // REQUIREMENT"),
       makeNode("strong", "achievement-back-title", title),
-      makeNode("p", "achievement-back-copy", description),
+      makeNode("span", "achievement-back-copy", description),
       makeNode("span", "achievement-back-status", unlocked
         ? "RECORDED ON THIS DEVICE"
         : "UNLOCK // " + description)
