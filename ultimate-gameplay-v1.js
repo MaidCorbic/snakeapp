@@ -381,7 +381,7 @@
     endlessCycle=0;endlessTotalStart=performance.now();
     if(dailyMode)enableDailyRng();else restoreRng();
     chooseCondition(partyMode);deathCause="NONE";perfectBroken=false;lastPerfectMilestone=0;ghostSaved=false;maxThreat=0;threatBonus=runCondition?.[0]==="DOUBLE DOWN"?10:0;bountyTarget=null;bountyClaimed=false;enemyId=0;arenaBlocks=[];telegraphs=[];riskShrine=null;secretPortal=null;secretUntil=0;layerZone=-1;layerEventClock=0;nextRiskAt=performance.now()+60000;nextSecretAt=performance.now()+90000;
-    loadGhost();contractOfferOpen=true;extractionOpen=false;evolutionCards=[];energyRespawnSerial=0;recentEnergyCells=[];encounters=[];encounterClock=0;encounterSerial=0;encounterBoostUntil=0;baseResetU();funMode=partyMode;activeRunTime=partyMode?FUN_RUN_TIME:RUN_TIME;if(partyMode)lives=4;score=0;combo=1;if(energy){const initial={x:energy.x,y:energy.y};energy=safeEnergyRespawnU(initial)}if(runCondition?.[0]==="ONE CHANCE"&&!funMode)lives=1;
+    loadGhost();contractOfferOpen=true;extractionOpen=false;evolutionCards=[];energyRespawnSerial=0;recentEnergyCells=[];encounters=[];encounterClock=0;encounterSerial=0;encounterBoostUntil=0;baseResetU();contractAccepted=false;contractOfferOpen=true;funMode=partyMode;activeRunTime=partyMode?FUN_RUN_TIME:RUN_TIME;if(partyMode)lives=4;score=0;combo=1;if(energy){const initial={x:energy.x,y:energy.y};energy=safeEnergyRespawnU(initial)}if(runCondition?.[0]==="ONE CHANCE"&&!funMode)lives=1;
     perfectStart=performance.now();generateArena();hud();draw();renderLeaderboard();baseRenderAchievementsU();renderUltimateAchievements();renderEvolutionCardsU()
   }
   function startDaily(){prepareRun("daily")}
@@ -402,6 +402,11 @@
 
   hud=function(){
     baseHudU();maxThreat=Math.max(maxThreat,danger);
+    const contractAcceptButton=document.querySelector("#contractAccept"),contractDeclineButton=document.querySelector("#contractDecline"),contractNameEl=document.querySelector("#contract"),contractLabelEl=document.querySelector("#contractLabel");
+    if(contractAcceptButton)contractAcceptButton.classList.toggle("hidden",!contractOfferOpen);
+    if(contractDeclineButton)contractDeclineButton.classList.toggle("hidden",!contractOfferOpen);
+    if(contractNameEl)contractNameEl.textContent=contractOfferOpen?"OFFER":contractDeclined?"DECLINED":contract?.[0]||"NONE";
+    if(contractLabelEl)contractLabelEl.textContent=contractOfferOpen?"ACCEPT OR DECLINE":contractDone?"COMPLETE":contract?contractValue()+"/"+contract[3]:"NONE";
     const cond=document.querySelector("#condition"),condLabel=document.querySelector("#conditionLabel"),mode=document.querySelector("#runMode"),bounty=document.querySelector("#bounty"),bountyLabel=document.querySelector("#bountyLabel"),perfect=document.querySelector("#perfectLabel"),maxD=document.querySelector("#maxThreat"),perk=document.querySelector("#evoPerk");
     if(cond)cond.textContent=conditionName();if(condLabel)condLabel.textContent=runCondition?.[1]||"STANDARD";if(mode)mode.textContent=endlessMode?"ENDLESS C"+endlessCycle:dailyMode?"DAILY":"STANDARD";
     if(bounty)bounty.textContent=bountyClaimed?"CLEARED":bountyTarget?"TARGET":"SEARCHING";if(bountyLabel)bountyLabel.textContent=bountyTarget&&!bountyClaimed?(bountyTarget.variant||bountyTarget.type||"TARGET").toUpperCase():"READY";

@@ -309,7 +309,7 @@
       }
       const ultimate = document.createElement("script");
       ultimate.id = "snakeUltimateScript";
-      ultimate.src = "ultimate-gameplay-v1.js?v=ultimate-v12";
+      ultimate.src = "ultimate-gameplay-v1.js?v=ultimate-v14";
       ultimate.onload = () => {
         if (bootFailed) return;
         if (typeof window.SnakeEvolution?.start !== "function") {
@@ -339,7 +339,7 @@
               if (bootFailed) return;
               const quality = document.createElement("script");
               quality.id = "snakeQualityGameplayScript";
-              quality.src = "quality-gameplay-v1.js?v=quality-v1";
+              quality.src = "quality-gameplay-v1.js?v=quality-v5";
               quality.onload = () => {
                 if (bootFailed) return;
                 try {

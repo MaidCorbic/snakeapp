@@ -185,6 +185,51 @@
     overlay.querySelector("#seTutorialSkip").addEventListener("click", dismiss);
     overlay.querySelector("#seTutorialStart").focus();
   }
+  function syncContractOffer() {
+    const state = getState();
+    const offered = state.contractOfferOpen === true;
+    const accept = document.querySelector("#contractAccept");
+    const decline = document.querySelector("#contractDecline");
+    const card = decline?.closest(".contract-card");
+    const actions = decline?.closest(".contract-actions");
+    if (card) {
+      if (offered) {
+        // Some HUD resets leave an inline display:none on the card even after
+        // the hidden class is cleared. The offer state owns this card's visibility.
+        card.style.setProperty("display", "flex", "important");
+        card.style.setProperty("flex-direction", "column");
+        card.style.setProperty("visibility", "visible", "important");
+      } else {
+        card.style.removeProperty("display");
+        card.style.removeProperty("flex-direction");
+        card.style.removeProperty("visibility");
+      }
+    }
+    if (actions && offered) actions.style.setProperty("display", "flex", "important");
+    else if (actions) actions.style.removeProperty("display");
+    if (accept) {
+      accept.classList.toggle("hidden", !offered);
+      accept.hidden = !offered;
+      if (offered) accept.style.setProperty("display", "inline-flex", "important");
+      else accept.style.removeProperty("display");
+      accept.setAttribute("aria-hidden", String(!offered));
+      accept.disabled = !offered;
+    }
+    if (decline) {
+      decline.classList.toggle("hidden", !offered);
+      decline.hidden = !offered;
+      if (offered) decline.style.setProperty("display", "inline-flex", "important");
+      else decline.style.removeProperty("display");
+      decline.setAttribute("aria-hidden", String(!offered));
+      decline.disabled = !offered;
+    }
+    const title = document.querySelector("#contract");
+    const label = document.querySelector("#contractLabel");
+    if (offered) {
+      if (title) title.textContent = "OFFER";
+      if (label) label.textContent = "ACCEPT OR DECLINE";
+    }
+  }
   function wrapLaunchMethods() {
     const api = window.SnakeEvolution;
     if (!api || api.__qualityLaunchWrapped) return;
@@ -193,9 +238,14 @@
       if (typeof original !== "function") return;
       api[name] = function qualityLaunch(...args) {
         const result = original.apply(this, args);
+        // Initial contract UI must be synchronized synchronously: consumers and
+        // accessibility checks can inspect it immediately after the launch call.
+        try { syncContractOffer(); } catch {}
         window.setTimeout(() => {
           styleSettingsToBody();
+          syncContractOffer();
           showFirstRunTutorial();
+          syncContractOffer();
           updateThreatPanel();
           polishAchievements(true);
         }, 0);
@@ -219,6 +269,7 @@
     const baseHud = hud;
     const qualityHud = function qualityThreatHud(...args) {
       const result = baseHud.apply(this, args);
+      try { syncContractOffer(); } catch {}
       try { updateThreatPanel(); } catch {}
       return result;
     };
@@ -230,7 +281,7 @@
   trackCompletedRun();
   wrapLaunchMethods();
   polishAchievements(true);
-  window.setInterval(() => { try { polishAchievements(); updateThreatPanel(); } catch {} }, 1000);
+  window.setInterval(() => { try { syncContractOffer(); polishAchievements(); updateThreatPanel(); } catch {} }, 1000);
   document.addEventListener("snake-evolution-settings-changed", styleSettingsToBody);
   window.SnakeQualityGameplay = Object.freeze({version:"1.0.0", refresh:()=>{updateThreatPanel();polishAchievements();}});
 })();

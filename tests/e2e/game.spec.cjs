@@ -150,6 +150,8 @@ test("Party Run keeps its four lives and isolated mode state", async ({ page }) 
   await expect(page.locator(".se-tutorial-overlay")).toBeVisible();
   await page.locator("#seTutorialStart").click();
   await expect(page.locator(".se-tutorial-overlay")).toHaveCount(0);
+  await expect.poll(() => page.evaluate(() => window.SnakeEvolution.getState().contractOfferOpen)).toBe(true);
+  await expect(page.locator("#contractDecline")).toBeVisible();
   await page.locator("#contractDecline").click();
   await expect.poll(() => page.evaluate(() => window.SnakeEvolution.getState().contractOfferOpen)).toBe(false);
   const state = await page.evaluate(() => window.SnakeEvolution.getState());
@@ -285,6 +287,10 @@ test("moving into the departing tail cell is legal when not growing", async ({ p
     core = null;
     shieldUntil = pulseUntil = 0;
     move();
+    // Freeze after this single deterministic tick so the scheduled follow-up
+    // step cannot move past the head position the test is checking.
+    clearTimeout(timer);
+    timer = null;
   });
   await expect.poll(() => page.evaluate(() => window.SnakeEvolution.getState().lives)).toBe(before);
   await expect.poll(() => page.evaluate(() => window.SnakeEvolution.getState().snakeHead)).toEqual({x:9,y:10});
@@ -420,6 +426,8 @@ test("normal launch shows a first-run tutorial and can resume gameplay", async (
   await page.locator("#seTutorialStart").click();
   await expect(page.locator(".se-tutorial-overlay")).toHaveCount(0);
   expect(await page.evaluate(() => localStorage.getItem("snake-evolution-tutorial-seen-v1"))).toBe("true");
+  await expect.poll(() => page.evaluate(() => window.SnakeEvolution.getState().contractOfferOpen)).toBe(true);
+  await expect(page.locator("#contractDecline")).toBeVisible();
   await page.locator("#contractDecline").click();
   await expect.poll(() => page.evaluate(() => window.SnakeEvolution.getState().contractOfferOpen)).toBe(false);
   await expect(page.locator("#pauseBtn")).toBeEnabled();
