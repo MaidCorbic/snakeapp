@@ -144,7 +144,7 @@
   outline-offset: 2px;
 }
 /* Threat Scan: refined field-intel strip injected by the gameplay quality layer. */
-#seThreatStatus {
+body #seThreatStatus {
   display: grid !important;
   grid-template-columns: minmax(150px, 1.15fr) repeat(3, minmax(0, 1fr)) !important;
   align-items: stretch !important;
@@ -160,7 +160,7 @@
   color: var(--hud2-muted);
   font: 500 12px/1.4 system-ui, -apple-system, "Segoe UI", sans-serif !important;
 }
-#seThreatStatus .se-threat-brand {
+body #seThreatStatus .se-threat-brand {
   display: flex;
   align-items: center;
   gap: 10px;
@@ -170,7 +170,7 @@
   border-radius: 9px;
   background: #09110c;
 }
-#seThreatStatus .se-threat-radar {
+body #seThreatStatus .se-threat-radar {
   display: grid;
   place-items: center;
   flex: 0 0 32px;
@@ -183,23 +183,23 @@
   font: 800 20px/1 system-ui, sans-serif;
   text-shadow: 0 0 12px #a3ff7c55;
 }
-#seThreatStatus .se-threat-title {
+body #seThreatStatus .se-threat-title {
   display: grid;
   gap: 4px;
   min-width: 0;
 }
-#seThreatStatus .se-threat-heading {
+body #seThreatStatus .se-threat-heading {
   color: #e1f5e3 !important;
   font: 800 10px/1.35 system-ui, -apple-system, "Segoe UI", sans-serif !important;
   letter-spacing: 1.5px !important;
   white-space: normal !important;
 }
-#seThreatStatus .se-threat-brand small {
+body #seThreatStatus .se-threat-brand small {
   color: #6f9278;
   font: 700 9px/1.3 system-ui, sans-serif;
   letter-spacing: .8px;
 }
-#seThreatStatus .se-threat-stat {
+body #seThreatStatus .se-threat-stat {
   display: grid !important;
   grid-template-columns: minmax(0, 1fr) auto;
   align-content: center;
@@ -212,34 +212,34 @@
   border-radius: 9px;
   background: linear-gradient(145deg, #101b13, #0a110c);
 }
-#seThreatStatus .se-threat-stat > span {
+body #seThreatStatus .se-threat-stat > span {
   min-width: 0;
   color: #96b09c;
   font: 800 9px/1.3 system-ui, sans-serif;
   letter-spacing: 1.2px;
 }
-#seThreatStatus .se-threat-stat > strong {
+body #seThreatStatus .se-threat-stat > strong {
   color: #e8f6e9;
   font: 800 20px/1 system-ui, sans-serif;
   font-variant-numeric: tabular-nums;
 }
-#seThreatStatus .se-threat-stat > small {
+body #seThreatStatus .se-threat-stat > small {
   grid-column: 1 / -1;
   color: #637e69;
   font: 600 9px/1.3 system-ui, sans-serif;
   letter-spacing: .4px;
 }
-#seThreatStatus .se-threat-hunters { border-left-color: #82e2ff !important; }
-#seThreatStatus .se-threat-hunters strong { color: #82e2ff; }
-#seThreatStatus .se-threat-hazards { border-left-color: #ff7083 !important; }
-#seThreatStatus .se-threat-hazards strong { color: #ff8795; }
-#seThreatStatus .se-threat-boss { border-left-color: #ffc977 !important; }
-#seThreatStatus .se-threat-boss strong { color: #ffc977; font-size: 13px; }
-#seThreatStatus.is-critical {
+body #seThreatStatus .se-threat-hunters { border-left-color: #82e2ff !important; }
+body #seThreatStatus .se-threat-hunters strong { color: #82e2ff; }
+body #seThreatStatus .se-threat-hazards { border-left-color: #ff7083 !important; }
+body #seThreatStatus .se-threat-hazards strong { color: #ff8795; }
+body #seThreatStatus .se-threat-boss { border-left-color: #ffc977 !important; }
+body #seThreatStatus .se-threat-boss strong { color: #ffc977; font-size: 13px; }
+body #seThreatStatus.is-critical {
   border-color: #7e4a4d !important;
   box-shadow: inset 0 0 24px #ff70830a, 0 0 24px #ff70830c !important;
 }
-#seThreatStatus.is-critical .se-threat-radar { border-color: #9e515a; color: #ff8996; animation: hud2RadarPulse 1.5s ease-in-out infinite; }
+body #seThreatStatus.is-critical .se-threat-radar { border-color: #9e515a; color: #ff8996; animation: hud2RadarPulse 1.5s ease-in-out infinite; }
 body.se-hide-threat-radar #seThreatStatus { display: none !important; }
 /* Snake Build: readable XP pipeline + tactile upgrade cards. */
 #progression {
@@ -730,15 +730,15 @@ body.se-hide-threat-radar #seThreatStatus { display: none !important; }
   .run-intel-v3 .intel-top > span { font-size: 9px !important; }
   .run-intel-v3 .intel-top > strong { font-size: 14px !important; }
   .run-intel-v3 .intel-explainer { font-size: 11px; }
-  #seThreatStatus {
+  body #seThreatStatus {
     grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
     gap: 7px !important;
     padding: 8px !important;
   }
-  #seThreatStatus .se-threat-brand { grid-column: 1 / -1; min-height: 48px; }
-  #seThreatStatus .se-threat-stat { padding: 8px !important; }
-  #seThreatStatus .se-threat-stat > span { font-size: 8px; letter-spacing: .7px; }
-  #seThreatStatus .se-threat-stat > strong { font-size: 18px; }
+  body #seThreatStatus .se-threat-brand { grid-column: 1 / -1; min-height: 48px; }
+  body #seThreatStatus .se-threat-stat { padding: 8px !important; }
+  body #seThreatStatus .se-threat-stat > span { font-size: 8px; letter-spacing: .7px; }
+  body #seThreatStatus .se-threat-stat > strong { font-size: 18px; }
   #progression .progression-body, #achievements .progression-body { padding: 10px !important; }
 }
 @media(max-width: 600px) {
@@ -764,14 +764,14 @@ body.se-hide-threat-radar #seThreatStatus { display: none !important; }
   #achievements #achievementList .se-bonus-achievements { grid-template-columns: 1fr !important; }
   #achievementList .achievement-deck-toolbar { padding: 10px; }
   #achievementList .achievement-filter { flex: 1 1 80px; }
-  #seThreatStatus { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; }
-  #seThreatStatus .se-threat-brand { gap: 8px; }
+  body #seThreatStatus { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; }
+  body #seThreatStatus .se-threat-brand { gap: 8px; }
   .run-intel-v3 .intel-card { padding: 10px !important; }
 }
 @media(prefers-reduced-motion: reduce) {
   #achievementList .achievement-card-inner { transition: none !important; }
   #progression .evolution-build::after,
-  #seThreatStatus.is-critical .se-threat-radar,
+  body #seThreatStatus.is-critical .se-threat-radar,
   .run-intel-v3 .danger-card.critical { animation: none !important; }
   .run-intel-v3 .intel-track i, #upgradeList .upgrade-item, #cardCollection .evolution-card { transition: none !important; }
 }
