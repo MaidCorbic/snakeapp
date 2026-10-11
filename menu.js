@@ -28,6 +28,8 @@
   const touchToggle = document.querySelector("#bootTouch");
   const autoPauseToggle = document.querySelector("#bootAutoPause");
   const fxToggle = document.querySelector("#bootFx");
+  const radarToggle = document.querySelector("#bootRadar");
+  const enemyDetailsToggle = document.querySelector("#bootEnemyDetails");
   const volumeSlider = document.querySelector("#bootVolume");
   const volumeValue = document.querySelector("#bootVolumeValue");
   const fullscreenBtn = document.querySelector("#bootFullscreen");
@@ -59,6 +61,9 @@
     showAbilities:true,
     touchControls:true,
     autoPause:true,
+    threatRadar:true,
+    enemyDetails:true,
+    snakeColor:"#79e35b",
     combatFx:true,
     sound:true,
     music:true,
@@ -107,7 +112,7 @@
   };
 
   const renderSettings = () => {
-    [[gridToggle,"grid"],[vibrationToggle,"vibration"],[motionToggle,"reducedMotion"],[crtToggle,"crt"],[contrastToggle,"highContrast"],[timerToggle,"showTimer"],[homeClockToggle,"homeClock"],[xpToggle,"showXp"],[intelToggle,"showIntel"],[missionsToggle,"showMissions"],[abilitiesToggle,"showAbilities"],[touchToggle,"touchControls"],[autoPauseToggle,"autoPause"],[fxToggle,"combatFx"],[soundToggle,"sound"],[musicToggle,"music"]].forEach(([button,key]) => {
+    [[gridToggle,"grid"],[vibrationToggle,"vibration"],[motionToggle,"reducedMotion"],[crtToggle,"crt"],[contrastToggle,"highContrast"],[timerToggle,"showTimer"],[homeClockToggle,"homeClock"],[xpToggle,"showXp"],[intelToggle,"showIntel"],[missionsToggle,"showMissions"],[abilitiesToggle,"showAbilities"],[touchToggle,"touchControls"],[autoPauseToggle,"autoPause"],[radarToggle,"threatRadar"],[enemyDetailsToggle,"enemyDetails"],[fxToggle,"combatFx"],[soundToggle,"sound"],[musicToggle,"music"]].forEach(([button,key]) => {
       if (!button) return;
       button.textContent = settings[key] ? "ON" : "OFF";
       button.setAttribute("aria-pressed", String(!!settings[key]));
@@ -129,9 +134,10 @@
 
   // NEON DRIVE // softer 16-bit synthwave loop, 112 BPM, designed for menu + run.
   const getMusicVolume = () => Math.max(0,Math.min(1,(Number(settings.volume ?? 65)/100)*0.075));
-  const leadNotes = [440,523.25,587.33,659.25,587.33,523.25,493.88,440,392,493.88,523.25,587.33,659.25,587.33,523.25,493.88];
-  const bassNotes = [110,110,146.83,146.83,98,98,130.81,130.81];
-  const chordSets = [[220,261.63,329.63],[196,246.94,293.66],[174.61,220,261.63],[196,246.94,329.63]];
+  // Slower layered synthwave loop: minor-key pads, arpeggiated lead, warm bass and restrained percussion.
+  const leadNotes = [659.25,0,523.25,659.25,783.99,659.25,523.25,392,523.25,0,659.25,523.25,440,493.88,392,440];
+  const bassNotes = [82.41,82.41,110,110,73.42,73.42,98,98];
+  const chordSets = [[164.81,196,246.94,293.66],[146.83,174.61,220,261.63],[130.81,155.56,196,233.08],[146.83,174.61,220,261.63]];
   let musicStarting=false;
 
   const playMusicTone = (frequency,duration=.2,type="triangle",level=.38) => {
@@ -168,19 +174,21 @@
     musicStep=0;
     const tick=()=>{
       if(!musicContext || !settings.music || settings.volume<=0){musicTimer=null;return}
-      const beat=musicStep%16;
-      const note=leadNotes[beat];
-      playMusicTone(note,.17,"triangle",.42);
-      if(beat%2===0) playMusicTone(bassNotes[Math.floor(beat/2)%bassNotes.length],.3,"sawtooth",.16);
-      if(beat%4===0){
-        const chord=chordSets[Math.floor(beat/4)%chordSets.length];
-        chord.forEach((f,i)=>playMusicTone(f,.42,"sine",i===1?.06:.045));
+      const beat=musicStep%32;
+      const step=beat%16;
+      const note=leadNotes[step];
+      if(note>0 && beat%2===0) playMusicTone(note,.24,"triangle",.32);
+      if(beat%4===0) playMusicTone(bassNotes[Math.floor(beat/4)%bassNotes.length],.34,"sine",.22);
+      if(beat%8===0){
+        const chord=chordSets[Math.floor(beat/8)%chordSets.length];
+        chord.forEach((f,i)=>playMusicTone(f,.72,"sine",i===0?.045:i===2?.035:.025));
         playMusicKick();
-      } else if(beat%2===1) {
-        playMusicTone(note*2,.055,"square",.035);
+      } else if(beat%4===2) {
+        playMusicTone(1760,.045,"sine",.018);
       }
+      if(note>0 && beat%4===2) playMusicTone(note*2,.075,"triangle",.07);
       musicStep++;
-      musicTimer=setTimeout(tick,134);
+      musicTimer=setTimeout(tick,168);
     };
     tick();
   };
@@ -215,6 +223,13 @@
     document.dispatchEvent(new CustomEvent("snake-evolution-settings-changed",{detail:{...settings}}));
     if (settings.music && settings.volume > 0) startMusic(); else stopMusic();
   };
+  document.addEventListener("snake-evolution-external-settings-changed", event => {
+    if (!event.detail || typeof event.detail !== "object") return;
+    settings = {...settings, ...event.detail};
+    try { localStorage.setItem(settingsKey, JSON.stringify(settings)); } catch {}
+    renderSettings();
+    document.dispatchEvent(new CustomEvent("snake-evolution-settings-changed", {detail:{...settings}}));
+  });
 
   const showBootMenu = () => {
     app?.classList.add("preboot");
@@ -236,10 +251,12 @@
   };
 
   const startLoadedMode = (mode) => {
-    if (mode === "daily") window.SnakeEvolution?.startDaily?.();
-    else if (mode === "endless") window.SnakeEvolution?.startEndless?.();
-    else if (mode === "party") window.SnakeEvolution?.startParty?.();
-    else { try { localStorage.setItem("snake-evolution-mode","standard"); } catch {} window.SnakeEvolution?.start?.(); }
+    const method = mode === "daily" ? "startDaily" : mode === "endless" ? "startEndless" : mode === "party" ? "startParty" : "start";
+    if (mode === "party") { try { localStorage.setItem("snake-evolution-mode","party"); } catch {} }
+    else { try { localStorage.setItem("snake-evolution-mode","standard"); } catch {} }
+    const api = window.SnakeEvolution;
+    if (!api || typeof api[method] !== "function") throw new Error("GAME MODE API NOT READY: " + method);
+    return api[method]();
   };
 
   const loadGame = (mode="normal") => {
@@ -320,15 +337,26 @@
             rework.src = "snake-rework-v2.js?v=rework-v5";
             rework.onload = () => {
               if (bootFailed) return;
-              try {
-                startLoadedMode(mode);
+              const quality = document.createElement("script");
+              quality.id = "snakeQualityGameplayScript";
+              quality.src = "quality-gameplay-v1.js?v=quality-v1";
+              quality.onload = () => {
+                if (bootFailed) return;
+                try {
+                  startLoadedMode(mode);
+                  cleanupBootListeners();
+                  gameLoading = false;
+                  gameLoaded = true;
+                } catch (error) {
+                  cleanupBootListeners();
+                  failLoad("GAME BOOT ERROR: GAME START FAILED — " + (error?.message || "unknown start error"));
+                }
+              };
+              quality.onerror = () => {
                 cleanupBootListeners();
-                gameLoading = false;
-                gameLoaded = true;
-              } catch (error) {
-                cleanupBootListeners();
-                failLoad("GAME BOOT ERROR: GAME START FAILED — " + (error?.message || "unknown start error"));
-              }
+                failLoad("GAMEPLAY QUALITY LAYER COULD NOT LOAD");
+              };
+              document.body.appendChild(quality);
             };
             rework.onerror = () => {
               cleanupBootListeners();
@@ -410,6 +438,8 @@
     bootAbilities: "menu-tap-toggle",
     bootTouch: "menu-tap-toggle",
     bootAutoPause: "menu-tap-toggle",
+    bootRadar: "menu-tap-toggle",
+    bootEnemyDetails: "menu-tap-toggle",
     bootFx: "menu-tap-toggle",
     bootSound: "menu-tap-toggle",
     bootMusic: "menu-tap-toggle"
@@ -447,6 +477,8 @@
   abilitiesToggle?.addEventListener("click", () => { settings.showAbilities=!settings.showAbilities; saveSettings(); });
   touchToggle?.addEventListener("click", () => { settings.touchControls=!settings.touchControls; saveSettings(); });
   autoPauseToggle?.addEventListener("click", () => { settings.autoPause=!settings.autoPause; saveSettings(); });
+  radarToggle?.addEventListener("click", () => { settings.threatRadar=!settings.threatRadar; saveSettings(); });
+  enemyDetailsToggle?.addEventListener("click", () => { settings.enemyDetails=!settings.enemyDetails; saveSettings(); });
   fxToggle?.addEventListener("click", () => { settings.combatFx=!settings.combatFx; saveSettings(); });
   volumeSlider?.addEventListener("input", () => {
     settings.volume=Number(volumeSlider.value)||0;
