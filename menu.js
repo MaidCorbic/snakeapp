@@ -130,6 +130,8 @@
     }
     if (settingsState) settingsState.textContent = "LOCAL // SAVED";
     applyVisualSettings();
+    const savedColor = /^#[0-9a-f]{6}$/i.test(String(settings.snakeColor || "")) ? settings.snakeColor : "#79e35b";
+    document.documentElement.style.setProperty("--snake-color", savedColor);
   };
 
   // NEON DRIVE // softer 16-bit synthwave loop, 112 BPM, designed for menu + run.
