@@ -10,7 +10,7 @@ test.beforeEach(async ({ page }) => {
     const source = await response.text();
     await route.fulfill({
       response,
-      body: source + "\nwindow.__snakeE2E = { startGameplay: () => { contractOfferOpen = false; contractAccepted = true; move(); }, endRun: () => end(), winRun: () => win(), freeCell: () => free(), setDirection: (x,y) => setDir(x,y), getPendingDirection: () => ({...next}), seedTransientRunState: () => { chain = 4; chainUntil = performance.now() + 10000; chainBest = 9; salvageChain = 5; salvageUntil = performance.now() + 10000; advancedZoneEvent = { type: 'HAZARD_STORM', until: performance.now() + 10000 }; extractionNextAt = 60000; extractionHeatUntil = performance.now() + 10000; advancedExitMode = 'EXTRACTING'; contractDeclined = true; }, getTransientRunState: () => ({ chain, chainUntil, chainBest, salvageChain, salvageUntil, zoneEvent: advancedZoneEvent?.type || null, extractionNextAt, extractionHeatUntil, advancedExitMode, contractDeclined }), forceSelfCollisionWithShield: () => { snake = [{x:10,y:10},{x:11,y:10},{x:11,y:9}]; dir = next = {x:1,y:0}; shieldUntil = performance.now() + 5000; pulseUntil = 0; lives = 3; stats.damage = 0; alive = true; paused = false; move(); }, setEdgeWarningScenario: (x,y,dx,dy) => { clearTimeout(timer); timer = null; snake = [{x,y},{x:x-dx,y:y-dy},{x:x-2*dx,y:y-2*dy}]; dir = next = {x:dx,y:dy}; alive = true; paused = false; draw(); } };\n"
+      body: source + "\nwindow.__snakeE2E = { startGameplay: () => { contractOfferOpen = false; contractAccepted = true; move(); }, endRun: () => end(), winRun: () => win(), freeCell: () => free(), setDirection: (x,y) => setDir(x,y), getPendingDirection: () => ({...next}), seedTransientRunState: () => { chain = 4; chainUntil = performance.now() + 10000; chainBest = 9; salvageChain = 5; salvageUntil = performance.now() + 10000; advancedZoneEvent = { type: 'HAZARD_STORM', until: performance.now() + 10000 }; extractionNextAt = 60000; extractionHeatUntil = performance.now() + 10000; advancedExitMode = 'EXTRACTING'; contractDeclined = true; }, getTransientRunState: () => ({ chain, chainUntil, chainBest, salvageChain, salvageUntil, zoneEvent: advancedZoneEvent?.type || null, extractionNextAt, extractionHeatUntil, advancedExitMode, contractDeclined }), forceSelfCollisionWithShield: () => { snake = [{x:10,y:10},{x:11,y:10},{x:11,y:9}]; dir = next = {x:1,y:0}; shieldUntil = performance.now() + 5000; pulseUntil = 0; lives = 3; stats.damage = 0; alive = true; paused = false; move(); }, setEdgeWarningScenario: (x,y,dx,dy) => { clearTimeout(timer); timer = null; snake = [{x,y},{x:x-dx,y:y-dy},{x:x-2*dx,y:y-2*dy}]; dir = next = {x:dx,y:dy}; alive = true; paused = false; draw(); }, setCollisionRecoveryScenario: () => { clearTimeout(timer); timer = null; snake = [{x:10,y:10},{x:9,y:10},{x:8,y:10}]; dir = next = {x:1,y:0}; hazards = [{x:11,y:10}]; hunters = []; powerups = []; boss = null; supplyDrop = null; energy = {x:24,y:15}; core = null; shieldUntil = pulseUntil = 0; lives = 3; stats.damage = 0; alive = true; paused = false; move(); }, getCollisionRecoveryState: () => ({ head: { ...snake[0] }, segments: snake.map(point => ({ ...point })), lives, alive, shielded: performance.now() < shieldUntil, damage: stats.damage, overlaps: snake.some(segment => hazards.some(item => same(segment,item)) || hunters.some(item => same(segment,item)) || powerups.some(item => same(segment,item)) || (boss && same(segment,boss)) || (energy && same(segment,energy)) || (core && same(segment,core)) || (supplyDrop && same(segment,supplyDrop))) }) };\n"
     });
   });
 });
@@ -368,6 +368,20 @@ test("food respawns at a randomized free cell and never overlaps the snake", asy
   expect(initial).toBeTruthy();
   const position = await page.evaluate(() => window.SnakeEvolution.getState().energyPosition);
   expect(position).toEqual(expect.objectContaining({ x: expect.any(Number), y: expect.any(Number) }));
+});
+
+test("collision recovery respawns in a safe lane and keeps the run active", async ({ page }) => {
+  await startGame(page);
+  await page.evaluate(() => window.__snakeE2E.setCollisionRecoveryScenario());
+  const state = await page.evaluate(() => window.__snakeE2E.getCollisionRecoveryState());
+  expect(state.lives).toBe(2);
+  expect(state.alive).toBe(true);
+  expect(state.shielded).toBe(true);
+  expect(state.damage).toBe(1);
+  expect(state.overlaps).toBe(false);
+  expect(state.segments).toHaveLength(3);
+  expect(state.head.x).toBeGreaterThanOrEqual(2);
+  expect(state.segments.every(segment => segment.y === state.head.y)).toBe(true);
 });
 
 test("shield cannot suppress self-collision", async ({ page }) => {
