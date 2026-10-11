@@ -194,6 +194,9 @@ check("gameplay balance tuning limits arena pressure",
 check("HEX color picker supports validation, live preview, and explicit save", html.includes('id="snakeHexInput"') && html.includes('id="snakeColorSave"') && ultimateUiJs.includes('snake-evolution-color-preview') && ultimateUiJs.includes('SAVE blocked') && game.includes('function getSnakeColor()'));
 check("Options readability rules remove tiny helper paragraphs and scale labels", ultimateUiCss.includes('option-row > div:first-child small') && ultimateUiCss.includes('font-size:clamp(12px,1vw,14px)'));
 check("browser regression covers custom HEX preview and persistence", read("tests/e2e/game.spec.cjs").includes("custom HEX snake color previews live") && read("tests/e2e/game.spec.cjs").includes("saved snake color is restored"));
+check("HEX color picker supports validation, live preview, and explicit save", html.includes('id="snakeHexInput"') && html.includes('id="snakeColorSave"') && ultimateUiJs.includes('snake-evolution-color-preview') && ultimateUiJs.includes('SAVE blocked') && game.includes('function getSnakeColor()'));
+check("Options readability rules remove tiny helper paragraphs and scale labels", ultimateUiCss.includes('option-row > div:first-child small') && ultimateUiCss.includes('font-size:clamp(12px,1vw,14px)'));
+check("browser regression covers custom HEX preview and persistence", read("tests/e2e/game.spec.cjs").includes("custom HEX snake color previews live") && read("tests/e2e/game.spec.cjs").includes("saved snake color is restored"));
 check("gameplay visibility settings are applied to live UI",
   /function\s+applyGameplaySettings\s*\(/.test(game) &&
   /showTimer/.test(game) &&
