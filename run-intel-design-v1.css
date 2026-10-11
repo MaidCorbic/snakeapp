@@ -849,3 +849,41 @@ body #achievements .achievement-deck-card.is-flipped .achievement-card-inner{
   .run-status-v3 .mutation-module>strong,
   .run-status-v3 .condition-module>strong{font-size:9px!important;line-height:1.5!important}
 }
+
+
+/* Final cascade guard: keep the Control Deck selectors above later menu styles. */
+#bootOptionsPanel .option-toggle{
+  display:inline-flex!important;align-items:center!important;justify-content:center!important;
+  min-width:76px!important;min-height:36px!important;padding:7px 11px!important;
+  border:1px solid #3a4d40!important;border-radius:4px!important;
+  background:linear-gradient(180deg,#111913,#080d0a)!important;color:#84988a!important;
+  font:8px/1.4 "Press Start 2P",monospace!important;letter-spacing:.5px!important;
+  box-shadow:inset 0 1px #ffffff07,0 3px 0 #020503!important;
+  transition:background .15s ease,border-color .15s ease,color .15s ease,box-shadow .15s ease,transform .12s ease!important;
+}
+#bootOptionsPanel .option-toggle:before{
+  content:"";width:6px;height:6px;flex:0 0 6px;margin-right:8px;border-radius:50%;
+  background:#526258;box-shadow:0 0 0 2px #52625820;
+}
+#bootOptionsPanel .option-toggle[aria-pressed="true"]{
+  border-color:#6aa779!important;background:linear-gradient(180deg,#183121,#0b1b11)!important;
+  color:#baffad!important;box-shadow:inset 0 1px #ffffff0d,0 3px 0 #203d27,0 0 15px #8dffad0b!important;
+}
+#bootOptionsPanel .option-toggle[aria-pressed="true"]:before{background:#8dffad;box-shadow:0 0 9px #8dffad,0 0 0 3px #8dffad1b}
+#bootOptionsPanel .option-toggle[aria-pressed="false"]{
+  border-color:#354139!important;background:linear-gradient(180deg,#101511,#080b09)!important;
+  color:#9aa99e!important;box-shadow:inset 0 1px #ffffff05,0 3px 0 #020503!important;
+}
+#bootOptionsPanel .option-toggle[aria-pressed="false"]:before{background:#58665c;box-shadow:0 0 0 3px #58665c1a}
+#bootOptionsPanel .option-toggle:hover{transform:translateY(-1px);border-color:#91bd99!important;filter:brightness(1.08)}
+#bootOptionsPanel .option-toggle:active{transform:translateY(2px);box-shadow:inset 0 1px #ffffff05,0 1px 0 #020503!important}
+#bootOptionsPanel .option-toggle:focus-visible{outline:2px solid #c6ffb9!important;outline-offset:3px!important}
+#bootOptionsPanel .snake-color-swatches .snake-swatch[aria-pressed="true"]{
+  border-color:#d6ffd0!important;box-shadow:0 0 0 2px #8dffad33,0 0 14px var(--swatch),0 3px 0 #020503!important;
+}
+#bootOptionsPanel .snake-color-swatches .snake-swatch[aria-pressed="true"]:after{
+  content:"✓";position:absolute;inset:0;display:grid;place-items:center;
+  color:#fff;font:900 14px/1 system-ui,sans-serif;text-shadow:0 1px 4px #000;
+}
+@media(max-width:620px){#bootOptionsPanel .option-toggle{min-width:68px!important;min-height:38px!important;font-size:7px!important}}
+@media(prefers-reduced-motion:reduce){#bootOptionsPanel .option-toggle{transition:none!important}#bootOptionsPanel .option-toggle:hover{transform:none!important}}
