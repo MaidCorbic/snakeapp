@@ -4246,3 +4246,12 @@ body.no-combat-fx .legend span:before{box-shadow:none}
 .pause-overlay>div,.pause-overlay button{pointer-events:auto!important}
 #message.message{z-index:30!important;pointer-events:auto!important}
 #message .message-card,#message .message-card button{pointer-events:auto!important}
+
+/* Fix animated panel overflowing its game-shell viewport during pointer clicks. */
+.game-shell{position:relative;isolation:isolate}
+.game-shell:before,.game-shell:after{pointer-events:none;z-index:0!important}
+.pause-overlay{position:absolute!important;inset:0!important;z-index:40!important;display:grid!important;place-items:center!important;overflow:auto!important}
+.pause-overlay>div{max-height:calc(100% - 24px);overflow:auto;transform:none!important;animation:none!important}
+.pause-overlay button{transform:none!important;animation:none!important}
+#message.message{position:absolute!important;inset:0!important;z-index:50!important;overflow:auto!important}
+#message .message-card{max-height:calc(100% - 16px);overflow:auto}
