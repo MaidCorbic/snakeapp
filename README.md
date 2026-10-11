@@ -21,3 +21,10 @@ The additive redesign introduces a clearer landing-page hierarchy, a Player Cent
 - `npm run test:e2e` — run browser E2E tests (Playwright required)
 
 The game is a static HTML/CSS/JavaScript application. Player records are stored locally in the current browser and are not synced to a server.
+
+
+## Options and color customization
+
+Options use a larger, cleaner text scale and hide redundant helper paragraphs. Snake Color supports preset swatches, a native color picker, and any valid `#RRGGBB` HEX value. The color previews in the arena immediately; SAVE validates and persists the chosen color to local browser storage for later runs.
+
+Run the regression and browser suites with `node scripts/validate-game.cjs`, `node scripts/stability-regression.cjs`, and `npm run test:e2e`.
