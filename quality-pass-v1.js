@@ -82,6 +82,7 @@
       const headingText = group.querySelector(".option-group-title")?.textContent || "";
       if (/PROFILE & UTILITIES|GAME CUSTOMIZATION/.test(headingText) && !group.querySelector(".option-row")) group.remove();
     });
+    ensureColorControls();
     setupSnakeColorControls(ensureColorControls());
   }
 
