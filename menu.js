@@ -332,7 +332,7 @@
       }
       const ultimate = document.createElement("script");
       ultimate.id = "snakeUltimateScript";
-      ultimate.src = "ultimate-gameplay-v1.js?v=ultimate-v15";
+      ultimate.src = "ultimate-gameplay-v1.js?v=ultimate-v16";
       ultimate.onload = () => {
         if (bootFailed) return;
         if (typeof window.SnakeEvolution?.start !== "function") {
