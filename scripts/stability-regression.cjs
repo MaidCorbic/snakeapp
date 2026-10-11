@@ -108,3 +108,19 @@ assert.match(html, /meta-progression-v1\.js/);
 pass("loader includes required gameplay layers and guards duplicate/failed boot");
 
 process.stdout.write("\nStability regression checks passed.\n");
+
+
+// Menu/presentation regression guards: keep the actual game handlers authoritative.
+const arcadeMenuCss = fs.readFileSync(path.join(root, "arcade-menu-v2.css"), "utf8");
+const arcadeMenuJs = fs.readFileSync(path.join(root, "arcade-menu-v2.js"), "utf8");
+assert.match(html, /arcade-menu-v2\.css\?v=arcade-menu-v2/);
+assert.match(html, /arcade-menu-v2\.js\?v=arcade-menu-v2/);
+assert.match(menu, /let leadNotes = \[587\.33,698\.46,880/);
+assert.match(menu, /setTimeout\(tick,142\)/);
+assert.match(arcadeMenuCss, /#bootOptionsPanel \.option-row>div:first-child small \{ display:none !important; \}/);
+assert.match(arcadeMenuCss, /#bootMenu \.boot-title/);
+assert.match(arcadeMenuCss, /#bootHowPanel \.boot-panel-heading b/);
+assert.match(arcadeMenuJs, /startThroughExistingHandler\("bootStart", "normal"\)/);
+assert.match(arcadeMenuJs, /startThroughExistingHandler\("bootFun", "party"\)/);
+assert.match(arcadeMenuJs, /pixel-pulse/);
+pass("arcade menu presentation, revised soundtrack and launch routing stay wired");

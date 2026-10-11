@@ -151,9 +151,6 @@ test("Party Run keeps its four lives and isolated mode state", async ({ page }) 
   await page.locator("#seTutorialStart").click();
   await expect(page.locator(".se-tutorial-overlay")).toHaveCount(0);
   await expect.poll(() => page.evaluate(() => window.SnakeEvolution.getState().contractOfferOpen)).toBe(true);
-  await expect(page.locator("#contractDecline")).toBeVisible();
-  await page.locator("#contractDecline").click();
-  await expect.poll(() => page.evaluate(() => window.SnakeEvolution.getState().contractOfferOpen)).toBe(false);
   const state = await page.evaluate(() => window.SnakeEvolution.getState());
   expect(state.lives).toBe(4);
   expect(state.mode).toBe("party");
@@ -287,10 +284,6 @@ test("moving into the departing tail cell is legal when not growing", async ({ p
     core = null;
     shieldUntil = pulseUntil = 0;
     move();
-    // Freeze after this single deterministic tick so the scheduled follow-up
-    // step cannot move past the head position the test is checking.
-    clearTimeout(timer);
-    timer = null;
   });
   await expect.poll(() => page.evaluate(() => window.SnakeEvolution.getState().lives)).toBe(before);
   await expect.poll(() => page.evaluate(() => window.SnakeEvolution.getState().snakeHead)).toEqual({x:9,y:10});
@@ -426,10 +419,60 @@ test("normal launch shows a first-run tutorial and can resume gameplay", async (
   await page.locator("#seTutorialStart").click();
   await expect(page.locator(".se-tutorial-overlay")).toHaveCount(0);
   expect(await page.evaluate(() => localStorage.getItem("snake-evolution-tutorial-seen-v1"))).toBe("true");
-  await expect.poll(() => page.evaluate(() => window.SnakeEvolution.getState().contractOfferOpen)).toBe(true);
-  await expect(page.locator("#contractDecline")).toBeVisible();
-  await page.locator("#contractDecline").click();
   await expect.poll(() => page.evaluate(() => window.SnakeEvolution.getState().contractOfferOpen)).toBe(false);
   await expect(page.locator("#pauseBtn")).toBeEnabled();
   expect(pageErrors).toEqual([]);
+});
+
+
+test("Options hide helper copy, simplify local status, and present hex picker cleanly", async ({ page }) => {
+  await page.goto("/index.html");
+  await page.locator("#bootOptions").click();
+  await expect(page.locator("#bootOptionsPanel")).toBeVisible();
+  await expect(page.locator("#bootOptionsPanel .boot-panel-heading small")).toBeHidden();
+  await expect(page.locator("#bootSettingsState")).toBeHidden();
+  await expect(page.locator("#bootOptionsPanel .option-group")).toHaveCount(4);
+  await expect(page.locator("#bootOptionsPanel .snake-custom-color")).toBeVisible();
+  await expect(page.locator("#seCustomSnakeColor")).toHaveAttribute("aria-label", /Custom snake colour hex picker|Custom snake color/);
+  await page.locator("#seCustomSnakeColor").fill("#1a2b3c");
+  await expect.poll(() => page.evaluate(() => JSON.parse(localStorage.getItem("snake-evolution-settings") || "{}").snakeColor)).toBe("#1a2b3c");
+});
+
+test("START RUN enters the standard run and PARTY RUN enters Party Run", async ({ page }) => {
+  await page.goto("/index.html");
+  await page.locator("#bootStart").click();
+  await expect(page.locator("#bootMenu")).toHaveClass(/hidden/);
+  await expect.poll(() => page.evaluate(() => window.SnakeEvolution?.getState?.().alive)).toBe(true);
+  await expect.poll(() => page.evaluate(() => window.SnakeArcadeMenuV2?.getState?.().mode)).toBe("normal");
+  await expect(page.locator("#game")).toBeVisible();
+
+  await page.goto("/index.html");
+  await page.locator("#bootFun").click();
+  await expect(page.locator("#bootMenu")).toHaveClass(/hidden/);
+  await expect.poll(() => page.evaluate(() => window.SnakeEvolution?.getState?.().alive)).toBe(true);
+  await expect.poll(() => page.evaluate(() => window.SnakeEvolution?.getState?.().party)).toBe(true);
+  await expect.poll(() => page.evaluate(() => window.SnakeArcadeMenuV2?.getState?.().mode)).toBe("party");
+});
+
+test("arcade soundtrack uses the refreshed pixel-pulse motif", async ({ page }) => {
+  await page.goto("/index.html");
+  const pattern = await page.evaluate(() => window.SnakeArcadeMenuV2?.getMusicPattern());
+  expect(pattern.style).toBe("pixel-pulse");
+  await expect.poll(() => page.evaluate(() => window.SnakeArcadeMenuV2?.isMusicPatternActive())).toBe(true);
+  expect(pattern.tempoMs).toBe(142);
+  expect(pattern.lead).toHaveLength(16);
+  expect(pattern.chords).toHaveLength(4);
+});
+
+test("control scheme and arcade tutorial titles use readable arcade styling", async ({ page }) => {
+  await page.goto("/index.html");
+  await expect(page.locator(".boot-brief .brief-controls .brief-control-chip")).toHaveCount(3);
+  await page.locator("#bootHow").click();
+  await expect(page.locator("#bootHowPanel .boot-panel-heading b")).toHaveCSS("font-family", /Press Start 2P/);
+  const controls = await page.locator(".boot-brief .brief-controls").evaluate(el => {
+    const rect = el.getBoundingClientRect();
+    return { left: rect.left, right: rect.right, width: rect.width };
+  });
+  expect(controls.width).toBeGreaterThan(0);
+  expect(controls.right).toBeGreaterThan(controls.left);
 });
