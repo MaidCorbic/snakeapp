@@ -18,9 +18,24 @@ function applyGameplaySettings(source=settings){
   });
   document.body.classList.toggle("no-combat-fx",source.combatFx===false);
 }
+let previewSnakeColor = null;
+function getSnakeColor() {
+  const saved = settings && /^#[0-9a-f]{6}$/i.test(String(settings.snakeColor || "")) ? settings.snakeColor : null;
+  return previewSnakeColor || saved || evoColors[evolution()-1] || "#b8ff8d";
+}
+document.addEventListener("snake-evolution-color-preview", event => {
+  const candidate = String(event.detail?.snakeColor || "");
+  if (!/^#[0-9a-f]{6}$/i.test(candidate)) return;
+  previewSnakeColor = candidate.toLowerCase();
+  document.documentElement.style.setProperty("--snake-color", previewSnakeColor);
+  if (typeof draw === "function") draw();
+});
 document.addEventListener("snake-evolution-settings-changed",event=>{
   if(event.detail&&typeof event.detail==="object")settings={...settings,...event.detail};
+  if (/^#[0-9a-f]{6}$/i.test(String(settings.snakeColor || ""))) previewSnakeColor = null;
   applyGameplaySettings(settings);
+  document.documentElement.style.setProperty("--snake-color", getSnakeColor());
+  if (typeof draw === "function") draw();
 });
 applyGameplaySettings(settings);
 let funMode=false,activeRunTime=RUN_TIME,funSegment=0,runFinalized=false;
@@ -449,7 +464,7 @@ function draw(){
   if(core){pixel(core,"#ffd85c");ctx.save();ctx.globalAlpha=.35;ctx.fillStyle="#ffd85c";ctx.fillRect(core.x+.28,Math.max(0,core.y-1.15),.44,.44);ctx.restore()}
 
   /* Snake: luminous armored segments, taper + directional head */
-  const chosenSnakeColor=typeof settings!=="undefined"&&/^#[0-9a-f]{6}$/i.test(String(settings.snakeColor||""))?settings.snakeColor:null;const snakeCol=chosenSnakeColor||evoColors[evolution()-1]||"#b8ff8d";
+  const snakeCol=getSnakeColor();
   snake.forEach((p,i)=>{
     const t=i/Math.max(1,snake.length-1),s=.82-t*.25;
     ctx.save();ctx.globalAlpha=.45+(1-t)*.5;ctx.fillStyle=snakeCol;ctx.shadowColor=snakeCol;ctx.shadowBlur=i===0?1.8:.55;
@@ -647,4 +662,4 @@ document.querySelector("#contractDecline")?.addEventListener("click",declineCont
 document.querySelector("#extractCashOut")?.addEventListener("click",cashOut);
 document.querySelector("#extractContinue")?.addEventListener("click",keepRunning);
 renderUpgrades();renderAchievements();showSave();
-window.SnakeEvolution={start:reset,resetRank:()=>{try{localStorage.removeItem("snake-evolution-best");localStorage.removeItem("snake-evolution-save");localStorage.removeItem("snake-evolution-leaderboard");localStorage.removeItem("snake-evolution-daily-leaderboard");localStorage.removeItem("snake-evolution-ghost");localStorage.removeItem("snake-evolution-ghost-best");localStorage.removeItem("snake-evolution-ghost-meta");localStorage.removeItem("snake-evolution-daily-ghost");localStorage.removeItem("snake-evolution-daily-ghost-best");localStorage.removeItem("snake-evolution-daily-ghost-meta")}catch{}hud();showSave()},getState:()=>({balance:{...BALANCE},alive,score,combo,fury,lives,xp,xpLevel,xpNext,danger,level,zone,objective:objective?.[0]||null,objectiveDone,contract:contract?.[0]||null,contractAccepted,contractOfferOpen,contractDone,supplyDrop:supplyDrop?.rarity||null,mutation:mutationName(),salvageChain,zoneEvent:advancedZoneEvent?.type||null,extractionOpen,extractionNextAt})};
+window.SnakeEvolution={start:reset,resetRank:()=>{try{localStorage.removeItem("snake-evolution-best");localStorage.removeItem("snake-evolution-save");localStorage.removeItem("snake-evolution-leaderboard");localStorage.removeItem("snake-evolution-daily-leaderboard");localStorage.removeItem("snake-evolution-ghost");localStorage.removeItem("snake-evolution-ghost-best");localStorage.removeItem("snake-evolution-ghost-meta");localStorage.removeItem("snake-evolution-daily-ghost");localStorage.removeItem("snake-evolution-daily-ghost-best");localStorage.removeItem("snake-evolution-daily-ghost-meta")}catch{}hud();showSave()},getState:()=>({balance:{...BALANCE},alive,score,combo,fury,lives,xp,xpLevel,xpNext,danger,level,zone,snakeColor:getSnakeColor(),objective:objective?.[0]||null,objectiveDone,contract:contract?.[0]||null,contractAccepted,contractOfferOpen,contractDone,supplyDrop:supplyDrop?.rarity||null,mutation:mutationName(),salvageChain,zoneEvent:advancedZoneEvent?.type||null,extractionOpen,extractionNextAt})};
