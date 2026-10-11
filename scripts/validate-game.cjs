@@ -126,7 +126,7 @@ for (const src of localScripts) {
   check("HTML script exists: " + clean, fs.existsSync(path.join(root, clean)));
 }
 
-check("menu loads cache-busted gameplay layers", menu.includes("game.js?v=arcade-v26") &&
+check("menu loads cache-busted gameplay layers", menu.includes("game.js?v=arcade-v27") &&
   menu.includes("ultimate-gameplay-v1.js?v=ultimate-v14") &&
   menu.includes("gameplay-update-v2.js?v=update-v13") &&
   menu.includes("snake-rework-v2.js?v=rework-v6") &&
