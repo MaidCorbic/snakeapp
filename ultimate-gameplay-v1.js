@@ -339,12 +339,13 @@
     const blockCollision=arenaBlocks.some(b=>same(b,nh));
     if(wallCollision||blockCollision){
       addTelegraph(Math.max(0,Math.min(COLS-1,nh.x)),Math.max(0,Math.min(ROWS-1,nh.y)),"WALL","#ff5b62",260);
-      takeDamage(wallCollision?"ARENA WALL":"ARENA OBSTACLE");
+      // Arena boundaries and solid arena blocks are fatal collisions. Finalize
+      // the run through the canonical result renderer so RUN OVER is visible.
+      deathCause=wallCollision?"ARENA WALL":"ARENA OBSTACLE";
+      stats.damage++;
+      say(deathCause+" // RUN OVER");
+      end();
       hud();draw();
-      // If damage did not end the run, queue one tick through the V2 scheduler.
-      if(alive&&!paused&&!contractOfferOpen&&!extractionOpen&&!timer){
-        timer=setTimeout(move,Math.max(60,118-combo*6-(force?35:0)-(runMutation?.[0]==="OVERCLOCK"?14:0)));
-      }
       return;
     }
     const before={energy:stats.energy,cores:stats.cores,powerups:stats.powerups,supplyDrops:stats.supplyDrops,elites:stats.elites};
