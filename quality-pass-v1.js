@@ -184,13 +184,22 @@
     enhanceControlScheme();
     const settings = readSettings();
     if (validColor(settings.snakeColor)) document.documentElement.style.setProperty("--snake-color", settings.snakeColor);
-    if (validColor(settings.snakeColor)) markPalette(settings.snakeColor);
+    if (validColor(settings.snakeColor)) {
+      document.querySelectorAll("#bootOptionsPanel .snake-swatch").forEach(swatch => swatch.setAttribute("aria-pressed", String(swatch.dataset.snakeColor?.toLowerCase() === settings.snakeColor.toLowerCase())));
+    }
   }
   document.addEventListener("snake-evolution-settings-changed", event => {
     const color = event.detail?.snakeColor;
     if (!validColor(color)) return;
-    markPalette(color);
-    document.documentElement.style.setProperty("--snake-color", color);
+    const editor = document.querySelector("#bootOptionsPanel .snake-color-editor");
+    const input = editor?.querySelector("#snakeHexInput");
+    const picker = editor?.querySelector("#snakeColorPicker");
+    if (input && document.activeElement !== input) input.value = color.toLowerCase();
+    if (picker) picker.value = color.toLowerCase();
+    document.querySelectorAll("#bootOptionsPanel .snake-swatch").forEach(swatch => {
+      swatch.setAttribute("aria-pressed", String(swatch.dataset.snakeColor?.toLowerCase() === color.toLowerCase()));
+    });
+    document.documentElement.style.setProperty("--snake-color", color.toLowerCase());
   });
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", start, {once:true});
   else start();
