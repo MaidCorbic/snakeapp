@@ -441,6 +441,8 @@ test("custom HEX snake color previews live, validates input, and saves for the n
   await page.goto("/index.html");
   await page.locator("#bootOptions").click();
   await expect(page.locator(".snake-color-group")).toBeVisible();
+  await page.locator(".snake-swatch[data-snake-color=\"#62cfff\"]").click();
+  await expect.poll(() => page.evaluate(() => document.documentElement.style.getPropertyValue("--snake-color"))).toBe("#62cfff");
 
   const hexInput = page.locator("#snakeHexInput");
   const status = page.locator("#snakeColorStatus");
@@ -461,6 +463,7 @@ test("custom HEX snake color previews live, validates input, and saves for the n
   await page.locator("#bootOptionsBack").click();
   await page.locator("#bootStart").click();
   await expect.poll(() => page.evaluate(() => window.SnakeEvolution?.getState?.().snakeColor)).toBe("#12abef");
+  await expect.poll(() => page.evaluate(() => document.documentElement.style.getPropertyValue("--snake-color"))).toBe("#12abef");
   expect(pageErrors).toEqual([]);
 });
 
