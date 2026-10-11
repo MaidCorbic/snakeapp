@@ -1,26 +1,23 @@
 # Snake Evolution
 
-Pixel-art arcade survival Snake built as a lightweight static web game.
+A browser-based arcade snake survival game with Survival, Daily, Endless, and Party Run modes.
 
-## Current build
-- Four launch modes: five-minute Survival, seeded Daily, Endless cycles, and three-minute Party Run
-- Energy and high-value Core pickups
-- Combo multiplier and score progression
-- Progressive hazards
-- Hunter enemies with simple tracking AI
-- Three abilities: Dash, Shield and Pulse
-- Mobile touch controls
-- Desktop keyboard controls
-- Storage-safe run finalization and local best score
-- Result screen with run details and a direct return to the main menu
-- Responsive pixel-art presentation with visible keyboard focus and mobile-friendly controls
-- No framework or build step required
+## Arcade Hub redesign (v1)
 
-## Controls
-- Move: WASD / arrow keys
-- Dash: Space
-- Shield: Shift
-- Pulse: E
-- Mobile: directional buttons + ability buttons
+The additive redesign introduces a clearer landing-page hierarchy, a Player Center with direct links to existing profile/records, Daily Run, collection, and settings flows, and a consistent responsive visual system for the menu, HUD, abilities, and result dialog. It reuses existing gameplay APIs and local progression storage rather than creating a second game engine or conflicting save format.
 
-Open `index.html` directly or serve the folder with any static HTTP server.
+### Existing systems
+
+- Four game modes: Survival, Daily, Endless, and Party Run
+- Energy/Core pickups, combo scoring, XP, upgrades, missions, contracts, mutations, and extraction
+- Hazards, hunter variants, Warden boss encounters, and abilities
+- Evolution cards, badges, achievements, local leaderboards, and ghost runs
+- Keyboard, touch/swipe, pause/resume, reduced motion, and configurable HUD
+- Playwright E2E coverage and a static validation script
+
+## Development
+
+- `npm test` — run the static game validator
+- `npm run test:e2e` — run browser E2E tests (Playwright required)
+
+The game is a static HTML/CSS/JavaScript application. Player records are stored locally in the current browser and are not synced to a server.
