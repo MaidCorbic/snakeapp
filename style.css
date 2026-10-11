@@ -4228,3 +4228,19 @@ img,svg,canvas{
  .ability,.ability:after{transition:none!important}
  #fury.ready,#dash.ready b:before,.ability.active{animation:none!important}
 }
+
+
+/* Collision recovery and combat readability pass */
+.legend{gap:9px 14px;align-items:center}
+.legend span{display:inline-flex;align-items:center;gap:6px;line-height:1.65}
+.legend span:before{content:"";display:inline-block;flex:0 0 8px;width:8px;height:8px;border-radius:2px;background:currentColor;box-shadow:0 0 9px currentColor}
+.legend .legend-energy{color:#a4ff79}
+.legend .legend-core{color:#ffd85c}
+.legend .legend-hunter{color:#62cfff}
+.legend .legend-elite{color:#ff9f43}
+.legend .legend-hazard{color:#ff5662}
+.legend .legend-powerup{color:#4de1d1}
+.legend .legend-supply{color:#9bd9ff}
+@media(max-width:700px){.legend{gap:7px 10px}.legend span:before{flex-basis:6px;width:6px;height:6px}}
+.game-shell #game{isolation:isolate}
+body.no-combat-fx .legend span:before{box-shadow:none}
