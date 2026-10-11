@@ -29,6 +29,21 @@ async function startGame(page) {
   await page.evaluate(() => window.__snakeE2E.startGameplay());
 }
 
+test("failed gameplay bootstrap reports an error instead of leaving a blank frozen arena", async ({ page }) => {
+  const pageErrors = [];
+  page.on("pageerror", error => pageErrors.push(error.message));
+  await page.goto("/index.html");
+  await page.locator("#bootStart").click();
+
+  await expect.poll(() => page.evaluate(() => ({
+    started: typeof window.SnakeEvolution?.getState === "function" && !!window.SnakeEvolution.getState().alive,
+    failed: !document.querySelector("#bootError")?.classList.contains("hidden")
+  }))).toMatchObject({ started: true, failed: false }).catch(async error => {
+    const failureText = await page.locator("#bootErrorText").textContent().catch(() => "");
+    throw new Error("Gameplay bootstrap did not start. Loader message: " + (failureText || "none") + "; page errors: " + pageErrors.join(" | ") + "; " + error.message);
+  });
+});
+
 test("landing menu, instructions, and options open and close", async ({ page }) => {
   const pageErrors = [];
   page.on("pageerror", error => pageErrors.push(error.message));
