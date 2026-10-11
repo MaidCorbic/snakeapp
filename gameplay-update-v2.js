@@ -22,11 +22,11 @@
   const baseResetV2 = reset;
   const baseMoveV2 = move;
 
-  // The gameplay clock is the single source of progression. Recover it if a
-  // pickup/event callback throws before the normal next-tick timeout is armed.
+  // One scheduler owns every gameplay tick, including wall and obstacle
+  // collisions. Clear stale timers first and always schedule the next tick
+  // after non-terminal collision damage so the canvas cannot remain frozen.
   move = function moveWithV2Recovery(force = false) {
     if (!alive || paused || contractOfferOpen || extractionOpen) return;
-    // A tick owns exactly one timeout. Clear it before advancing the simulation.
     clearTimeout(timer);
     timer = null;
     const beforeEnergy = stats?.energy || 0;
