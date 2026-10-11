@@ -159,7 +159,6 @@
         return;
       }
       document.dispatchEvent(new CustomEvent("snake-evolution-external-settings-changed", {detail:{snakeColor:candidate}}));
-      document.dispatchEvent(new CustomEvent("snake-evolution-settings-changed", {detail:settings}));
       document.dispatchEvent(new CustomEvent("snake-evolution-color-preview", {detail:{snakeColor:candidate}}));
       setActiveSwatch(candidate);
       input.setAttribute("aria-invalid", "false");
