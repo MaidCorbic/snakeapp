@@ -27,7 +27,8 @@
     panel.setAttribute("aria-label", "Live threat scanner");
     panel.setAttribute("aria-live", "polite");
     panel.innerHTML = '<span class="se-threat-heading">THREAT SCAN</span><span class="se-threat-stat se-threat-hunters"><span>HUNTERS</span><strong id="seThreatHunters">0</strong></span><span class="se-threat-stat se-threat-hazards"><span>HAZARDS</span><strong id="seThreatHazards">0</strong></span><span class="se-threat-stat se-threat-boss"><span>WARDEN</span><strong id="seThreatBoss">OFFLINE</strong></span>';
-    canvas.insertAdjacentElement("afterend", panel);
+    const shell = canvas.closest(".game-shell");
+    (shell || canvas).insertAdjacentElement("afterend", panel);
   }
   function updateThreatPanel() {
     addThreatPanel();
@@ -90,20 +91,39 @@
       ctx.restore();
     }
   }
-  function polishAchievements() {
-    const root = document.querySelector("#achievementList");
-    if (!root) return;
+  const ACHIEVEMENT_KEY = "snake-evolution-quality-achievements-v1";
+  let lastAchievementMarkup = "";
+  function trackAchievementState() {
     const state = getState();
     const save = safeRead("snake-evolution-save", {}) || {};
-    const key = "snake-evolution-quality-achievements-v1";
-    const earned = safeRead(key, {}) || {};
+    const earned = safeRead(ACHIEVEMENT_KEY, {}) || {};
+    const criteria = {
+      first_run: Number(save.runs) >= 1,
+      combo_five: Number(state.combo) >= 5,
+      zone_three: Number(state.zone) >= 2,
+      near_miss_ten: Number(save.nearMisses || 0) >= 10,
+      level_four: Number(state.level) >= 4
+    };
+    let changed = false;
+    Object.entries(criteria).forEach(([id, complete]) => {
+      if (complete && !earned[id]) { earned[id] = 1; changed = true; }
+    });
+    if (changed) safeWrite(ACHIEVEMENT_KEY, earned);
+    return { earned, changed };
+  }
+  function polishAchievements(force = false) {
+    const root = document.querySelector("#achievementList");
+    if (!root) return;
+    const { earned } = trackAchievementState();
     const metrics = [
-      ["first_run","ARCADE INIT","Finish your first recorded run.", Number(save.runs) >= 1, "RUN LOGGED"],
-      ["combo_five","CHAIN REACTION","Reach a combo multiplier of x5.", Number(state.combo) >= 5, "COMBO x5"],
-      ["zone_three","DEEP EXPLORER","Reach the third zone in a run.", Number(state.zone) >= 2, "ZONE 3"],
-      ["near_miss_ten","CLOSE CALL","Record ten near misses across runs.", Number(save.nearMisses || state.nearMisses) >= 10, "10 NEAR MISSES"],
-      ["level_four","APEX BUILD","Reach evolution level 4.", Number(state.level) >= 4, "LEVEL 4"]
+      ["first_run","ARCADE INIT","Finish your first recorded run."],
+      ["combo_five","CHAIN REACTION","Reach a combo multiplier of x5."],
+      ["zone_three","DEEP EXPLORER","Reach the third zone in a run."],
+      ["near_miss_ten","CLOSE CALL","Record ten near misses across runs."],
+      ["level_four","APEX BUILD","Reach evolution level 4."]
     ];
+    const markup = metrics.map(([id,title,desc]) => '<article class="se-bonus-card '+(earned[id] ? "is-complete" : "")+'"><strong>'+(earned[id] ? "UNLOCKED // " : "LOCKED // ")+title+'</strong><small>'+desc+'</small></article>').join("");
+    if (!force && markup === lastAchievementMarkup && root.querySelector(".se-bonus-achievements")) return;
     let wrap = root.querySelector(".se-bonus-achievements");
     if (!wrap) {
       wrap = document.createElement("div");
@@ -111,11 +131,22 @@
       wrap.setAttribute("aria-label", "Additional achievements");
       root.appendChild(wrap);
     }
-    wrap.innerHTML = metrics.map(([id,title,desc,complete,goal]) => {
-      const done = !!earned[id] || !!complete;
-      if (done && !earned[id]) { earned[id] = 1; safeWrite(key, earned); }
-      return '<article class="se-bonus-card '+(done ? "is-complete" : "")+'"><strong>'+(done ? "UNLOCKED // " : "LOCKED // ")+title+'</strong><small>'+desc+'</small></article>';
-    }).join("");
+    wrap.innerHTML = markup;
+    lastAchievementMarkup = markup;
+  }
+  function trackCompletedRun() {
+    if (typeof persist !== "function" || persist.__qualityNearMissTotal) return;
+    const original = persist;
+    const wrapped = function persistWithCumulativeNearMisses(...args) {
+      const runMisses = Math.max(0, Number(getState().nearMisses) || 0);
+      const result = original.apply(this, args);
+      const save = safeRead("snake-evolution-save", {}) || {};
+      save.nearMisses = Math.max(0, Number(save.nearMisses) || 0) + runMisses;
+      safeWrite("snake-evolution-save", save);
+      return result;
+    };
+    wrapped.__qualityNearMissTotal = true;
+    persist = wrapped;
   }
   function styleSettingsToBody() {
     document.body.classList.toggle("se-hide-threat-radar", !settingOn("threatRadar"));
@@ -166,7 +197,7 @@
           styleSettingsToBody();
           showFirstRunTutorial();
           updateThreatPanel();
-          polishAchievements();
+          polishAchievements(true);
         }, 0);
         return result;
       };
@@ -179,6 +210,7 @@
     const qualityDraw = function qualityEnemyDraw() {
       baseDraw();
       try { drawEnemyDetails(); } catch (error) { console.warn("[Snake Evolution] Enemy overlay skipped:", error); }
+      try { trackAchievementState(); } catch {}
     };
     qualityDraw.__qualityEnemyDraw = true;
     draw = qualityDraw;
@@ -188,7 +220,6 @@
     const qualityHud = function qualityThreatHud(...args) {
       const result = baseHud.apply(this, args);
       try { updateThreatPanel(); } catch {}
-      try { polishAchievements(); } catch {}
       return result;
     };
     qualityHud.__qualityThreatHud = true;
@@ -196,8 +227,10 @@
   }
   styleSettingsToBody();
   addThreatPanel();
+  trackCompletedRun();
   wrapLaunchMethods();
-  polishAchievements();
+  polishAchievements(true);
+  window.setInterval(() => { try { polishAchievements(); updateThreatPanel(); } catch {} }, 1000);
   document.addEventListener("snake-evolution-settings-changed", styleSettingsToBody);
   window.SnakeQualityGameplay = Object.freeze({version:"1.0.0", refresh:()=>{updateThreatPanel();polishAchievements();}});
 })();
