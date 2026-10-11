@@ -76,7 +76,7 @@ check("HUD V2.9.0 and interactive achievement deck are wired",
   html.includes('hud-achievement-deck-v2.css?v=hud-deck-v2') &&
   !html.includes('hud-achievement-deck-v2.js?v=hud-deck-v2') &&
   menu.includes("loadAchievementDeck") &&
-  menu.includes("hud-achievement-deck-v2.js?v=hud-deck-v3") &&
+  menu.includes("hud-achievement-deck-v2.js?v=hud-deck-v4") &&
   read("hud-achievement-deck-v2.js").includes("achievement-back-copy") &&
   read("hud-achievement-deck-v2.css").includes("rotateY(180deg)"));
 check("new runs clear carry-over chain, salvage and zone-event state",
