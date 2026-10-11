@@ -128,7 +128,7 @@
         rankProfile.textContent = "BEST 0 · RUNS 0";
       }
     }
-    if (settingsState) settingsState.textContent = "LOCAL // SAVED";
+    if (settingsState) settingsState.textContent = "READY";
     applyVisualSettings();
     const savedColor = /^#[0-9a-f]{6}$/i.test(String(settings.snakeColor || "")) ? settings.snakeColor : "#79e35b";
     document.documentElement.style.setProperty("--snake-color", savedColor);
@@ -137,10 +137,19 @@
   // NEON DRIVE // softer 16-bit synthwave loop, 112 BPM, designed for menu + run.
   const getMusicVolume = () => Math.max(0,Math.min(1,(Number(settings.volume ?? 65)/100)*0.075));
   // Slower layered synthwave loop: minor-key pads, arpeggiated lead, warm bass and restrained percussion.
-  const leadNotes = [659.25,0,523.25,659.25,783.99,659.25,523.25,392,523.25,0,659.25,523.25,440,493.88,392,440];
-  const bassNotes = [82.41,82.41,110,110,73.42,73.42,98,98];
-  const chordSets = [[164.81,196,246.94,293.66],[146.83,174.61,220,261.63],[130.81,155.56,196,233.08],[146.83,174.61,220,261.63]];
+  let leadNotes = [587.33,698.46,880,0,783.99,698.46,587.33,523.25,659.25,0,783.99,987.77,880,783.99,659.25,523.25];
+  let bassNotes = [73.42,73.42,110,110,65.41,65.41,98,98];
+  let chordSets = [[146.83,174.61,220,261.63],[130.81,155.56,196,233.08],[164.81,196,246.94,293.66],[130.81,155.56,196,233.08]];
   let musicStarting=false;
+  window.__snakeMusicSetPattern = pattern => {
+    if (!pattern || !Array.isArray(pattern.lead) || !Array.isArray(pattern.bass) || !Array.isArray(pattern.chords)) return;
+    leadNotes = pattern.lead.slice();
+    bassNotes = pattern.bass.slice();
+    chordSets = pattern.chords.map(chord => chord.slice());
+    if (musicTimer) stopMusic();
+    if (settings.music && settings.volume > 0) startMusic();
+  };
+  window.dispatchEvent(new CustomEvent("snake-evolution-music-ready"));
 
   const playMusicTone = (frequency,duration=.2,type="triangle",level=.38) => {
     if(!musicContext || !musicGain || !settings.music || settings.volume<=0) return;
@@ -190,7 +199,7 @@
       }
       if(note>0 && beat%4===2) playMusicTone(note*2,.075,"triangle",.07);
       musicStep++;
-      musicTimer=setTimeout(tick,168);
+      musicTimer=setTimeout(tick,142);
     };
     tick();
   };
@@ -311,7 +320,7 @@
       }
       const ultimate = document.createElement("script");
       ultimate.id = "snakeUltimateScript";
-      ultimate.src = "ultimate-gameplay-v1.js?v=ultimate-v14";
+      ultimate.src = "ultimate-gameplay-v1.js?v=ultimate-v12";
       ultimate.onload = () => {
         if (bootFailed) return;
         if (typeof window.SnakeEvolution?.start !== "function") {
@@ -341,7 +350,7 @@
               if (bootFailed) return;
               const quality = document.createElement("script");
               quality.id = "snakeQualityGameplayScript";
-              quality.src = "quality-gameplay-v1.js?v=quality-v5";
+              quality.src = "quality-gameplay-v1.js?v=quality-v1";
               quality.onload = () => {
                 if (bootFailed) return;
                 try {
@@ -516,7 +525,7 @@
     renderLandingProfile();
     if(settingsState)settingsState.textContent="RANK // RESET";
     if(rankProfile)rankProfile.textContent="BEST 0 · RUNS 0";
-    window.setTimeout(()=>{if(settingsState)settingsState.textContent="LOCAL // SAVED"},1200);
+    window.setTimeout(()=>{if(settingsState)settingsState.textContent="READY"},1200);
   });
 
   const blockPageCopy = () => {
