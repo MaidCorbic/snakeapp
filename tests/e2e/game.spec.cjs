@@ -10,7 +10,7 @@ test.beforeEach(async ({ page }) => {
     const source = await response.text();
     await route.fulfill({
       response,
-      body: source + "\nwindow.__snakeE2E = { startGameplay: () => { contractOfferOpen = false; contractAccepted = true; move(); }, endRun: () => end(), winRun: () => win(), freeCell: () => free(), forceSelfCollisionWithShield: () => { snake = [{x:10,y:10},{x:11,y:10},{x:11,y:9}]; dir = next = {x:1,y:0}; shieldUntil = performance.now() + 5000; pulseUntil = 0; lives = 3; stats.damage = 0; alive = true; paused = false; move(); }, setEdgeWarningScenario: (x,y,dx,dy) => { clearTimeout(timer); timer = null; snake = [{x,y},{x:x-dx,y:y-dy},{x:x-2*dx,y:y-2*dy}]; dir = next = {x:dx,y:dy}; alive = true; paused = false; draw(); } };\n"
+      body: source + "\nwindow.__snakeE2E = { startGameplay: () => { contractOfferOpen = false; contractAccepted = true; move(); }, endRun: () => end(), winRun: () => win(), freeCell: () => free(), setDirection: (x,y) => setDir(x,y), getPendingDirection: () => ({...next}), forceSelfCollisionWithShield: () => { snake = [{x:10,y:10},{x:11,y:10},{x:11,y:9}]; dir = next = {x:1,y:0}; shieldUntil = performance.now() + 5000; pulseUntil = 0; lives = 3; stats.damage = 0; alive = true; paused = false; move(); }, setEdgeWarningScenario: (x,y,dx,dy) => { clearTimeout(timer); timer = null; snake = [{x,y},{x:x-dx,y:y-dy},{x:x-2*dx,y:y-2*dy}]; dir = next = {x:dx,y:dy}; alive = true; paused = false; draw(); } };\n"
     });
   });
 });
@@ -395,9 +395,9 @@ test("rapid direction input cannot queue an immediate reverse turn", async ({ pa
   await page.evaluate(() => {
     // Inputs can arrive between ticks. A direction chosen against the current
     // heading must not be able to reverse the queued direction on the next tick.
-    setDir(0, -1);
-    setDir(-1, 0);
-    setDir(0, 1);
+    window.__snakeE2E.setDirection(0, -1);
+    window.__snakeE2E.setDirection(-1, 0);
+    window.__snakeE2E.setDirection(0, 1);
   });
   await page.waitForTimeout(40);
   const state = await page.evaluate(() => window.SnakeEvolution.getState());
