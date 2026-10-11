@@ -1,45 +1,37 @@
-/* Snake Evolution — Arcade Hub UX layer v1. */
+/* Snake Evolution — Player Center progress dashboard v2. */
 (() => {
 "use strict";
 const $=(s,r=document)=>r.querySelector(s);
-const safeRead=(key,fallback={})=>{try{const raw=localStorage.getItem(key);if(raw===null)return fallback;const v=JSON.parse(raw);return v===null?fallback:v}catch{return fallback}};
+const safeRead=(key,fallback)=>{try{const raw=localStorage.getItem(key);return raw===null?fallback:JSON.parse(raw)??fallback}catch{return fallback}};
 const put=(node,value)=>{if(node)node.textContent=String(value)};
-const dateKey=()=>{const d=new Date();return [d.getFullYear(),String(d.getMonth()+1).padStart(2,"0"),String(d.getDate()).padStart(2,"0")].join("-")};
+const number=(value)=>Math.max(0,Number(value)||0);
 function refreshHub(){
- const save=safeRead("snake-evolution-save"),bestValue=safeRead("snake-evolution-best",0);
- const best=Math.max(0,Number(bestValue)||Number(save.best)||0),runs=Math.max(0,Number(save.runs)||0);
- put($("#seHubSummary"),"BEST "+best+" · RUNS "+runs);
- put($("#seHubCareer"),runs?runs+" recorded runs · best "+best:"Your recorded runs and personal best");
- put($("#seHubDate"),"DAILY CHALLENGE // "+dateKey());
+ const save=safeRead("snake-evolution-save",{});
+ const best=Math.max(number(safeRead("snake-evolution-best",0)),number(save.best));
+ const runs=number(save.runs);
+ const daily=number(safeRead("snake-evolution-daily-best",0));
+ const cards=safeRead("snake-evolution-card-collection",{});
+ const cardCount=number(cards.total)||["scout","core","guardian","fury","hunter","apex"].reduce((sum,id)=>sum+number(cards[id]),0);
+ put($("#seHubBest"),best.toLocaleString());
+ put($("#seHubRuns"),runs.toLocaleString());
+ put($("#seHubDaily"),daily.toLocaleString());
+ put($("#seHubCards"),cardCount.toLocaleString());
+ put($("#seHubSummary"),runs ? "PROFILE ACTIVE · "+runs.toLocaleString()+" RUNS RECORDED" : "YOUR RECORDS WILL APPEAR HERE AS YOU PLAY");
 }
 function addHub(){
- const menu=$("#bootMenu"),profile=menu?.querySelector(".landing-profile");
- if(!menu||!profile||$("#seArcadeHub"))return;
+ const menu=$("#bootMenu"),layout=menu?.querySelector(".boot-layout"),profile=menu?.querySelector(".landing-profile");
+ if(!menu||!layout||$("#seArcadeHub"))return;
+ profile?.remove();
  const hub=document.createElement("section");
- hub.id="seArcadeHub";hub.className="se-hub";hub.setAttribute("aria-label","Arcade hub navigation");
- hub.innerHTML='<div class="se-hub-head"><div><div class="se-hub-kicker">PLAYER CENTER // LOCAL PROFILE</div><h3>Your next run starts here.</h3></div><p id="seHubDate">DAILY CHALLENGE</p></div><div class="se-hub-grid"><button class="se-hub-tile" type="button" data-hub-action="profile"><span class="se-tile-icon" aria-hidden="true">◈</span><b>CAREER PROFILE</b><small id="seHubCareer">Your recorded runs and personal best</small></button><button class="se-hub-tile" type="button" data-hub-action="daily"><span class="se-tile-icon" aria-hidden="true">◎</span><b>DAILY CHALLENGE</b><small>Today’s seeded run and local record</small></button><button class="se-hub-tile" type="button" data-hub-action="collection"><span class="se-tile-icon" aria-hidden="true">◇</span><b>COLLECTIONS</b><small>Evolution cards and unlocked badges</small></button><button class="se-hub-tile" type="button" data-hub-action="settings"><span class="se-tile-icon" aria-hidden="true">⚙</span><b>GAME SETTINGS</b><small>Controls, display, audio and access</small></button></div><div class="se-hub-foot"><span>PROFILE STORAGE <strong>LOCAL DEVICE</strong></span><span id="seHubSummary">BEST 0 · RUNS 0</span></div>';
- profile.insertAdjacentElement("afterend",hub);
- hub.addEventListener("click",event=>{
-  const button=event.target.closest("[data-hub-action]");if(!button)return;
-  const action=button.dataset.hubAction;
-  if(action==="daily"){$("#bootDaily")?.click();return}
-  if(action==="settings"){$("#bootOptions")?.click();return}
-  if(action==="collection"){$("#bootOptions")?.click();window.setTimeout(()=>($("#bootCardDeck")||$("#bootBadgeArchive"))?.click(),40);return}
-  if(action==="profile"){
-   const save=safeRead("snake-evolution-save"),best=Math.max(0,Number(safeRead("snake-evolution-best",0))||Number(save.best)||0),runs=Math.max(0,Number(save.runs)||0),wins=Math.max(0,Number(save.wins)||0);
-   const ratio=runs?Math.round(wins/runs*100):0;
-   const details=["CAREER PROFILE","Best score: "+best,"Runs recorded: "+runs,"Survival wins: "+wins,"Win rate: "+ratio+"%","Daily record: "+(Number(safeRead("snake-evolution-daily-best",0))||0),"","Records are stored locally in this browser."].join("\n");
-   let panel=$("#seProfileDialog");if(!panel){panel=document.createElement("div");panel.id="seProfileDialog";panel.className="boot-panel se-profile-dialog";panel.setAttribute("role","status");hub.insertAdjacentElement("afterend",panel)}
-   panel.replaceChildren();const content=document.createElement("div");content.textContent=details;panel.append(content);
-   const close=document.createElement("button");close.type="button";close.className="boot-action secondary";close.textContent="CLOSE PROFILE";close.addEventListener("click",()=>panel.remove());panel.append(close);
-  }
- });
+ hub.id="seArcadeHub";hub.className="se-hub";hub.setAttribute("aria-label","Player progress and arcade records");
+ hub.innerHTML='<div class="se-hub-head"><div><div class="se-hub-kicker">PLAYER CENTER / YOUR ARCADE RECORD</div><h3>Your progress, at a glance.</h3><p class="se-hub-description">A snapshot of what you have built so far. No extra menus — just your records.</p></div><span class="se-hub-mark" aria-hidden="true">◆</span></div><div class="se-progress-grid"><article class="se-progress-stat se-progress-best"><span class="se-stat-label">PERSONAL BEST</span><strong id="seHubBest">0</strong><small>All-time high score</small></article><article class="se-progress-stat"><span class="se-stat-label">RUNS PLAYED</span><strong id="seHubRuns">0</strong><small>Total recorded attempts</small></article><article class="se-progress-stat"><span class="se-stat-label">DAILY BEST</span><strong id="seHubDaily">0</strong><small>Today’s challenge record</small></article><article class="se-progress-stat"><span class="se-stat-label">CARDS COLLECTED</span><strong id="seHubCards">0</strong><small>Evolution collection</small></article></div><div class="se-hub-foot"><span id="seHubSummary">YOUR RECORDS WILL APPEAR HERE AS YOU PLAY</span><span class="se-hub-storage"><i aria-hidden="true"></i> SAVED ON THIS DEVICE</span></div>';
+ layout.insertAdjacentElement("afterend",hub);
  refreshHub();
 }
 function observeResults(){
  const result=$("#message");if(!result||result.dataset.seHubObserved)return;result.dataset.seHubObserved="true";
  new MutationObserver(()=>{if(result.classList.contains("hidden"))return;const title=$("h2",result);if(!title||$("#seResultHint",result))return;const hint=document.createElement("p");hint.id="seResultHint";hint.textContent="RUN RECORDED // Review your stats, then run it back or return to the arcade.";hint.style.cssText="max-width:560px;margin:12px auto;color:#9aaea0;font:12px/1.6 system-ui,sans-serif;text-align:center";title.insertAdjacentElement("afterend",hint)}).observe(result,{attributes:true,childList:true,subtree:true});
 }
-function init(){addHub();observeResults();refreshHub();window.addEventListener("focus",refreshHub);document.addEventListener("visibilitychange",()=>{if(!document.hidden)refreshHub()});const menu=$("#bootMenu");if(menu)new MutationObserver(refreshHub).observe(menu,{attributes:true,attributeFilter:["class"]})}
+function init(){addHub();observeResults();refreshHub();window.addEventListener("focus",refreshHub);document.addEventListener("visibilitychange",()=>{if(!document.hidden)refreshHub()});}
 if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",init,{once:true});else init();
 })();
