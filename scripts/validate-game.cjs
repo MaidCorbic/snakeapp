@@ -191,7 +191,20 @@ check("gameplay balance tuning limits arena pressure",
   /function\s+addHazards\(count=1\)/.test(game) &&
   (game.match(/hazards\.push\(free\(\)\)/g) || []).length === 1);
 
-check("HEX color picker supports validation, live preview, and explicit save", html.includes('id="snakeHexInput"') && html.includes('id="snakeColorSave"') && ultimateUiJs.includes('snake-evolution-color-preview') && ultimateUiJs.includes('SAVE blocked') && game.includes('function getSnakeColor()'));
+check("one authoritative HEX editor supports validation, live preview, and explicit save",
+  html.includes('id="snakeHexInput"') && html.includes('id="snakeColorSave"') &&
+  ultimateUiJs.includes('function ensureColorControls()') &&
+  ultimateUiJs.includes('function setupSnakeColorControls(controls)') &&
+  ultimateUiJs.includes('snake-evolution-color-preview') &&
+  ultimateUiJs.includes('SAVE blocked') &&
+  !ultimateUiJs.includes('function applySnakeColor') &&
+  read("tests/e2e/game.spec.cjs").includes("only save color on explicit SAVE"));
+check("color control keeps a single editor and removes the legacy auto-save picker",
+  (html.match(/id="snakeHexInput"/g) || []).length === 1 &&
+  (html.match(/id="snakeColorSave"/g) || []).length === 1 &&
+  ultimateUiJs.includes('panel.querySelectorAll(".snake-custom-color, #seCustomSnakeColor")') &&
+  ultimateUiJs.includes('localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings))'));
+
 check("Options readability rules remove tiny helper paragraphs and scale labels", ultimateUiCss.includes('option-row > div:first-child small') && ultimateUiCss.includes('font-size:clamp(12px,1vw,14px)'));
 check("browser regression covers custom HEX preview and persistence", read("tests/e2e/game.spec.cjs").includes("custom HEX snake color previews live") && read("tests/e2e/game.spec.cjs").includes("saved snake color is restored"));
 check("gameplay visibility settings are applied to live UI",
