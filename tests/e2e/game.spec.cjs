@@ -75,6 +75,31 @@ test("gameplay display and combat-effect settings affect the live game", async (
   await expect(page.locator("body")).toHaveClass(/no-combat-fx/);
 });
 
+test("pause, resume, and restart keep one gameplay timer without page errors", async ({ page }) => {
+  const pageErrors = [];
+  page.on("pageerror", error => pageErrors.push(error.message));
+  await startGame(page);
+
+  await page.locator("#pauseBtn").click();
+  await expect(page.locator("#pauseOverlay")).toBeVisible();
+  const pausedHead = await page.evaluate(() => window.SnakeEvolution.getState().snakeHead);
+  await page.waitForTimeout(280);
+  expect(await page.evaluate(() => window.SnakeEvolution.getState().snakeHead)).toEqual(pausedHead);
+
+  await page.locator("#resume").click();
+  await expect(page.locator("#pauseOverlay")).toHaveCount(0);
+  await expect.poll(async () => {
+    await page.waitForTimeout(150);
+    return page.evaluate(() => window.SnakeEvolution.getState().snakeHead);
+  }).not.toEqual(pausedHead);
+
+  await page.locator("#pauseBtn").click();
+  await page.locator("#restartPause").click();
+  await expect(page.locator("#pauseOverlay")).toHaveCount(0);
+  await expect.poll(() => page.evaluate(() => window.SnakeEvolution.getState().alive)).toBe(true);
+  expect(pageErrors).toEqual([]);
+});
+
 test("gameplay balance profile is exposed and bounded", async ({ page }) => {
   await startGame(page);
   const balance = await page.evaluate(() => window.__snakeBalanceProfile);
