@@ -215,6 +215,9 @@
       if (typeof original !== "function") return;
       api[name] = function qualityLaunch(...args) {
         const result = original.apply(this, args);
+        // Initial contract UI must be synchronized synchronously: consumers and
+        // accessibility checks can inspect it immediately after the launch call.
+        try { syncContractOffer(); } catch {}
         window.setTimeout(() => {
           styleSettingsToBody();
           syncContractOffer();
