@@ -449,7 +449,7 @@ function draw(){
   if(core){pixel(core,"#ffd85c");ctx.save();ctx.globalAlpha=.35;ctx.fillStyle="#ffd85c";ctx.fillRect(core.x+.28,Math.max(0,core.y-1.15),.44,.44);ctx.restore()}
 
   /* Snake: luminous armored segments, taper + directional head */
-  const snakeCol=evoColors[evolution()-1]||"#b8ff8d";
+  const chosenSnakeColor=typeof settings!=="undefined"&&/^#[0-9a-f]{6}$/i.test(String(settings.snakeColor||""))?settings.snakeColor:null;const snakeCol=chosenSnakeColor||evoColors[evolution()-1]||"#b8ff8d";
   snake.forEach((p,i)=>{
     const t=i/Math.max(1,snake.length-1),s=.82-t*.25;
     ctx.save();ctx.globalAlpha=.45+(1-t)*.5;ctx.fillStyle=snakeCol;ctx.shadowColor=snakeCol;ctx.shadowBlur=i===0?1.8:.55;
