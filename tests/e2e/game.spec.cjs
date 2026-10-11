@@ -369,3 +369,18 @@ test("win path renders a victory report and persists the win", async ({ page }) 
   await expect(page.locator("#start")).toBeVisible();
   await expect.poll(() => page.evaluate(() => JSON.parse(localStorage.getItem("snake-evolution-save") || "{}").wins)).toBe(1);
 });
+
+test("arcade hub redesign exposes profile, daily, collection, and settings navigation", async ({ page }) => {
+  const pageErrors = [];
+  page.on("pageerror", error => pageErrors.push(error.message));
+  await page.goto("/index.html");
+  await expect(page.locator("#seArcadeHub")).toBeVisible();
+  await expect(page.locator("#seArcadeHub .se-hub-tile")).toHaveCount(4);
+  await expect(page.locator("#seHubDate")).toContainText("DAILY CHALLENGE");
+  await page.locator('[data-hub-action="profile"]').click();
+  await expect(page.locator("#seProfileDialog")).toContainText("CAREER PROFILE");
+  await page.locator("#seProfileDialog button").click();
+  await page.locator('[data-hub-action="settings"]').click();
+  await expect(page.locator("#bootOptionsPanel")).toBeVisible();
+  expect(pageErrors).toEqual([]);
+});
