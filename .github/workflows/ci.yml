@@ -48,6 +48,8 @@ jobs:
           node --check snake-rework-v2.js
           node --check ultimate-ui-v1.js
           node --check arcade-hub-v1.js
+          node --check quality-pass-v1.js
+          node --check quality-gameplay-v1.js
           node --check scripts/validate-game.cjs
           node --check scripts/stability-regression.cjs
           node --check playwright.config.cjs
