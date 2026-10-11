@@ -95,7 +95,7 @@
       }
     };
     const setActiveSwatch = color => {
-      $$(".snake-swatch", panel).forEach(swatch => {
+      $(".snake-swatch", panel).forEach(swatch => {
         swatch.setAttribute("aria-pressed", String(swatch.dataset.snakeColor?.toLowerCase() === color.toLowerCase()));
       });
     };
