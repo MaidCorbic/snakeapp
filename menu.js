@@ -261,6 +261,18 @@
     if (errorText) errorText.textContent = detail || "GAME BOOT FAILED";
   };
 
+  // Keep the visual achievement deck off the critical gameplay bootstrap path.
+  // If the optional collection UI fails, the game must still start normally.
+  const loadAchievementDeck = () => {
+    if (window.__snakeAchievementDeckV2 || document.getElementById("snakeHudAchievementDeckScript")) return;
+    const deck = document.createElement("script");
+    deck.id = "snakeHudAchievementDeckScript";
+    deck.src = "hud-achievement-deck-v2.js?v=hud-deck-v3";
+    deck.async = true;
+    deck.onerror = () => console.warn("[Snake Evolution] Achievement deck failed to load; gameplay will continue.");
+    document.body.appendChild(deck);
+  };
+
   const startLoadedMode = (mode) => {
     const method = mode === "daily" ? "startDaily" : mode === "endless" ? "startEndless" : mode === "party" ? "startParty" : "start";
     if (mode === "party") { try { localStorage.setItem("snake-evolution-mode","party"); } catch {} }
@@ -311,7 +323,7 @@
 
     const script = document.createElement("script");
     script.id = "snakeGameScript";
-    script.src = "game.js?v=survival-v24";
+    script.src = "game.js?v=survival-v25";
     script.onload = () => {
       if (bootFailed) return;
       if (typeof window.SnakeEvolution?.start !== "function") {
@@ -320,7 +332,7 @@
       }
       const ultimate = document.createElement("script");
       ultimate.id = "snakeUltimateScript";
-      ultimate.src = "ultimate-gameplay-v1.js?v=ultimate-v12";
+      ultimate.src = "ultimate-gameplay-v1.js?v=ultimate-v13";
       ultimate.onload = () => {
         if (bootFailed) return;
         if (typeof window.SnakeEvolution?.start !== "function") {
@@ -329,12 +341,12 @@
         }
         const update = document.createElement("script");
         update.id = "snakeGameplayUpdateV2";
-        update.src = "gameplay-update-v2.js?v=update-v10";
+        update.src = "gameplay-update-v2.js?v=update-v11";
         update.onload = () => {
           if (bootFailed) return;
           const polish = document.createElement("script");
           polish.id = "snakeArcadePolishV1";
-          polish.src = "arcade-polish-v1.js?v=arcade-v2";
+          polish.src = "arcade-polish-v1.js?v=arcade-v3";
           polish.onload = () => {
             if (bootFailed) return;
             try {
@@ -345,12 +357,12 @@
             }
             const rework = document.createElement("script");
             rework.id = "snakeReworkV2";
-            rework.src = "snake-rework-v2.js?v=rework-v5";
+            rework.src = "snake-rework-v2.js?v=rework-v6";
             rework.onload = () => {
               if (bootFailed) return;
               const quality = document.createElement("script");
               quality.id = "snakeQualityGameplayScript";
-              quality.src = "quality-gameplay-v1.js?v=quality-v2";
+              quality.src = "quality-gameplay-v1.js?v=quality-v3";
               quality.onload = () => {
                 if (bootFailed) return;
                 try {
@@ -358,6 +370,7 @@
                   cleanupBootListeners();
                   gameLoading = false;
                   gameLoaded = true;
+                  loadAchievementDeck();
                 } catch (error) {
                   cleanupBootListeners();
                   failLoad("GAME BOOT ERROR: GAME START FAILED — " + (error?.message || "unknown start error"));

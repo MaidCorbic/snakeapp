@@ -74,7 +74,9 @@ const requiredIds = [
 check("HUD V2.9.0 and interactive achievement deck are wired",
   html.includes('V2.9.0') &&
   html.includes('hud-achievement-deck-v2.css?v=hud-deck-v2') &&
-  html.includes('hud-achievement-deck-v2.js?v=hud-deck-v2') &&
+  !html.includes('hud-achievement-deck-v2.js?v=hud-deck-v2') &&
+  menu.includes("loadAchievementDeck") &&
+  menu.includes("hud-achievement-deck-v2.js?v=hud-deck-v3") &&
   read("hud-achievement-deck-v2.js").includes("achievement-back-copy") &&
   read("hud-achievement-deck-v2.css").includes("rotateY(180deg)"));
 check("new runs clear carry-over chain, salvage and zone-event state",
@@ -86,7 +88,7 @@ check("release polish stylesheet is linked", html.includes('release-polish-v1.cs
 check("Endless is available from the landing menu", html.includes('id="bootEndless"') && !html.includes(".boot-actions #bootEndless{\n  display:none!important;") && !reworkCss.includes("body.rework-v2 .boot-actions #bootEndless{\n  display:none!important;"));
 check("rework stylesheet exists", fs.existsSync(path.join(root, "snake-rework-v2.css")));
 check("party run wiring exists", /bootFun/.test(html) && /mode === "party"/.test(menu) && /FUN_RUN_TIME/.test(game));
-check("arcade polish loader is wired", /arcade-polish-v1\.js\?v=arcade-v2/.test(menu) && /snake-rework-v2\.js\?v=rework-v5/.test(menu));
+check("arcade polish loader is wired", /arcade-polish-v1\.js\?v=arcade-v3/.test(menu) && /snake-rework-v2\.js\?v=rework-v6/.test(menu));
 
 check("run finalization is one-shot and best-score storage is guarded", game.includes("function finalizeRun(won,summary)") && game.includes("function saveBestScoreSafely()") && game.includes("runFinalized=false"));
 check("Endless cycle respects the shared hazard cap", ultimate.includes("addHazards(3)") && !ultimate.includes("hazards.push(free())"));
@@ -124,10 +126,10 @@ for (const src of localScripts) {
   check("HTML script exists: " + clean, fs.existsSync(path.join(root, clean)));
 }
 
-check("menu loads cache-busted gameplay layers", menu.includes("game.js?v=survival-v24") &&
-  menu.includes("ultimate-gameplay-v1.js?v=ultimate-v12") &&
-  menu.includes("gameplay-update-v2.js?v=update-v10") &&
-  menu.includes("snake-rework-v2.js?v=rework-v5") &&
+check("menu loads cache-busted gameplay layers", menu.includes("game.js?v=survival-v25") &&
+  menu.includes("ultimate-gameplay-v1.js?v=ultimate-v13") &&
+  menu.includes("gameplay-update-v2.js?v=update-v11") &&
+  menu.includes("snake-rework-v2.js?v=rework-v6") &&
   html.includes("meta-progression-v1.js?v=meta-v4"));
 
 check("pause control has one authoritative click handler", !/pauseBtn\?\.addEventListener\("click"/.test(game) && /pauseControl\?\.addEventListener\("click"/.test(update));
