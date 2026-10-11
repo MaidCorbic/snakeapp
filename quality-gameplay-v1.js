@@ -190,13 +190,36 @@
     const offered = state.contractOfferOpen === true;
     const accept = document.querySelector("#contractAccept");
     const decline = document.querySelector("#contractDecline");
+    const card = decline?.closest(".contract-card");
+    const actions = decline?.closest(".contract-actions");
+    if (card) {
+      if (offered) {
+        // Some HUD resets leave an inline display:none on the card even after
+        // the hidden class is cleared. The offer state owns this card's visibility.
+        card.style.setProperty("display", "flex", "important");
+        card.style.setProperty("flex-direction", "column");
+        card.style.setProperty("visibility", "visible", "important");
+      } else {
+        card.style.removeProperty("display");
+        card.style.removeProperty("flex-direction");
+        card.style.removeProperty("visibility");
+      }
+    }
+    if (actions && offered) actions.style.setProperty("display", "flex", "important");
+    else if (actions) actions.style.removeProperty("display");
     if (accept) {
       accept.classList.toggle("hidden", !offered);
+      accept.hidden = !offered;
+      if (offered) accept.style.setProperty("display", "inline-flex", "important");
+      else accept.style.removeProperty("display");
       accept.setAttribute("aria-hidden", String(!offered));
       accept.disabled = !offered;
     }
     if (decline) {
       decline.classList.toggle("hidden", !offered);
+      decline.hidden = !offered;
+      if (offered) decline.style.setProperty("display", "inline-flex", "important");
+      else decline.style.removeProperty("display");
       decline.setAttribute("aria-hidden", String(!offered));
       decline.disabled = !offered;
     }
