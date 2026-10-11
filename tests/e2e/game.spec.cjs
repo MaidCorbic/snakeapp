@@ -10,7 +10,7 @@ test.beforeEach(async ({ page }) => {
     const source = await response.text();
     await route.fulfill({
       response,
-      body: source + "\nwindow.__snakeE2E = { startGameplay: () => { contractOfferOpen = false; contractAccepted = true; move(); }, endRun: () => end(), winRun: () => win(), freeCell: () => free(), setDirection: (x,y) => setDir(x,y), getPendingDirection: () => ({...next}), seedTransientRunState: () => { chain = 4; chainUntil = performance.now() + 10000; chainBest = 9; salvageChain = 5; salvageUntil = performance.now() + 10000; advancedZoneEvent = { type: 'HAZARD_STORM', until: performance.now() + 10000 }; extractionNextAt = 60000; extractionHeatUntil = performance.now() + 10000; advancedExitMode = 'EXTRACTING'; contractDeclined = true; }, getTransientRunState: () => ({ chain, chainUntil, chainBest, salvageChain, salvageUntil, zoneEvent: advancedZoneEvent?.type || null, extractionNextAt, extractionHeatUntil, advancedExitMode, contractDeclined }), forceSelfCollisionWithShield: () => { snake = [{x:10,y:10},{x:11,y:10},{x:11,y:9}]; dir = next = {x:1,y:0}; shieldUntil = performance.now() + 5000; pulseUntil = 0; lives = 3; stats.damage = 0; alive = true; paused = false; move(); }, setEdgeWarningScenario: (x,y,dx,dy) => { clearTimeout(timer); timer = null; snake = [{x,y},{x:x-dx,y:y-dy},{x:x-2*dx,y:y-2*dy}]; dir = next = {x:dx,y:dy}; alive = true; paused = false; draw(); }, setCollisionRecoveryScenario: () => { clearTimeout(timer); timer = null; snake = [{x:10,y:10},{x:9,y:10},{x:8,y:10}]; dir = next = {x:1,y:0}; hazards = [{x:11,y:10}]; hunters = []; powerups = []; boss = null; supplyDrop = null; energy = {x:24,y:15}; core = null; shieldUntil = pulseUntil = 0; lives = 3; stats.damage = 0; alive = true; paused = false; move(); }, getCollisionRecoveryState: () => ({ head: { ...snake[0] }, segments: snake.map(point => ({ ...point })), lives, alive, shielded: performance.now() < shieldUntil, damage: stats.damage, overlaps: snake.some(segment => hazards.some(item => same(segment,item)) || hunters.some(item => same(segment,item)) || powerups.some(item => same(segment,item)) || (boss && same(segment,boss)) || (energy && same(segment,energy)) || (core && same(segment,core)) || (supplyDrop && same(segment,supplyDrop))) }) };\n"
+      body: source + "\nwindow.__snakeE2E = { startGameplay: () => { contractOfferOpen = false; contractAccepted = true; move(); }, endRun: () => end(), winRun: () => win(), freeCell: () => free(), setDirection: (x,y) => setDir(x,y), getPendingDirection: () => ({...next}), seedTransientRunState: () => { chain = 4; chainUntil = performance.now() + 10000; chainBest = 9; salvageChain = 5; salvageUntil = performance.now() + 10000; advancedZoneEvent = { type: 'HAZARD_STORM', until: performance.now() + 10000 }; extractionNextAt = 60000; extractionHeatUntil = performance.now() + 10000; advancedExitMode = 'EXTRACTING'; contractDeclined = true; }, getTransientRunState: () => ({ chain, chainUntil, chainBest, salvageChain, salvageUntil, zoneEvent: advancedZoneEvent?.type || null, extractionNextAt, extractionHeatUntil, advancedExitMode, contractDeclined }), forceSelfCollisionWithShield: () => { snake = [{x:10,y:10},{x:11,y:10},{x:11,y:9}]; dir = next = {x:1,y:0}; shieldUntil = performance.now() + 5000; pulseUntil = 0; lives = 3; stats.damage = 0; alive = true; paused = false; move(); }, setEdgeWarningScenario: (x,y,dx,dy) => { clearTimeout(timer); timer = null; snake = [{x,y},{x:x-dx,y:y-dy},{x:x-2*dx,y:y-2*dy}]; dir = next = {x:dx,y:dy}; alive = true; paused = false; draw(); }, setCollisionRecoveryScenario: () => { clearTimeout(timer); timer = null; snake = [{x:10,y:10},{x:9,y:10},{x:8,y:10}]; dir = next = {x:1,y:0}; hazards = [{x:11,y:10}]; hunters = []; powerups = []; boss = null; supplyDrop = null; energy = {x:24,y:15}; core = null; shieldUntil = pulseUntil = 0; lives = 3; stats.damage = 0; alive = true; paused = false; move(); }, setWallCollisionScenario: () => { clearTimeout(timer); timer = null; contractOfferOpen = false; contractAccepted = true; extractionOpen = false; paused = false; snake = [{x:COLS-1,y:10},{x:COLS-2,y:10},{x:COLS-3,y:10}]; dir = next = {x:1,y:0}; hazards = []; hunters = []; powerups = []; boss = null; supplyDrop = null; energy = {x:1,y:1}; core = null; arenaBlocks = []; shieldUntil = pulseUntil = 0; lives = 3; stats.damage = 0; alive = true; move(); }, setObstacleCollisionScenario: () => { clearTimeout(timer); timer = null; contractOfferOpen = false; contractAccepted = true; extractionOpen = false; paused = false; snake = [{x:10,y:10},{x:9,y:10},{x:8,y:10}]; dir = next = {x:1,y:0}; hazards = []; hunters = []; powerups = []; boss = null; supplyDrop = null; energy = {x:1,y:1}; core = null; arenaBlocks = [{x:11,y:10}]; shieldUntil = pulseUntil = 0; lives = 3; stats.damage = 0; alive = true; move(); }, getCollisionRecoveryState: () => ({ head: { ...snake[0] }, segments: snake.map(point => ({ ...point })), lives, alive, shielded: performance.now() < shieldUntil, damage: stats.damage, timerPending: !!timer, overlaps: snake.some(segment => hazards.some(item => same(segment,item)) || hunters.some(item => same(segment,item)) || powerups.some(item => same(segment,item)) || (boss && same(segment,boss)) || (energy && same(segment,energy)) || (core && same(segment,core)) || (supplyDrop && same(segment,supplyDrop))) }) };\n"
     });
   });
 });
@@ -466,19 +466,23 @@ test("ability deck exposes clear names and responsive visual states", async ({ p
   expect(deck).toBe("grid");
 });
 
-test("wall collision ends a run and displays the loss result", async ({ page }) => {
+test("wall and solid obstacle collisions show RUN OVER and finalize the run", async ({ page }) => {
   await startGame(page);
 
-  // Turn down once before turning left, respecting the no-reverse input rule.
-  await page.keyboard.press("ArrowDown");
-  await page.waitForTimeout(150);
-  await page.keyboard.press("ArrowLeft");
+  for (const [index, scenario] of ["setWallCollisionScenario", "setObstacleCollisionScenario"].entries()) {
+    if (index > 0) {
+      await page.evaluate(() => window.SnakeEvolution.start());
+      await expect.poll(() => page.evaluate(() => window.SnakeEvolution.getState().alive)).toBe(true);
+    }
 
-  await expect(page.locator("#message h2")).toHaveText("RUN OVER", { timeout: 4_000 });
-  await expect(page.locator("#message .result-copy")).toContainText("RUN ENDED");
-  await expect(page.locator("#message .gameover-details")).toBeVisible();
-  await expect(page.locator("#start")).toBeVisible();
-  await expect.poll(() => page.evaluate(() => JSON.parse(localStorage.getItem("snake-evolution-save") || "{}").runs)).toBe(1);
+    await page.evaluate(name => window.__snakeE2E[name](), scenario);
+    await expect(page.locator("#message h2")).toHaveText("RUN OVER");
+    await expect(page.locator("#message .result-copy")).toContainText("RUN ENDED");
+    await expect(page.locator("#message .gameover-details")).toBeVisible();
+    await expect(page.locator("#start")).toBeVisible();
+    await expect.poll(() => page.evaluate(() => window.SnakeEvolution.getState().alive)).toBe(false);
+    await expect.poll(() => page.evaluate(() => JSON.parse(localStorage.getItem("snake-evolution-save") || "{}").runs)).toBe(index + 1);
+  }
 });
 
 test("rapid direction input cannot queue an immediate reverse turn", async ({ page }) => {

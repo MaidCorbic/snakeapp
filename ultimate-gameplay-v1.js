@@ -331,13 +331,22 @@
   bossStep=function(){if(boss&&boss.phase>=2&&bossTelegraphUntil<=performance.now()){bossTelegraphUntil=performance.now()+450;addTelegraph(boss.x,boss.y,"WARDEN STRIKE","#ff3f8f",450,{radius:boss.phase===3?4:3})}baseBossStepU()};
 
   move=function(force=false){
-    if(!alive||contractOfferOpen||extractionOpen)return;
+    if(!alive||paused||contractOfferOpen||extractionOpen)return;
+    // Route collision ticks through the single recovery scheduler. The old wall
+    // branch bypassed baseMoveV2 and could compete with its finally timeout.
     const nh={x:snake[0].x+next.x,y:snake[0].y+next.y};
-    if(arenaBlocks.some(b=>same(b,nh))){
-      addTelegraph(nh.x,nh.y,"WALL","#ff5b62",260);
-      takeDamage("ARENA WALL");
-      if(alive&&!paused&&!contractOfferOpen&&!extractionOpen)timer=setTimeout(move,Math.max(60,118-combo*6-(force?35:0)-(runMutation?.[0]==="OVERCLOCK"?14:0)));
-      return
+    const wallCollision=nh.x<0||nh.x>=COLS||nh.y<0||nh.y>=ROWS;
+    const blockCollision=arenaBlocks.some(b=>same(b,nh));
+    if(wallCollision||blockCollision){
+      addTelegraph(Math.max(0,Math.min(COLS-1,nh.x)),Math.max(0,Math.min(ROWS-1,nh.y)),"WALL","#ff5b62",260);
+      // Arena boundaries and solid arena blocks are fatal collisions. Finalize
+      // the run through the canonical result renderer so RUN OVER is visible.
+      deathCause=wallCollision?"ARENA WALL":"ARENA OBSTACLE";
+      stats.damage++;
+      say(deathCause+" // RUN OVER");
+      end();
+      hud();draw();
+      return;
     }
     const before={energy:stats.energy,cores:stats.cores,powerups:stats.powerups,supplyDrops:stats.supplyDrops,elites:stats.elites};
     const consumedEnergy=energy?{x:energy.x,y:energy.y}:null;
