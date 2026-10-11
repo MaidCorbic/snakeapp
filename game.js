@@ -174,7 +174,27 @@ function currentLevel(){return Math.min(4,1+Math.floor(score/600))}
 function evolution(){return currentLevel()}
 function event(t){eventBanner.textContent="⚠ "+t;eventBanner.classList.add("show");clearTimeout(event.t);event.t=setTimeout(()=>eventBanner.classList.remove("show"),1300)}
 function floatText(t,p=snake[0]){const el=document.createElement("span");el.className="floater";el.textContent=t;el.style.left=((p.x/COLS)*100)+"%";el.style.top=((p.y/ROWS)*100)+"%";floaters.appendChild(el);setTimeout(()=>el.remove(),700)}
-function pause(){if(!alive)return;paused=!paused;if(paused){clearTimeout(timer);const o=document.createElement("div");o.className="pause-overlay";o.id="pauseOverlay";o.innerHTML="<div><h2>PAUSED</h2><button id=\"resume\">RESUME</button><button id=\"restartPause\">RESTART</button><button id=\"menuPause\">MAIN MENU</button></div>";document.querySelector(".game-shell").appendChild(o);o.querySelector("#resume").onclick=pause;o.querySelector("#restartPause").onclick=()=>{o.remove();paused=false;reset()};o.querySelector("#menuPause").onclick=()=>{o.remove();alive=false;message.style.display="none";window.showBootMenu?.()}}else{document.querySelector("#pauseOverlay")?.remove();move()}}
+function pause(){
+ if(!alive)return;
+ paused=!paused;
+ if(paused){
+   clearTimeout(timer);timer=null;
+   document.querySelector("#pauseOverlay")?.remove();
+   const overlay=document.createElement("div");
+   overlay.className="pause-overlay";overlay.id="pauseOverlay";overlay.setAttribute("role","dialog");overlay.setAttribute("aria-modal","true");overlay.setAttribute("aria-label","Paused game");
+   overlay.innerHTML="<div><h2>PAUSED</h2><button id=\"resume\" type=\"button\">RESUME</button><button id=\"restartPause\" type=\"button\">RESTART</button><button id=\"menuPause\" type=\"button\">MAIN MENU</button></div>";
+   document.querySelector(".game-shell").appendChild(overlay);
+   overlay.querySelector("#resume").onclick=()=>{overlay.remove();paused=false;move();hud()};
+   overlay.querySelector("#restartPause").onclick=()=>{overlay.remove();paused=false;clearTimeout(timer);timer=null;reset()};
+   overlay.querySelector("#menuPause").onclick=()=>{overlay.remove();clearTimeout(timer);timer=null;alive=false;message.style.display="none";window.showBootMenu?.()};
+ }else{
+   document.querySelector("#pauseOverlay")?.remove();
+   clearTimeout(timer);timer=null;
+   move();
+ }
+ hud();
+}
+
 function showSave(){let s={};try{s=JSON.parse(localStorage.getItem("snake-evolution-save")||"{}")}catch{}saveStats.innerHTML="RUNS <strong>"+(s.runs||0)+"</strong> · WINS <strong>"+(s.wins||0)+"</strong> · BEST COMBO <strong>x"+(s.combo||1)+"</strong> · WARDENS <strong>"+(s.wardens||0)+"</strong> · ELITES <strong>"+(s.elites||0)+"</strong> · DROPS <strong>"+(s.supplyDrops||0)+"</strong> · CONTRACTS <strong>"+(s.contracts||0)+"</strong> · EVOLUTION <strong>"+(evoNames[s.evo-1]||"RUNNER")+"</strong>"}
 function hud(){
  scoreEl.textContent=score;
