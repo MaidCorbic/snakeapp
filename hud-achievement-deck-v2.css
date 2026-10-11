@@ -242,30 +242,30 @@ body #seThreatStatus.is-critical {
 body #seThreatStatus.is-critical .se-threat-radar { border-color: #9e515a; color: #ff8996; animation: hud2RadarPulse 1.5s ease-in-out infinite; }
 body.se-hide-threat-radar #seThreatStatus { display: none !important; }
 /* Snake Build: readable XP pipeline + tactile upgrade cards. */
-#progression {
+body #progression {
   border: 1px solid #2b4833 !important;
   border-radius: 14px !important;
   background: linear-gradient(145deg, #0c1510, #070c09) !important;
   box-shadow: inset 0 1px #ffffff07, 0 10px 28px #0003 !important;
 }
-#progression > .progression-head {
+body #progression > .progression-head {
   min-height: 64px;
   gap: 12px;
   padding: 15px 17px !important;
   background: linear-gradient(110deg, #13231a, #0b120d) !important;
 }
-#progression .progression-head > span { display: grid; gap: 6px; }
-#progression .progression-head b {
+body #progression .progression-head > span { display: grid; gap: 6px; }
+body #progression .progression-head b {
   color: #e5f8e8 !important;
   font: 800 12px/1.4 system-ui, -apple-system, "Segoe UI", sans-serif !important;
   letter-spacing: 1.5px !important;
 }
-#progression .progression-head small {
+body #progression .progression-head small {
   color: #8dab93 !important;
   font: 600 11px/1.45 system-ui, -apple-system, "Segoe UI", sans-serif !important;
   letter-spacing: .3px !important;
 }
-#progression .progression-head > strong {
+body #progression .progression-head > strong {
   padding: 7px 10px;
   border: 1px solid #4a704b;
   border-radius: 8px;
@@ -274,8 +274,8 @@ body.se-hide-threat-radar #seThreatStatus { display: none !important; }
   font: 800 11px/1.25 system-ui, sans-serif !important;
   white-space: nowrap;
 }
-#progression .progression-body { padding: 14px !important; }
-#progression .evolution-build {
+body #progression .progression-body { padding: 14px !important; }
+body #progression .evolution-build {
   position: relative;
   overflow: hidden;
   padding: 16px !important;
@@ -286,7 +286,7 @@ body.se-hide-threat-radar #seThreatStatus { display: none !important; }
     linear-gradient(135deg, #101e14, #09120d) !important;
   box-shadow: inset 0 1px #ffffff08 !important;
 }
-#progression .evolution-build::after {
+body #progression .evolution-build::after {
   content: "";
   position: absolute;
   top: 0; bottom: 0; left: -40%;
@@ -296,25 +296,25 @@ body.se-hide-threat-radar #seThreatStatus { display: none !important; }
   transform: skewX(-18deg);
   animation: hud2BuildSweep 7s ease-in-out infinite;
 }
-#progression .evolution-build-head {
+body #progression .evolution-build-head {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
   gap: 9px;
 }
-#progression .evolution-build-head > div { display: grid; gap: 6px; }
-#progression .evolution-build-head > div > span {
+body #progression .evolution-build-head > div { display: grid; gap: 6px; }
+body #progression .evolution-build-head > div > span {
   color: #82a68a !important;
   font: 800 10px/1.3 system-ui, sans-serif !important;
   letter-spacing: 1.6px !important;
 }
-#progression #evolutionBuildLevel {
+body #progression #evolutionBuildLevel {
   color: #edffef !important;
   font: 800 clamp(16px, 1.8vw, 22px)/1.25 system-ui, sans-serif !important;
   letter-spacing: .1px !important;
 }
-#progression #evolutionBuildNext {
+body #progression #evolutionBuildNext {
   padding: 6px 8px;
   border: 1px solid #304e37;
   border-radius: 7px;
@@ -322,7 +322,7 @@ body.se-hide-threat-radar #seThreatStatus { display: none !important; }
   color: #b5dcb9 !important;
   font: 700 10px/1.3 system-ui, sans-serif !important;
 }
-#progression .evolution-build-track {
+body #progression .evolution-build-track {
   position: relative;
   height: 9px !important;
   margin: 14px 0 10px !important;
@@ -331,7 +331,7 @@ body.se-hide-threat-radar #seThreatStatus { display: none !important; }
   border-radius: 99px !important;
   background: #050a07 !important;
 }
-#progression #evolutionBuildFill {
+body #progression #evolutionBuildFill {
   position: relative;
   display: block;
   height: 100%;
@@ -340,29 +340,29 @@ body.se-hide-threat-radar #seThreatStatus { display: none !important; }
   box-shadow: 0 0 16px #a3ff7c45;
   transition: width .28s ease;
 }
-#progression .evolution-build > small {
+body #progression .evolution-build > small {
   position: relative;
   z-index: 1;
   display: block;
   color: #9ab6a0 !important;
   font: 500 12px/1.6 system-ui, sans-serif !important;
 }
-#progression .progression-subsection {
+body #progression .progression-subsection {
   margin-top: 14px !important;
   padding: 14px !important;
   border: 1px solid #233d2b !important;
   border-radius: 11px !important;
   background: #09110c !important;
 }
-#progression .progression-subhead {
+body #progression .progression-subhead {
   margin-bottom: 10px !important;
 }
-#progression .progression-subhead b {
+body #progression .progression-subhead b {
   color: #cde5d0 !important;
   font: 800 10px/1.4 system-ui, sans-serif !important;
   letter-spacing: 1.3px !important;
 }
-#progression .progression-subhead span {
+body #progression .progression-subhead span {
   color: #82a58a !important;
   font: 800 10px/1.3 system-ui, sans-serif !important;
 }
@@ -428,29 +428,29 @@ body.se-hide-threat-radar #seThreatStatus { display: none !important; }
 }
 #cardCollection .evolution-card:hover { transform: translateY(-2px); }
 /* Advanced Achievements becomes an explorable, keyboard-operable flip-card deck. */
-#achievements {
+body #achievements {
   border: 1px solid #2b4833 !important;
   border-radius: 14px !important;
   background: linear-gradient(145deg, #0c1510, #070c09) !important;
   box-shadow: inset 0 1px #ffffff07, 0 10px 28px #0003 !important;
 }
-#achievements > .progression-head {
+body #achievements > .progression-head {
   min-height: 64px;
   padding: 15px 17px !important;
   background: linear-gradient(110deg, #13231a, #0b120d) !important;
 }
-#achievements .progression-head > span { display: grid; gap: 6px; }
-#achievements .progression-head b {
+body #achievements .progression-head > span { display: grid; gap: 6px; }
+body #achievements .progression-head b {
   color: #e5f8e8 !important;
   font: 800 12px/1.4 system-ui, sans-serif !important;
   letter-spacing: 1.5px !important;
 }
-#achievements .progression-head small {
+body #achievements .progression-head small {
   color: #8dab93 !important;
   font: 600 11px/1.45 system-ui, sans-serif !important;
   letter-spacing: .3px !important;
 }
-#achievements .progression-head > strong {
+body #achievements .progression-head > strong {
   padding: 7px 10px;
   border: 1px solid #4a704b;
   border-radius: 8px;
@@ -458,8 +458,8 @@ body.se-hide-threat-radar #seThreatStatus { display: none !important; }
   color: var(--hud2-green) !important;
   font: 800 11px/1.25 system-ui, sans-serif !important;
 }
-#achievements .progression-body { padding: 14px !important; }
-#achievements #achievementList.achievement-list {
+body #achievements .progression-body { padding: 14px !important; }
+body #achievements #achievementList.achievement-list {
   display: grid !important;
   grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
   gap: 12px !important;
@@ -718,9 +718,9 @@ body.se-hide-threat-radar #seThreatStatus { display: none !important; }
   88%, 100% { left: 115%; opacity: 0; }
 }
 @media(max-width: 980px) {
-  #achievements #achievementList.achievement-list,
-  #achievements #achievementList .ultimate-achievements,
-  #achievements #achievementList .se-bonus-achievements { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+  body #achievements #achievementList.achievement-list,
+  body #achievements #achievementList .ultimate-achievements,
+  body #achievements #achievementList .se-bonus-achievements { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
   #achievementList .achievement-deck-toolbar { align-items: flex-start; }
   #achievementList .achievement-deck-intro { flex: 1 1 220px; }
 }
@@ -739,12 +739,12 @@ body.se-hide-threat-radar #seThreatStatus { display: none !important; }
   body #seThreatStatus .se-threat-stat { padding: 8px !important; }
   body #seThreatStatus .se-threat-stat > span { font-size: 8px; letter-spacing: .7px; }
   body #seThreatStatus .se-threat-stat > strong { font-size: 18px; }
-  #progression .progression-body, #achievements .progression-body { padding: 10px !important; }
+  body #progression .progression-body, body #achievements .progression-body { padding: 10px !important; }
 }
 @media(max-width: 600px) {
-  #progression > .progression-head, #achievements > .progression-head { padding: 12px !important; }
-  #progression .progression-head b, #achievements .progression-head b { font-size: 11px !important; }
-  #progression .progression-head small, #achievements .progression-head small { font-size: 10px !important; }
+  body #progression > .progression-head, body #achievements > .progression-head { padding: 12px !important; }
+  body #progression .progression-head b, body #achievements .progression-head b { font-size: 11px !important; }
+  body #progression .progression-head small, body #achievements .progression-head small { font-size: 10px !important; }
   #upgradeList.upgrade-list { grid-template-columns: 1fr !important; }
   #cardCollection.card-collection { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
   #achievementList .achievement-deck-toolbar { gap: 10px; }
@@ -759,9 +759,9 @@ body.se-hide-threat-radar #seThreatStatus { display: none !important; }
   #achievementList .achievement-back .achievement-back-copy { font-size: 11px; }
 }
 @media(max-width: 390px) {
-  #achievements #achievementList.achievement-list,
-  #achievements #achievementList .ultimate-achievements,
-  #achievements #achievementList .se-bonus-achievements { grid-template-columns: 1fr !important; }
+  body #achievements #achievementList.achievement-list,
+  body #achievements #achievementList .ultimate-achievements,
+  body #achievements #achievementList .se-bonus-achievements { grid-template-columns: 1fr !important; }
   #achievementList .achievement-deck-toolbar { padding: 10px; }
   #achievementList .achievement-filter { flex: 1 1 80px; }
   body #seThreatStatus { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; }
@@ -770,7 +770,7 @@ body.se-hide-threat-radar #seThreatStatus { display: none !important; }
 }
 @media(prefers-reduced-motion: reduce) {
   #achievementList .achievement-card-inner { transition: none !important; }
-  #progression .evolution-build::after,
+  body #progression .evolution-build::after,
   body #seThreatStatus.is-critical .se-threat-radar,
   .run-intel-v3 .danger-card.critical { animation: none !important; }
   .run-intel-v3 .intel-track i, #upgradeList .upgrade-item, #cardCollection .evolution-card { transition: none !important; }
