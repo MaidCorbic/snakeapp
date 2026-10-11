@@ -25,7 +25,8 @@ const files = [
   "gameplay-update-v2.js",
   "arcade-polish-v1.js",
   "snake-rework-v2.js",
-  "ultimate-ui-v1.js"
+  "ultimate-ui-v1.js",
+  "arcade-hub-v1.js"
 ];
 
 for (const file of files) {
@@ -110,7 +111,7 @@ for (const src of localScripts) {
 }
 
 check("menu loads cache-busted gameplay layers", menu.includes("game.js?v=survival-v24") &&
-  menu.includes("ultimate-gameplay-v1.js?v=ultimate-v11") &&
+  menu.includes("ultimate-gameplay-v1.js?v=ultimate-v12") &&
   menu.includes("gameplay-update-v2.js?v=update-v10") &&
   menu.includes("snake-rework-v2.js?v=rework-v5") &&
   html.includes("meta-progression-v1.js?v=meta-v4"));

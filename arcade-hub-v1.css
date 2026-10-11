@@ -1,0 +1,63 @@
+/* Snake Evolution — Arcade Hub redesign v1 */
+:root{--se-bg:#070b09;--se-panel:#0c1410;--se-line:rgba(146,255,177,.17);--se-green:#8dffad;--se-amber:#ffc86b;--se-muted:#9aaea0;--se-radius:16px;--se-shadow:0 22px 70px rgba(0,0,0,.34)}
+body{background-color:var(--se-bg)}
+#bootMenu .boot-card{width:min(1120px,calc(100% - 28px));max-width:1120px;border:1px solid var(--se-line);border-radius:24px;overflow:hidden;box-shadow:var(--se-shadow);background:radial-gradient(ellipse at 18% 0%,rgba(61,232,121,.09),transparent 38%),linear-gradient(145deg,#0b120e,#080c0a 65%)}
+#bootMenu .boot-topline{padding:20px 24px;border-bottom:1px solid var(--se-line)}
+#bootMenu .boot-layout{grid-template-columns:minmax(0,1.12fr) minmax(270px,.88fr);gap:clamp(20px,4vw,48px);padding:clamp(24px,4vw,52px)}
+#bootMenu .boot-hero{align-items:flex-start;text-align:left;min-width:0}
+#bootMenu .boot-emblem{width:72px;height:72px;margin:0 0 24px;border-radius:20px;background:linear-gradient(145deg,rgba(141,255,173,.16),rgba(141,255,173,.02));border:1px solid var(--se-line)}
+#bootMenu .boot-emblem img{width:48px;height:48px}
+#bootMenu .boot-title{font-size:clamp(30px,5.2vw,64px);line-height:1.12;letter-spacing:-.055em;text-align:left;max-width:650px}
+#bootMenu .boot-title-spacer{height:18px}
+#bootMenu .boot-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;width:100%;max-width:620px}
+#bootMenu .boot-actions .boot-primary{grid-column:1/-1;min-height:62px;font-size:15px;letter-spacing:.09em;border-radius:12px;box-shadow:0 0 32px rgba(61,232,121,.12)}
+#bootMenu .boot-action{min-height:48px;border-radius:10px;transition:transform .18s ease,border-color .18s ease,background .18s ease}
+#bootMenu .boot-action:hover{transform:translateY(-2px)}
+#bootMenu .boot-actions .secondary{border:1px solid var(--se-line);background:rgba(255,255,255,.025);text-align:left;padding-inline:16px}
+#bootMenu .boot-brief{align-self:stretch;padding:clamp(18px,2.6vw,28px);border:1px solid var(--se-line);border-radius:16px;background:linear-gradient(160deg,rgba(141,255,173,.055),rgba(255,255,255,.012))}
+#bootMenu .brief-heading{margin-bottom:22px}
+#bootMenu .brief-item{padding:15px 0;border-bottom:1px solid rgba(255,255,255,.07);gap:15px}
+#bootMenu .brief-item strong{color:var(--se-green);font-size:12px}
+#bootMenu .brief-item b{font-size:12px;letter-spacing:.07em}
+#bootMenu .brief-controls{display:flex;align-items:center;flex-wrap:wrap;gap:7px;margin-top:20px}
+#bootMenu .brief-controls kbd{border-radius:6px;padding:6px 8px;background:#111d15;border:1px solid var(--se-line)}
+#bootMenu .landing-profile{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;padding:0 clamp(24px,4vw,52px) 24px;border:0}
+#bootMenu .profile-block{padding:16px 18px;border:1px solid var(--se-line);border-radius:12px;background:rgba(255,255,255,.022);min-width:0}
+#bootMenu .profile-block span{color:var(--se-muted);font-size:10px;letter-spacing:.12em}
+#bootMenu .profile-block strong{display:block;margin-top:7px;font-size:13px;overflow-wrap:anywhere}
+#bootMenu .se-hub{padding:0 clamp(24px,4vw,52px) 28px}
+#bootMenu .se-hub-head{display:flex;justify-content:space-between;align-items:end;gap:14px;margin:4px 0 14px}
+#bootMenu .se-hub-kicker{font:10px/1.5 ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--se-green);letter-spacing:.16em}
+#bootMenu .se-hub-head h3{font-size:clamp(17px,2vw,22px);margin:5px 0 0;color:#eef8ef}
+#bootMenu .se-hub-head p{font:12px/1.5 system-ui,sans-serif;color:var(--se-muted);margin:0}
+#bootMenu .se-hub-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+#bootMenu .se-hub-tile{display:flex;flex-direction:column;align-items:flex-start;gap:12px;text-align:left;min-height:112px;padding:16px;border-radius:12px;border:1px solid var(--se-line);background:linear-gradient(145deg,rgba(255,255,255,.035),rgba(255,255,255,.012));color:#e8f6eb;cursor:pointer}
+#bootMenu .se-hub-tile:hover{border-color:rgba(141,255,173,.48);background:rgba(141,255,173,.055)}
+#bootMenu .se-hub-tile .se-tile-icon{font-size:19px;color:var(--se-green)}
+#bootMenu .se-hub-tile b{font:11px/1.4 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.035em}
+#bootMenu .se-hub-tile small{font:11px/1.45 system-ui,sans-serif;color:var(--se-muted)}
+#bootMenu .se-hub-foot{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;padding-top:14px;color:var(--se-muted);font:11px/1.5 system-ui,sans-serif}
+#bootMenu .se-hub-foot strong{color:var(--se-green);font-weight:600}
+#bootMenu .boot-panels{padding-inline:clamp(24px,4vw,52px)}
+#bootMenu .boot-panel{border-radius:14px;border-color:var(--se-line);background:rgba(7,13,9,.96)}
+#bootMenu .option-row{border-color:rgba(255,255,255,.07)}
+#bootMenu .option-toggle[aria-pressed=true]{color:var(--se-green)}
+#app{max-width:1200px;margin-inline:auto;padding-inline:clamp(10px,2vw,24px)}
+#app .run-hud-v3{gap:12px}
+#app .run-command-bar,#app .run-intel,#app .mission-block,#app .ability-bar,#app .controls,#app .run-mode-bar{border-color:var(--se-line);border-radius:14px;box-shadow:0 10px 32px rgba(0,0,0,.12)}
+#app .run-command-bar{padding:clamp(12px,2vw,20px);background:linear-gradient(120deg,rgba(141,255,173,.055),rgba(255,255,255,.012))}
+#app .run-identity h1{letter-spacing:-.045em}
+#app .run-intel{gap:10px}
+#app .time-tile,#app .xp-module,#app .run-intel>*{border-radius:10px}
+#app .ability-bar{gap:10px;padding:12px;background:rgba(10,17,12,.88)}
+#app .ability-bar button,#app .ability-card{border-radius:10px;min-height:62px}
+#app .controls button{min-height:46px;border-radius:10px}
+#app #game{border-radius:14px;overflow:hidden;box-shadow:0 0 0 1px var(--se-line),0 20px 55px rgba(0,0,0,.28)}
+#app #message .message-card,#app .ultimate-result-card{border-radius:18px;border:1px solid var(--se-line);box-shadow:var(--se-shadow)}
+#app #message .message-card{padding:clamp(20px,4vw,38px)}
+#app #message .gameover-details,#app #message .stats-grid{gap:10px}
+#app #message button,#app #message .boot-action{min-height:46px;border-radius:10px}
+#app :focus-visible,#bootMenu :focus-visible{outline:2px solid var(--se-green);outline-offset:3px}
+@media(max-width:760px){#bootMenu .boot-layout{grid-template-columns:1fr;padding:22px;gap:24px}#bootMenu .boot-hero{align-items:stretch}#bootMenu .boot-title{text-align:left;font-size:clamp(29px,9vw,48px)}#bootMenu .boot-brief{padding:18px}#bootMenu .landing-profile{padding:0 22px 20px;grid-template-columns:1fr 1fr}#bootMenu .profile-audio{grid-column:1/-1}#bootMenu .se-hub{padding:0 22px 22px}#bootMenu .se-hub-grid{grid-template-columns:repeat(2,minmax(0,1fr))}#bootMenu .se-hub-tile{min-height:100px;padding:13px}#bootMenu .boot-panels{padding-inline:22px}#app{padding-inline:8px}}
+@media(max-width:390px){#bootMenu .boot-actions{grid-template-columns:1fr}#bootMenu .boot-actions .boot-primary{grid-column:auto}#bootMenu .landing-profile{grid-template-columns:1fr 1fr}#bootMenu .profile-block{padding:12px}#bootMenu .se-hub-head{align-items:flex-start;flex-direction:column}}
+@media(prefers-reduced-motion:reduce){#bootMenu .boot-action{transition:none}#bootMenu .boot-action:hover{transform:none}}
