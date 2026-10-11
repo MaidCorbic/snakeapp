@@ -207,7 +207,7 @@ check("color control keeps one editor and normalizes the original duplicate mark
   qualityPassJs.includes('legacyGroup.replaceWith(group)') &&
   qualityPassJs.includes('localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings))'));
 check("Options readability rules remove tiny helper paragraphs and scale labels", ultimateUiCss.includes('option-row > div:first-child small') && ultimateUiCss.includes('font-size:clamp(12px,1vw,14px)'));
-check("browser regression covers single HEX editor preview, explicit persistence, and invalid input", read("tests/e2e/game.spec.cjs").includes("Options use one HEX editor and only save color on explicit SAVE") && read("tests/e2e/game.spec.cjs").includes("PREVIEW ONLY:") && read("tests/e2e/game.spec.cjs").includes("SAVE blocked"));
+check("browser regression covers single HEX editor preview, explicit persistence, and invalid input", read("tests/e2e/game.spec.cjs").includes("Options use one HEX editor and only save color on explicit SAVE") && read("tests/e2e/game.spec.cjs").includes("snakeHexInput") && read("tests/e2e/game.spec.cjs").includes("SAVED: #1A2B3C"));
 check("gameplay visibility settings are applied to live UI",
   /function\s+applyGameplaySettings\s*\(/.test(game) &&
   /showTimer/.test(game) &&
