@@ -339,7 +339,7 @@
               if (bootFailed) return;
               const quality = document.createElement("script");
               quality.id = "snakeQualityGameplayScript";
-              quality.src = "quality-gameplay-v1.js?v=quality-v1";
+              quality.src = "quality-gameplay-v1.js?v=quality-v2";
               quality.onload = () => {
                 if (bootFailed) return;
                 try {
