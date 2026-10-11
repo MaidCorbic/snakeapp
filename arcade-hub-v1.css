@@ -61,3 +61,204 @@ body{background-color:var(--se-bg)}
 @media(max-width:760px){#bootMenu .boot-layout{grid-template-columns:1fr;padding:22px;gap:24px}#bootMenu .boot-hero{align-items:stretch}#bootMenu .boot-title{text-align:left;font-size:clamp(29px,9vw,48px)}#bootMenu .boot-brief{padding:18px}#bootMenu .landing-profile{padding:0 22px 20px;grid-template-columns:1fr 1fr}#bootMenu .profile-audio{grid-column:1/-1}#bootMenu .se-hub{padding:0 22px 22px}#bootMenu .se-hub-grid{grid-template-columns:repeat(2,minmax(0,1fr))}#bootMenu .se-hub-tile{min-height:100px;padding:13px}#bootMenu .boot-panels{padding-inline:22px}#app{padding-inline:8px}}
 @media(max-width:390px){#bootMenu .boot-actions{grid-template-columns:1fr}#bootMenu .boot-actions .boot-primary{grid-column:auto}#bootMenu .landing-profile{grid-template-columns:1fr 1fr}#bootMenu .profile-block{padding:12px}#bootMenu .se-hub-head{align-items:flex-start;flex-direction:column}}
 @media(prefers-reduced-motion:reduce){#bootMenu .boot-action{transition:none}#bootMenu .boot-action:hover{transform:none}}
+
+/* LANDING V2 — PIXEL ARCADE SYSTEM
+   Reworks presentation only: existing controls, IDs, and game wiring stay intact. */
+#bootMenu.boot-menu{
+  display:grid!important;place-items:start center!important;
+  min-height:100dvh!important;height:auto!important;overflow-y:auto!important;
+  padding:clamp(12px,2.4vw,32px)!important;
+  background:
+    linear-gradient(rgba(121,227,91,.035) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(121,227,91,.035) 1px,transparent 1px),
+    radial-gradient(ellipse at 50% 0%,rgba(121,227,91,.10),transparent 46%),
+    #050806!important;
+  background-size:24px 24px,24px 24px,auto,auto!important;
+}
+#bootMenu .boot-card{
+  width:min(1160px,100%)!important;max-width:1160px!important;
+  max-height:none!important;overflow:visible!important;
+  margin:auto!important;padding:0!important;
+  border:2px solid #314d36!important;border-radius:4px!important;
+  background:linear-gradient(180deg,#0b120d 0%,#070b08 100%)!important;
+  box-shadow:8px 8px 0 #020302,0 0 0 4px rgba(121,227,91,.025),0 0 64px rgba(121,227,91,.075)!important;
+  text-align:left!important;
+}
+#bootMenu .boot-topline{
+  display:flex!important;align-items:center!important;justify-content:space-between!important;gap:16px!important;
+  padding:15px clamp(16px,2.5vw,28px)!important;margin:0!important;
+  border-bottom:2px solid #263b2b!important;background:#080e0a!important;
+}
+#bootMenu .boot-topline>.eyebrow{font-size:9px!important;letter-spacing:1.5px!important;color:#79e35b!important}
+#bootMenu .boot-top-meta{display:flex!important;align-items:center!important;justify-content:flex-end!important;gap:10px!important;flex-wrap:wrap!important}
+#bootMenu .game-version,#bootMenu .boot-clock,#bootMenu .boot-status{
+  display:inline-flex!important;align-items:center!important;min-height:27px!important;padding:7px 8px!important;
+  border:1px solid #2b4430!important;border-radius:2px!important;background:#0b150d!important;
+  color:#a7c4a8!important;font:7px/1.5 "Press Start 2P",monospace!important;letter-spacing:0!important;
+}
+#bootMenu .boot-status i{width:6px;height:6px;display:inline-block;margin-right:7px;background:#79e35b;box-shadow:0 0 8px #79e35b}
+#bootMenu .boot-layout{
+  display:grid!important;grid-template-columns:minmax(0,1.18fr) minmax(280px,.82fr)!important;
+  gap:clamp(16px,2.5vw,28px)!important;padding:clamp(16px,2.5vw,28px)!important;
+}
+#bootMenu .boot-hero{
+  display:flex!important;flex-direction:column!important;align-items:flex-start!important;justify-content:center!important;
+  min-width:0!important;padding:clamp(18px,3vw,34px)!important;
+  border:1px solid #2b4330!important;border-radius:3px!important;
+  background:radial-gradient(ellipse at 15% 0%,rgba(121,227,91,.10),transparent 54%),#0a110c!important;
+  box-shadow:inset 0 0 0 4px rgba(0,0,0,.12)!important;
+}
+#bootMenu .boot-emblem{
+  width:64px!important;height:64px!important;margin:0 0 22px!important;
+  display:grid!important;place-items:center!important;border:2px solid #426347!important;border-radius:3px!important;
+  background:#0b170e!important;box-shadow:4px 4px 0 #030503!important;
+}
+#bootMenu .boot-emblem img{width:44px!important;height:44px!important}
+#bootMenu .boot-title{
+  max-width:100%!important;margin:0!important;padding:0!important;
+  font:clamp(24px,3.5vw,44px)/1.45 "Press Start 2P",monospace!important;
+  letter-spacing:-1.3px!important;text-align:left!important;color:#e2f5df!important;
+  text-shadow:3px 3px 0 #172b1a!important;overflow-wrap:anywhere!important;
+}
+#bootMenu .boot-title b{display:block!important;color:#79e35b!important}
+#bootMenu .boot-title-spacer{height:15px!important}
+#bootMenu .boot-actions{
+  display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  gap:9px!important;width:100%!important;max-width:none!important;margin-top:12px!important;
+}
+#bootMenu .boot-action{
+  display:flex!important;align-items:center!important;justify-content:space-between!important;gap:8px!important;
+  min-width:0!important;min-height:48px!important;margin:0!important;padding:12px!important;
+  border:1px solid #334c38!important;border-radius:2px!important;
+  background:#0b140e!important;color:#cde7ca!important;
+  font:8px/1.7 "Press Start 2P",monospace!important;letter-spacing:0!important;text-align:left!important;
+  box-shadow:3px 3px 0 #020402!important;transition:transform .14s,border-color .14s,background .14s!important;
+}
+#bootMenu .boot-action:hover{transform:translate(-1px,-1px)!important;border-color:#79e35b!important;background:#102015!important}
+#bootMenu .boot-actions .boot-primary{
+  grid-column:1/-1!important;min-height:60px!important;padding:16px!important;
+  border:2px solid #79e35b!important;background:linear-gradient(180deg,#18331e,#0e1c12)!important;
+  color:#baffaa!important;font-size:11px!important;letter-spacing:.6px!important;
+  box-shadow:4px 4px 0 #29442e,0 0 24px rgba(121,227,91,.10)!important;
+}
+#bootMenu .boot-actions .secondary{background:#0a100c!important}
+#bootMenu .boot-brief{
+  align-self:stretch!important;min-width:0!important;padding:clamp(17px,2.3vw,26px)!important;
+  border:1px solid #2b4330!important;border-radius:3px!important;
+  background:linear-gradient(145deg,#0d1710,#080d09)!important;
+}
+#bootMenu .brief-heading{
+  display:flex!important;align-items:center!important;justify-content:space-between!important;gap:10px!important;
+  margin:0 0 15px!important;padding:0 0 14px!important;border-bottom:1px solid #2b4030!important;
+  color:#79e35b!important;font:9px/1.7 "Press Start 2P",monospace!important;
+}
+#bootMenu .brief-heading b{color:#ffd85c!important;font-size:7px!important}
+#bootMenu .brief-item{display:flex!important;align-items:center!important;gap:13px!important;padding:15px 0!important;border-bottom:1px solid #1c2a20!important}
+#bootMenu .brief-item>strong{
+  display:grid!important;place-items:center!important;flex:0 0 34px!important;width:34px!important;height:34px!important;
+  border:1px solid #35513a!important;background:#0b160e!important;color:#79e35b!important;font-size:9px!important;
+}
+#bootMenu .brief-item>div b{font:8px/1.8 "Press Start 2P",monospace!important;color:#d7ead4!important}
+#bootMenu .brief-controls{display:flex!important;align-items:center!important;gap:7px!important;flex-wrap:wrap!important;margin-top:16px!important;padding-top:14px!important;border-top:1px solid #1c2a20!important}
+#bootMenu .brief-controls span{font:7px/1.6 "Press Start 2P",monospace!important;color:#90a892!important}
+#bootMenu .brief-controls kbd{padding:7px!important;border:1px solid #38523d!important;border-radius:2px!important;background:#060b07!important;color:#b7e9b1!important;font:7px/1.4 "Press Start 2P",monospace!important}
+#bootMenu .landing-profile{
+  display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:10px!important;
+  padding:0 clamp(16px,2.5vw,28px) 18px!important;margin:0!important;border:0!important;
+}
+#bootMenu .profile-block{
+  min-width:0!important;padding:15px!important;border:1px solid #2b4030!important;border-radius:3px!important;
+  background:#09100b!important;box-shadow:inset 0 0 18px rgba(0,0,0,.15)!important;
+}
+#bootMenu .profile-block span{display:block!important;color:#8aa28c!important;font:7px/1.8 "Press Start 2P",monospace!important;letter-spacing:0!important}
+#bootMenu .profile-block strong{display:block!important;margin-top:10px!important;color:#e0f4dc!important;font:9px/1.8 "Press Start 2P",monospace!important;overflow-wrap:anywhere!important}
+#bootMenu .profile-audio strong{color:#79e35b!important}
+#bootMenu .se-hub{
+  margin:0 clamp(16px,2.5vw,28px) 20px!important;padding:18px!important;
+  border:1px solid #35513a!important;border-radius:3px!important;
+  background:linear-gradient(135deg,rgba(121,227,91,.055),transparent 48%),#080e0a!important;
+  box-shadow:inset 0 0 0 3px rgba(0,0,0,.16)!important;
+}
+#bootMenu .se-hub-head{align-items:center!important;margin:0 0 16px!important;padding-bottom:13px!important;border-bottom:1px solid #25392a!important}
+#bootMenu .se-hub-kicker{font:7px/1.8 "Press Start 2P",monospace!important;letter-spacing:0!important;color:#79e35b!important}
+#bootMenu .se-hub-head h3{margin:8px 0 0!important;color:#e2f5df!important;font:clamp(12px,1.5vw,16px)/1.7 "Press Start 2P",monospace!important}
+#bootMenu .se-hub-head p{margin:0!important;color:#ffd85c!important;font:7px/1.8 "Press Start 2P",monospace!important;text-align:right!important}
+#bootMenu .se-hub-grid{grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:9px!important}
+#bootMenu .se-hub-tile{
+  display:flex!important;flex-direction:column!important;align-items:flex-start!important;gap:10px!important;
+  min-width:0!important;min-height:124px!important;padding:14px!important;
+  border:1px solid #2d4432!important;border-radius:3px!important;background:#0a120c!important;
+  color:#d9efd5!important;text-align:left!important;box-shadow:3px 3px 0 #020402!important;
+  transition:transform .14s,border-color .14s,background .14s!important;
+}
+#bootMenu .se-hub-tile:hover{transform:translate(-1px,-1px)!important;border-color:#79e35b!important;background:#102015!important}
+#bootMenu .se-hub-tile .se-tile-icon{font:20px/1.2 "Press Start 2P",monospace!important;color:#79e35b!important}
+#bootMenu .se-hub-tile b{font:7px/1.8 "Press Start 2P",monospace!important;letter-spacing:0!important;overflow-wrap:anywhere!important}
+#bootMenu .se-hub-tile small{font:11px/1.6 ui-monospace,monospace!important;color:#90a892!important}
+#bootMenu .se-hub-foot{padding-top:13px!important;font:7px/1.8 "Press Start 2P",monospace!important;color:#90a892!important}
+#bootMenu .se-hub-foot strong{color:#79e35b!important}
+#bootMenu .boot-panels{padding:0 clamp(16px,2.5vw,28px) 24px!important}
+#bootMenu .boot-panel{margin-top:12px!important;padding:18px!important;border:1px solid #2d4432!important;border-radius:3px!important;background:#080e0a!important;color:#d9efd5!important}
+#bootMenu .boot-panel-heading{border-color:#25392a!important}
+#bootMenu .boot-panel-heading b{font:9px/1.8 "Press Start 2P",monospace!important;color:#79e35b!important}
+#bootMenu .boot-panel-heading small{font:7px/1.8 ui-monospace,monospace!important;color:#90a892!important}
+#bootMenu .boot-panel-heading>strong{font:7px/1.8 "Press Start 2P",monospace!important;color:#ffd85c!important}
+#bootMenu .option-row{border-color:#1c2a20!important}
+#bootMenu .option-row>div:first-child b{font:8px/1.8 "Press Start 2P",monospace!important;color:#d9efd5!important}
+#bootMenu .option-row>div:first-child small{font:11px/1.6 ui-monospace,monospace!important;color:#90a892!important}
+#bootMenu .option-toggle{border:1px solid #38523d!important;border-radius:2px!important;background:#0b150d!important;color:#9cb49d!important;font:8px/1.6 "Press Start 2P",monospace!important}
+#bootMenu .option-toggle[aria-pressed=true]{border-color:#79e35b!important;color:#79e35b!important}
+#bootMenu .boot-panel button{font-family:"Press Start 2P",monospace!important}
+#bootMenu .se-profile-dialog{margin:14px clamp(16px,2.5vw,28px) 20px!important;padding:18px!important;white-space:pre-line!important;font:8px/2 "Press Start 2P",monospace!important;color:#d9efd5!important}
+#bootMenu .se-profile-dialog>div{color:#d9efd5!important}
+#bootMenu .se-profile-dialog button{margin-top:14px!important}
+#bootMenu :focus-visible{outline:2px solid #ffd85c!important;outline-offset:3px!important}
+@media(max-width:900px){
+  #bootMenu .boot-layout{grid-template-columns:minmax(0,1fr) minmax(240px,.8fr)!important;gap:12px!important;padding:14px!important}
+  #bootMenu .boot-hero{padding:20px!important}
+  #bootMenu .boot-title{font-size:clamp(22px,4vw,34px)!important}
+  #bootMenu .boot-brief{padding:16px!important}
+  #bootMenu .se-hub-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+}
+@media(max-width:680px){
+  #bootMenu.boot-menu{padding:8px!important}
+  #bootMenu .boot-topline{align-items:flex-start!important;padding:12px!important;flex-direction:column!important}
+  #bootMenu .boot-top-meta{justify-content:flex-start!important}
+  #bootMenu .game-version,#bootMenu .boot-clock,#bootMenu .boot-status{font-size:6px!important}
+  #bootMenu .boot-layout{grid-template-columns:1fr!important;padding:10px!important}
+  #bootMenu .boot-hero{padding:18px!important}
+  #bootMenu .boot-title{font-size:clamp(21px,6.6vw,34px)!important}
+  #bootMenu .boot-emblem{width:52px!important;height:52px!important;margin-bottom:16px!important}
+  #bootMenu .boot-emblem img{width:36px!important;height:36px!important}
+  #bootMenu .boot-actions{gap:8px!important}
+  #bootMenu .boot-action{min-height:44px!important;padding:10px!important;font-size:7px!important}
+  #bootMenu .boot-actions .boot-primary{min-height:54px!important;font-size:9px!important}
+  #bootMenu .boot-brief{padding:15px!important}
+  #bootMenu .landing-profile{grid-template-columns:repeat(2,minmax(0,1fr))!important;padding:0 10px 12px!important;gap:7px!important}
+  #bootMenu .profile-block{padding:12px!important}
+  #bootMenu .profile-block span{font-size:6px!important}
+  #bootMenu .profile-block strong{font-size:7px!important}
+  #bootMenu .profile-audio{grid-column:1/-1}
+  #bootMenu .se-hub{margin:0 10px 14px!important;padding:13px!important}
+  #bootMenu .se-hub-head{align-items:flex-start!important;flex-direction:column!important;gap:8px!important}
+  #bootMenu .se-hub-head h3{font-size:12px!important}
+  #bootMenu .se-hub-head p{text-align:left!important}
+  #bootMenu .se-hub-tile{min-height:112px!important;padding:11px!important}
+  #bootMenu .se-hub-tile b{font-size:6px!important}
+  #bootMenu .se-hub-tile small{font-size:10px!important}
+  #bootMenu .se-hub-foot{font-size:6px!important}
+  #bootMenu .boot-panels{padding:0 10px 16px!important}
+  #bootMenu .boot-panel{padding:12px!important}
+}
+@media(max-width:390px){
+  #bootMenu .boot-actions{grid-template-columns:1fr!important}
+  #bootMenu .boot-actions .boot-primary{grid-column:auto!important}
+  #bootMenu .brief-item>div b{font-size:7px!important}
+  #bootMenu .se-hub-grid{grid-template-columns:1fr 1fr!important}
+  #bootMenu .se-hub-tile{min-height:105px!important}
+  #bootMenu .se-hub-tile small{font-size:9px!important}
+}
+@media(prefers-reduced-motion:reduce){
+  #bootMenu .boot-action,#bootMenu .se-hub-tile{transition:none!important}
+  #bootMenu .boot-action:hover,#bootMenu .se-hub-tile:hover{transform:none!important}
+}

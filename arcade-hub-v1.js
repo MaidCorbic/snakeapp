@@ -29,7 +29,7 @@ function addHub(){
    const save=safeRead("snake-evolution-save"),best=Math.max(0,Number(safeRead("snake-evolution-best",0))||Number(save.best)||0),runs=Math.max(0,Number(save.runs)||0),wins=Math.max(0,Number(save.wins)||0);
    const ratio=runs?Math.round(wins/runs*100):0;
    const details=["CAREER PROFILE","Best score: "+best,"Runs recorded: "+runs,"Survival wins: "+wins,"Win rate: "+ratio+"%","Daily record: "+(Number(safeRead("snake-evolution-daily-best",0))||0),"","Records are stored locally in this browser."].join("\n");
-   let panel=$("#seProfileDialog");if(!panel){panel=document.createElement("div");panel.id="seProfileDialog";panel.className="boot-panel";panel.style.cssText="margin:16px 0;padding:20px;border:1px solid var(--se-line);border-radius:14px;background:#0a120d;color:#e8f6eb;white-space:pre-line;font:13px/1.9 ui-monospace,monospace";panel.setAttribute("role","status");hub.insertAdjacentElement("afterend",panel)}
+   let panel=$("#seProfileDialog");if(!panel){panel=document.createElement("div");panel.id="seProfileDialog";panel.className="boot-panel se-profile-dialog";panel.setAttribute("role","status");hub.insertAdjacentElement("afterend",panel)}
    panel.replaceChildren();const content=document.createElement("div");content.textContent=details;panel.append(content);
    const close=document.createElement("button");close.type="button";close.className="boot-action secondary";close.textContent="CLOSE PROFILE";close.addEventListener("click",()=>panel.remove());panel.append(close);
   }
