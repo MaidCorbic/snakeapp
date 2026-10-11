@@ -150,6 +150,8 @@ test("Party Run keeps its four lives and isolated mode state", async ({ page }) 
   await expect(page.locator(".se-tutorial-overlay")).toBeVisible();
   await page.locator("#seTutorialStart").click();
   await expect(page.locator(".se-tutorial-overlay")).toHaveCount(0);
+  await page.locator("#contractDecline").click();
+  await expect.poll(() => page.evaluate(() => window.SnakeEvolution.getState().contractOfferOpen)).toBe(false);
   const state = await page.evaluate(() => window.SnakeEvolution.getState());
   expect(state.lives).toBe(4);
   expect(state.mode).toBe("party");
@@ -418,5 +420,8 @@ test("normal launch shows a first-run tutorial and can resume gameplay", async (
   await page.locator("#seTutorialStart").click();
   await expect(page.locator(".se-tutorial-overlay")).toHaveCount(0);
   expect(await page.evaluate(() => localStorage.getItem("snake-evolution-tutorial-seen-v1"))).toBe("true");
+  await page.locator("#contractDecline").click();
+  await expect.poll(() => page.evaluate(() => window.SnakeEvolution.getState().contractOfferOpen)).toBe(false);
+  await expect(page.locator("#pauseBtn")).toBeEnabled();
   expect(pageErrors).toEqual([]);
 });
