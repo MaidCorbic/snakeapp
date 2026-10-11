@@ -185,6 +185,28 @@
     overlay.querySelector("#seTutorialSkip").addEventListener("click", dismiss);
     overlay.querySelector("#seTutorialStart").focus();
   }
+  function syncContractOffer() {
+    const state = getState();
+    const offered = state.contractOfferOpen === true;
+    const accept = document.querySelector("#contractAccept");
+    const decline = document.querySelector("#contractDecline");
+    if (accept) {
+      accept.classList.toggle("hidden", !offered);
+      accept.setAttribute("aria-hidden", String(!offered));
+      accept.disabled = !offered;
+    }
+    if (decline) {
+      decline.classList.toggle("hidden", !offered);
+      decline.setAttribute("aria-hidden", String(!offered));
+      decline.disabled = !offered;
+    }
+    const title = document.querySelector("#contract");
+    const label = document.querySelector("#contractLabel");
+    if (offered) {
+      if (title) title.textContent = "OFFER";
+      if (label) label.textContent = "ACCEPT OR DECLINE";
+    }
+  }
   function wrapLaunchMethods() {
     const api = window.SnakeEvolution;
     if (!api || api.__qualityLaunchWrapped) return;
@@ -195,7 +217,9 @@
         const result = original.apply(this, args);
         window.setTimeout(() => {
           styleSettingsToBody();
+          syncContractOffer();
           showFirstRunTutorial();
+          syncContractOffer();
           updateThreatPanel();
           polishAchievements(true);
         }, 0);
