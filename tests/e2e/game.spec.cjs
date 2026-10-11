@@ -24,6 +24,8 @@ async function startGame(page) {
   await expect(page.locator("#game")).toBeVisible();
   await expect(page.locator("#message")).toHaveClass(/hidden/);
   await expect.poll(() => page.evaluate(() => typeof window.__snakeE2E?.startGameplay)).toBe("function");
+  const tutorial = page.locator(".se-tutorial-overlay");
+  if (await tutorial.isVisible().catch(() => false)) await page.locator("#seTutorialStart").click();
   await page.evaluate(() => window.__snakeE2E.startGameplay());
 }
 
@@ -101,7 +103,8 @@ test("game boot loads all gameplay layers and starts a run", async ({ page }) =>
     "snakeUltimateScript",
     "snakeGameplayUpdateV2",
     "snakeArcadePolishV1",
-    "snakeReworkV2"
+    "snakeReworkV2",
+    "snakeQualityGameplayScript"
   ].every(id => Boolean(document.getElementById(id))));
   expect(loadedLayers).toBe(true);
   expect(pageErrors).toEqual([]);
@@ -144,6 +147,11 @@ test("Party Run keeps its four lives and isolated mode state", async ({ page }) 
   await page.goto("/index.html");
   await page.locator("#bootFun").click();
   await expect.poll(() => page.evaluate(() => window.SnakeEvolution?.getState?.().alive)).toBe(true);
+  await expect(page.locator(".se-tutorial-overlay")).toBeVisible();
+  await page.locator("#seTutorialStart").click();
+  await expect(page.locator(".se-tutorial-overlay")).toHaveCount(0);
+  await page.locator("#contractDecline").click();
+  await expect.poll(() => page.evaluate(() => window.SnakeEvolution.getState().contractOfferOpen)).toBe(false);
   const state = await page.evaluate(() => window.SnakeEvolution.getState());
   expect(state.lives).toBe(4);
   expect(state.mode).toBe("party");
@@ -370,17 +378,50 @@ test("win path renders a victory report and persists the win", async ({ page }) 
   await expect.poll(() => page.evaluate(() => JSON.parse(localStorage.getItem("snake-evolution-save") || "{}").wins)).toBe(1);
 });
 
-test("arcade hub redesign exposes profile, daily, collection, and settings navigation", async ({ page }) => {
+test("Player Center uses a clean four-stat dashboard with no duplicate decorative mark", async ({ page }) => {
   const pageErrors = [];
   page.on("pageerror", error => pageErrors.push(error.message));
   await page.goto("/index.html");
   await expect(page.locator("#seArcadeHub")).toBeVisible();
-  await expect(page.locator("#seArcadeHub .se-hub-tile")).toHaveCount(4);
-  await expect(page.locator("#seHubDate")).toContainText("DAILY CHALLENGE");
-  await page.locator('[data-hub-action="profile"]').click();
-  await expect(page.locator("#seProfileDialog")).toContainText("CAREER PROFILE");
-  await page.locator("#seProfileDialog button").click();
-  await page.locator('[data-hub-action="settings"]').click();
+  await expect(page.locator("#seArcadeHub .se-progress-stat")).toHaveCount(4);
+  await expect(page.locator("#seArcadeHub .se-hub-mark")).toHaveCount(0);
+  await expect(page.locator(".landing-profile")).toHaveCount(0);
+  expect(pageErrors).toEqual([]);
+});
+
+test("Options expose snake color and gameplay toggles without Profile and Utilities", async ({ page }) => {
+  const pageErrors = [];
+  page.on("pageerror", error => pageErrors.push(error.message));
+  await page.goto("/index.html");
+  await expect(page.locator("#bootVersion")).toHaveText("V2.8.2");
+  await expect(page.locator("#bootClock")).toBeVisible();
+  await page.locator("#bootOptions").click();
   await expect(page.locator("#bootOptionsPanel")).toBeVisible();
+  await expect(page.locator(".snake-color-group")).toBeVisible();
+  await expect(page.locator('#bootOptionsPanel .option-group[aria-label="PROFILE & UTILITIES"]')).toHaveCount(0);
+  await expect(page.locator("#bootOptionsPanel .control-deck-profile-row")).toHaveCount(0);
+  const swatch = page.locator('.snake-swatch[data-snake-color="#62cfff"]');
+  await swatch.click();
+  await expect.poll(() => page.evaluate(() => JSON.parse(localStorage.getItem("snake-evolution-settings") || "{}").snakeColor)).toBe("#62cfff");
+  await expect(swatch).toHaveAttribute("aria-pressed", "true");
+  await page.locator("#bootRadar").click();
+  await expect(page.locator("#bootRadar")).toHaveAttribute("aria-pressed", "false");
+  expect(pageErrors).toEqual([]);
+});
+
+test("normal launch shows a first-run tutorial and can resume gameplay", async ({ page }) => {
+  const pageErrors = [];
+  page.on("pageerror", error => pageErrors.push(error.message));
+  await page.goto("/index.html");
+  await page.locator("#bootStart").click();
+  await expect.poll(() => page.evaluate(() => window.SnakeEvolution?.getState?.().alive)).toBe(true);
+  await expect(page.locator(".se-tutorial-overlay")).toBeVisible();
+  await expect(page.locator("#seTutorialStart")).toBeEnabled();
+  await page.locator("#seTutorialStart").click();
+  await expect(page.locator(".se-tutorial-overlay")).toHaveCount(0);
+  expect(await page.evaluate(() => localStorage.getItem("snake-evolution-tutorial-seen-v1"))).toBe("true");
+  await page.locator("#contractDecline").click();
+  await expect.poll(() => page.evaluate(() => window.SnakeEvolution.getState().contractOfferOpen)).toBe(false);
+  await expect(page.locator("#pauseBtn")).toBeEnabled();
   expect(pageErrors).toEqual([]);
 });

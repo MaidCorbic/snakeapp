@@ -22,7 +22,7 @@
 
     const sections = [
       { label: "01 / PRESENTATION", keys: ["bootGrid", "bootMotion", "bootCrt", "bootContrast", "bootHomeClock"] },
-      { label: "02 / IN-RUN HUD", keys: ["bootTimer", "bootXp", "bootIntel", "bootMissions", "bootAbilities", "bootTouch", "bootAutoPause"] },
+      { label: "02 / IN-RUN HUD", keys: ["bootTimer", "bootXp", "bootIntel", "bootMissions", "bootAbilities", "bootTouch", "bootAutoPause", "bootRadar", "bootEnemyDetails"] },
       { label: "03 / AUDIO & FEEDBACK", keys: ["bootVibration", "bootFx", "bootSound", "bootMusic", "bootVolume"] }
     ];
     const allRows = [...grid.children].filter(node => node.classList.contains("option-row"));
@@ -53,7 +53,7 @@
       group.className = "option-group";
       const heading = document.createElement("h3");
       heading.className = "option-group-title";
-      heading.textContent = "04 / PROFILE & UTILITIES";
+      heading.textContent = "04 / GAME CUSTOMIZATION";
       group.appendChild(heading);
       rowsById.forEach(row => group.appendChild(row));
       grid.appendChild(group);
