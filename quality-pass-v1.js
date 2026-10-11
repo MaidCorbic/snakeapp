@@ -100,7 +100,14 @@
     enhanceControlScheme();
     const settings = readSettings();
     if (validColor(settings.snakeColor)) document.documentElement.style.setProperty("--snake-color", settings.snakeColor);
+    if (validColor(settings.snakeColor)) markPalette(settings.snakeColor);
   }
+  document.addEventListener("snake-evolution-settings-changed", event => {
+    const color = event.detail?.snakeColor;
+    if (!validColor(color)) return;
+    markPalette(color);
+    document.documentElement.style.setProperty("--snake-color", color);
+  });
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", start, {once:true});
   else start();
   window.SnakeQualityMenu = Object.freeze({version:"1.0.0",applySnakeColor,refresh:cleanOptions});
