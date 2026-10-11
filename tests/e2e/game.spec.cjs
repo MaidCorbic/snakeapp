@@ -466,19 +466,21 @@ test("ability deck exposes clear names and responsive visual states", async ({ p
   expect(deck).toBe("grid");
 });
 
-test("wall collision ends a run and displays the loss result", async ({ page }) => {
+test("wall and obstacle collisions recover without freezing gameplay", async ({ page }) => {
   await startGame(page);
 
-  // Turn down once before turning left, respecting the no-reverse input rule.
-  await page.keyboard.press("ArrowDown");
-  await page.waitForTimeout(150);
-  await page.keyboard.press("ArrowLeft");
+  for (const scenario of ["setWallCollisionScenario", "setObstacleCollisionScenario"]) {
+    await page.evaluate(name => window.__snakeE2E[name](), scenario);
+    await expect.poll(() => page.evaluate(() => window.SnakeEvolution.getState().lives)).toBe(2);
+    await expect.poll(() => page.evaluate(() => {
+      const state = window.__snakeE2E.getCollisionRecoveryState();
+      return state.alive && state.timerPending && state.shielded && state.damage === 1;
+    })).toBe(true);
 
-  await expect(page.locator("#message h2")).toHaveText("RUN OVER", { timeout: 4_000 });
-  await expect(page.locator("#message .result-copy")).toContainText("RUN ENDED");
-  await expect(page.locator("#message .gameover-details")).toBeVisible();
-  await expect(page.locator("#start")).toBeVisible();
-  await expect.poll(() => page.evaluate(() => JSON.parse(localStorage.getItem("snake-evolution-save") || "{}").runs)).toBe(1);
+    const respawnHead = await page.evaluate(() => window.SnakeEvolution.getState().snakeHead);
+    await expect.poll(() => page.evaluate(() => window.SnakeEvolution.getState().snakeHead), { timeout: 2_000 }).not.toEqual(respawnHead);
+    await expect.poll(() => page.evaluate(() => window.SnakeEvolution.getState().alive)).toBe(true);
+  }
 });
 
 test("rapid direction input cannot queue an immediate reverse turn", async ({ page }) => {
