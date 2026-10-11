@@ -341,7 +341,7 @@
         }
         const update = document.createElement("script");
         update.id = "snakeGameplayUpdateV2";
-        update.src = "gameplay-update-v2.js?v=update-v13";
+        update.src = "gameplay-update-v2.js?v=update-v14";
         update.onload = () => {
           if (bootFailed) return;
           const polish = document.createElement("script");
