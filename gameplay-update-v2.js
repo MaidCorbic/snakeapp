@@ -26,6 +26,7 @@
   // pickup/event callback throws before the normal next-tick timeout is armed.
   move = function moveWithV2Recovery(force = false) {
     if (!alive || paused || contractOfferOpen || extractionOpen) return;
+    // A tick owns exactly one timeout. Clear it before advancing the simulation.
     clearTimeout(timer);
     timer = null;
     const beforeEnergy = stats?.energy || 0;
@@ -82,10 +83,20 @@
 
   pause = function pauseWithButtonState() {
     if (!alive) {
+      clearTimeout(timer);
+      timer = null;
       syncPauseButton();
       return;
     }
+    if (!paused) {
+      clearTimeout(timer);
+      timer = null;
+    }
     basePauseV2();
+    if (paused) {
+      clearTimeout(timer);
+      timer = null;
+    }
     syncPauseButton();
   };
 

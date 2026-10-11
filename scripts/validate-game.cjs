@@ -46,6 +46,7 @@ const rework = read("snake-rework-v2.js");
 const reworkCss = read("snake-rework-v2.css");
 const ultimateUiCss = read("ultimate-ui-v1.css");
 const ultimateUiJs = read("ultimate-ui-v1.js");
+const qualityPassJs = read("quality-pass-v1.js");
 const update = read("gameplay-update-v2.js");
 
 const ids = [...html.matchAll(/\bid\s*=\s*["']([^"']+)["']/g)].map(m => m[1]);
@@ -69,7 +70,7 @@ const requiredIds = [
 ];
 
 check("arcade polish stylesheet exists", fs.existsSync(path.join(root, "arcade-polish-v1.css")));
-check("ultimate UI assets are linked and grouped options are present", html.includes("ultimate-ui-v1.css?v=ultimate-ui-v2") && html.includes("ultimate-ui-v1.js?v=ultimate-ui-v2") && ultimateUiCss.includes(".option-group") && ultimateUiCss.includes(".ultimate-result-card") && /setAttribute\("role",\s*"dialog"\)/.test(ultimateUiJs));
+check("ultimate UI assets are linked and grouped options are present", html.includes("ultimate-ui-v1.css?v=ultimate-ui-v2") && html.includes("ultimate-ui-v1.js?v=ultimate-ui-v6") && ultimateUiCss.includes(".option-group") && ultimateUiCss.includes(".ultimate-result-card") && /setAttribute\("role",\s*"dialog"\)/.test(ultimateUiJs));
 check("release polish stylesheet is linked", html.includes('release-polish-v1.css?v=release-v1') && releasePolish.includes(":focus-visible"));
 check("Endless is available from the landing menu", html.includes('id="bootEndless"') && !html.includes(".boot-actions #bootEndless{\n  display:none!important;") && !reworkCss.includes("body.rework-v2 .boot-actions #bootEndless{\n  display:none!important;"));
 check("rework stylesheet exists", fs.existsSync(path.join(root, "snake-rework-v2.css")));
@@ -191,9 +192,22 @@ check("gameplay balance tuning limits arena pressure",
   /function\s+addHazards\(count=1\)/.test(game) &&
   (game.match(/hazards\.push\(free\(\)\)/g) || []).length === 1);
 
-check("HEX color picker supports validation, live preview, and explicit save", html.includes('id="snakeHexInput"') && html.includes('id="snakeColorSave"') && ultimateUiJs.includes('snake-evolution-color-preview') && ultimateUiJs.includes('SAVE blocked') && game.includes('function getSnakeColor()'));
+check("one authoritative HEX editor supports validation, live preview, and explicit save",
+  html.includes('id="snakeHexInput"') && html.includes('id="snakeColorSave"') &&
+  qualityPassJs.includes('function ensureColorControls()') &&
+  qualityPassJs.includes('function setupSnakeColorControls(controls)') &&
+  qualityPassJs.includes('snake-evolution-color-preview') &&
+  qualityPassJs.includes('SAVE blocked') &&
+  !qualityPassJs.includes('function applySnakeColor') &&
+  read("tests/e2e/game.spec.cjs").includes("Options use one HEX editor and only save color on explicit SAVE"));
+check("color control keeps one editor and normalizes the original duplicate markup",
+  (html.match(/id="snakeHexInput"/g) || []).length === 1 &&
+  (html.match(/id="snakeColorSave"/g) || []).length === 1 &&
+  qualityPassJs.includes('panel.querySelectorAll(".snake-custom-color, #seCustomSnakeColor")') &&
+  qualityPassJs.includes('legacyGroup.replaceWith(group)') &&
+  qualityPassJs.includes('localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings))'));
 check("Options readability rules remove tiny helper paragraphs and scale labels", ultimateUiCss.includes('option-row > div:first-child small') && ultimateUiCss.includes('font-size:clamp(12px,1vw,14px)'));
-check("browser regression covers custom HEX preview and persistence", read("tests/e2e/game.spec.cjs").includes("custom HEX snake color previews live") && read("tests/e2e/game.spec.cjs").includes("saved snake color is restored"));
+check("browser regression covers single HEX editor preview, explicit persistence, and invalid input", read("tests/e2e/game.spec.cjs").includes("Options use one HEX editor and only save color on explicit SAVE") && read("tests/e2e/game.spec.cjs").includes("snakeHexInput") && read("tests/e2e/game.spec.cjs").includes("SAVED: #1A2B3C"));
 check("gameplay visibility settings are applied to live UI",
   /function\s+applyGameplaySettings\s*\(/.test(game) &&
   /showTimer/.test(game) &&
