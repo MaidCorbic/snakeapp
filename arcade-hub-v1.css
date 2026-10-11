@@ -311,3 +311,267 @@ body{background-color:var(--se-bg)}
  #bootMenu .se-hub-foot{font-size:6px!important}
 }
 @media(max-width:390px){#bootMenu .se-progress-grid{grid-template-columns:1fr 1fr!important}#bootMenu .se-progress-stat{min-height:100px!important;padding:10px!important}#bootMenu .se-progress-stat strong{font-size:17px!important}#bootMenu .se-stat-label{font-size:5px!important}}
+
+
+/* LANDING FINISH — visual hierarchy, tactile controls, responsive polish.
+   Scoped to the boot menu; no game logic or gameplay layout changes. */
+#bootMenu{
+  isolation:isolate;
+  background:
+    radial-gradient(ellipse at 50% 8%,rgba(141,255,173,.105),transparent 38%),
+    linear-gradient(rgba(141,255,173,.028) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(141,255,173,.028) 1px,transparent 1px),
+    #050806!important;
+  background-size:auto,28px 28px,28px 28px,auto!important;
+}
+#bootMenu .boot-card{
+  position:relative!important;
+  border-color:#3c6044!important;
+  box-shadow:0 0 0 1px #0a160d,0 22px 70px #0009,0 0 72px #79e35b0c!important;
+}
+#bootMenu .boot-card:before{
+  content:"";
+  position:absolute;
+  z-index:0;
+  inset:0;
+  pointer-events:none;
+  background:linear-gradient(115deg,transparent 0%,#a5ff7d05 48%,transparent 70%);
+}
+#bootMenu .boot-topline,
+#bootMenu .boot-layout,
+#bootMenu .se-hub,
+#bootMenu .boot-panels{position:relative;z-index:1}
+#bootMenu .boot-topline{
+  background:linear-gradient(90deg,#09120b,#0a100c 60%,#080e0a)!important;
+}
+#bootMenu .boot-topline>.eyebrow{
+  display:inline-flex;
+  align-items:center;
+  gap:9px;
+  color:#b7d8bb!important;
+  font-size:8px!important;
+  letter-spacing:2px!important;
+}
+#bootMenu .boot-topline>.eyebrow:before{
+  content:"";
+  width:7px;height:7px;flex:0 0 7px;
+  background:#8dffad;
+  box-shadow:0 0 12px #8dffad80;
+}
+#bootMenu .boot-hero{
+  position:relative;
+  overflow:hidden;
+  border-color:#3a5940!important;
+  background:
+    radial-gradient(ellipse at 8% 0%,#8dffad13,transparent 48%),
+    linear-gradient(150deg,#0d1911,#080e0a 72%)!important;
+  box-shadow:inset 0 1px #ffffff0a,0 12px 30px #0003!important;
+}
+#bootMenu .boot-emblem{
+  position:relative;
+  box-shadow:0 0 0 5px #8dffad08,0 0 28px #8dffad12!important;
+}
+#bootMenu .boot-title{
+  text-wrap:balance;
+  text-shadow:0 4px 0 #09150b,0 0 28px #8dffad12!important;
+}
+#bootMenu .boot-title b{
+  color:#a5ff7d!important;
+  text-shadow:0 0 24px #8dffad1b!important;
+}
+#bootMenu .boot-tagline{
+  max-width:48ch!important;
+  color:#b1c7b5!important;
+  font-size:clamp(11px,.9vw,13px)!important;
+  line-height:1.85!important;
+  letter-spacing:.01em!important;
+}
+#bootMenu .boot-pills span{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  border-color:#36563d!important;
+  color:#c5ddc8!important;
+  box-shadow:inset 0 1px #ffffff08;
+}
+#bootMenu .boot-actions .boot-primary,
+#bootMenu .boot-actions #bootStart{
+  position:relative;
+  justify-content:center!important;
+  border:1px solid #a5ff7d!important;
+  background:linear-gradient(180deg,#25472c,#112819 65%,#0c1b11)!important;
+  color:#d9ffd0!important;
+  box-shadow:0 4px 0 #203d27,0 0 24px #8dffad13,inset 0 1px #ffffff18!important;
+  text-shadow:0 0 12px #8dffad1c;
+  transition:filter .16s ease,box-shadow .16s ease,border-color .16s ease!important;
+}
+#bootMenu .boot-actions .boot-primary:hover,
+#bootMenu .boot-actions #bootStart:hover{
+  transform:none!important;
+  filter:brightness(1.12);
+  box-shadow:0 4px 0 #203d27,0 0 32px #8dffad25,inset 0 1px #ffffff20!important;
+}
+#bootMenu .boot-actions .boot-primary:active,
+#bootMenu .boot-actions #bootStart:active{
+  transform:translateY(2px)!important;
+  box-shadow:0 2px 0 #203d27,inset 0 1px #ffffff18!important;
+}
+#bootMenu .boot-actions .secondary{
+  border-color:#2d4934!important;
+  background:linear-gradient(145deg,#101b13,#0a100c)!important;
+  color:#d1e3d3!important;
+  box-shadow:inset 0 1px #ffffff08,0 3px 0 #020503!important;
+  transition:border-color .16s ease,background .16s ease,color .16s ease!important;
+}
+#bootMenu .boot-actions .secondary:hover{
+  transform:none!important;
+  border-color:#65946d!important;
+  background:linear-gradient(145deg,#14251a,#0b140e)!important;
+  color:#f0fff0!important;
+}
+#bootMenu .boot-brief{
+  position:relative;
+  overflow:hidden;
+  border-color:#344e39!important;
+  background:
+    radial-gradient(ellipse at 100% 0%,#ffd66b0c,transparent 38%),
+    linear-gradient(145deg,#0d1710,#080d09)!important;
+}
+#bootMenu .brief-heading{
+  color:#a5ff7d!important;
+  letter-spacing:1.1px!important;
+}
+#bootMenu .brief-heading b{color:#ffd66b!important}
+#bootMenu .brief-item{
+  transition:background .16s ease,border-color .16s ease;
+}
+#bootMenu .brief-item:hover{
+  background:linear-gradient(90deg,#8dffad08,transparent);
+}
+#bootMenu .brief-item>strong{
+  color:#a5ff7d!important;
+  text-shadow:0 0 12px #8dffad12;
+}
+#bootMenu .brief-item b{color:#e3f1e4!important}
+#bootMenu .brief-item small{color:#91a995!important;line-height:1.7}
+#bootMenu .brief-controls kbd{
+  border-color:#385540!important;
+  background:#0b160e!important;
+  color:#bde8c0!important;
+  box-shadow:0 2px 0 #020503;
+}
+#bootMenu .se-hub{
+  margin-top:4px!important;
+}
+#bootMenu .se-hub-head{
+  align-items:center!important;
+  margin-bottom:16px!important;
+}
+#bootMenu .se-hub-kicker{
+  color:#a5ff7d!important;
+  letter-spacing:.13em!important;
+}
+#bootMenu .se-hub-head h3{
+  line-height:1.6!important;
+  letter-spacing:-.02em!important;
+}
+#bootMenu .se-hub-description{
+  max-width:56ch;
+  color:#91a995!important;
+}
+#bootMenu .se-hub-mark{
+  border-color:#3b5b41!important;
+  color:#a5ff7d!important;
+  background:linear-gradient(145deg,#14261a,#09120c)!important;
+  box-shadow:4px 4px 0 #020503,0 0 20px #8dffad0c!important;
+}
+#bootMenu .se-hub-tile{
+  position:relative;
+  isolation:isolate;
+  overflow:hidden;
+  min-height:122px!important;
+  border-color:#2d4533!important;
+  border-radius:8px!important;
+  background:linear-gradient(145deg,#101a13,#090f0b 80%)!important;
+  box-shadow:inset 0 1px #ffffff08,0 4px 0 #020503!important;
+  transition:border-color .16s ease,background .16s ease,box-shadow .16s ease!important;
+}
+#bootMenu .se-hub-tile:before{
+  content:"";
+  position:absolute;z-index:-1;inset:0;
+  background:radial-gradient(ellipse at 0 0,#8dffad0b,transparent 65%);
+  pointer-events:none;
+}
+#bootMenu .se-hub-tile:hover{
+  transform:none!important;
+  border-color:#6b9b72!important;
+  background:linear-gradient(145deg,#14251a,#0a120c)!important;
+  box-shadow:inset 0 1px #ffffff0c,0 4px 0 #020503,0 0 18px #8dffad0b!important;
+}
+#bootMenu .se-hub-tile:active{filter:brightness(.96)}
+#bootMenu .se-hub-tile .se-tile-icon{
+  display:grid;place-items:center;
+  width:34px;height:34px;
+  border:1px solid #34523a;
+  background:#0b160e;
+  color:#a5ff7d!important;
+  font-size:17px!important;
+}
+#bootMenu .se-hub-tile b{
+  color:#e7f5e9!important;
+  font-size:10px!important;
+  line-height:1.6!important;
+}
+#bootMenu .se-hub-tile small{
+  color:#94a998!important;
+  line-height:1.65!important;
+}
+#bootMenu .se-hub-foot{
+  border-top:1px solid #223729;
+  margin-top:16px;
+  line-height:1.8!important;
+}
+#bootMenu .se-hub-storage i{box-shadow:0 0 10px #8dffad80!important}
+#bootMenu .boot-panels{padding-bottom:22px}
+#bootMenu .boot-panel{
+  border-color:#385440!important;
+  box-shadow:inset 0 1px #ffffff08,0 12px 30px #0004!important;
+}
+#bootMenu .boot-action:focus-visible,
+#bootMenu .se-hub-tile:focus-visible{
+  outline:2px solid #b5ff9c!important;
+  outline-offset:3px!important;
+}
+@media(max-width:760px){
+  #bootMenu .boot-topline{padding:13px 15px!important}
+  #bootMenu .boot-layout{gap:14px!important}
+  #bootMenu .boot-hero{padding:clamp(16px,4vw,24px)!important}
+  #bootMenu .boot-tagline{font-size:12px!important}
+  #bootMenu .boot-actions{gap:8px!important}
+  #bootMenu .boot-actions .boot-primary,
+  #bootMenu .boot-actions #bootStart{min-height:54px!important;font-size:10px!important}
+  #bootMenu .boot-actions .secondary{min-height:46px!important;font-size:7px!important}
+  #bootMenu .se-hub-head{align-items:flex-start!important}
+  #bootMenu .se-hub-tile{min-height:110px!important}
+}
+@media(max-width:420px){
+  #bootMenu .boot-card{width:100%!important}
+  #bootMenu .boot-topline{align-items:flex-start!important}
+  #bootMenu .boot-top-meta{max-width:58%;gap:5px!important}
+  #bootMenu .boot-tagline{font-size:11px!important}
+  #bootMenu .boot-actions{grid-template-columns:1fr 1fr!important}
+  #bootMenu .boot-actions .boot-primary,
+  #bootMenu .boot-actions #bootStart{grid-column:1/-1!important}
+  #bootMenu .se-hub{padding-inline:14px!important}
+  #bootMenu .se-hub-head h3{font-size:11px!important}
+  #bootMenu .se-hub-description{font-size:10px!important}
+  #bootMenu .se-hub-grid{gap:8px!important}
+  #bootMenu .se-hub-tile{min-height:104px!important;padding:10px!important}
+  #bootMenu .se-hub-tile b{font-size:9px!important}
+  #bootMenu .se-hub-tile small{font-size:10px!important}
+}
+@media(prefers-reduced-motion:reduce){
+  #bootMenu .boot-actions button,
+  #bootMenu .brief-item,
+  #bootMenu .se-hub-tile{transition:none!important}
+}
