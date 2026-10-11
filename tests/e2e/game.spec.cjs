@@ -10,7 +10,7 @@ test.beforeEach(async ({ page }) => {
     const source = await response.text();
     await route.fulfill({
       response,
-      body: source + "\nwindow.__snakeE2E = { startGameplay: () => { contractOfferOpen = false; contractAccepted = true; move(); }, endRun: () => end(), winRun: () => win(), freeCell: () => free(), forceSelfCollisionWithShield: () => { snake = [{x:10,y:10},{x:11,y:10},{x:11,y:9}]; dir = next = {x:1,y:0}; shieldUntil = performance.now() + 5000; pulseUntil = 0; lives = 3; stats.damage = 0; alive = true; paused = false; move(); }, setEdgeWarningScenario: (x,y,dx,dy) => { clearTimeout(timer); timer = null; snake = [{x,y},{x:x-dx,y:y-dy},{x:x-2*dx,y:y-2*dy}]; dir = next = {x:dx,y:dy}; alive = true; paused = false; draw(); } };\n"
+      body: source + "\nwindow.__snakeE2E = { startGameplay: () => { contractOfferOpen = false; contractAccepted = true; move(); }, endRun: () => end(), winRun: () => win(), freeCell: () => free(), setDirection: (x,y) => setDir(x,y), getPendingDirection: () => ({...next}), forceSelfCollisionWithShield: () => { snake = [{x:10,y:10},{x:11,y:10},{x:11,y:9}]; dir = next = {x:1,y:0}; shieldUntil = performance.now() + 5000; pulseUntil = 0; lives = 3; stats.damage = 0; alive = true; paused = false; move(); }, setEdgeWarningScenario: (x,y,dx,dy) => { clearTimeout(timer); timer = null; snake = [{x,y},{x:x-dx,y:y-dy},{x:x-2*dx,y:y-2*dy}]; dir = next = {x:dx,y:dy}; alive = true; paused = false; draw(); } };\n"
     });
   });
 });
@@ -387,6 +387,18 @@ test("wall collision ends a run and displays the loss result", async ({ page }) 
   await expect(page.locator("#message .gameover-details")).toBeVisible();
   await expect(page.locator("#start")).toBeVisible();
   await expect.poll(() => page.evaluate(() => JSON.parse(localStorage.getItem("snake-evolution-save") || "{}").runs)).toBe(1);
+});
+
+test("rapid direction input cannot queue an immediate reverse turn", async ({ page }) => {
+  await startGame(page);
+  const pending = await page.evaluate(() => {
+    // The snake is moving right. These two buffered inputs are both legal
+    // relative to the current tick, but the second reverses the queued turn.
+    window.__snakeE2E.setDirection(0, -1);
+    window.__snakeE2E.setDirection(0, 1);
+    return window.__snakeE2E.getPendingDirection();
+  });
+  expect(pending).toEqual({ x: 0, y: -1 });
 });
 
 test("win path renders a victory report and persists the win", async ({ page }) => {

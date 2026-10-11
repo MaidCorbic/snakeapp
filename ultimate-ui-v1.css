@@ -228,3 +228,52 @@ body.rework-v2 .boot-actions #bootStart:hover::after { transform: translateX(120
 #bootOptionsPanel #snakeHexHelp{grid-column:1/-1;margin-top:-7px}
 #bootOptionsPanel #snakeColorStatus{grid-column:1/-1;color:#b8ff83;font:700 11px/1.5 system-ui,sans-serif;letter-spacing:.5px}
 @media(max-width:620px){#bootOptionsPanel .snake-color-group{grid-template-columns:1fr;padding:12px;gap:12px}#bootOptionsPanel .snake-color-copy b{font-size:14px}#bootOptionsPanel .snake-color-copy span,#bootOptionsPanel #snakeHexHelp{font-size:11px}#bootOptionsPanel .snake-color-swatches{gap:12px}#bootOptionsPanel .snake-swatch{width:32px;height:32px}#bootOptionsPanel #snakeHexInput{flex:1;min-width:0;width:100%;font-size:14px}#bootOptionsPanel #snakeColorSave{min-width:76px}}
+
+
+/* GAME OVER REFINEMENT V2 — readable result hierarchy and complete details */
+#message .message-card.ultimate-result-card .gameover-summary span{
+  min-width:0;
+  padding:12px;
+  border:1px solid #344b37;
+  background:linear-gradient(145deg,#121d14,#080d09);
+  color:#a9b9aa;
+  font:700 11px/1.45 system-ui,sans-serif;
+  letter-spacing:.7px;
+  overflow-wrap:anywhere;
+}
+#message .message-card.ultimate-result-card .gameover-summary span:first-child{
+  background:radial-gradient(circle at 100% 0%,rgba(184,255,131,.12),transparent 55%),linear-gradient(145deg,#142719,#0a120c);
+}
+#message .message-card.ultimate-result-card .gameover-summary strong{
+  margin-top:6px;
+  color:#edf8ed;
+  font:800 clamp(18px,2.3vw,27px)/1.25 system-ui,sans-serif;
+  letter-spacing:0;
+}
+#message .message-card.ultimate-result-card .gameover-summary span:first-child strong{
+  color:var(--ui-green);
+  font-size:clamp(26px,4vw,40px);
+}
+#message .message-card.ultimate-result-card .result-copy{
+  border-radius:7px;
+  padding:11px 14px;
+  font:600 12px/1.6 system-ui,sans-serif;
+  letter-spacing:.2px;
+}
+#message .message-card.ultimate-result-card .gameover-detail-body .stats-grid span{
+  min-width:0;
+  overflow-wrap:anywhere;
+}
+#message .message-card.ultimate-result-card .gameover-detail-body .stats-grid strong,
+#message .message-card.ultimate-result-card .gameover-detail-body .analysis-grid strong{
+  overflow-wrap:anywhere;
+}
+#message .message-card.ultimate-result-card #start,
+#message .message-card.ultimate-result-card .result-menu{
+  width:100%;
+  min-height:50px;
+}
+@media(max-width:620px){
+  #message .message-card.ultimate-result-card .gameover-summary span{font-size:10px}
+  #message .message-card.ultimate-result-card .result-copy{font-size:11px}
+}

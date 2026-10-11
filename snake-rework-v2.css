@@ -410,12 +410,106 @@ body.rework-v2 #message .message-card{
 }
 
 body.rework-v2 #message .message-card h2{
-  font-size:clamp(17px,3vw,28px);
-  letter-spacing:4px;
+  font-size:clamp(20px,3.2vw,34px);
+  letter-spacing:clamp(1px,.2vw,3px);
 }
 
-body.rework-v2 #message .message-card .stats-grid span:nth-child(n+4){
-  display:none;
+body.rework-v2 #message .message-card .gameover-summary{
+  display:grid;
+  grid-template-columns:1.35fr 1fr 1fr;
+  gap:8px;
+}
+body.rework-v2 #message .message-card .gameover-summary span{
+  min-width:0;
+  padding:12px;
+  border:1px solid #304a35;
+  border-radius:7px;
+  background:linear-gradient(145deg,#101d13,#080e0a);
+  color:#95ad99;
+  font:700 8px/1.5 system-ui,sans-serif;
+  letter-spacing:.8px;
+}
+body.rework-v2 #message .message-card .gameover-summary span:first-child{
+  border-color:#5c8c54;
+  background:radial-gradient(circle at 100% 0%,rgba(184,255,131,.12),transparent 55%),linear-gradient(145deg,#132819,#0a120c);
+}
+body.rework-v2 #message .message-card .gameover-summary strong{
+  display:block;
+  margin-top:6px;
+  color:#edf8ed;
+  font:800 clamp(16px,2.3vw,25px)/1.25 system-ui,sans-serif;
+  letter-spacing:0;
+}
+body.rework-v2 #message .message-card .gameover-summary span:first-child strong{
+  color:var(--brutal-green);
+  font-size:clamp(24px,4vw,38px);
+}
+body.rework-v2 #message .message-card .gameover-details{
+  border:1px solid #304a35;
+  border-radius:8px;
+  background:#070d09;
+}
+body.rework-v2 #message .message-card .gameover-details summary{
+  min-height:42px;
+  display:flex;
+  align-items:center;
+  padding:10px 13px;
+  font:700 9px/1.4 system-ui,sans-serif;
+  letter-spacing:1px;
+}
+body.rework-v2 #message .message-card .gameover-detail-body .stats-grid{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:7px;
+}
+body.rework-v2 #message .message-card .gameover-detail-body .stats-grid span{
+  display:block;
+  min-width:0;
+  border-radius:5px;
+  overflow-wrap:anywhere;
+}
+body.rework-v2 #message .message-card .gameover-detail-body .analysis-grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:7px;
+  margin-top:8px;
+}
+body.rework-v2 #message .message-card .gameover-detail-body .analysis-grid span{
+  min-width:0;
+  border:1px solid #3a3324;
+  border-radius:5px;
+  padding:9px;
+  color:#a8a18c;
+  font:700 7px/1.6 system-ui,sans-serif;
+  overflow-wrap:anywhere;
+}
+body.rework-v2 #message .message-card .gameover-detail-body .analysis-grid strong{
+  display:block;
+  margin-top:4px;
+  color:#f2d5aa;
+  font:800 9px/1.5 system-ui,sans-serif;
+  overflow-wrap:anywhere;
+}
+body.rework-v2 #message .message-card .record{
+  border-radius:6px;
+  padding:10px;
+  text-align:center;
+  font-size:9px;
+}
+body.rework-v2 #message .message-card #start,
+body.rework-v2 #message .message-card .result-menu{
+  width:100%;
+  min-height:48px;
+  border-radius:7px!important;
+  font-size:8px!important;
+}
+@media(max-width:560px){
+  body.rework-v2 #message .message-card .gameover-summary{grid-template-columns:1fr 1fr}
+  body.rework-v2 #message .message-card .gameover-summary span:first-child{grid-column:1/-1}
+  body.rework-v2 #message .message-card .gameover-detail-body .stats-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(prefers-reduced-motion:reduce){
+  body.rework-v2 #message .message-card *{scroll-behavior:auto}
 }
 
 /* ---------- RESPONSIVE ---------- */
