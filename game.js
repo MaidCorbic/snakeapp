@@ -21,7 +21,7 @@ function applyGameplaySettings(source=settings){
 let previewSnakeColor = null;
 function getSnakeColor() {
   const saved = settings && /^#[0-9a-f]{6}$/i.test(String(settings.snakeColor || "")) ? settings.snakeColor : null;
-  return previewSnakeColor || saved || evoColors[evolution()-1] || "#b8ff8d";
+  return previewSnakeColor || saved || "#79e35b";
 }
 document.addEventListener("snake-evolution-color-preview", event => {
   const candidate = String(event.detail?.snakeColor || "");
