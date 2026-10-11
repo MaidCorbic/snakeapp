@@ -128,7 +128,7 @@ for (const src of localScripts) {
 
 check("menu loads cache-busted gameplay layers", menu.includes("game.js?v=arcade-v26") &&
   menu.includes("ultimate-gameplay-v1.js?v=ultimate-v14") &&
-  menu.includes("gameplay-update-v2.js?v=update-v12") &&
+  menu.includes("gameplay-update-v2.js?v=update-v13") &&
   menu.includes("snake-rework-v2.js?v=rework-v6") &&
   html.includes("meta-progression-v1.js?v=meta-v4"));
 
