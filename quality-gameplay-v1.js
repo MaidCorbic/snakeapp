@@ -25,8 +25,8 @@
     const panel = document.createElement("section");
     panel.id = "seThreatStatus";
     panel.setAttribute("aria-label", "Live threat scanner");
-    panel.setAttribute("aria-live", "polite");
-    panel.innerHTML = '<span class="se-threat-heading">THREAT SCAN</span><span class="se-threat-stat se-threat-hunters"><span>HUNTERS</span><strong id="seThreatHunters">0</strong></span><span class="se-threat-stat se-threat-hazards"><span>HAZARDS</span><strong id="seThreatHazards">0</strong></span><span class="se-threat-stat se-threat-boss"><span>WARDEN</span><strong id="seThreatBoss">OFFLINE</strong></span>';
+    panel.setAttribute("role", "group");
+    panel.innerHTML = '<div class="se-threat-brand"><span class="se-threat-radar" aria-hidden="true">◎</span><span class="se-threat-title"><b class="se-threat-heading">THREAT SCAN</b><small>LIVE FIELD INTEL</small></span></div><span class="se-threat-stat se-threat-hunters"><span>HUNTERS</span><strong id="seThreatHunters">0</strong><small>ACTIVE HOSTILES</small></span><span class="se-threat-stat se-threat-hazards"><span>HAZARDS</span><strong id="seThreatHazards">0</strong><small>ARENA DANGER</small></span><span class="se-threat-stat se-threat-boss"><span>WARDEN</span><strong id="seThreatBoss">OFFLINE</strong><small>BOSS SIGNAL</small></span>';
     const shell = canvas.closest(".game-shell");
     (shell || canvas).insertAdjacentElement("afterend", panel);
   }
@@ -35,9 +35,17 @@
     const hunterCount = Array.isArray(hunters) ? hunters.length : 0;
     const hazardCount = Array.isArray(hazards) ? hazards.length : 0;
     const h = document.querySelector("#seThreatHunters"), z = document.querySelector("#seThreatHazards"), b = document.querySelector("#seThreatBoss");
+    const bossActive = typeof boss !== "undefined" && !!boss;
     if (h) h.textContent = String(hunterCount);
     if (z) z.textContent = String(hazardCount);
-    if (b) b.textContent = typeof boss !== "undefined" && boss ? "ACTIVE" : "OFFLINE";
+    if (b) b.textContent = bossActive ? "ACTIVE" : "OFFLINE";
+    const panel = document.querySelector("#seThreatStatus");
+    if (panel) {
+      panel.dataset.hunters = String(hunterCount);
+      panel.dataset.hazards = String(hazardCount);
+      panel.dataset.warden = bossActive ? "active" : "offline";
+      panel.classList.toggle("is-critical", hunterCount >= 4 || hazardCount >= 6 || bossActive);
+    }
   }
   function drawEnemyDetails() {
     if (!settingOn("enemyDetails") || typeof ctx === "undefined" || !Array.isArray(hunters)) return;

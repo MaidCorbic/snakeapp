@@ -1180,11 +1180,11 @@ body.rework-v2 .landing-profile .profile-block:nth-child(4) strong{
   #bootHowPanel .how-row p{font-size:4.9px!important}
   #bootHowPanel .how-row kbd{font-size:5px!important}
 }
-</style><link rel="stylesheet" href="release-polish-v1.css?v=release-v1"><link rel="stylesheet" href="arcade-hub-v1.css?v=hub-v3"><link rel="stylesheet" href="quality-pass-v1.css?v=quality-v2"><link rel="stylesheet" href="arcade-menu-v2.css?v=arcade-menu-v2"><link rel="stylesheet" href="visual-polish-v1.css?v=visual-polish-v1"><link rel="stylesheet" href="game-over-finish-v1.css?v=game-over-finish-v1">
+</style><link rel="stylesheet" href="release-polish-v1.css?v=release-v1"><link rel="stylesheet" href="arcade-hub-v1.css?v=hub-v3"><link rel="stylesheet" href="quality-pass-v1.css?v=quality-v2"><link rel="stylesheet" href="arcade-menu-v2.css?v=arcade-menu-v2"><link rel="stylesheet" href="visual-polish-v1.css?v=visual-polish-v1"><link rel="stylesheet" href="game-over-finish-v1.css?v=game-over-finish-v1"><link rel="stylesheet" href="hud-achievement-deck-v2.css?v=hud-deck-v2">
 </head>
 <body class="rework-v2"><section id="bootMenu" class="boot-menu" role="dialog" aria-modal="true" aria-label="Snake Evolution main menu">
   <div class="boot-card">
-    <div class="boot-topline"><span class="eyebrow">PIXEL ARCADE</span><div class="boot-top-meta"><span id="bootVersion" class="game-version" aria-label="Current game version">V2.8.2</span><span id="bootClock" class="boot-clock" aria-label="Current time">00:00:00</span><span class="boot-status"><i></i> SYSTEM READY</span></div></div>
+    <div class="boot-topline"><span class="eyebrow">PIXEL ARCADE</span><div class="boot-top-meta"><span id="bootVersion" class="game-version" aria-label="Current game version">V2.9.0</span><span id="bootClock" class="boot-clock" aria-label="Current time">00:00:00</span><span class="boot-status"><i></i> SYSTEM READY</span></div></div>
     <div class="boot-layout">
       <section class="boot-hero" aria-labelledby="bootTitle">
         <div class="boot-emblem" aria-hidden="true"><img src="favicon.svg?v=snake1" alt="" width="58" height="58"><i></i></div>
@@ -1407,22 +1407,26 @@ body.rework-v2 .landing-profile .profile-block:nth-child(4) strong{
   </div>
 
   <section class="run-intel run-intel-v3" aria-label="Live run intel">
-    <div class="intel-card intel-primary-card danger-card">
+    <div class="intel-card intel-primary-card danger-card" aria-label="Threat pressure rises with the zone, active hostiles and elapsed time">
       <div class="intel-top"><span>THREAT</span><strong id="danger">0%</strong><b id="dangerLabel">STABLE</b></div>
       <div class="intel-track"><i id="dangerFill"></i></div>
+      <small class="intel-explainer">Pressure from zone, enemies and time.</small>
     </div>
-    <div class="intel-card intel-primary-card objective-card">
+    <div class="intel-card intel-primary-card objective-card" aria-label="Run objective progress; completing it awards score and XP">
       <div class="intel-top"><span>OBJECTIVE</span><strong id="objective">LOADING</strong><b id="objectiveLabel">0/0</b></div>
       <div class="intel-track"><i id="objectiveFill"></i></div>
+      <small class="intel-explainer">Complete the target for score and XP.</small>
     </div>
-    <div class="intel-card intel-primary-card contract-card">
+    <div class="intel-card intel-primary-card contract-card" aria-label="Optional contract progress; contracts offer bonus rewards">
       <div class="intel-top"><span>CONTRACT</span><strong id="contract">LOADING</strong><b id="contractLabel">0/0</b></div>
       <div class="intel-track"><i id="contractFill"></i></div>
+      <small class="intel-explainer">Optional high-risk target for bonus rewards.</small>
       <div class="contract-actions"><button id="contractAccept" type="button">ACCEPT</button><button id="contractDecline" type="button">DECLINE</button></div>
     </div>
-    <div class="intel-card intel-primary-card chain-card">
+    <div class="intel-card intel-primary-card chain-card" aria-label="Chain bonus decays if you do not continue collecting or defeating threats">
       <div class="intel-top"><span>CHAIN</span><strong id="chainLabel">CHAIN READY</strong><b>DECAY</b></div>
       <div class="intel-track"><i id="chainFill"></i></div>
+      <small class="intel-explainer">Keep collecting to preserve the bonus.</small>
     </div>
 
     <div class="intel-card intel-secondary-card salvage-card">
@@ -1473,15 +1477,15 @@ body.rework-v2 .landing-profile .profile-block:nth-child(4) strong{
 <details id="progression" class="progression-panel collapsible-panel" data-collapse-key="progression">
 <summary class="progression-head"><span><b>PROGRESSION // SNAKE BUILD</b><small>XP LEVEL · UPGRADES · CARDS</small></span><strong id="upgradeData">DATA 0</strong><i class="collapse-chevron" aria-hidden="true">+</i></summary>
 <div class="progression-body">
-<div class="evolution-build"><div class="evolution-build-head"><div><span>EVOLUTION BUILD</span><strong id="evolutionBuildLevel">BUILD LVL 1</strong></div><b id="evolutionBuildNext">100 XP TO NEXT</b></div><div class="evolution-build-track"><i id="evolutionBuildFill"></i></div><small>Collect ENERGY, CORES, cards and takedowns to grow your XP level.</small></div>
+<div class="evolution-build"><div class="evolution-build-head"><div><span>EVOLUTION BUILD</span><strong id="evolutionBuildLevel">BUILD LVL 1</strong></div><b id="evolutionBuildNext">100 XP TO NEXT</b></div><div class="evolution-build-track"><i id="evolutionBuildFill"></i></div><small>XP increases your build level. DATA buys permanent upgrades; cards add run bonuses.</small></div>
 <section id="upgrades" class="progression-subsection"><div class="progression-subhead"><b>PERMANENT UPGRADES</b><span>DATA</span></div><div id="upgradeList" class="upgrade-list"></div></section>
 <section class="progression-subsection"><div class="progression-subhead"><b>EVOLUTION CARDS</b><span>COLLECTIBLE</span></div><div id="cardCollection" class="card-collection"></div></section>
 </div>
 </details>
 <details id="achievements" class="progression-panel collapsible-panel" data-collapse-key="achievements">
-<summary class="progression-head"><span><b>ADVANCED ACHIEVEMENTS</b><small>LONG-TERM RECORD · COLLECTION</small></span><strong>RECORD</strong><i class="collapse-chevron" aria-hidden="true">+</i></summary>
+<summary class="progression-head"><span><b>ADVANCED ACHIEVEMENTS</b><small>Flip a card to inspect its unlock condition.</small></span><strong>RECORD</strong><i class="collapse-chevron" aria-hidden="true">+</i></summary>
 <div class="progression-body"><div id="achievementList" class="achievement-list"></div></div>
 </details>
 <section id="leaderboards" class="progression-panel"><div class="progression-head"><b>LOCAL LEADERBOARDS</b><strong>TOP 10</strong></div><div class="leaderboard-columns"><div><h4>ALL RUNS</h4><div id="leaderboardList" class="leaderboard-list"></div></div><div><h4>DAILY // TODAY</h4><div id="dailyLeaderboardList" class="leaderboard-list"></div></div></div></section>
 <footer><div class="legend"><span class="desktop-commands">KEYBOARD: WASD / ARROWS · SPACE DASH · SHIFT SHIELD · E PULSE · Q FURY · P / ESC PAUSE</span><span>ENERGY +10</span><span>CORE +50</span><span>HUNTER</span><span>HAZARD</span><span>POWER-UP</span><span>SUPPLY DROP</span></div><div class="controls" aria-label="Mobile touch controls"><span class="touch-label">TOUCH</span><button data-dir="up">▲</button><div><button data-dir="left">◀</button><button data-dir="down">▼</button><button data-dir="right">▶</button></div></div></footer>
-</main><script src="ultimate-ui-v1.js?v=ultimate-ui-v6"></script><script src="menu.js?v=boot-v34"></script><script src="arcade-menu-v2.js?v=arcade-menu-v2"></script><script src="meta-progression-v1.js?v=meta-v4"></script><script src="arcade-hub-v1.js?v=hub-v3"></script><script src="quality-pass-v1.js?v=quality-v2"></script><script src="visual-polish-v1.js?v=visual-polish-v1"></script></body></html>
+</main><script src="ultimate-ui-v1.js?v=ultimate-ui-v6"></script><script src="menu.js?v=boot-v34"></script><script src="arcade-menu-v2.js?v=arcade-menu-v2"></script><script src="meta-progression-v1.js?v=meta-v4"></script><script src="arcade-hub-v1.js?v=hub-v3"></script><script src="quality-pass-v1.js?v=quality-v2"></script><script src="visual-polish-v1.js?v=visual-polish-v1"></script><script id="snakeHudAchievementDeckScript" src="hud-achievement-deck-v2.js?v=hud-deck-v2"></script></body></html>

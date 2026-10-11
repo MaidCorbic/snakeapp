@@ -10,7 +10,7 @@ test.beforeEach(async ({ page }) => {
     const source = await response.text();
     await route.fulfill({
       response,
-      body: source + "\nwindow.__snakeE2E = { startGameplay: () => { contractOfferOpen = false; contractAccepted = true; move(); }, endRun: () => end(), winRun: () => win(), freeCell: () => free(), setDirection: (x,y) => setDir(x,y), getPendingDirection: () => ({...next}), forceSelfCollisionWithShield: () => { snake = [{x:10,y:10},{x:11,y:10},{x:11,y:9}]; dir = next = {x:1,y:0}; shieldUntil = performance.now() + 5000; pulseUntil = 0; lives = 3; stats.damage = 0; alive = true; paused = false; move(); }, setEdgeWarningScenario: (x,y,dx,dy) => { clearTimeout(timer); timer = null; snake = [{x,y},{x:x-dx,y:y-dy},{x:x-2*dx,y:y-2*dy}]; dir = next = {x:dx,y:dy}; alive = true; paused = false; draw(); } };\n"
+      body: source + "\nwindow.__snakeE2E = { startGameplay: () => { contractOfferOpen = false; contractAccepted = true; move(); }, endRun: () => end(), winRun: () => win(), freeCell: () => free(), setDirection: (x,y) => setDir(x,y), getPendingDirection: () => ({...next}), seedTransientRunState: () => { chain = 4; chainUntil = performance.now() + 10000; chainBest = 9; salvageChain = 5; salvageUntil = performance.now() + 10000; advancedZoneEvent = { type: 'HAZARD_STORM', until: performance.now() + 10000 }; extractionNextAt = 60000; extractionHeatUntil = performance.now() + 10000; advancedExitMode = 'EXTRACTING'; contractDeclined = true; }, getTransientRunState: () => ({ chain, chainUntil, chainBest, salvageChain, salvageUntil, zoneEvent: advancedZoneEvent?.type || null, extractionNextAt, extractionHeatUntil, advancedExitMode, contractDeclined }), forceSelfCollisionWithShield: () => { snake = [{x:10,y:10},{x:11,y:10},{x:11,y:9}]; dir = next = {x:1,y:0}; shieldUntil = performance.now() + 5000; pulseUntil = 0; lives = 3; stats.damage = 0; alive = true; paused = false; move(); }, setEdgeWarningScenario: (x,y,dx,dy) => { clearTimeout(timer); timer = null; snake = [{x,y},{x:x-dx,y:y-dy},{x:x-2*dx,y:y-2*dy}]; dir = next = {x:dx,y:dy}; alive = true; paused = false; draw(); } };\n"
     });
   });
 });
@@ -129,7 +129,8 @@ test("game boot loads all gameplay layers and starts a run", async ({ page }) =>
     "snakeGameplayUpdateV2",
     "snakeArcadePolishV1",
     "snakeReworkV2",
-    "snakeQualityGameplayScript"
+    "snakeQualityGameplayScript",
+    "snakeHudAchievementDeckScript"
   ].every(id => Boolean(document.getElementById(id))));
   expect(loadedLayers).toBe(true);
   expect(pageErrors).toEqual([]);
@@ -280,6 +281,68 @@ test("ultimate UI uses grouped options and a dedicated accessible result dialog"
 });
 
 
+test("Threat Scan explains pressure and exposes a compact live field readout", async ({ page }) => {
+  await startGame(page);
+  await expect(page.locator("#seThreatStatus")).toBeVisible();
+  await expect(page.locator("#seThreatStatus .se-threat-heading")).toHaveText("THREAT SCAN");
+  await expect(page.locator("#seThreatStatus .se-threat-brand")).toBeVisible();
+  await expect(page.locator("#seThreatHunters")).toBeVisible();
+  await expect(page.locator("#seThreatHazards")).toBeVisible();
+  await expect(page.locator("#seThreatBoss")).toBeVisible();
+  expect(await page.locator("#seThreatStatus").getAttribute("aria-live")).toBeNull();
+  await expect(page.locator(".intel-explainer")).toHaveCount(4);
+  await expect(page.locator(".danger-card .intel-explainer")).toContainText("Pressure");
+  await expect(page.locator(".objective-card .intel-explainer")).toContainText("score and XP");
+  await expect(page.locator(".contract-card .intel-explainer")).toContainText("bonus rewards");
+});
+
+test("Advanced Achievements cards flip, filter, and expose unlock notes", async ({ page }) => {
+  await startGame(page);
+  await page.locator("#achievements > summary").click();
+  const toolbar = page.locator("#achievementList > .achievement-deck-toolbar");
+  await expect(toolbar).toBeVisible();
+  const cards = page.locator("#achievementList .achievement-deck-card");
+  await expect.poll(() => cards.count()).toBeGreaterThan(0);
+  const first = cards.first();
+  const flip = first.locator(".achievement-flip");
+  await expect(flip).toHaveAttribute("aria-expanded", "false");
+  await flip.click();
+  await expect(first).toHaveClass(/is-flipped/);
+  await expect(flip).toHaveAttribute("aria-expanded", "true");
+  await expect(flip.locator(".achievement-back-copy")).toBeVisible();
+  await flip.click();
+  await expect(first).not.toHaveClass(/is-flipped/);
+  await toolbar.locator('[data-filter="locked"]').click();
+  const lockedVisible = page.locator("#achievementList .achievement-deck-card:not([hidden])");
+  await expect.poll(() => lockedVisible.count()).toBeGreaterThan(0);
+  expect(await lockedVisible.evaluateAll(items => items.every(item => item.dataset.deckState === "locked"))).toBe(true);
+  await toolbar.locator('[data-filter="all"]').click();
+  await expect(toolbar.locator('[data-filter="all"]')).toHaveAttribute("aria-pressed", "true");
+});
+
+test("restarting a run clears temporary chain, salvage and zone-event state", async ({ page }) => {
+  await startGame(page);
+  await page.evaluate(() => window.__snakeE2E.seedTransientRunState());
+  const seeded = await page.evaluate(() => window.__snakeE2E.getTransientRunState());
+  expect(seeded.salvageChain).toBe(5);
+  expect(seeded.zoneEvent).toBe("HAZARD_STORM");
+  expect(seeded.extractionNextAt).toBe(60000);
+  await page.evaluate(() => window.SnakeEvolution.start());
+  await expect.poll(() => page.evaluate(() => window.SnakeEvolution.getState().salvageChain)).toBe(0);
+  await expect.poll(() => page.evaluate(() => window.SnakeEvolution.getState().zoneEvent)).toBe(null);
+  const reset = await page.evaluate(() => window.__snakeE2E.getTransientRunState());
+  expect(reset.chain).toBe(0);
+  expect(reset.chainUntil).toBe(0);
+  expect(reset.chainBest).toBe(0);
+  expect(reset.salvageChain).toBe(0);
+  expect(reset.salvageUntil).toBe(0);
+  expect(reset.zoneEvent).toBe(null);
+  expect(reset.extractionNextAt).toBe(0);
+  expect(reset.extractionHeatUntil).toBe(0);
+  expect(reset.advancedExitMode).toBe("RUNNING");
+  expect(reset.contractDeclined).toBe(false);
+});
+
 test("food respawns at a randomized free cell and never overlaps the snake", async ({ page }) => {
   await startGame(page);
   const initial = await page.evaluate(() => window.SnakeEvolution.getState().energyPosition);
@@ -429,7 +492,7 @@ test("Options expose snake color and gameplay toggles without Profile and Utilit
   const pageErrors = [];
   page.on("pageerror", error => pageErrors.push(error.message));
   await page.goto("/index.html");
-  await expect(page.locator("#bootVersion")).toHaveText("V2.8.2");
+  await expect(page.locator("#bootVersion")).toHaveText("V2.9.0");
   await expect(page.locator("#bootClock")).toBeVisible();
   await page.locator("#bootOptions").click();
   await expect(page.locator("#bootOptionsPanel")).toBeVisible();

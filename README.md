@@ -1,5 +1,10 @@
 # Snake Evolution
 
+**Current version: V2.9.0 — HUD & Achievement Deck**
+
+This pass refreshes the run-intel cards and Threat Scan, turns Advanced Achievements into an interactive flip-card archive with unlock filters, modernizes the Snake Build progression panel, and fixes transient state leaking into restarted runs.
+
+
 A browser-based arcade snake survival game with Survival, Daily, Endless, and Party Run modes.
 
 ## Arcade Hub redesign (v1)
