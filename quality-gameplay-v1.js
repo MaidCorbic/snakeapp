@@ -243,6 +243,7 @@
     const baseHud = hud;
     const qualityHud = function qualityThreatHud(...args) {
       const result = baseHud.apply(this, args);
+      try { syncContractOffer(); } catch {}
       try { updateThreatPanel(); } catch {}
       return result;
     };
@@ -254,7 +255,7 @@
   trackCompletedRun();
   wrapLaunchMethods();
   polishAchievements(true);
-  window.setInterval(() => { try { polishAchievements(); updateThreatPanel(); } catch {} }, 1000);
+  window.setInterval(() => { try { syncContractOffer(); polishAchievements(); updateThreatPanel(); } catch {} }, 1000);
   document.addEventListener("snake-evolution-settings-changed", styleSettingsToBody);
   window.SnakeQualityGameplay = Object.freeze({version:"1.0.0", refresh:()=>{updateThreatPanel();polishAchievements();}});
 })();
