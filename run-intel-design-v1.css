@@ -748,3 +748,104 @@ body #achievements .achievement-deck-card.is-flipped .achievement-card-inner{
   body .run-status-v3 .xp-track>i:after{animation:none!important}
   body .run-status-v3 .xp-track>i{transition:none!important}
 }
+
+
+/* MUTATION + CONDITION // arcade level cards, matching live intel panels */
+.run-status-v3 .mutation-module,
+.run-status-v3 .condition-module{
+  position:relative!important;
+  isolation:isolate;
+  overflow:hidden;
+  display:flex!important;
+  flex-direction:column!important;
+  justify-content:center!important;
+  align-items:flex-start!important;
+  gap:7px!important;
+  min-width:0!important;
+  min-height:92px!important;
+  padding:13px 14px 12px!important;
+  border:1px solid var(--level-line,#3b4e64)!important;
+  border-radius:9px!important;
+  background:
+    radial-gradient(ellipse at 100% 0%,var(--level-glow,#8b7dff12),transparent 58%),
+    linear-gradient(145deg,var(--level-bg,#10151d),#080d0b 84%)!important;
+  box-shadow:inset 0 1px #ffffff0a,0 4px 12px #0003!important;
+}
+.run-status-v3 .mutation-module:before,
+.run-status-v3 .condition-module:before{
+  content:"";
+  position:absolute;z-index:-1;inset:0 0 auto;height:2px;
+  background:linear-gradient(90deg,var(--level-accent,#9b8bff),transparent 88%);
+  opacity:.95;
+}
+.run-status-v3 .mutation-module:after,
+.run-status-v3 .condition-module:after{
+  content:"";
+  position:absolute;right:12px;top:12px;
+  width:6px;height:6px;border-radius:50%;
+  background:var(--level-accent,#9b8bff);
+  box-shadow:0 0 10px var(--level-accent,#9b8bff);
+  opacity:.85;
+}
+.run-status-v3 .mutation-module{--level-accent:#c19aff;--level-line:#51416e;--level-bg:#171126;--level-glow:#a979ff19}
+.run-status-v3 .condition-module{--level-accent:#72d7ff;--level-line:#31576a;--level-bg:#0c1820;--level-glow:#52cfff17}
+.run-status-v3 .mutation-module>span,
+.run-status-v3 .condition-module>span{
+  display:flex!important;align-items:center;gap:7px;
+  color:var(--level-accent)!important;
+  font:700 8px/1.5 "Press Start 2P",monospace!important;
+  letter-spacing:.7px!important;
+}
+.run-status-v3 .mutation-module>span:before,
+.run-status-v3 .condition-module>span:before{
+  content:"";
+  display:inline-block;width:13px;height:2px;flex:0 0 13px;
+  background:var(--level-accent);
+  box-shadow:0 0 8px var(--level-accent);
+}
+.run-status-v3 .mutation-module>strong,
+.run-status-v3 .condition-module>strong{
+  display:block!important;
+  max-width:100%;
+  color:#f0f5ff!important;
+  font:clamp(10px,.86vw,13px)/1.6 "Press Start 2P",monospace!important;
+  letter-spacing:.15px!important;
+  overflow-wrap:anywhere;
+  text-shadow:0 0 14px var(--level-glow);
+}
+.run-status-v3 .mutation-module>small,
+.run-status-v3 .condition-module>small{
+  display:block!important;
+  max-width:100%;
+  padding:4px 6px!important;
+  border:1px solid var(--level-line)!important;
+  border-radius:3px!important;
+  background:#050a08a8!important;
+  color:var(--level-accent)!important;
+  font:700 7px/1.5 ui-monospace,SFMono-Regular,Menlo,monospace!important;
+  letter-spacing:1px!important;
+  overflow-wrap:anywhere;
+}
+.run-status-v3 .mutation-module:hover,
+.run-status-v3 .condition-module:hover{
+  border-color:var(--level-accent)!important;
+  box-shadow:inset 0 1px #ffffff0b,0 0 18px var(--level-glow),0 4px 12px #0003!important;
+}
+@media(max-width:760px){
+  .run-status-v3 .mutation-module,
+  .run-status-v3 .condition-module{min-height:82px!important;padding:11px!important}
+  .run-status-v3 .mutation-module>span,
+  .run-status-v3 .condition-module>span{font-size:7px!important}
+  .run-status-v3 .mutation-module>strong,
+  .run-status-v3 .condition-module>strong{font-size:clamp(9px,2vw,11px)!important}
+  .run-status-v3 .mutation-module>small,
+  .run-status-v3 .condition-module>small{font-size:7px!important}
+}
+@media(max-width:420px){
+  .run-status-v3 .mutation-module,
+  .run-status-v3 .condition-module{min-height:76px!important;padding:9px!important;gap:6px!important}
+  .run-status-v3 .mutation-module>span,
+  .run-status-v3 .condition-module>span{font-size:6px!important;letter-spacing:.3px!important}
+  .run-status-v3 .mutation-module>strong,
+  .run-status-v3 .condition-module>strong{font-size:9px!important;line-height:1.5!important}
+}
