@@ -107,3 +107,7 @@ body.se-hide-threat-radar #seThreatStatus{display:none!important}
  .snake-swatch{transition:none!important}
  .se-tutorial-card *{animation:none!important;transition:none!important}
 }
+
+/* A visually hidden boot overlay must never sit above live gameplay or results. */
+#bootMenu.hidden,
+#bootMenu.hidden *{pointer-events:none!important;visibility:hidden!important}
