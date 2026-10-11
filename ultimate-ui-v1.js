@@ -98,11 +98,15 @@
     const setDraft = (value, { preview = true } = {}) => {
       const color = normalize(value);
       input.value = color;
-      input.setAttribute("aria-invalid", String(!hexPattern.test(color)));
-      if (!hexPattern.test(color)) { setStatus("Enter a valid HEX value such as #62CFFF.", true); return false; }
+      const valid = hexPattern.test(color);
+      input.setAttribute("aria-invalid", String(!valid));
+      if (!valid) { setStatus("Enter a valid HEX value such as #62CFFF.", true); return false; }
       picker.value = color;
       setActiveSwatch(color);
-      if (preview) document.dispatchEvent(new CustomEvent("snake-evolution-color-preview", { detail: { snakeColor: color } }));
+      if (preview) {
+        document.documentElement.style.setProperty("--snake-color", color);
+        document.dispatchEvent(new CustomEvent("snake-evolution-color-preview", { detail: { snakeColor: color } }));
+      }
       setStatus("PREVIEW: " + color.toUpperCase());
       return true;
     };
@@ -122,6 +126,7 @@
       const settings = readSettings();
       settings.snakeColor = candidate;
       if (!safeWrite("snake-evolution-settings", JSON.stringify(settings))) { setStatus("SAVE failed: browser storage is unavailable.", true); return; }
+      document.documentElement.style.setProperty("--snake-color", candidate);
       document.dispatchEvent(new CustomEvent("snake-evolution-settings-changed", { detail: settings }));
       document.dispatchEvent(new CustomEvent("snake-evolution-color-preview", { detail: { snakeColor: candidate } }));
       setActiveSwatch(candidate);
