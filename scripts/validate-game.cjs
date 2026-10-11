@@ -69,7 +69,7 @@ const requiredIds = [
 ];
 
 check("arcade polish stylesheet exists", fs.existsSync(path.join(root, "arcade-polish-v1.css")));
-check("ultimate UI assets are linked and grouped options are present", html.includes("ultimate-ui-v1.css?v=ultimate-ui-v1") && html.includes("ultimate-ui-v1.js?v=ultimate-ui-v1") && ultimateUiCss.includes(".option-group") && ultimateUiCss.includes(".ultimate-result-card") && /setAttribute\("role",\s*"dialog"\)/.test(ultimateUiJs));
+check("ultimate UI assets are linked and grouped options are present", html.includes("ultimate-ui-v1.css?v=ultimate-ui-v2") && html.includes("ultimate-ui-v1.js?v=ultimate-ui-v2") && ultimateUiCss.includes(".option-group") && ultimateUiCss.includes(".ultimate-result-card") && /setAttribute\("role",\s*"dialog"\)/.test(ultimateUiJs));
 check("release polish stylesheet is linked", html.includes('release-polish-v1.css?v=release-v1') && releasePolish.includes(":focus-visible"));
 check("Endless is available from the landing menu", html.includes('id="bootEndless"') && !html.includes(".boot-actions #bootEndless{\n  display:none!important;") && !reworkCss.includes("body.rework-v2 .boot-actions #bootEndless{\n  display:none!important;"));
 check("rework stylesheet exists", fs.existsSync(path.join(root, "snake-rework-v2.css")));
@@ -191,6 +191,9 @@ check("gameplay balance tuning limits arena pressure",
   /function\s+addHazards\(count=1\)/.test(game) &&
   (game.match(/hazards\.push\(free\(\)\)/g) || []).length === 1);
 
+check("HEX color picker supports validation, live preview, and explicit save", html.includes('id="snakeHexInput"') && html.includes('id="snakeColorSave"') && ultimateUiJs.includes('snake-evolution-color-preview') && ultimateUiJs.includes('SAVE blocked') && game.includes('function getSnakeColor()'));
+check("Options readability rules remove tiny helper paragraphs and scale labels", ultimateUiCss.includes('option-row > div:first-child small') && ultimateUiCss.includes('font-size:clamp(12px,1vw,14px)'));
+check("browser regression covers custom HEX preview and persistence", read("tests/e2e/game.spec.cjs").includes("custom HEX snake color previews live") && read("tests/e2e/game.spec.cjs").includes("saved snake color is restored"));
 check("gameplay visibility settings are applied to live UI",
   /function\s+applyGameplaySettings\s*\(/.test(game) &&
   /showTimer/.test(game) &&

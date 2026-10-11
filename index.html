@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#080b09"><title>Snake Evolution — Survival Run</title><link rel="icon" href="favicon.svg?v=snake1" type="image/svg+xml"><link rel="stylesheet" href="style.css?v=survival-v39"><link rel="stylesheet" href="arcade-polish-v1.css?v=arcade-v1"><link rel="stylesheet" href="snake-rework-v2.css?v=rework-v4"><link rel="stylesheet" href="ultimate-ui-v1.css?v=ultimate-ui-v1"><style id="landing-enhancements">
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#080b09"><title>Snake Evolution — Survival Run</title><link rel="icon" href="favicon.svg?v=snake1" type="image/svg+xml"><link rel="stylesheet" href="style.css?v=survival-v39"><link rel="stylesheet" href="arcade-polish-v1.css?v=arcade-v1"><link rel="stylesheet" href="snake-rework-v2.css?v=rework-v4"><link rel="stylesheet" href="ultimate-ui-v1.css?v=ultimate-ui-v2"><style id="landing-enhancements">
 /* Landing page / Options / How-to-Play enhancement pass */
 .boot-top-meta{display:flex;align-items:center;gap:14px}
 .game-version{padding:6px 8px;border:1px solid #38533c;background:#0a120d;color:var(--green);font-size:6px;letter-spacing:.5px;box-shadow:inset 0 0 12px #79e35b08}
@@ -1224,6 +1224,25 @@ body.rework-v2 .landing-profile .profile-block:nth-child(4) strong{
     <div class="boot-panels">
       <div id="bootOptionsPanel" class="boot-panel options-console hidden">
   <div class="boot-panel-heading"><div><b>CONTROL DECK</b><small>LOCAL PREFERENCES · SAVED ON THIS DEVICE</small></div><strong id="bootSettingsState">SYNCED</strong></div>
+  <section class="snake-color-group" aria-label="Snake color customization">
+    <div class="snake-color-copy"><b>SNAKE COLOR</b></div>
+    <div class="snake-color-swatches" role="group" aria-label="Preset snake colors">
+      <button type="button" class="snake-swatch" data-snake-color="#79e35b" aria-label="Green snake" aria-pressed="true" style="--swatch:#79e35b"></button>
+      <button type="button" class="snake-swatch" data-snake-color="#62cfff" aria-label="Cyan snake" aria-pressed="false" style="--swatch:#62cfff"></button>
+      <button type="button" class="snake-swatch" data-snake-color="#ff6ab7" aria-label="Pink snake" aria-pressed="false" style="--swatch:#ff6ab7"></button>
+      <button type="button" class="snake-swatch" data-snake-color="#ffd85c" aria-label="Yellow snake" aria-pressed="false" style="--swatch:#ffd85c"></button>
+      <button type="button" class="snake-swatch" data-snake-color="#b58cff" aria-label="Purple snake" aria-pressed="false" style="--swatch:#b58cff"></button>
+      <button type="button" class="snake-swatch" data-snake-color="#ffffff" aria-label="White snake" aria-pressed="false" style="--swatch:#ffffff"></button>
+    </div>
+    <div class="snake-hex-row">
+      <label for="snakeHexInput">HEX</label>
+      <input id="snakeHexInput" type="text" value="#79e35b" inputmode="text" autocomplete="off" spellcheck="false" maxlength="7" pattern="^#[0-9a-fA-F]{6}$" aria-describedby="snakeHexHelp">
+      <input id="snakeColorPicker" type="color" value="#79e35b" aria-label="Choose custom snake color">
+      <button type="button" id="snakeColorSave" class="boot-action boot-primary">SAVE</button>
+    </div>
+    <small id="snakeHexHelp">Format: #RRGGBB. SAVE commits the selected color to this device.</small>
+    <div id="snakeColorStatus" role="status" aria-live="polite">CURRENT COLOR: #79E35B</div>
+  </section>
   <div class="options-grid">
     <div class="option-row"><div><b>GRID</b><small>Show gameplay tile grid.</small></div><button type="button" class="option-toggle" id="bootGrid" aria-pressed="true">ON</button></div>
     <div class="option-row"><div><b>VIBRATION</b><small>Phone haptic feedback.</small></div><button type="button" class="option-toggle" id="bootVibration" aria-pressed="true">ON</button></div>
@@ -1465,4 +1484,4 @@ body.rework-v2 .landing-profile .profile-block:nth-child(4) strong{
 </details>
 <section id="leaderboards" class="progression-panel"><div class="progression-head"><b>LOCAL LEADERBOARDS</b><strong>TOP 10</strong></div><div class="leaderboard-columns"><div><h4>ALL RUNS</h4><div id="leaderboardList" class="leaderboard-list"></div></div><div><h4>DAILY // TODAY</h4><div id="dailyLeaderboardList" class="leaderboard-list"></div></div></div></section>
 <footer><div class="legend"><span class="desktop-commands">KEYBOARD: WASD / ARROWS · SPACE DASH · SHIFT SHIELD · E PULSE · Q FURY · P / ESC PAUSE</span><span>ENERGY +10</span><span>CORE +50</span><span>HUNTER</span><span>HAZARD</span><span>POWER-UP</span><span>SUPPLY DROP</span></div><div class="controls" aria-label="Mobile touch controls"><span class="touch-label">TOUCH</span><button data-dir="up">▲</button><div><button data-dir="left">◀</button><button data-dir="down">▼</button><button data-dir="right">▶</button></div></div></footer>
-</main><script src="ultimate-ui-v1.js?v=ultimate-ui-v1"></script><script src="menu.js?v=boot-v34"></script><script src="arcade-menu-v2.js?v=arcade-menu-v2"></script><script src="meta-progression-v1.js?v=meta-v4"></script><script src="arcade-hub-v1.js?v=hub-v3"></script><script src="quality-pass-v1.js?v=quality-v1"></script></body></html>
+</main><script src="ultimate-ui-v1.js?v=ultimate-ui-v2"></script><script src="menu.js?v=boot-v34"></script><script src="arcade-menu-v2.js?v=arcade-menu-v2"></script><script src="meta-progression-v1.js?v=meta-v4"></script><script src="arcade-hub-v1.js?v=hub-v3"></script><script src="quality-pass-v1.js?v=quality-v1"></script></body></html>

@@ -401,8 +401,10 @@ test("Options expose snake color and gameplay toggles without Profile and Utilit
   await expect(page.locator("#bootOptionsPanel .control-deck-profile-row")).toHaveCount(0);
   const swatch = page.locator('.snake-swatch[data-snake-color="#62cfff"]');
   await swatch.click();
-  await expect.poll(() => page.evaluate(() => JSON.parse(localStorage.getItem("snake-evolution-settings") || "{}").snakeColor)).toBe("#62cfff");
+  await expect.poll(() => page.evaluate(() => document.documentElement.style.getPropertyValue("--snake-color"))).toBe("#62cfff");
   await expect(swatch).toHaveAttribute("aria-pressed", "true");
+  await page.locator("#snakeColorSave").click();
+  await expect.poll(() => page.evaluate(() => JSON.parse(localStorage.getItem("snake-evolution-settings") || "{}").snakeColor)).toBe("#62cfff");
   await page.locator("#bootRadar").click();
   await expect(page.locator("#bootRadar")).toHaveAttribute("aria-pressed", "false");
   expect(pageErrors).toEqual([]);

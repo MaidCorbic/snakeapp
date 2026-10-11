@@ -18,11 +18,27 @@ function applyGameplaySettings(source=settings){
   });
   document.body.classList.toggle("no-combat-fx",source.combatFx===false);
 }
+let previewSnakeColor = null;
+function getSnakeColor() {
+  const saved = settings && /^#[0-9a-f]{6}$/i.test(String(settings.snakeColor || "")) ? settings.snakeColor : null;
+  return previewSnakeColor || saved || "#79e35b";
+}
+document.addEventListener("snake-evolution-color-preview", event => {
+  const candidate = String(event.detail?.snakeColor || "");
+  if (!/^#[0-9a-f]{6}$/i.test(candidate)) return;
+  previewSnakeColor = candidate.toLowerCase();
+  document.documentElement.style.setProperty("--snake-color", previewSnakeColor);
+  if (typeof draw === "function") draw();
+});
 document.addEventListener("snake-evolution-settings-changed",event=>{
   if(event.detail&&typeof event.detail==="object")settings={...settings,...event.detail};
+  if (/^#[0-9a-f]{6}$/i.test(String(settings.snakeColor || ""))) previewSnakeColor = null;
   applyGameplaySettings(settings);
+  document.documentElement.style.setProperty("--snake-color", getSnakeColor());
+  if (typeof draw === "function") draw();
 });
 applyGameplaySettings(settings);
+document.documentElement.style.setProperty("--snake-color", getSnakeColor());
 let funMode=false,activeRunTime=RUN_TIME,funSegment=0,runFinalized=false;
 let snake=[],dir,next,energy=null,core=null,hazards=[],hunters=[],powerups=[],boss=null,supplyDrop=null,runMutation=null,score=0,combo=1,alive=false,paused=false,startedAt=0,timer,spawnClock=0,eventClock=0,hunterClock=0,bossClock=0,supplyDropClock=0,level=1,zone=0,shieldUntil=0,pulseUntil=0,dashReady=0,shieldReady=0,pulseReady=0,furyUntil=0,fury=0,lives=3,maxLives=4,lastStandAnnounced=false,xp=0,xpLevel=1,xpNext=100,danger=0,threatBonus=0,lastDangerBand=0,lastZone=-1,objective=null,objectiveDone=false,contract=null,contractDone=false,contractRewarded=false,streakRewards=0,chain=0,eventClock2=0,stats={energy:0,cores:0,elites:0,hunters:0,wardens:0,damage:0,runCount:0,powerups:0,pulses:0,furyUses:0,supplyDrops:0,contracts:0};
 const energyHistory=new Set();
@@ -449,7 +465,7 @@ function draw(){
   if(core){pixel(core,"#ffd85c");ctx.save();ctx.globalAlpha=.35;ctx.fillStyle="#ffd85c";ctx.fillRect(core.x+.28,Math.max(0,core.y-1.15),.44,.44);ctx.restore()}
 
   /* Snake: luminous armored segments, taper + directional head */
-  const chosenSnakeColor=typeof settings!=="undefined"&&/^#[0-9a-f]{6}$/i.test(String(settings.snakeColor||""))?settings.snakeColor:null;const snakeCol=chosenSnakeColor||evoColors[evolution()-1]||"#b8ff8d";
+  const snakeCol=getSnakeColor();
   snake.forEach((p,i)=>{
     const t=i/Math.max(1,snake.length-1),s=.82-t*.25;
     ctx.save();ctx.globalAlpha=.45+(1-t)*.5;ctx.fillStyle=snakeCol;ctx.shadowColor=snakeCol;ctx.shadowBlur=i===0?1.8:.55;
@@ -647,4 +663,4 @@ document.querySelector("#contractDecline")?.addEventListener("click",declineCont
 document.querySelector("#extractCashOut")?.addEventListener("click",cashOut);
 document.querySelector("#extractContinue")?.addEventListener("click",keepRunning);
 renderUpgrades();renderAchievements();showSave();
-window.SnakeEvolution={start:reset,resetRank:()=>{try{localStorage.removeItem("snake-evolution-best");localStorage.removeItem("snake-evolution-save");localStorage.removeItem("snake-evolution-leaderboard");localStorage.removeItem("snake-evolution-daily-leaderboard");localStorage.removeItem("snake-evolution-ghost");localStorage.removeItem("snake-evolution-ghost-best");localStorage.removeItem("snake-evolution-ghost-meta");localStorage.removeItem("snake-evolution-daily-ghost");localStorage.removeItem("snake-evolution-daily-ghost-best");localStorage.removeItem("snake-evolution-daily-ghost-meta")}catch{}hud();showSave()},getState:()=>({balance:{...BALANCE},alive,score,combo,fury,lives,xp,xpLevel,xpNext,danger,level,zone,objective:objective?.[0]||null,objectiveDone,contract:contract?.[0]||null,contractAccepted,contractOfferOpen,contractDone,supplyDrop:supplyDrop?.rarity||null,mutation:mutationName(),salvageChain,zoneEvent:advancedZoneEvent?.type||null,extractionOpen,extractionNextAt})};
+window.SnakeEvolution={start:reset,resetRank:()=>{try{localStorage.removeItem("snake-evolution-best");localStorage.removeItem("snake-evolution-save");localStorage.removeItem("snake-evolution-leaderboard");localStorage.removeItem("snake-evolution-daily-leaderboard");localStorage.removeItem("snake-evolution-ghost");localStorage.removeItem("snake-evolution-ghost-best");localStorage.removeItem("snake-evolution-ghost-meta");localStorage.removeItem("snake-evolution-daily-ghost");localStorage.removeItem("snake-evolution-daily-ghost-best");localStorage.removeItem("snake-evolution-daily-ghost-meta")}catch{}hud();showSave()},getState:()=>({balance:{...BALANCE},alive,score,combo,fury,lives,xp,xpLevel,xpNext,danger,level,zone,snakeColor:getSnakeColor(),objective:objective?.[0]||null,objectiveDone,contract:contract?.[0]||null,contractAccepted,contractOfferOpen,contractDone,supplyDrop:supplyDrop?.rarity||null,mutation:mutationName(),salvageChain,zoneEvent:advancedZoneEvent?.type||null,extractionOpen,extractionNextAt})};
