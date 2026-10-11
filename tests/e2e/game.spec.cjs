@@ -389,6 +389,23 @@ test("wall collision ends a run and displays the loss result", async ({ page }) 
   await expect.poll(() => page.evaluate(() => JSON.parse(localStorage.getItem("snake-evolution-save") || "{}").runs)).toBe(1);
 });
 
+test("rapid direction input cannot queue an immediate reverse turn", async ({ page }) => {
+  await startGame(page);
+  const before = await page.evaluate(() => window.SnakeEvolution.getState().snakeHead);
+  await page.evaluate(() => {
+    // Inputs can arrive between ticks. A direction chosen against the current
+    // heading must not be able to reverse the queued direction on the next tick.
+    setDir(0, -1);
+    setDir(-1, 0);
+    setDir(0, 1);
+  });
+  await page.waitForTimeout(40);
+  const state = await page.evaluate(() => window.SnakeEvolution.getState());
+  expect(state.alive).toBe(true);
+  expect(state.snakeHead).not.toEqual(before);
+  expect(state.lives).toBeGreaterThan(0);
+});
+
 test("win path renders a victory report and persists the win", async ({ page }) => {
   await startGame(page);
   await expect.poll(() => page.evaluate(() => typeof window.__snakeE2E?.winRun)).toBe("function");
