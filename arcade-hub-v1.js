@@ -2,7 +2,7 @@
 (() => {
 "use strict";
 const $=(s,r=document)=>r.querySelector(s);
-const safeRead=(key,fallback={})=>{try{const v=JSON.parse(localStorage.getItem(key)||"null");return v&&typeof v==="object"?v:fallback}catch{return fallback}};
+const safeRead=(key,fallback={})=>{try{const raw=localStorage.getItem(key);if(raw===null)return fallback;const v=JSON.parse(raw);return v===null?fallback:v}catch{return fallback}};
 const put=(node,value)=>{if(node)node.textContent=String(value)};
 const dateKey=()=>{const d=new Date();return [d.getFullYear(),String(d.getMonth()+1).padStart(2,"0"),String(d.getDate()).padStart(2,"0")].join("-")};
 function refreshHub(){
