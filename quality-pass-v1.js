@@ -22,33 +22,58 @@
     const grid = panel?.querySelector(".options-grid");
     if (!panel || !grid) return null;
 
-    // Remove the auto-saving custom picker; keep one explicit-save editor.
+    // Remove the legacy auto-saving picker before normalizing the original HTML.
     panel.querySelectorAll(".snake-custom-color, #seCustomSnakeColor").forEach(node => {
       const wrapper = node.closest(".snake-custom-color");
       if (wrapper) wrapper.remove();
       else node.remove();
     });
 
-    let group = panel.querySelector(".snake-color-group");
+    let group = grid.querySelector(".snake-color-group");
+    const legacyGroup = panel.querySelector(".snake-color-group");
+    if (!group && legacyGroup) {
+      group = document.createElement("section");
+      group.className = "option-group snake-color-group";
+      group.setAttribute("aria-label", "SNAKE APPEARANCE");
+      legacyGroup.replaceWith(group);
+    }
     if (!group) {
       group = document.createElement("section");
       group.className = "option-group snake-color-group";
       group.setAttribute("aria-label", "SNAKE APPEARANCE");
+    }
+
+    group.className = "option-group snake-color-group";
+    group.setAttribute("aria-label", "SNAKE APPEARANCE");
+
+    // Older HTML had the HEX controls outside the option grid. Rebuild only this
+    // color section if it lacks the single canonical palette/editor structure.
+    let palette = group.querySelector(".snake-palette");
+    if (!palette) {
+      group.replaceChildren();
       const heading = document.createElement("h3");
       heading.className = "option-group-title";
       heading.textContent = "04 / SNAKE CUSTOMIZATION";
       group.appendChild(heading);
+
       const row = document.createElement("div");
       row.className = "option-row snake-color-row";
       row.innerHTML = '<div><b>SNAKE COLOR</b><small>Preview changes live. SAVE stores it on this device.</small></div><div class="snake-palette" role="group" aria-label="Snake color presets"></div>';
       group.appendChild(row);
+      palette = row.querySelector(".snake-palette");
+    } else if (!group.querySelector(".option-group-title")) {
+      const heading = document.createElement("h3");
+      heading.className = "option-group-title";
+      heading.textContent = "04 / SNAKE CUSTOMIZATION";
+      group.prepend(heading);
+    }
+
+    if (group.parentElement !== grid) {
       const presentation = grid.querySelector('.option-group[aria-label="PRESENTATION"]');
       if (presentation) presentation.insertAdjacentElement("afterend", group);
       else grid.appendChild(group);
     }
 
-    const palette = group.querySelector(".snake-palette");
-    if (!palette) return null;
     palette.querySelectorAll(".snake-swatch").forEach(node => node.remove());
     colors.forEach(([name, color]) => {
       const button = document.createElement("button");
@@ -70,7 +95,13 @@
       editor.innerHTML = '<label for="snakeHexInput">HEX</label><input id="snakeHexInput" type="text" value="#79e35b" inputmode="text" autocomplete="off" spellcheck="false" maxlength="7" pattern="^#[0-9a-fA-F]{6}$" aria-describedby="snakeHexHelp"><input id="snakeColorPicker" type="color" value="#79e35b" aria-label="Choose custom snake color"><button type="button" id="snakeColorSave" class="boot-action boot-primary">SAVE</button><small id="snakeHexHelp">Format: #RRGGBB.</small><div id="snakeColorStatus" role="status" aria-live="polite"></div>';
       group.appendChild(editor);
     }
-    return { panel, group, palette, input: editor.querySelector("#snakeHexInput"), picker: editor.querySelector("#snakeColorPicker"), save: editor.querySelector("#snakeColorSave"), status: editor.querySelector("#snakeColorStatus") };
+    return {
+      panel, group, palette,
+      input: editor.querySelector("#snakeHexInput"),
+      picker: editor.querySelector("#snakeColorPicker"),
+      save: editor.querySelector("#snakeColorSave"),
+      status: editor.querySelector("#snakeColorStatus")
+    };
   }
 
   function cleanOptions() {
@@ -83,7 +114,8 @@
       if (/PROFILE & UTILITIES|GAME CUSTOMIZATION/.test(headingText) && !group.querySelector(".option-row")) group.remove();
     });
     ensureColorControls();
-    setupSnakeColorControls(ensureColorControls());
+    const colorControls = ensureColorControls();
+    setupSnakeColorControls(colorControls);
   }
 
   function setupSnakeColorControls(controls) {
