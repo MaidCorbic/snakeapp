@@ -267,7 +267,7 @@
     if (window.__snakeAchievementDeckV2 || document.getElementById("snakeHudAchievementDeckScript")) return;
     const deck = document.createElement("script");
     deck.id = "snakeHudAchievementDeckScript";
-    deck.src = "hud-achievement-deck-v2.js?v=hud-deck-v3";
+    deck.src = "hud-achievement-deck-v2.js?v=hud-deck-v4";
     deck.async = true;
     deck.onerror = () => console.warn("[Snake Evolution] Achievement deck failed to load; gameplay will continue.");
     document.body.appendChild(deck);
