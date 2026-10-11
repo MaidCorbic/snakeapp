@@ -78,7 +78,8 @@ check("HUD V2.9.0 and interactive achievement deck are wired",
   menu.includes("loadAchievementDeck") &&
   menu.includes("hud-achievement-deck-v2.js?v=hud-deck-v4") &&
   read("hud-achievement-deck-v2.js").includes("achievement-back-copy") &&
-  read("hud-achievement-deck-v2.css").includes("rotateY(180deg)"));
+  read("hud-achievement-deck-v2.css").includes("rotateY(180deg)") &&
+  read("hud-achievement-deck-v2.css").includes("#achievementList .achievement-deck-card.is-flipped .achievement-card-inner"));
 check("new runs clear carry-over chain, salvage and zone-event state",
   ultimate.includes('chainUntil=0;chainBest=0;salvageChain=0;salvageUntil=0;advancedZoneEvent=null;') &&
   read("tests/e2e/game.spec.cjs").includes("restarting a run clears temporary chain, salvage and zone-event state"));
