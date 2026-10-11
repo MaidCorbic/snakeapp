@@ -127,7 +127,7 @@
     const cards = [...root.querySelectorAll(".achievement-deck-card")];
     const unlockedCount = cards.filter(card => card.dataset.deckState === "unlocked").length;
     const count = toolbar.querySelector("#achievementDeckCount");
-    if (count) count.textContent = unlockedCount + " / " + cards.length + " UNLOCKED";
+    if (count) { const nextCount = unlockedCount + " / " + cards.length + " UNLOCKED"; if (count.textContent !== nextCount) count.textContent = nextCount; }
 
     toolbar.querySelectorAll("button[data-filter]").forEach(button => {
       button.setAttribute("aria-pressed", String(button.dataset.filter === filterMode));
