@@ -151,6 +151,15 @@ test("Party Run keeps its four lives and isolated mode state", async ({ page }) 
   await page.locator("#seTutorialStart").click();
   await expect(page.locator(".se-tutorial-overlay")).toHaveCount(0);
   await expect.poll(() => page.evaluate(() => window.SnakeEvolution.getState().contractOfferOpen)).toBe(true);
+  console.log("CONTRACT_VISIBILITY_DIAGNOSTIC", JSON.stringify(await page.evaluate(() => {
+    const button = document.querySelector("#contractDecline");
+    const chain = [];
+    for (let node = button; node && chain.length < 6; node = node.parentElement) {
+      const css = getComputedStyle(node);
+      chain.push({tag: node.tagName, id: node.id, cls: String(node.className || ""), display: css.display, visibility: css.visibility, opacity: css.opacity, hidden: node.hidden, rect: (() => { const r = node.getBoundingClientRect(); return {width:r.width,height:r.height,x:r.x,y:r.y}; })()});
+    }
+    return {state: window.SnakeEvolution?.getState?.(), buttonClass: button?.className, buttonDisplay: button ? getComputedStyle(button).display : null, chain};
+  })));
   await expect(page.locator("#contractDecline")).toBeVisible();
   await page.locator("#contractDecline").click();
   await expect.poll(() => page.evaluate(() => window.SnakeEvolution.getState().contractOfferOpen)).toBe(false);
