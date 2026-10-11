@@ -17,7 +17,7 @@ The additive redesign introduces a clearer landing-page hierarchy, a Player Cent
 
 ## Development
 
-- `npm test` — run the static game validator
+- `node scripts/validate-game.cjs` — run the static game validator
 - `npm run test:e2e` — run browser E2E tests (Playwright required)
 
 The game is a static HTML/CSS/JavaScript application. Player records are stored locally in the current browser and are not synced to a server.
