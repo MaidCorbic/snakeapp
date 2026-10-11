@@ -39,8 +39,12 @@
       const wallCollision =
         nextHead.x < 0 || nextHead.x >= COLS ||
         nextHead.y < 0 || nextHead.y >= ROWS;
-      const blockCollision = Array.isArray(arenaBlocks) &&
-        arenaBlocks.some(block => block.x === nextHead.x && block.y === nextHead.y);
+      const blocks = typeof arenaBlocks !== "undefined" && Array.isArray(arenaBlocks)
+        ? arenaBlocks
+        : [];
+      const blockCollision = blocks.some(
+        block => block.x === nextHead.x && block.y === nextHead.y
+      );
 
       if (wallCollision || blockCollision) {
         deathCause = wallCollision ? "ARENA WALL" : "ARENA OBSTACLE";
