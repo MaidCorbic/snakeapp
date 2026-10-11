@@ -401,7 +401,7 @@ const selfCollision=snake.some((s,i)=>i>0&&(willGrow||i<snake.length-1)&&same(s,
 const worldCollision=hazards.some(h=>same(h,head))||hunters.some(h=>same(h,head))||(boss&&same(boss,head));
 if(selfCollision||(!protectedNow&&worldCollision)){
  takeDamage(selfCollision?"SELF HIT":hunters.some(h=>same(h,head))?"HUNTER HIT":hazards.some(h=>same(h,head))?"HAZARD HIT":"COLLISION");
- if(alive&&!paused)timer=setTimeout(move,Math.max(60,118-combo*6-(force?35:0)-(runMutation?.[0]==="OVERCLOCK"?14:0)));
+ if(alive&&!paused&&!timer)timer=setTimeout(move,Math.max(60,118-combo*6-(force?35:0)-(runMutation?.[0]==="OVERCLOCK"?14:0)));
  return
 }
 snake.unshift(head);let grow=false;
