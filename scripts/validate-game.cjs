@@ -26,7 +26,9 @@ const files = [
   "arcade-polish-v1.js",
   "snake-rework-v2.js",
   "ultimate-ui-v1.js",
-  "arcade-hub-v1.js"
+  "arcade-hub-v1.js",
+  "quality-gameplay-v1.js",
+  "hud-achievement-deck-v2.js"
 ];
 
 for (const file of files) {
@@ -69,6 +71,15 @@ const requiredIds = [
   "nearMiss", "encounterStatus", "ghostStatus"
 ];
 
+check("HUD V2.9.0 and interactive achievement deck are wired",
+  html.includes('V2.9.0') &&
+  html.includes('hud-achievement-deck-v2.css?v=hud-deck-v2') &&
+  html.includes('hud-achievement-deck-v2.js?v=hud-deck-v2') &&
+  read("hud-achievement-deck-v2.js").includes("achievement-back-copy") &&
+  read("hud-achievement-deck-v2.css").includes("rotateY(180deg)"));
+check("new runs clear carry-over chain, salvage and zone-event state",
+  ultimate.includes('chainUntil=0;chainBest=0;salvageChain=0;salvageUntil=0;advancedZoneEvent=null;') &&
+  read("tests/e2e/game.spec.cjs").includes("restarting a run clears temporary chain, salvage and zone-event state"));
 check("arcade polish stylesheet exists", fs.existsSync(path.join(root, "arcade-polish-v1.css")));
 check("ultimate UI assets are linked and grouped options are present", html.includes("ultimate-ui-v1.css?v=ultimate-ui-v2") && html.includes("ultimate-ui-v1.js?v=ultimate-ui-v6") && ultimateUiCss.includes(".option-group") && ultimateUiCss.includes(".ultimate-result-card") && /setAttribute\("role",\s*"dialog"\)/.test(ultimateUiJs));
 check("release polish stylesheet is linked", html.includes('release-polish-v1.css?v=release-v1') && releasePolish.includes(":focus-visible"));
@@ -96,6 +107,8 @@ check("required project files exist", [
   "scripts/validate-game.cjs",
   "ultimate-ui-v1.js",
   "ultimate-ui-v1.css",
+  "hud-achievement-deck-v2.css",
+  "hud-achievement-deck-v2.js",
   ".github/workflows/ci.yml"
 ].every(file => fs.existsSync(path.join(root, file))));
 
