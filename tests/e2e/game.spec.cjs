@@ -391,19 +391,14 @@ test("wall collision ends a run and displays the loss result", async ({ page }) 
 
 test("rapid direction input cannot queue an immediate reverse turn", async ({ page }) => {
   await startGame(page);
-  const before = await page.evaluate(() => window.SnakeEvolution.getState().snakeHead);
-  await page.evaluate(() => {
-    // Inputs can arrive between ticks. A direction chosen against the current
-    // heading must not be able to reverse the queued direction on the next tick.
+  const pending = await page.evaluate(() => {
+    // The snake is moving right. These two buffered inputs are both legal
+    // relative to the current tick, but the second reverses the queued turn.
     window.__snakeE2E.setDirection(0, -1);
-    window.__snakeE2E.setDirection(-1, 0);
     window.__snakeE2E.setDirection(0, 1);
+    return window.__snakeE2E.getPendingDirection();
   });
-  await page.waitForTimeout(40);
-  const state = await page.evaluate(() => window.SnakeEvolution.getState());
-  expect(state.alive).toBe(true);
-  expect(state.snakeHead).not.toEqual(before);
-  expect(state.lives).toBeGreaterThan(0);
+  expect(pending).toEqual({ x: 0, y: -1 });
 });
 
 test("win path renders a victory report and persists the win", async ({ page }) => {
