@@ -1,0 +1,134 @@
+/* Arcade Menu V2 — focused landing/options refinements */
+:root { --arcade-accent: #91ff70; }
+#bootMenu .boot-title {
+  font-size: clamp(34px, 5.2vw, 58px) !important;
+  line-height: 1.12 !important;
+  letter-spacing: clamp(1px, .25vw, 3px) !important;
+  text-shadow: 0 0 22px #79e35b20;
+}
+#bootMenu .boot-title b { color: var(--arcade-accent) !important; }
+#bootMenu .boot-brief { display: flex !important; flex-direction: column !important; }
+#bootMenu .boot-brief { align-self:stretch !important; }
+#bootMenu .boot-brief .brief-controls {
+  order: 2;
+  margin-top: auto !important;
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0,1fr)) !important;
+  gap: 8px !important;
+  padding: 12px !important;
+}
+#bootMenu .boot-brief .brief-controls::before {
+  grid-column: 1 / -1;
+  content: "CONTROL SCHEME";
+  color: #ffbd6e;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #684823;
+  font: 700 8px/1.5 system-ui,sans-serif;
+  letter-spacing: 1.5px;
+}
+#bootMenu .brief-control-chip {
+  display:flex; flex-direction:column; gap:9px; min-width:0;
+  padding:10px; border:1px solid #72542e; border-radius:8px;
+  background:linear-gradient(145deg,#24180c,#120d08);
+}
+#bootMenu .brief-control-chip b {
+  color:#ffbd6e; font:700 8px/1.4 system-ui,sans-serif; letter-spacing:1px;
+}
+#bootMenu .brief-control-keys { display:flex; flex-wrap:wrap; gap:5px; }
+#bootMenu .brief-control-chip kbd {
+  font: 600 10px/1.2 "Press Start 2P",monospace !important;
+  padding:7px 8px !important; border-radius:5px !important;
+}
+#bootMenu .boot-actions #bootStart { font-size:10px !important; min-height:58px !important; }
+#bootMenu .boot-actions #bootFun { font-size:8px !important; min-height:48px !important; }
+#bootOptionsPanel {
+  width:100%;
+  max-height:min(76dvh,780px);
+  overflow-y:auto;
+  scrollbar-color:#456d48 #0a100c;
+}
+#bootOptionsPanel .boot-panel-heading {
+  position:sticky; top:-1px; z-index:5;
+  margin:0 -2px 12px; padding:12px 2px 14px !important;
+  background:linear-gradient(#0a120c 82%, transparent);
+}
+#bootOptionsPanel .boot-panel-heading b { font-size:clamp(13px,1.5vw,18px) !important; }
+#bootOptionsPanel .boot-panel-heading small { display:none !important; }
+#bootOptionsPanel #bootSettingsState { display:none !important; }
+#bootOptionsPanel .options-grid {
+  display:grid !important; grid-template-columns:1fr !important;
+  gap:12px !important; align-items:start;
+}
+#bootOptionsPanel .option-group {
+  display:grid; grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:0 22px; padding:12px 16px 14px;
+  border:1px solid #294331; border-radius:10px;
+  background:linear-gradient(145deg,#0d1710,#070c09);
+}
+#bootOptionsPanel .option-group-title {
+  grid-column:1/-1; font-size:9px !important; letter-spacing:1.1px;
+}
+#bootOptionsPanel .option-row {
+  min-height:58px !important; padding:8px 0 !important; gap:12px;
+}
+#bootOptionsPanel .option-row>div:first-child b { font-size:9px !important; }
+#bootOptionsPanel .option-row>div:first-child small { display:none !important; }
+#bootOptionsPanel .option-toggle { min-width:60px; }
+#bootOptionsPanel .snake-color-group {
+  border-color:#446c49;
+  background:radial-gradient(ellipse at top right,#183522,#0a110c 70%);
+}
+#bootOptionsPanel .snake-color-row {
+  grid-column:1/-1; display:flex !important; align-items:center;
+  justify-content:space-between; gap:16px; min-height:70px !important;
+}
+#bootOptionsPanel .snake-color-row>div:first-child small { display:none !important; }
+#bootOptionsPanel .snake-palette { justify-content:flex-end; gap:9px; }
+#bootOptionsPanel .snake-swatch { width:32px; height:32px; }
+#bootOptionsPanel .snake-custom-color {
+  display:inline-flex; align-items:center; gap:8px; width:auto; height:42px;
+  padding:5px 10px; border:1px solid #4b7051; border-radius:9px;
+  background:linear-gradient(145deg,#112218,#08100b); color:#cee7d0;
+  font:700 8px/1.4 system-ui,sans-serif; letter-spacing:.8px;
+}
+#bootOptionsPanel .snake-custom-color::before { content:"CUSTOM HEX"; white-space:nowrap; }
+#bootOptionsPanel .snake-custom-color input {
+  width:25px; height:25px; border-radius:6px; overflow:hidden;
+}
+#bootOptionsPanel .option-actions { grid-template-columns:repeat(3,minmax(0,1fr)) !important; }
+#bootHowPanel .boot-panel-heading small { display:none !important; }
+#bootHowPanel .boot-panel-heading b {
+  font-family:"Press Start 2P",monospace !important;
+  font-size:clamp(12px,1.5vw,17px) !important;
+  line-height:1.7 !important; letter-spacing:1px;
+}
+#bootHowPanel .boot-panel-heading>strong {
+  font:700 9px/1.5 "Press Start 2P",monospace !important;
+}
+@media (min-width:901px) {
+  #bootMenu .boot-layout { grid-template-columns:minmax(0,1fr) minmax(360px,.9fr) !important; }
+}
+@media (max-width:900px) {
+  #bootMenu .boot-brief { display:flex !important; }
+  #bootMenu .boot-brief .brief-controls { grid-template-columns:1fr !important; }
+  #bootMenu .boot-layout { grid-template-columns:1fr !important; }
+}
+@media (max-width:620px) {
+  #bootMenu .boot-title { font-size:clamp(29px,9vw,42px) !important; }
+  #bootMenu .boot-brief .brief-controls { grid-template-columns:1fr !important; }
+  #bootOptionsPanel { max-height:calc(100dvh - 24px); padding:12px !important; }
+  #bootOptionsPanel .option-group { grid-template-columns:1fr; padding:10px 12px; }
+  #bootOptionsPanel .option-group-title { font-size:8px !important; }
+  #bootOptionsPanel .option-row { min-height:48px !important; }
+  #bootOptionsPanel .snake-color-row { align-items:flex-start !important; flex-direction:column !important; }
+  #bootOptionsPanel .snake-palette { justify-content:flex-start; }
+  #bootOptionsPanel .option-actions { grid-template-columns:repeat(2,minmax(0,1fr)) !important; }
+}
+@media (prefers-reduced-motion:reduce) {
+  #bootMenu *, #bootMenu *::before, #bootMenu *::after { animation:none !important; transition:none !important; }
+}
+
+/* Keep the hidden menu from covering gameplay controls and result actions. */
+#bootMenu.hidden {
+  pointer-events: none !important;
+}
