@@ -287,6 +287,10 @@ test("moving into the departing tail cell is legal when not growing", async ({ p
     core = null;
     shieldUntil = pulseUntil = 0;
     move();
+    // Freeze after this single deterministic tick so the scheduled follow-up
+    // step cannot move past the head position the test is checking.
+    clearTimeout(timer);
+    timer = null;
   });
   await expect.poll(() => page.evaluate(() => window.SnakeEvolution.getState().lives)).toBe(before);
   await expect.poll(() => page.evaluate(() => window.SnakeEvolution.getState().snakeHead)).toEqual({x:9,y:10});
