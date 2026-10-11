@@ -1,0 +1,283 @@
+/* RUN INTEL VISUAL REFINEMENT — CSS only; gameplay behavior unchanged */
+:root{
+  --intel-surface:#0b140e;
+  --intel-line:#294332;
+  --intel-muted:#8ca391;
+  --intel-green:#a5ff7d;
+  --intel-amber:#ffd66b;
+  --intel-red:#ff6575;
+  --intel-blue:#72d7ff;
+}
+
+/* A clearer, more deliberate HUD hierarchy */
+.run-intel-v3{
+  gap:10px!important;
+  padding:11px!important;
+  border:1px solid #2e4935!important;
+  border-radius:13px!important;
+  background:
+    radial-gradient(ellipse at 12% 0%,rgba(132,255,105,.055),transparent 48%),
+    linear-gradient(145deg,#0a120d,#050906 78%)!important;
+  box-shadow:0 12px 30px #0005,inset 0 1px 0 #ffffff08!important;
+}
+.run-intel-v3 .intel-card{
+  position:relative;
+  isolation:isolate;
+  overflow:hidden;
+  box-sizing:border-box;
+  min-width:0;
+  border:1px solid #2a4030!important;
+  border-radius:9px!important;
+  background:linear-gradient(145deg,#101b13,#090f0b 78%)!important;
+  box-shadow:inset 0 1px 0 #ffffff08,0 4px 10px #0002!important;
+  transition:border-color .18s ease,background .18s ease,transform .18s ease;
+}
+.run-intel-v3 .intel-card:before{
+  content:"";
+  position:absolute;
+  z-index:-1;
+  inset:0 0 auto;
+  height:2px;
+  background:linear-gradient(90deg,var(--intel-accent,#55745b),transparent 85%);
+  opacity:.8;
+  pointer-events:none;
+}
+.run-intel-v3 .intel-primary-card{
+  min-height:88px;
+  padding:12px 12px 10px!important;
+}
+.run-intel-v3 .intel-top{
+  grid-template-columns:minmax(0,auto) minmax(0,1fr) auto!important;
+  gap:8px!important;
+  align-items:center;
+}
+.run-intel-v3 .intel-top span{
+  color:#9bb0a0!important;
+  font-size:clamp(8px,.62vw,10px)!important;
+  font-weight:800;
+  letter-spacing:1.2px!important;
+}
+.run-intel-v3 .intel-top strong{
+  min-width:0;
+  color:#f0f8ef!important;
+  font-size:clamp(10px,.8vw,13px)!important;
+  line-height:1.35;
+  text-align:right;
+  overflow-wrap:anywhere;
+}
+.run-intel-v3 .intel-top b{
+  padding:5px 6px;
+  border:1px solid #2b4532;
+  border-radius:5px;
+  background:#0a130d;
+  color:var(--intel-green)!important;
+  font-size:clamp(7px,.52vw,9px)!important;
+  line-height:1.3;
+  letter-spacing:.35px;
+  text-align:center;
+}
+.run-intel-v3 .intel-track{
+  height:7px!important;
+  margin-top:11px!important;
+  overflow:hidden;
+  border:1px solid #304838!important;
+  border-radius:999px!important;
+  background:#050a07!important;
+  box-shadow:inset 0 1px 3px #0009;
+}
+.run-intel-v3 .intel-track i{
+  border-radius:999px;
+  box-shadow:0 0 10px color-mix(in srgb,var(--intel-accent,#a5ff7d) 35%,transparent);
+}
+.run-intel-v3 .intel-explainer{
+  display:block;
+  margin-top:8px!important;
+  color:#839889!important;
+  font:500 10px/1.55 system-ui,sans-serif!important;
+  letter-spacing:.1px;
+}
+
+/* Threat = warm warning language; severity states remain easy to scan. */
+.run-intel-v3 .danger-card{
+  --intel-accent:#ff8c69;
+  border-color:#593a2e!important;
+  background:
+    radial-gradient(circle at 100% 0%,rgba(255,115,84,.09),transparent 52%),
+    linear-gradient(145deg,#1b130f,#0c0e0b 78%)!important;
+}
+.run-intel-v3 .danger-card .intel-top strong{color:#ffd2a6!important}
+.run-intel-v3 .danger-card .intel-top b{
+  color:#ffbd84!important;
+  border-color:#65442e;
+  background:#1c120c;
+}
+.run-intel-v3 .danger-card .intel-track{border-color:#654333!important}
+.run-intel-v3 .danger-card .intel-track i{
+  background:linear-gradient(90deg,#ffbd69,#ff784f,#ff4d63)!important;
+  box-shadow:0 0 12px #ff654b44;
+}
+.run-intel-v3 .danger-card.high,
+.run-intel-v3 .danger-card.elevated{
+  border-color:#8c682d!important;
+  --intel-accent:#ffd66b;
+}
+.run-intel-v3 .danger-card.high .intel-top b,
+.run-intel-v3 .danger-card.elevated .intel-top b{
+  color:#ffe18b!important;border-color:#765c2d;background:#211a0d;
+}
+.run-intel-v3 .danger-card.critical{
+  border-color:#a64150!important;
+  background:radial-gradient(circle at 100% 0%,#ff4b6518,transparent 55%),linear-gradient(145deg,#210e12,#0e0b0c 78%)!important;
+  box-shadow:inset 0 0 22px #ff3b4c0b,0 0 0 1px #ff59601a!important;
+}
+.run-intel-v3 .danger-card.critical .intel-top strong,
+.run-intel-v3 .danger-card.critical .intel-top b{color:#ff8792!important}
+.run-intel-v3 .danger-card.critical .intel-top b{border-color:#813541;background:#230d12}
+
+/* Objective = cool, confident progress; completed state gets a restrained success accent. */
+.run-intel-v3 .objective-card{
+  --intel-accent:#72d7ff;
+  border-color:#2c5060!important;
+  background:radial-gradient(circle at 100% 0%,#4bc8ff0c,transparent 52%),linear-gradient(145deg,#0d1a20,#090f0d 78%)!important;
+}
+.run-intel-v3 .objective-card .intel-top span{color:#9eddf0!important}
+.run-intel-v3 .objective-card .intel-top strong{color:#d7f5ff!important}
+.run-intel-v3 .objective-card .intel-top b{color:#91e4ff!important;border-color:#2b5261;background:#09171c}
+.run-intel-v3 .objective-card .intel-track{border-color:#2c5360!important}
+.run-intel-v3 .objective-card .intel-track i{background:linear-gradient(90deg,#4eb8ee,#9beaff)!important;box-shadow:0 0 12px #53c9ff38}
+.run-intel-v3 .objective-card.complete{
+  border-color:#497c4b!important;
+  --intel-accent:#a5ff7d;
+  background:radial-gradient(circle at 100% 0%,#a5ff7d10,transparent 52%),linear-gradient(145deg,#112016,#090f0b 78%)!important;
+}
+.run-intel-v3 .objective-card.complete .intel-top strong,
+.run-intel-v3 .objective-card.complete .intel-top b{color:var(--intel-green)!important}
+
+/* Contract = optional high-risk bonus; controls read as two distinct actions. */
+.run-intel-v3 .contract-card{
+  --intel-accent:#ffd66b;
+  border-color:#5b4b29!important;
+  background:radial-gradient(circle at 100% 0%,#ffd66b10,transparent 52%),linear-gradient(145deg,#1a170d,#0b0e09 78%)!important;
+}
+.run-intel-v3 .contract-card .intel-top span{color:#e0ca8b!important}
+.run-intel-v3 .contract-card .intel-top strong{color:#fff0bb!important}
+.run-intel-v3 .contract-card .intel-top b{color:#ffe18b!important;border-color:#65532b;background:#1b170a}
+.run-intel-v3 .contract-card .intel-track{border-color:#5a4b2a!important}
+.run-intel-v3 .contract-card .intel-track i{background:linear-gradient(90deg,#e9b94c,#fff09a)!important;box-shadow:0 0 12px #ffd66b38}
+.run-intel-v3 .contract-card.complete{
+  border-color:#47784a!important;
+  --intel-accent:#a5ff7d;
+  background:radial-gradient(circle at 100% 0%,#a5ff7d10,transparent 52%),linear-gradient(145deg,#112016,#090f0b 78%)!important;
+}
+.run-intel-v3 .contract-card.complete .intel-top strong,
+.run-intel-v3 .contract-card.complete .intel-top b{color:var(--intel-green)!important}
+.run-intel-v3 .contract-actions{
+  display:flex;
+  gap:7px!important;
+  margin-top:10px!important;
+}
+.run-intel-v3 .contract-actions button{
+  flex:1 1 0;
+  min-width:0;
+  min-height:34px!important;
+  padding:8px 9px!important;
+  border:1px solid #b6a04b!important;
+  border-radius:6px!important;
+  background:linear-gradient(180deg,#f6d975,#d5ae43)!important;
+  color:#191406!important;
+  font:800 9px/1.2 system-ui,sans-serif!important;
+  letter-spacing:1px;
+  box-shadow:0 3px 0 #66501d,0 5px 12px #0003!important;
+  transition:filter .15s ease,transform .15s ease,box-shadow .15s ease;
+}
+.run-intel-v3 .contract-actions button:last-child{
+  border-color:#3c5042!important;
+  background:linear-gradient(180deg,#18271d,#101811)!important;
+  color:#b7c8ba!important;
+  box-shadow:0 3px 0 #030604!important;
+}
+.run-intel-v3 .contract-actions button:hover:not(:disabled){
+  filter:brightness(1.1);transform:translateY(-1px);
+}
+.run-intel-v3 .contract-actions button:active:not(:disabled){
+  transform:translateY(2px);box-shadow:0 1px 0 #66501d!important;
+}
+.run-intel-v3 .contract-actions button:focus-visible{
+  outline:2px solid #fff0a0;outline-offset:3px;
+}
+.run-intel-v3 .contract-actions button:disabled{
+  cursor:not-allowed;filter:grayscale(.65);opacity:.45;
+}
+
+/* Secondary telemetry stays compact but no longer looks unfinished. */
+.run-intel-v3 .intel-secondary-card{
+  min-height:57px!important;
+  padding:9px 10px!important;
+  border-radius:8px!important;
+  background:linear-gradient(145deg,#0c1510,#070c09)!important;
+}
+.run-intel-v3 .intel-secondary-card .intel-top span{
+  color:#819788!important;font-size:8px!important;letter-spacing:.9px!important;
+}
+.run-intel-v3 .intel-secondary-card .intel-top strong{
+  color:#d8e7da!important;font-size:10px!important;
+}
+.run-intel-v3 .intel-secondary-card .intel-top b{
+  padding:3px 5px;font-size:7px!important;
+}
+.run-intel-v3 .chain-card{--intel-accent:#a5ff7d}
+.run-intel-v3 .salvage-card{--intel-accent:#ffd66b}
+.run-intel-v3 .bounty-card{--intel-accent:#72d7ff}
+.run-intel-v3 .perfect-card{--intel-accent:#c7a4ff}
+.run-intel-v3 .extract-card{--intel-accent:#ffb16e}
+.run-intel-v3 .intel-secondary-card .intel-track{height:4px!important;margin-top:8px!important}
+
+/* Clean up the adjacent mode strip to match the upgraded telemetry cards. */
+.run-mode-v3{
+  gap:8px 12px!important;
+  padding:10px 12px!important;
+  border:1px solid #253d2c!important;
+  border-radius:9px!important;
+  background:linear-gradient(145deg,#0b130d,#070b08)!important;
+}
+.run-mode-v3>span{
+  color:#77907e!important;
+  font-size:8px!important;
+  letter-spacing:.9px!important;
+}
+.run-mode-v3>strong,.run-mode-v3>b{
+  color:#dceadd!important;
+  font-size:9px!important;
+}
+.run-mode-v3>strong{color:var(--intel-green)!important}
+.run-mode-v3>b{padding:4px 6px;border:1px solid #263f2d;border-radius:4px;background:#0a120d}
+
+/* Small screens: preserve the three main cards side by side where practical. */
+@media(max-width:900px){
+  .run-intel-v3{gap:8px!important;padding:9px!important}
+  .run-intel-v3 .intel-primary-card{padding:10px!important;min-height:84px}
+  .run-intel-v3 .intel-top{grid-template-columns:minmax(0,1fr) auto!important;gap:6px!important}
+  .run-intel-v3 .intel-top span{font-size:8px!important}
+  .run-intel-v3 .intel-top strong{grid-column:2;grid-row:1;text-align:right;font-size:10px!important}
+  .run-intel-v3 .intel-top b{grid-column:1/-1;justify-self:start;font-size:7px!important}
+  .run-intel-v3 .intel-explainer{font-size:9px!important}
+  .run-intel-v3 .contract-actions button{font-size:8px!important;padding:7px 5px!important}
+}
+@media(max-width:560px){
+  .run-intel-v3{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:7px!important;padding:7px!important}
+  .run-intel-v3 .intel-primary-card{min-height:88px;padding:9px!important}
+  .run-intel-v3 .danger-card{grid-column:auto}
+  .run-intel-v3 .contract-card .contract-actions{gap:5px!important}
+  .run-intel-v3 .contract-actions button{min-height:31px!important;font-size:8px!important;letter-spacing:.5px}
+  .run-intel-v3 .intel-explainer{font-size:8px!important;line-height:1.45!important}
+  .run-mode-v3{gap:7px!important;padding:8px!important}
+}
+@media(max-width:360px){
+  .run-intel-v3 .intel-top span{font-size:7px!important;letter-spacing:.7px!important}
+  .run-intel-v3 .intel-top strong{font-size:9px!important}
+  .run-intel-v3 .intel-top b{font-size:6px!important}
+  .run-intel-v3 .contract-actions button{padding:6px 3px!important;font-size:7px!important}
+}
+@media(prefers-reduced-motion:reduce){
+  .run-intel-v3 .intel-card,.run-intel-v3 .contract-actions button{transition:none!important}
+}
