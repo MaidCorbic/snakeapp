@@ -312,7 +312,11 @@
       bootMenu?.classList.add("hidden");
       document.body.classList.remove("boot-open");
       app?.classList.remove("preboot");
-      startLoadedMode(mode);
+      try {
+        startLoadedMode(mode);
+      } catch (error) {
+        failLoad("GAME BOOT ERROR: GAME START FAILED — " + (error?.message || "unknown start error"));
+      }
       return;
     }
     if (gameLoading) return;
