@@ -286,10 +286,61 @@
       try{localStorage.setItem(key,JSON.stringify(runPath.slice(0,5000)));localStorage.setItem(bestKey,String(score));localStorage.setItem(key+"-meta",String(score));ghostBestScore=score;ghostSaved=true}catch{}
     }
   }
-  function saveLeaderboard(mode){const key=dailyMode?"snake-evolution-daily-leaderboard":"snake-evolution-leaderboard";let list=[];try{list=JSON.parse(localStorage.getItem(key)||"[]")}catch{}list.push({score:Math.round(score),combo,zone:currentZone(),evolution:evoNames[evolution()-1],mutation:mutationName(),condition:conditionName(),mode,date:dailyDateKey()});list.sort((a,b)=>b.score-a.score);writeStore(key,list.slice(0,10))}
+  function leaderboardLabel(value,fallback){
+    if(typeof value!=="string")return fallback;
+    return value.replace(/[\\u0000-\\u001f\\u007f]/g,"").slice(0,40)||fallback;
+  }
+  function readLeaderboardRecords(key){
+    let stored;
+    try{stored=JSON.parse(localStorage.getItem(key)||"[]")}catch{return []}
+    if(!Array.isArray(stored))return [];
+    return stored
+      .filter(record=>record&&typeof record==="object"&&!Array.isArray(record)&&Number.isFinite(Number(record.score))&&Number(record.score)>=0)
+      .map(record=>({
+        score:Math.min(Number.MAX_SAFE_INTEGER,Math.round(Number(record.score))),
+        combo:Math.max(1,Math.min(99,Math.trunc(Number(record.combo)||1))),
+        evolution:leaderboardLabel(record.evolution,"RUNNER"),
+        mutation:leaderboardLabel(record.mutation,"STANDARD"),
+        mode:leaderboardLabel(record.mode,"STANDARD"),
+        date:leaderboardLabel(record.date,dailyDateKey())
+      }));
+  }
+  function saveLeaderboard(mode){
+    const key=dailyMode?"snake-evolution-daily-leaderboard":"snake-evolution-leaderboard";
+    const list=readLeaderboardRecords(key);
+    list.push({score:Math.round(score),combo,zone:currentZone(),evolution:evoNames[evolution()-1],mutation:mutationName(),condition:conditionName(),mode,date:dailyDateKey()});
+    list.sort((a,b)=>b.score-a.score);
+    writeStore(key,list.slice(0,10));
+  }
   function renderLeaderboard(){
-    const render=(el,key)=>{if(!el)return;let list=[];try{list=JSON.parse(localStorage.getItem(key)||"[]")}catch{}el.innerHTML=list.length?list.map((r,n)=>"<div class=\"leader-row\"><b>#"+(n+1)+"</b><strong>"+r.score+"</strong><span>x"+r.combo+" // "+r.evolution+"</span><small>"+r.mutation+" // "+r.mode+"</small></div>").join(""):"<div class=\"leader-empty\">NO RUNS RECORDED</div>"};
-    render(document.querySelector("#leaderboardList"),"snake-evolution-leaderboard");render(document.querySelector("#dailyLeaderboardList"),"snake-evolution-daily-leaderboard")
+    const render=(el,key)=>{
+      if(!el)return;
+      const list=readLeaderboardRecords(key).sort((a,b)=>b.score-a.score).slice(0,10);
+      el.replaceChildren();
+      if(!list.length){
+        const empty=document.createElement("div");
+        empty.className="leader-empty";
+        empty.textContent="NO RUNS RECORDED";
+        el.appendChild(empty);
+        return;
+      }
+      list.forEach((record,index)=>{
+        const row=document.createElement("div");
+        row.className="leader-row";
+        const rank=document.createElement("b");
+        rank.textContent="#"+(index+1);
+        const value=document.createElement("strong");
+        value.textContent=String(record.score);
+        const details=document.createElement("span");
+        details.textContent="x"+record.combo+" // "+record.evolution;
+        const meta=document.createElement("small");
+        meta.textContent=record.mutation+" // "+record.mode;
+        row.append(rank,value,details,meta);
+        el.appendChild(row);
+      });
+    };
+    render(document.querySelector("#leaderboardList"),"snake-evolution-leaderboard");
+    render(document.querySelector("#dailyLeaderboardList"),"snake-evolution-daily-leaderboard");
   }
 
   function spawnRiskShrine(){if(riskShrine||currentZone()<2)return;const point=safePointU();if(!point)return;riskShrine={...point,expires:performance.now()+18000};addTelegraph(riskShrine.x,riskShrine.y,"RISK SHRINE","#ffd85c",900);event("RISK SHRINE // ACCEPT THE HEAT");say("RISK SHRINE // +15 THREAT // +400")}
