@@ -1180,8 +1180,8 @@ body.rework-v2 .landing-profile .profile-block:nth-child(4) strong{
   #bootHowPanel .how-row p{font-size:4.9px!important}
   #bootHowPanel .how-row kbd{font-size:5px!important}
 }
-</style><link rel="stylesheet" href="release-polish-v1.css?v=release-v1"><link rel="stylesheet" href="arcade-hub-v1.css?v=hub-v5"><link rel="stylesheet" href="quality-pass-v1.css?v=quality-v2"><link rel="stylesheet" href="arcade-menu-v2.css?v=arcade-menu-v2"><link rel="stylesheet" href="visual-polish-v1.css?v=visual-polish-v1"><link rel="stylesheet" href="game-over-finish-v1.css?v=game-over-finish-v1"><link rel="stylesheet" href="hud-achievement-deck-v2.css?v=hud-deck-v2">
-<link rel="stylesheet" href="run-intel-design-v1.css?v=run-intel-v4"></head>
+</style><link rel="stylesheet" href="release-polish-v1.css?v=release-v1"><link rel="stylesheet" href="arcade-hub-v1.css?v=hub-v5"><link rel="stylesheet" href="quality-pass-v1.css?v=quality-v2"><link rel="stylesheet" href="arcade-menu-v2.css?v=arcade-menu-v3"><link rel="stylesheet" href="visual-polish-v1.css?v=visual-polish-v1"><link rel="stylesheet" href="game-over-finish-v1.css?v=game-over-finish-v1"><link rel="stylesheet" href="hud-achievement-deck-v2.css?v=hud-deck-v2">
+<link rel="stylesheet" href="run-intel-design-v1.css?v=run-intel-v5"></head>
 <body class="rework-v2"><section id="bootMenu" class="boot-menu" role="dialog" aria-modal="true" aria-label="Snake Evolution main menu">
   <div class="boot-card">
     <div class="boot-topline"><span class="eyebrow">PIXEL ARCADE</span><div class="boot-top-meta"><span id="bootVersion" class="game-version" aria-label="Current game version">V2.9.0</span><span id="bootClock" class="boot-clock" aria-label="Current time">00:00:00</span><span class="boot-status"><i></i> SYSTEM READY</span></div></div>
@@ -1191,11 +1191,18 @@ body.rework-v2 .landing-profile .profile-block:nth-child(4) strong{
         <h2 id="bootTitle" class="boot-title">SNAKE <b>EVOLUTION</b></h2>
         <div class="boot-title-spacer" aria-hidden="true"></div>
         <div class="boot-actions">
-          <button type="button" id="bootStart" class="boot-action boot-primary">START RUN <span>▶</span></button><button type="button" id="bootFun" class="boot-action secondary">PARTY RUN // CHAOS</button>
-          <button type="button" id="bootDaily" class="boot-action secondary">DAILY RUN</button>
-          <button type="button" id="bootEndless" class="boot-action secondary">ENDLESS MODE</button>
-          <button type="button" id="bootHow" class="boot-action secondary">HOW TO PLAY</button>
-          <button type="button" id="bootOptions" class="boot-action secondary">OPTIONS</button>
+          <button type="button" id="bootStart" class="boot-action boot-primary">START RUN <span>▶</span></button>
+          <div class="boot-mode-actions" aria-label="Game modes">
+            <span class="boot-action-group-label">CHOOSE A MODE</span>
+            <button type="button" id="bootFun" class="boot-action secondary">PARTY RUN // CHAOS</button>
+            <button type="button" id="bootDaily" class="boot-action secondary">DAILY RUN</button>
+            <button type="button" id="bootEndless" class="boot-action secondary">ENDLESS MODE</button>
+          </div>
+          <div class="boot-utility-actions" aria-label="Menu utilities">
+            <span class="boot-action-group-label">GET STARTED</span>
+            <button type="button" id="bootHow" class="boot-action secondary">HOW TO PLAY</button>
+            <button type="button" id="bootOptions" class="boot-action secondary">OPTIONS</button>
+          </div>
         </div>
       </section>
       <aside class="boot-brief" aria-label="Mission briefing">
@@ -1272,7 +1279,7 @@ body.rework-v2 .landing-profile .profile-block:nth-child(4) strong{
     <button type="button" id="bootResetSettings" class="boot-action secondary">RESET DEFAULTS</button><button type="button" id="bootResetRank" class="boot-action secondary rank-reset">RESET RANK</button>
     <button type="button" id="bootCardDeck" class="boot-action secondary">CARD DECK</button>
     <button type="button" id="bootBadgeArchive" class="boot-action secondary">BADGE ARCHIVE</button>
-    <button type="button" id="bootAutoAchievements" class="boot-action secondary">AUTO ACHIEVEMENTS</button>
+    <button type="button" id="bootAutoAchievements" class="boot-action secondary">TIMED ACHIEVEMENTS</button>
   </div>
   <button type="button" id="bootOptionsBack" class="boot-action secondary">BACK</button>
 </div>
@@ -1289,7 +1296,7 @@ body.rework-v2 .landing-profile .profile-block:nth-child(4) strong{
   <button type="button" id="bootBadgeBack" class="boot-action secondary meta-close">BACK TO OPTIONS</button>
 </div>
 <div id="bootAchievementPanel" class="boot-panel meta-panel hidden">
-  <div class="meta-panel-head"><div><b>AUTOMATIC ACHIEVEMENTS</b><small>NO CLAIM BUTTON. TIMED UNLOCKS ARE GRANTED AS SOON AS THE CONDITION IS MET.</small></div><strong>AUTO-CLAIM</strong></div>
+  <div class="meta-panel-head"><div><b>TIMED ACHIEVEMENTS</b><small>UNLOCKS ARE GRANTED AUTOMATICALLY WHEN THEIR CONDITIONS ARE MET.</small></div><strong>AUTO-CLAIM</strong></div>
   <div id="timedSummary" class="meta-summary"></div>
   <div class="meta-panel-scroll"><div id="bootTimedList" class="timed-list"></div></div>
   <button type="button" id="bootAchievementsBack" class="boot-action secondary meta-close">BACK TO OPTIONS</button>
@@ -1488,4 +1495,4 @@ body.rework-v2 .landing-profile .profile-block:nth-child(4) strong{
 </details>
 <section id="leaderboards" class="progression-panel"><div class="progression-head"><b>LOCAL LEADERBOARDS</b><strong>TOP 10</strong></div><div class="leaderboard-columns"><div><h4>ALL RUNS</h4><div id="leaderboardList" class="leaderboard-list"></div></div><div><h4>DAILY // TODAY</h4><div id="dailyLeaderboardList" class="leaderboard-list"></div></div></div></section>
 <footer><div class="legend"><span class="desktop-commands">KEYBOARD: WASD / ARROWS · SPACE DASH · SHIFT SHIELD · E PULSE · Q FURY · P / ESC PAUSE</span><span>ENERGY +10</span><span>CORE +50</span><span class="legend-energy">ENERGY · GREEN</span><span class="legend-core">CORE · GOLD</span><span class="legend-hunter">HUNTER · CYAN</span><span class="legend-elite">ELITE · AMBER</span><span class="legend-hazard">HAZARD · RED</span><span class="legend-powerup">POWER-UP · VIOLET/TEAL</span><span class="legend-supply">SUPPLY DROP · BLUE/GOLD/WHITE</span></div><div class="controls" aria-label="Mobile touch controls"><span class="touch-label">TOUCH</span><button data-dir="up">▲</button><div><button data-dir="left">◀</button><button data-dir="down">▼</button><button data-dir="right">▶</button></div></div></footer>
-</main><script src="ultimate-ui-v1.js?v=ultimate-ui-v6"></script><script src="menu.js?v=boot-v42"></script><script src="arcade-menu-v2.js?v=arcade-menu-v2"></script><script src="meta-progression-v1.js?v=meta-v4"></script><script src="arcade-hub-v1.js?v=hub-v3"></script><script src="quality-pass-v1.js?v=quality-v3"></script><script src="visual-polish-v1.js?v=visual-polish-v1"></script></body></html>
+</main><script src="ultimate-ui-v1.js?v=ultimate-ui-v7"></script><script src="menu.js?v=boot-v43"></script><script src="arcade-menu-v2.js?v=arcade-menu-v2"></script><script src="meta-progression-v1.js?v=meta-v4"></script><script src="arcade-hub-v1.js?v=hub-v3"></script><script src="quality-pass-v1.js?v=quality-v4"></script><script src="visual-polish-v1.js?v=visual-polish-v1"></script></body></html>
