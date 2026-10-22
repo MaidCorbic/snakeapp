@@ -21,11 +21,11 @@
     panel.dataset.ultimateUi = "1";
 
     const sections = [
-      { label: "01 / PRESENTATION", keys: ["bootGrid", "bootMotion", "bootCrt", "bootContrast", "bootHomeClock"] },
-      { label: "02 / IN-RUN HUD", keys: ["bootTimer", "bootXp", "bootIntel", "bootMissions", "bootAbilities", "bootTouch", "bootAutoPause", "bootRadar", "bootEnemyDetails"] },
-      { label: "03 / AUDIO & FEEDBACK", keys: ["bootVibration", "bootFx", "bootSound", "bootMusic", "bootVolume"] }
+      { label: "01 / APPEARANCE", keys: ["bootGrid", "bootMotion", "bootCrt", "bootContrast", "bootHomeClock"] },
+      { label: "03 / GAMEPLAY & HUD", keys: ["bootTimer", "bootXp", "bootIntel", "bootMissions", "bootAbilities", "bootTouch", "bootAutoPause", "bootRadar", "bootEnemyDetails"] },
+      { label: "04 / SOUND & FEEDBACK", keys: ["bootVibration", "bootFx", "bootSound", "bootMusic", "bootVolume"] }
     ];
-    const allRows = [...grid.children].filter(node => node.classList.contains("option-row"));
+    const allRows = [...grid.children].filter(node => node.classList.contains("option-row") && !node.classList.contains("control-deck-profile-row"));
     const labels = [...grid.children].filter(node => node.classList.contains("options-section-label"));
     labels.forEach(node => node.remove());
     const rowsById = new Map(allRows.map(row => {
@@ -53,7 +53,7 @@
       group.className = "option-group";
       const heading = document.createElement("h3");
       heading.className = "option-group-title";
-      heading.textContent = "04 / GAME CUSTOMIZATION";
+      heading.textContent = "05 / OTHER SETTINGS";
       group.appendChild(heading);
       rowsById.forEach(row => group.appendChild(row));
       grid.appendChild(group);
@@ -63,9 +63,30 @@
     // All controls remain the original controls; this only changes their layout.
     const actions = $(".option-actions", panel);
     if (actions) {
-      actions.setAttribute("aria-label", "Settings utilities");
+      actions.setAttribute("aria-label", "Collections and utilities");
+      if (!panel.querySelector(".option-actions-title")) {
+        const heading = document.createElement("h3");
+        heading.className = "option-actions-title";
+        heading.textContent = "COLLECTIONS & UTILITIES";
+        actions.insertAdjacentElement("beforebegin", heading);
+      }
       const resetRank = $("#bootResetRank", actions);
-      if (resetRank) resetRank.title = "Clears local score records and saved leaderboard data";
+      if (resetRank && !panel.querySelector(".option-danger-zone")) {
+        const zone = document.createElement("section");
+        zone.className = "option-danger-zone";
+        zone.setAttribute("aria-labelledby", "bootResetRankHeading");
+        const heading = document.createElement("h3");
+        heading.id = "bootResetRankHeading";
+        heading.textContent = "DANGER ZONE";
+        const description = document.createElement("p");
+        description.id = "bootResetRankDescription";
+        description.textContent = "Permanently clears local scores, leaderboard entries and ghost runs on this device.";
+        resetRank.textContent = "RESET LOCAL RECORDS";
+        resetRank.setAttribute("aria-describedby", description.id);
+        resetRank.title = "Requires confirmation; clears saved local score and leaderboard data";
+        zone.append(heading, description, resetRank);
+        actions.insertAdjacentElement("afterend", zone);
+      }
     }
   }
 
