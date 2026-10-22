@@ -117,7 +117,7 @@ assert.match(html, /arcade-menu-v2\.css\?v=arcade-menu-v3/);
 assert.match(html, /arcade-menu-v2\.js\?v=arcade-menu-v2/);
 assert.match(menu, /let leadNotes = \[587\.33,698\.46,880/);
 assert.match(menu, /setTimeout\(tick,142\)/);
-assert.match(arcadeMenuCss, /#bootOptionsPanel \.option-row>div:first-child small \{ display:none !important; \}/);
+assert.match(arcadeMenuCss, /#bootOptionsPanel \.option-row>div:first-child small \{ display:block !important;/);
 assert.match(arcadeMenuCss, /#bootMenu \.boot-title/);
 assert.match(arcadeMenuCss, /#bootHowPanel \.boot-panel-heading b/);
 assert.match(arcadeMenuJs, /startThroughExistingHandler\("bootStart", "normal"\)/);
