@@ -132,7 +132,7 @@
   #bootOptionsPanel { max-height:calc(100dvh - 24px); padding:12px !important; }
   #bootOptionsPanel .option-group { grid-template-columns:1fr; padding:10px 12px; }
   #bootMenu .boot-mode-actions { grid-template-columns:repeat(2,minmax(0,1fr)); }
-  #bootOptionsPanel .option-group-title { font-size:8px !important; }
+  #bootOptionsPanel .option-group-title { font-size:11px !important; }
   #bootOptionsPanel .option-row { min-height:60px !important; }
   #bootOptionsPanel .option-row>div:first-child b { font-size:12px !important; }
   #bootOptionsPanel .option-row>div:first-child small { font-size:10px !important; }
