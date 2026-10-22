@@ -131,6 +131,11 @@ test("one scheduler owns ticks through pause, resume and restart", async ({ page
   await page.locator("#pauseBtn").click();
   await page.locator("#restartPause").click();
   await expect(page.locator("#pauseOverlay")).toHaveCount(0);
+  // Restart deliberately reopens the contract offer; gameplay ticks stay stopped
+  // until the player accepts or declines it.
+  await expect.poll(() => page.evaluate(() => window.SnakeEvolution.getState().contractOfferOpen)).toBe(true);
+  expect(await page.evaluate(() => window.__snakeE2E.getSchedulerState().timerPending)).toBe(false);
+  await page.locator("#contractDecline").click();
   await expect.poll(() => page.evaluate(() => window.__snakeE2E.getSchedulerState().timerPending)).toBe(true);
   const restarted = await page.evaluate(() => window.__snakeE2E.getSchedulerState());
   expect(restarted.owner).toBe("external");
@@ -160,7 +165,8 @@ test("corrupted local leaderboard records are filtered and rendered as text", as
   await expect(page.locator("#leaderboardList .leader-row")).toHaveCount(1);
   await expect(page.locator("#leaderboardList img, #leaderboardList svg")).toHaveCount(0);
   const leaderboardText = await page.locator("#leaderboardList").innerText();
-  expect(leaderboardText).toContain('<img src=x onerror="window.__snakeInjected=true">');
+  expect(leaderboardText).toContain("<img src=x onerror=");
+  expect(leaderboardText).toContain("<svg onload=alert(1)>");
   expect(await page.evaluate(() => window.__snakeInjected)).toBeUndefined();
 });
 
