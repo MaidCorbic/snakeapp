@@ -282,13 +282,41 @@
     return api[method]();
   };
 
-  const loadGame = (mode="normal") => {
+  // Single source of truth for gameplay dependencies and their cache versions.
+  const GAMEPLAY_SCRIPT_LAYERS = Object.freeze([
+    { id: "snakeGameScript", src: "game.js?v=arcade-v28", failure: "GAME SCRIPT COULD NOT LOAD" },
+    { id: "snakeUltimateScript", src: "ultimate-gameplay-v1.js?v=ultimate-v16", failure: "ULTIMATE GAMEPLAY LAYER COULD NOT LOAD" },
+    { id: "snakeGameplayUpdateV2", src: "gameplay-update-v2.js?v=update-v15", failure: "GAMEPLAY UPDATE PACK COULD NOT LOAD" },
+    { id: "snakeArcadePolishV1", src: "arcade-polish-v1.js?v=arcade-v3", failure: "ARCADE POLISH LAYER COULD NOT LOAD" },
+    { id: "snakeReworkV2", src: "snake-rework-v2.js?v=rework-v6", failure: "REWORK PRESENTATION LAYER COULD NOT LOAD" },
+    { id: "snakeQualityGameplayScript", src: "quality-gameplay-v1.js?v=quality-v3", failure: "GAMEPLAY QUALITY LAYER COULD NOT LOAD" }
+  ]);
+
+  const appendGameplayLayer = layer => new Promise((resolve, reject) => {
+    if (document.getElementById(layer.id)) {
+      reject(new Error("PARTIAL GAME BOOTSTRAP DETECTED — RELOAD REQUIRED"));
+      return;
+    }
+    const script = document.createElement("script");
+    script.id = layer.id;
+    script.src = layer.src;
+    script.async = false;
+    script.onload = () => resolve(script);
+    script.onerror = () => reject(new Error(layer.failure));
+    document.body.appendChild(script);
+  });
+
+  const loadGame = async (mode="normal") => {
     hidePanels();
     if (gameLoaded) {
       bootMenu?.classList.add("hidden");
       document.body.classList.remove("boot-open");
       app?.classList.remove("preboot");
-      startLoadedMode(mode);
+      try {
+        startLoadedMode(mode);
+      } catch (error) {
+        failLoad("GAME BOOT ERROR: GAME START FAILED — " + (error?.message || "unknown start error"));
+      }
       return;
     }
     if (gameLoading) return;
@@ -306,13 +334,13 @@
       window.removeEventListener("error", onRuntimeError);
       window.removeEventListener("unhandledrejection", onRuntimeRejection);
     };
-    const onRuntimeError = (event) => {
+    const onRuntimeError = event => {
       if (!gameLoading) return;
       bootFailed = true;
       cleanupBootListeners();
       failLoad("GAME BOOT ERROR: " + (event.message || "unknown runtime error"));
     };
-    const onRuntimeRejection = (event) => {
+    const onRuntimeRejection = event => {
       if (!gameLoading) return;
       bootFailed = true;
       cleanupBootListeners();
@@ -321,96 +349,40 @@
     window.addEventListener("error", onRuntimeError);
     window.addEventListener("unhandledrejection", onRuntimeRejection);
 
-    const script = document.createElement("script");
-    script.id = "snakeGameScript";
-    script.src = "game.js?v=arcade-v27";
-    script.onload = () => {
-      if (bootFailed) return;
-      if (typeof window.SnakeEvolution?.start !== "function") {
-        cleanupBootListeners();
-        return failLoad("GAME BOOT ERROR: CORE START API NOT READY");
-      }
-      const ultimate = document.createElement("script");
-      ultimate.id = "snakeUltimateScript";
-      ultimate.src = "ultimate-gameplay-v1.js?v=ultimate-v16";
-      ultimate.onload = () => {
+    try {
+      for (const layer of GAMEPLAY_SCRIPT_LAYERS) {
+        await appendGameplayLayer(layer);
         if (bootFailed) return;
-        if (typeof window.SnakeEvolution?.start !== "function") {
-          cleanupBootListeners();
-          return failLoad("GAME BOOT ERROR: ADVANCED START API NOT READY");
+
+        if (layer.id === "snakeGameScript" && typeof window.SnakeEvolution?.start !== "function") {
+          throw new Error("GAME BOOT ERROR: CORE START API NOT READY");
         }
-        const update = document.createElement("script");
-        update.id = "snakeGameplayUpdateV2";
-        update.src = "gameplay-update-v2.js?v=update-v14";
-        update.onload = () => {
-          if (bootFailed) return;
-          const polish = document.createElement("script");
-          polish.id = "snakeArcadePolishV1";
-          polish.src = "arcade-polish-v1.js?v=arcade-v3";
-          polish.onload = () => {
-            if (bootFailed) return;
-            try {
-              window.SnakeArcadePolish?.start?.();
-            } catch (error) {
-              cleanupBootListeners();
-              return failLoad("GAME BOOT ERROR: ARCADE POLISH INIT FAILED");
-            }
-            const rework = document.createElement("script");
-            rework.id = "snakeReworkV2";
-            rework.src = "snake-rework-v2.js?v=rework-v6";
-            rework.onload = () => {
-              if (bootFailed) return;
-              const quality = document.createElement("script");
-              quality.id = "snakeQualityGameplayScript";
-              quality.src = "quality-gameplay-v1.js?v=quality-v3";
-              quality.onload = () => {
-                if (bootFailed) return;
-                try {
-                  startLoadedMode(mode);
-                  cleanupBootListeners();
-                  gameLoading = false;
-                  gameLoaded = true;
-                  loadAchievementDeck();
-                } catch (error) {
-                  cleanupBootListeners();
-                  failLoad("GAME BOOT ERROR: GAME START FAILED — " + (error?.message || "unknown start error"));
-                }
-              };
-              quality.onerror = () => {
-                cleanupBootListeners();
-                failLoad("GAMEPLAY QUALITY LAYER COULD NOT LOAD");
-              };
-              document.body.appendChild(quality);
-            };
-            rework.onerror = () => {
-              cleanupBootListeners();
-              failLoad("REWORK PRESENTATION LAYER COULD NOT LOAD");
-            };
-            document.body.appendChild(rework);
-          };
-          polish.onerror = () => {
-            cleanupBootListeners();
-          failLoad("ARCADE POLISH LAYER COULD NOT LOAD");
-          };
-          document.body.appendChild(polish);
-        };
-        update.onerror = () => {
-          cleanupBootListeners();
-        failLoad("GAMEPLAY UPDATE PACK COULD NOT LOAD");
-        };
-        document.body.appendChild(update);
-      };
-      ultimate.onerror = () => {
-        cleanupBootListeners();
-        failLoad("ULTIMATE GAMEPLAY LAYER COULD NOT LOAD");
-      };
-      document.body.appendChild(ultimate);
-    };
-    script.onerror = () => {
+        if (layer.id === "snakeUltimateScript" && typeof window.SnakeEvolution?.start !== "function") {
+          throw new Error("GAME BOOT ERROR: ADVANCED START API NOT READY");
+        }
+        if (layer.id === "snakeArcadePolishV1") {
+          try {
+            window.SnakeArcadePolish?.start?.();
+          } catch (error) {
+            throw new Error("GAME BOOT ERROR: ARCADE POLISH INIT FAILED — " + (error?.message || "unknown error"));
+          }
+        }
+      }
+
+      try {
+        startLoadedMode(mode);
+      } catch (error) {
+        throw new Error("GAME BOOT ERROR: GAME START FAILED — " + (error?.message || "unknown start error"));
+      }
       cleanupBootListeners();
-      failLoad("GAME SCRIPT COULD NOT LOAD");
-    };
-    document.body.appendChild(script);
+      gameLoading = false;
+      gameLoaded = true;
+      loadAchievementDeck();
+    } catch (error) {
+      cleanupBootListeners();
+      if (bootFailed) return;
+      failLoad(error?.message || "GAME BOOT FAILED");
+    }
   };
 
   [startBtn,dailyBtn,endlessBtn,funBtn,howBtn,optionsBtn].forEach(button=>button?.addEventListener("click",()=>startMusic(),{once:true}));

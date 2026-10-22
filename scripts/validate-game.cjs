@@ -127,11 +127,14 @@ for (const src of localScripts) {
   check("HTML script exists: " + clean, fs.existsSync(path.join(root, clean)));
 }
 
-check("menu loads cache-busted gameplay layers", menu.includes("game.js?v=arcade-v27") &&
+check("gameplay assets are defined once in an ordered manifest", menu.includes("const GAMEPLAY_SCRIPT_LAYERS = Object.freeze([") &&
+  menu.includes("game.js?v=arcade-v28") &&
   menu.includes("ultimate-gameplay-v1.js?v=ultimate-v16") &&
-  menu.includes("gameplay-update-v2.js?v=update-v14") &&
+  menu.includes("gameplay-update-v2.js?v=update-v15") &&
   menu.includes("snake-rework-v2.js?v=rework-v6") &&
-  html.includes("meta-progression-v1.js?v=meta-v4"));
+  menu.includes("quality-gameplay-v1.js?v=quality-v3") &&
+  html.includes("meta-progression-v1.js?v=meta-v4") &&
+  menu.indexOf('id: "snakeGameplayUpdateV2"') < menu.indexOf('id: "snakeQualityGameplayScript"'));
 
 check("pause control has one authoritative click handler", !/pauseBtn\?\.addEventListener\("click"/.test(game) && /pauseControl\?\.addEventListener\("click"/.test(update));
 
@@ -241,6 +244,22 @@ check("setting visibility and combat-effect styles are defined",
 check("browser regression covers modes and storage resilience", read("tests/e2e/game.spec.cjs").includes("Daily and Endless launch buttons are visible") && read("tests/e2e/game.spec.cjs").includes("blocked browser storage") && read("tests/e2e/game.spec.cjs").includes("narrow viewport keeps the game"));
 check("browser regression covers live gameplay settings",
   /gameplay display and combat-effect settings affect the live game/.test(read("tests/e2e/game.spec.cjs")));
+
+
+check("gameplay tick scheduling has one explicit owner and a bounded error recovery path",
+  /tickSchedulerOwner="core"/.test(game) &&
+  /function\s+scheduleCoreTick\(/.test(game) &&
+  /setTickSchedulerOwner\("external"\)/.test(update) &&
+  /MAX_CONSECUTIVE_TICK_ERRORS = 3/.test(update) &&
+  /coreTickSchedules/.test(update));
+check("leaderboard data is validated and rendered without HTML interpolation",
+  /function\s+readLeaderboardRecords\(/.test(ultimate) &&
+  /replaceChildren\(\)/.test(ultimate) &&
+  !/el\.innerHTML=list\.length\?list\.map/.test(ultimate));
+check("browser regressions cover scheduler ownership, repeated tick faults and corrupt leaderboard data",
+  /one scheduler owns ticks through pause, resume and restart/.test(read("tests/e2e/game.spec.cjs")) &&
+  /repeated gameplay tick failures pause the game/.test(read("tests/e2e/game.spec.cjs")) &&
+  /corrupted local leaderboard records are filtered/.test(read("tests/e2e/game.spec.cjs")));
 
 check("CI workflow invokes the same validator",
   /node\s+scripts\/validate-game\.cjs/.test(read(".github/workflows/ci.yml")));
