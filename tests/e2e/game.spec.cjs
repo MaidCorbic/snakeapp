@@ -32,7 +32,7 @@ async function startGame(page) {
 test("failed gameplay bootstrap reports a useful error instead of leaving a frozen arena", async ({ page }) => {
   const pageErrors = [];
   page.on("pageerror", error => pageErrors.push(error.message));
-  await page.route(/\\/ultimate-gameplay-v1\\.js\\?v=/, route => route.abort());
+  await page.route(/\/ultimate-gameplay-v1\.js\?v=/, route => route.abort());
   await page.goto("/index.html");
   await page.locator("#bootStart").click();
 
