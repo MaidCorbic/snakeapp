@@ -10,7 +10,7 @@ test.beforeEach(async ({ page }) => {
     const source = await response.text();
     await route.fulfill({
       response,
-      body: source + "\nwindow.__snakeE2E = { startGameplay: () => { contractOfferOpen = false; contractAccepted = true; move(); }, endRun: () => end(), winRun: () => win(), freeCell: () => free(), setDirection: (x,y) => setDir(x,y), getPendingDirection: () => ({...next}), seedTransientRunState: () => { chain = 4; chainUntil = performance.now() + 10000; chainBest = 9; salvageChain = 5; salvageUntil = performance.now() + 10000; advancedZoneEvent = { type: 'HAZARD_STORM', until: performance.now() + 10000 }; extractionNextAt = 60000; extractionHeatUntil = performance.now() + 10000; advancedExitMode = 'EXTRACTING'; contractDeclined = true; }, getTransientRunState: () => ({ chain, chainUntil, chainBest, salvageChain, salvageUntil, zoneEvent: advancedZoneEvent?.type || null, extractionNextAt, extractionHeatUntil, advancedExitMode, contractDeclined }), forceSelfCollisionWithShield: () => { snake = [{x:10,y:10},{x:11,y:10},{x:11,y:9}]; dir = next = {x:1,y:0}; shieldUntil = performance.now() + 5000; pulseUntil = 0; lives = 3; stats.damage = 0; alive = true; paused = false; move(); }, setEdgeWarningScenario: (x,y,dx,dy) => { clearTimeout(timer); timer = null; snake = [{x,y},{x:x-dx,y:y-dy},{x:x-2*dx,y:y-2*dy}]; dir = next = {x:dx,y:dy}; alive = true; paused = false; draw(); }, setCollisionRecoveryScenario: () => { clearTimeout(timer); timer = null; snake = [{x:10,y:10},{x:9,y:10},{x:8,y:10}]; dir = next = {x:1,y:0}; hazards = [{x:11,y:10}]; hunters = []; powerups = []; boss = null; supplyDrop = null; energy = {x:24,y:15}; core = null; shieldUntil = pulseUntil = 0; lives = 3; stats.damage = 0; alive = true; paused = false; move(); }, setWallCollisionScenario: () => { clearTimeout(timer); timer = null; contractOfferOpen = false; contractAccepted = true; extractionOpen = false; paused = false; snake = [{x:COLS-1,y:10},{x:COLS-2,y:10},{x:COLS-3,y:10}]; dir = next = {x:1,y:0}; hazards = []; hunters = []; powerups = []; boss = null; supplyDrop = null; energy = {x:1,y:1}; core = null; window.__snakeE2E.setArenaBlocks([]); shieldUntil = pulseUntil = 0; lives = 3; stats.damage = 0; alive = true; move(); }, setObstacleCollisionScenario: () => { clearTimeout(timer); timer = null; contractOfferOpen = false; contractAccepted = true; extractionOpen = false; paused = false; snake = [{x:10,y:10},{x:9,y:10},{x:8,y:10}]; dir = next = {x:1,y:0}; hazards = []; hunters = []; powerups = []; boss = null; supplyDrop = null; energy = {x:1,y:1}; core = null; window.__snakeE2E.setArenaBlocks([{x:11,y:10}]); shieldUntil = pulseUntil = 0; lives = 3; stats.damage = 0; alive = true; move(); }, getCollisionRecoveryState: () => ({ head: { ...snake[0] }, segments: snake.map(point => ({ ...point })), lives, alive, shielded: performance.now() < shieldUntil, damage: stats.damage, timerPending: !!timer, overlaps: snake.some(segment => hazards.some(item => same(segment,item)) || hunters.some(item => same(segment,item)) || powerups.some(item => same(segment,item)) || (boss && same(segment,boss)) || (energy && same(segment,energy)) || (core && same(segment,core)) || (supplyDrop && same(segment,supplyDrop))) }) };\n"
+      body: source + "\nwindow.__snakeE2E = { startGameplay: () => { contractOfferOpen = false; contractAccepted = true; move(); }, endRun: () => end(), winRun: () => win(), freeCell: () => free(), setDirection: (x,y) => setDir(x,y), getPendingDirection: () => ({...next}), seedTransientRunState: () => { chain = 4; chainUntil = performance.now() + 10000; chainBest = 9; salvageChain = 5; salvageUntil = performance.now() + 10000; advancedZoneEvent = { type: 'HAZARD_STORM', until: performance.now() + 10000 }; extractionNextAt = 60000; extractionHeatUntil = performance.now() + 10000; advancedExitMode = 'EXTRACTING'; contractDeclined = true; }, getTransientRunState: () => ({ chain, chainUntil, chainBest, salvageChain, salvageUntil, zoneEvent: advancedZoneEvent?.type || null, extractionNextAt, extractionHeatUntil, advancedExitMode, contractDeclined }), forceSelfCollisionWithShield: () => { snake = [{x:10,y:10},{x:11,y:10},{x:11,y:9}]; dir = next = {x:1,y:0}; shieldUntil = performance.now() + 5000; pulseUntil = 0; lives = 3; stats.damage = 0; alive = true; paused = false; move(); }, setEdgeWarningScenario: (x,y,dx,dy) => { clearTimeout(timer); timer = null; snake = [{x,y},{x:x-dx,y:y-dy},{x:x-2*dx,y:y-2*dy}]; dir = next = {x:dx,y:dy}; alive = true; paused = false; draw(); }, setCollisionRecoveryScenario: () => { clearTimeout(timer); timer = null; snake = [{x:10,y:10},{x:9,y:10},{x:8,y:10}]; dir = next = {x:1,y:0}; hazards = [{x:11,y:10}]; hunters = []; powerups = []; boss = null; supplyDrop = null; energy = {x:24,y:15}; core = null; shieldUntil = pulseUntil = 0; lives = 3; stats.damage = 0; alive = true; paused = false; move(); }, setWallCollisionScenario: () => { clearTimeout(timer); timer = null; contractOfferOpen = false; contractAccepted = true; extractionOpen = false; paused = false; snake = [{x:COLS-1,y:10},{x:COLS-2,y:10},{x:COLS-3,y:10}]; dir = next = {x:1,y:0}; hazards = []; hunters = []; powerups = []; boss = null; supplyDrop = null; energy = {x:1,y:1}; core = null; window.__snakeE2E.setArenaBlocks([]); shieldUntil = pulseUntil = 0; lives = 3; stats.damage = 0; alive = true; move(); }, setObstacleCollisionScenario: () => { clearTimeout(timer); timer = null; contractOfferOpen = false; contractAccepted = true; extractionOpen = false; paused = false; snake = [{x:10,y:10},{x:9,y:10},{x:8,y:10}]; dir = next = {x:1,y:0}; hazards = []; hunters = []; powerups = []; boss = null; supplyDrop = null; energy = {x:1,y:1}; core = null; window.__snakeE2E.setArenaBlocks([{x:11,y:10}]); shieldUntil = pulseUntil = 0; lives = 3; stats.damage = 0; alive = true; move(); }, getSchedulerState: () => ({ owner: tickSchedulerOwner, coreTickSchedules, timerPending: !!timer }), setCoreDrawFailure: () => { draw = () => { throw new Error("forced E2E gameplay draw failure"); }; }, getCollisionRecoveryState: () => ({ head: { ...snake[0] }, segments: snake.map(point => ({ ...point })), lives, alive, shielded: performance.now() < shieldUntil, damage: stats.damage, timerPending: !!timer, overlaps: snake.some(segment => hazards.some(item => same(segment,item)) || hunters.some(item => same(segment,item)) || powerups.some(item => same(segment,item)) || (boss && same(segment,boss)) || (energy && same(segment,energy)) || (core && same(segment,core)) || (supplyDrop && same(segment,supplyDrop))) }) };\n"
     });
   });
 });
@@ -29,19 +29,17 @@ async function startGame(page) {
   await page.evaluate(() => window.__snakeE2E.startGameplay());
 }
 
-test("failed gameplay bootstrap reports an error instead of leaving a blank frozen arena", async ({ page }) => {
+test("failed gameplay bootstrap reports a useful error instead of leaving a frozen arena", async ({ page }) => {
   const pageErrors = [];
   page.on("pageerror", error => pageErrors.push(error.message));
+  await page.route(/\\/ultimate-gameplay-v1\\.js\\?v=/, route => route.abort());
   await page.goto("/index.html");
   await page.locator("#bootStart").click();
 
-  await expect.poll(() => page.evaluate(() => ({
-    started: typeof window.SnakeEvolution?.getState === "function" && !!window.SnakeEvolution.getState().alive,
-    failed: !document.querySelector("#bootError")?.classList.contains("hidden")
-  }))).toMatchObject({ started: true, failed: false }).catch(async error => {
-    const failureText = await page.locator("#bootErrorText").textContent().catch(() => "");
-    throw new Error("Gameplay bootstrap did not start. Loader message: " + (failureText || "none") + "; page errors: " + pageErrors.join(" | ") + "; " + error.message);
-  });
+  await expect(page.locator("#bootMenu")).toBeVisible();
+  await expect(page.locator("#bootError")).toBeVisible();
+  await expect(page.locator("#bootErrorText")).toHaveText("ULTIMATE GAMEPLAY LAYER COULD NOT LOAD");
+  expect(pageErrors).toEqual([]);
 });
 
 test("landing menu, instructions, and options open and close", async ({ page }) => {
@@ -113,6 +111,57 @@ test("pause, resume, and restart keep one gameplay timer without page errors", a
   await expect(page.locator("#pauseOverlay")).toHaveCount(0);
   await expect.poll(() => page.evaluate(() => window.SnakeEvolution.getState().alive)).toBe(true);
   expect(pageErrors).toEqual([]);
+});
+
+test("one scheduler owns ticks through pause, resume and restart", async ({ page }) => {
+  await startGame(page);
+  const started = await page.evaluate(() => window.__snakeE2E.getSchedulerState());
+  expect(started.owner).toBe("external");
+  expect(started.coreTickSchedules).toBe(0);
+  expect(started.timerPending).toBe(true);
+
+  await page.locator("#pauseBtn").click();
+  await expect(page.locator("#pauseOverlay")).toBeVisible();
+  expect(await page.evaluate(() => window.__snakeE2E.getSchedulerState().timerPending)).toBe(false);
+
+  await page.locator("#resume").click();
+  await expect(page.locator("#pauseOverlay")).toHaveCount(0);
+  await expect.poll(() => page.evaluate(() => window.__snakeE2E.getSchedulerState().timerPending)).toBe(true);
+
+  await page.locator("#pauseBtn").click();
+  await page.locator("#restartPause").click();
+  await expect(page.locator("#pauseOverlay")).toHaveCount(0);
+  await expect.poll(() => page.evaluate(() => window.__snakeE2E.getSchedulerState().timerPending)).toBe(true);
+  const restarted = await page.evaluate(() => window.__snakeE2E.getSchedulerState());
+  expect(restarted.owner).toBe("external");
+  expect(restarted.coreTickSchedules).toBe(0);
+});
+
+test("repeated gameplay tick failures pause the game and cancel future ticks", async ({ page }) => {
+  await startGame(page);
+  await page.evaluate(() => window.__snakeE2E.setCoreDrawFailure());
+  await expect(page.locator("#pauseOverlay")).toBeVisible();
+  const scheduler = await page.evaluate(() => window.__snakeE2E.getSchedulerState());
+  expect(scheduler.owner).toBe("external");
+  expect(scheduler.coreTickSchedules).toBe(0);
+  expect(scheduler.timerPending).toBe(false);
+});
+
+test("corrupted local leaderboard records are filtered and rendered as text", async ({ page }) => {
+  await page.addInitScript(() => {
+    localStorage.setItem("snake-evolution-leaderboard", JSON.stringify([
+      { score: 250, combo: 3, evolution: '<img src=x onerror="window.__snakeInjected=true">', mutation: "<svg onload=alert(1)>", mode: "STANDARD" },
+      { score: "<img src=x>", combo: 2, evolution: "INVALID", mutation: "BROKEN", mode: "STANDARD" },
+      null,
+      "corrupt record"
+    ]));
+  });
+  await startGame(page);
+  await expect(page.locator("#leaderboardList .leader-row")).toHaveCount(1);
+  await expect(page.locator("#leaderboardList img, #leaderboardList svg")).toHaveCount(0);
+  const leaderboardText = await page.locator("#leaderboardList").innerText();
+  expect(leaderboardText).toContain('<img src=x onerror="window.__snakeInjected=true">');
+  expect(await page.evaluate(() => window.__snakeInjected)).toBeUndefined();
 });
 
 test("gameplay balance profile is exposed and bounded", async ({ page }) => {
