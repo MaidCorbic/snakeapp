@@ -39,7 +39,14 @@
   font: 600 10px/1.2 "Press Start 2P",monospace !important;
   padding:7px 8px !important; border-radius:5px !important;
 }
-#bootMenu .boot-actions #bootStart { font-size:10px !important; min-height:58px !important; }
+#bootMenu .boot-actions { display:grid !important; grid-template-columns:minmax(0,1fr) !important; gap:12px !important; }
+#bootMenu .boot-actions #bootStart { grid-column:1/-1; width:100%; font-size:10px !important; min-height:58px !important; }
+#bootMenu .boot-mode-actions, #bootMenu .boot-utility-actions { grid-column:1/-1; display:grid; gap:8px; min-width:0; }
+#bootMenu .boot-mode-actions { grid-template-columns:repeat(3,minmax(0,1fr)); }
+#bootMenu .boot-utility-actions { grid-template-columns:repeat(2,minmax(0,1fr)); padding-top:12px; border-top:1px solid #263a2b; }
+#bootMenu .boot-action-group-label { grid-column:1/-1; color:#8fa994; font:700 10px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif; letter-spacing:1px; }
+#bootMenu .boot-mode-actions .boot-action, #bootMenu .boot-utility-actions .boot-action { min-width:0; min-height:44px; text-align:center; justify-content:center; overflow-wrap:anywhere; }
+#bootMenu .boot-actions #bootFun { font-size:8px !important; min-height:48px !important; }
 #bootMenu .boot-actions #bootFun { font-size:8px !important; min-height:48px !important; }
 #bootOptionsPanel {
   width:100%;
@@ -66,13 +73,14 @@
   background:linear-gradient(145deg,#0d1710,#070c09);
 }
 #bootOptionsPanel .option-group-title {
-  grid-column:1/-1; font-size:9px !important; letter-spacing:1.1px;
+  grid-column:1/-1; color:#a9c9ac; font:700 11px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif !important; letter-spacing:1px;
 }
 #bootOptionsPanel .option-row {
   min-height:58px !important; padding:8px 0 !important; gap:12px;
 }
-#bootOptionsPanel .option-row>div:first-child b { font-size:9px !important; }
-#bootOptionsPanel .option-row>div:first-child small { display:none !important; }
+#bootOptionsPanel .option-row>div:first-child { min-width:0; gap:5px; }
+#bootOptionsPanel .option-row>div:first-child b { font:700 13px/1.45 system-ui,-apple-system,"Segoe UI",sans-serif !important; letter-spacing:.2px; overflow-wrap:anywhere; }
+#bootOptionsPanel .option-row>div:first-child small { display:block !important; max-width:42ch; color:#91a995 !important; font:500 11px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif !important; letter-spacing:0; }
 #bootOptionsPanel .option-toggle { min-width:60px; }
 #bootOptionsPanel .snake-color-group {
   border-color:#446c49;
@@ -95,7 +103,12 @@
 #bootOptionsPanel .snake-custom-color input {
   width:25px; height:25px; border-radius:6px; overflow:hidden;
 }
+#bootOptionsPanel .option-actions-title { margin:18px 0 9px; color:#b8d2bb; font:700 11px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif; letter-spacing:1px; }
 #bootOptionsPanel .option-actions { grid-template-columns:repeat(3,minmax(0,1fr)) !important; }
+#bootOptionsPanel .option-danger-zone { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:8px 16px; align-items:center; margin-top:14px; padding:14px; border:1px solid #643e38; border-radius:10px; background:linear-gradient(145deg,#1b100f,#0d0909); }
+#bootOptionsPanel .option-danger-zone h3 { grid-column:1/-1; margin:0; color:#ff9b91; font:800 11px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif; letter-spacing:1.2px; }
+#bootOptionsPanel .option-danger-zone p { margin:0; color:#b89b98; font:500 11px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif; }
+#bootOptionsPanel .option-danger-zone #bootResetRank { grid-column:2; grid-row:2; min-width:160px; min-height:42px; padding:9px 12px; white-space:normal; border:1px solid #a0524a !important; border-radius:6px; background:#2b1212 !important; color:#ffd1cc !important; font:700 11px/1.4 system-ui,-apple-system,"Segoe UI",sans-serif !important; box-shadow:0 3px 0 #180707 !important; }
 #bootHowPanel .boot-panel-heading small { display:none !important; }
 #bootHowPanel .boot-panel-heading b {
   font-family:"Press Start 2P",monospace !important;
@@ -118,11 +131,19 @@
   #bootMenu .boot-brief .brief-controls { grid-template-columns:1fr !important; }
   #bootOptionsPanel { max-height:calc(100dvh - 24px); padding:12px !important; }
   #bootOptionsPanel .option-group { grid-template-columns:1fr; padding:10px 12px; }
-  #bootOptionsPanel .option-group-title { font-size:8px !important; }
-  #bootOptionsPanel .option-row { min-height:48px !important; }
+  #bootMenu .boot-mode-actions { grid-template-columns:repeat(2,minmax(0,1fr)); }
+  #bootOptionsPanel .option-group-title { font-size:11px !important; }
+  #bootOptionsPanel .option-row { min-height:60px !important; }
+  #bootOptionsPanel .option-row>div:first-child b { font-size:12px !important; }
+  #bootOptionsPanel .option-row>div:first-child small { font-size:10px !important; }
+  #bootOptionsPanel .option-danger-zone { grid-template-columns:minmax(0,1fr); }
+  #bootOptionsPanel .option-danger-zone #bootResetRank { grid-column:1; grid-row:auto; width:100%; }
   #bootOptionsPanel .snake-color-row { align-items:flex-start !important; flex-direction:column !important; }
   #bootOptionsPanel .snake-palette { justify-content:flex-start; }
   #bootOptionsPanel .option-actions { grid-template-columns:repeat(2,minmax(0,1fr)) !important; }
+}
+@media (max-width:390px) {
+  #bootMenu .boot-mode-actions { grid-template-columns:1fr; }
 }
 @media (prefers-reduced-motion:reduce) {
   #bootMenu *, #bootMenu *::before, #bootMenu *::after { animation:none !important; transition:none !important; }

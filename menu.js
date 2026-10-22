@@ -37,9 +37,9 @@
   const resetRankBtn = document.querySelector("#bootResetRank");
   const rankProfile = document.querySelector("#bootRankProfile");
   const settingsState = document.querySelector("#bootSettingsState");
-  const versionLabel = document.querySelector("#bootGameVersion");
+  const versionLabel = document.querySelector("#bootVersion");
   const bootClock = document.querySelector("#bootClock");
-  const GAME_VERSION = "2.0.0";
+  const GAME_VERSION = "2.9.0";
   const landingBest = document.querySelector("#landingBest");
   const landingLastMode = document.querySelector("#landingLastMode");
   const landingAudioState = document.querySelector("#landingAudioState");
@@ -119,6 +119,7 @@
     });
     if (volumeSlider) volumeSlider.value = String(settings.volume ?? 65);
     if (volumeValue) volumeValue.textContent = String(settings.volume ?? 65) + "%";
+    if (bootClock) bootClock.classList.toggle("hidden", !settings.homeClock);
     if (rankProfile) {
       try {
         const best = Number(localStorage.getItem("snake-evolution-best") || 0);
@@ -493,6 +494,8 @@
     try { localStorage.removeItem("snake-evolution-sound"); } catch {}
   });
   resetRankBtn?.addEventListener("click", () => {
+    const confirmed = window.confirm("Reset all local scores, leaderboards and ghost runs? This cannot be undone.");
+    if (!confirmed) return;
     const keys=[
       "snake-evolution-best",
       "snake-evolution-save",

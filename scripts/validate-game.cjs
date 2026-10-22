@@ -84,7 +84,7 @@ check("new runs clear carry-over chain, salvage and zone-event state",
   ultimate.includes('chainUntil=0;chainBest=0;salvageChain=0;salvageUntil=0;advancedZoneEvent=null;') &&
   read("tests/e2e/game.spec.cjs").includes("restarting a run clears temporary chain, salvage and zone-event state"));
 check("arcade polish stylesheet exists", fs.existsSync(path.join(root, "arcade-polish-v1.css")));
-check("ultimate UI assets are linked and grouped options are present", html.includes("ultimate-ui-v1.css?v=ultimate-ui-v2") && html.includes("ultimate-ui-v1.js?v=ultimate-ui-v6") && ultimateUiCss.includes(".option-group") && ultimateUiCss.includes(".ultimate-result-card") && /setAttribute\("role",\s*"dialog"\)/.test(ultimateUiJs));
+check("ultimate UI assets are linked and grouped options are present", html.includes("ultimate-ui-v1.css?v=ultimate-ui-v2") && html.includes("ultimate-ui-v1.js?v=ultimate-ui-v7") && ultimateUiCss.includes(".option-group") && ultimateUiCss.includes(".ultimate-result-card") && /setAttribute\("role",\s*"dialog"\)/.test(ultimateUiJs));
 check("release polish stylesheet is linked", html.includes('release-polish-v1.css?v=release-v1') && releasePolish.includes(":focus-visible"));
 check("Endless is available from the landing menu", html.includes('id="bootEndless"') && !html.includes(".boot-actions #bootEndless{\n  display:none!important;") && !reworkCss.includes("body.rework-v2 .boot-actions #bootEndless{\n  display:none!important;"));
 check("rework stylesheet exists", fs.existsSync(path.join(root, "snake-rework-v2.css")));
@@ -225,7 +225,9 @@ check("color control keeps one editor and normalizes the original duplicate mark
   qualityPassJs.includes('panel.querySelectorAll(".snake-custom-color, #seCustomSnakeColor")') &&
   qualityPassJs.includes('legacyGroup.replaceWith(group)') &&
   qualityPassJs.includes('localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings))'));
-check("Options readability rules remove tiny helper paragraphs and scale labels", ultimateUiCss.includes('option-row > div:first-child small') && ultimateUiCss.includes('font-size:clamp(12px,1vw,14px)'));
+check("Options and action hierarchy use readable labels, descriptions, and a dedicated danger zone", html.includes("TIMED ACHIEVEMENTS") && menu.includes('GAME_VERSION = "2.9.0"') && menu.includes("settings.homeClock);") && menu.includes("window.confirm(") && read("quality-pass-v1.js").includes("02 / SNAKE APPEARANCE") && read("arcade-menu-v2.css").includes("option-danger-zone") && ultimateUiCss.includes("option-row > div:first-child small") && ultimateUiCss.includes("font-size:clamp(12px,1vw,14px)"));
+check("landing page separates game modes from secondary actions", html.includes('class="boot-mode-actions"') && html.includes('class="boot-utility-actions"') && html.includes("CHOOSE A MODE") && html.includes("GET STARTED"));
+check("CRT toggle controls a dedicated arena scanline overlay", menu.includes('document.body.classList.toggle("no-crt", !settings.crt)') && read("run-intel-design-v1.css").includes("background:repeating-linear-gradient(to bottom") && read("run-intel-design-v1.css").includes("body.no-crt .game-shell::after"));
 check("browser regression covers single HEX editor preview, explicit persistence, and invalid input", read("tests/e2e/game.spec.cjs").includes("Options use one HEX editor and only save color on explicit SAVE") && read("tests/e2e/game.spec.cjs").includes("snakeHexInput") && read("tests/e2e/game.spec.cjs").includes("SAVED: #1A2B3C"));
 check("gameplay visibility settings are applied to live UI",
   /function\s+applyGameplaySettings\s*\(/.test(game) &&

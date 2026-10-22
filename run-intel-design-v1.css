@@ -887,3 +887,20 @@ body #achievements .achievement-deck-card.is-flipped .achievement-card-inner{
 }
 @media(max-width:620px){#bootOptionsPanel .option-toggle{min-width:68px!important;min-height:38px!important;font-size:7px!important}}
 @media(prefers-reduced-motion:reduce){#bootOptionsPanel .option-toggle{transition:none!important}#bootOptionsPanel .option-toggle:hover{transform:none!important}}
+
+
+/* UI cleanup: make CRT Scanlines control the actual arena overlay. */
+body.rework-v2 .game-shell::after {
+  content:"" !important;
+  position:absolute !important;
+  inset:0 !important;
+  left:0 !important;
+  top:0 !important;
+  width:auto !important;
+  height:auto !important;
+  z-index:1 !important;
+  pointer-events:none !important;
+  background:repeating-linear-gradient(to bottom, transparent 0 3px, rgba(181,255,114,.035) 3px 4px) !important;
+  opacity:.42;
+}
+body.no-crt .game-shell::after { display:none !important; }
