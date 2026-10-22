@@ -226,6 +226,8 @@ check("color control keeps one editor and normalizes the original duplicate mark
   qualityPassJs.includes('legacyGroup.replaceWith(group)') &&
   qualityPassJs.includes('localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings))'));
 check("Options and action hierarchy use readable labels, descriptions, and a dedicated danger zone", html.includes("TIMED ACHIEVEMENTS") && menu.includes('GAME_VERSION = "2.9.0"') && menu.includes("settings.homeClock);") && menu.includes("window.confirm(") && read("quality-pass-v1.js").includes("02 / SNAKE APPEARANCE") && read("arcade-menu-v2.css").includes("option-danger-zone") && ultimateUiCss.includes("option-row > div:first-child small") && ultimateUiCss.includes("font-size:clamp(12px,1vw,14px)"));
+check("landing page separates game modes from secondary actions", html.includes('class="boot-mode-actions"') && html.includes('class="boot-utility-actions"') && html.includes("CHOOSE A MODE") && html.includes("GET STARTED"));
+check("CRT toggle controls a dedicated arena scanline overlay", menu.includes('document.body.classList.toggle("no-crt", !settings.crt)') && read("run-intel-design-v1.css").includes("background:repeating-linear-gradient(to bottom") && read("run-intel-design-v1.css").includes("body.no-crt .game-shell::after"));
 check("browser regression covers single HEX editor preview, explicit persistence, and invalid input", read("tests/e2e/game.spec.cjs").includes("Options use one HEX editor and only save color on explicit SAVE") && read("tests/e2e/game.spec.cjs").includes("snakeHexInput") && read("tests/e2e/game.spec.cjs").includes("SAVED: #1A2B3C"));
 check("gameplay visibility settings are applied to live UI",
   /function\s+applyGameplaySettings\s*\(/.test(game) &&
