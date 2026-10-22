@@ -288,7 +288,7 @@
   }
   function leaderboardLabel(value,fallback){
     if(typeof value!=="string")return fallback;
-    return value.replace(/[\\u0000-\\u001f\\u007f]/g,"").slice(0,40)||fallback;
+    return value.replace(/[\u0000-\u001f\u007f]/g,"").slice(0,40)||fallback;
   }
   function readLeaderboardRecords(key){
     let stored;
