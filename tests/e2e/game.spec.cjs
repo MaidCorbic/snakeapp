@@ -340,7 +340,10 @@ test("ultimate UI uses grouped options and a dedicated accessible result dialog"
   await page.goto("/index.html");
   await page.locator("#bootOptions").click();
   await expect(page.locator("#bootOptionsPanel .option-group")).toHaveCount(4);
-  await expect(page.locator("#bootOptionsPanel .option-group-title").first()).toContainText("PRESENTATION");
+  await expect(page.locator("#bootOptionsPanel .option-group-title")).toHaveText(["01 / APPEARANCE", "02 / SNAKE APPEARANCE", "03 / GAMEPLAY & HUD", "04 / SOUND & FEEDBACK"]);
+  const emptyGroups = await page.locator("#bootOptionsPanel .option-group").evaluateAll(groups => groups.filter(group => !group.querySelector(".option-row")).length);
+  expect(emptyGroups).toBe(0);
+  await expect(page.locator("#bootOptionsPanel .option-row>div:first-child small").first()).toBeVisible();
   await page.locator("#bootOptionsBack").click();
   await startGame(page);
   await page.evaluate(() => window.__snakeE2E.endRun());
@@ -596,6 +599,43 @@ test("Options expose snake color and gameplay toggles without Profile and Utilit
   await page.locator("#bootRadar").click();
   await expect(page.locator("#bootRadar")).toHaveAttribute("aria-pressed", "false");
   expect(pageErrors).toEqual([]);
+});
+
+test("HOME CLOCK and CRT Scanlines toggles affect the advertised UI", async ({ page }) => {
+  await page.goto("/index.html");
+  await expect(page.locator("#bootClock")).toBeVisible();
+  await page.locator("#bootOptions").click();
+
+  await page.locator("#bootHomeClock").click();
+  await expect(page.locator("#bootClock")).toBeHidden();
+  expect(await page.evaluate(() => JSON.parse(localStorage.getItem("snake-evolution-settings") || "{}").homeClock)).toBe(false);
+  await page.locator("#bootHomeClock").click();
+  await expect(page.locator("#bootClock")).toBeVisible();
+
+  await page.locator("#bootCrt").click();
+  await expect.poll(() => page.locator("body").evaluate(body => body.classList.contains("no-crt"))).toBe(true);
+  await expect.poll(() => page.locator(".game-shell").evaluate(shell => getComputedStyle(shell, "::after").display)).toBe("none");
+  await page.locator("#bootCrt").click();
+  await expect.poll(() => page.locator("body").evaluate(body => body.classList.contains("no-crt"))).toBe(false);
+  await expect.poll(() => page.locator(".game-shell").evaluate(shell => getComputedStyle(shell, "::after").backgroundImage)).toContain("repeating-linear-gradient");
+});
+
+test("RESET RANK data deletion requires explicit confirmation", async ({ page }) => {
+  await page.addInitScript(() => {
+    localStorage.setItem("snake-evolution-best", "1234");
+    localStorage.setItem("snake-evolution-leaderboard", JSON.stringify([{name:"TEST",score:1234}]));
+  });
+  await page.goto("/index.html");
+  await page.locator("#bootOptions").click();
+  await expect(page.locator(".option-danger-zone")).toBeVisible();
+  await expect(page.locator("#bootResetRank")).toHaveText("RESET LOCAL RECORDS");
+  const dialogPromise = page.waitForEvent("dialog");
+  await page.locator("#bootResetRank").click();
+  const dialog = await dialogPromise;
+  expect(dialog.type()).toBe("confirm");
+  await dialog.accept();
+  await expect.poll(() => page.evaluate(() => localStorage.getItem("snake-evolution-best"))).toBeNull();
+  await expect.poll(() => page.evaluate(() => localStorage.getItem("snake-evolution-leaderboard"))).toBeNull();
 });
 
 test("normal launch shows a first-run tutorial and can resume gameplay", async ({ page }) => {
