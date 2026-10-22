@@ -21,6 +21,9 @@
   const baseStatsMarkupV2 = statsMarkup;
   const baseResetV2 = reset;
   const baseMoveV2 = move;
+  setTickSchedulerOwner("external");
+  let consecutiveTickErrors = 0;
+  const MAX_CONSECUTIVE_TICK_ERRORS = 3;
 
   // One scheduler owns every gameplay tick, including wall and obstacle
   // collisions. Clear stale timers first and always schedule the next tick
@@ -48,10 +51,26 @@
           haptic(18);
         }
       }
+      consecutiveTickErrors = 0;
       return result;
     } catch (error) {
-      console.error("[Snake Evolution] recovered gameplay tick:", error);
-      say("SYSTEM RECOVERY // RUN CONTINUES");
+      consecutiveTickErrors += 1;
+      console.error("[Snake Evolution] gameplay tick failed (" + consecutiveTickErrors + "/" + MAX_CONSECUTIVE_TICK_ERRORS + "):", error);
+      if (consecutiveTickErrors >= MAX_CONSECUTIVE_TICK_ERRORS) {
+        try {
+          pause();
+        } catch (pauseError) {
+          paused = true;
+          clearTimeout(timer);
+          timer = null;
+          syncPauseButton();
+          console.error("[Snake Evolution] could not open the safety pause:", pauseError);
+        }
+        say("SYSTEM FAULT // RUN PAUSED");
+        event("GAMEPLAY ERROR // RESTART OR RETURN TO MENU");
+      } else {
+        say("SYSTEM RECOVERY // RUN CONTINUES");
+      }
     } finally {
       if (alive && !paused && !contractOfferOpen && !extractionOpen && !timer) {
         const delay = Math.max(
@@ -205,7 +224,9 @@
         zoneCheckpoints: checkpointCount,
         energySurges: energySurgeCount,
         energyPickups: energyPickupCount,
-        updatePack: "V4"
+        updatePack: "V5",
+        schedulerOwner: tickSchedulerOwner,
+        coreTickSchedules
       });
     }
   }
